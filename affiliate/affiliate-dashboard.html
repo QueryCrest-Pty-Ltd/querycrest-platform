@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Affiliate Dashboard — QueryCrest</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#f8fafc;--card:#ffffff;--surface:#f1f5f9;--surface2:#e2e8f0;
+  --primary:#3498db;--primary-dark:#2980b9;--primary-light:#5dade2;
+  --primary-d:rgba(52,152,219,.1);
+  --dark:#34495e;--dark2:#2c3e50;
+  --green:#27ae60;--green-d:rgba(39,174,96,.1);
+  --red:#e74c3c;--red-d:rgba(231,76,60,.1);
+  --orange:#e67e22;--orange-d:rgba(230,126,34,.1);
+  --t1:#2c3e50;--t2:#5d6d7e;--t3:#95a5a6;
+  --bdr:#e8eef3;--bdr2:#cbd5e0;
+  --r:8px;--r2:12px;
+  --shadow:0 1px 3px rgba(44,62,80,.06),0 4px 14px rgba(44,62,80,.04);
+  --shadow2:0 12px 40px rgba(52,152,219,.15);
+  --sb:240px;--tb:60px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:14.5px;}
+body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--t1);min-height:100vh;line-height:1.55;}
+.app{display:grid;grid-template-columns:var(--sb) 1fr;grid-template-rows:var(--tb) 1fr;min-height:100vh;}
+.topbar{grid-column:1/-1;background:#fff;border-bottom:1px solid var(--bdr);display:flex;align-items:center;padding:0 24px 0 0;position:sticky;top:0;z-index:200;box-shadow:0 1px 0 rgba(0,0,0,.02);}
+.tb-brand{width:var(--sb);height:100%;display:flex;align-items:center;gap:10px;padding:0 20px;border-right:1px solid var(--bdr);background:none;border-top:none;border-bottom:none;cursor:pointer;font-family:'Poppins',sans-serif;text-decoration:none;}
+.brand-ico{width:32px;height:32px;border-radius:8px;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:800;color:#fff;flex-shrink:0;}
+.brand-txt{font-size:.9rem;font-weight:700;color:var(--dark2);letter-spacing:-.01em;}
+.brand-txt em{color:var(--primary);font-style:normal;}
+.tb-right{display:flex;align-items:center;gap:8px;margin-left:auto;}
+.tb-user{font-size:.82rem;color:var(--t2);}
+.tb-user strong{color:var(--dark);font-weight:600;}
+.btn-tb{padding:7px 14px;border-radius:var(--r);font-size:.78rem;font-weight:500;cursor:pointer;font-family:'Poppins',sans-serif;border:1.5px solid var(--bdr2);background:transparent;color:var(--t2);transition:all .18s;display:inline-flex;align-items:center;gap:6px;}
+.btn-tb:hover{border-color:var(--primary);color:var(--primary);}
+.btn-tb svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;}
+.hamburger{display:none;width:38px;height:38px;border-radius:var(--r);background:none;border:none;cursor:pointer;color:var(--t2);align-items:center;justify-content:center;margin:0 8px;}
+.hamburger:hover{background:var(--surface);}
+.hamburger svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;}
+.sidebar{background:#fff;border-right:1px solid var(--bdr);display:flex;flex-direction:column;overflow-y:auto;position:sticky;top:var(--tb);height:calc(100vh - var(--tb));}
+.ns{font-size:.7rem;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.08em;padding:18px 20px 8px;}
+.ni{display:flex;align-items:center;gap:11px;padding:10px 18px;cursor:pointer;color:var(--t2);font-size:.9rem;font-weight:500;border:none;background:none;width:100%;text-align:left;border-left:3px solid transparent;transition:all .15s;font-family:'Poppins',sans-serif;}
+.ni:hover{background:var(--surface);color:var(--dark2);}
+.ni.on{background:var(--primary-d);color:var(--primary-dark);border-left-color:var(--primary);font-weight:600;}
+.ni-ico{width:30px;height:30px;border-radius:8px;background:var(--surface);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;}
+.ni-ico svg{width:15px;height:15px;stroke:var(--t3);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:stroke .15s;}
+.ni.on .ni-ico{background:var(--primary);}
+.ni.on .ni-ico svg{stroke:#fff;}
+.sb-foot{margin-top:auto;padding:16px;border-top:1px solid var(--bdr);}
+.ref-chip{background:var(--primary-d);border:1px solid rgba(52,152,219,.2);border-radius:var(--r);padding:10px 12px;}
+.ref-chip .rl{font-size:.65rem;font-weight:600;color:var(--primary-dark);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;}
+.ref-chip .rc{font-size:.92rem;color:var(--dark2);font-weight:600;letter-spacing:.04em;}
+.main{overflow-y:auto;background:var(--bg);}
+.mi{padding:28px 32px 60px;}
+.drawer-bg{display:none;position:fixed;inset:0;background:rgba(44,62,80,.4);z-index:290;}
+.drawer-bg.show{display:block;}
+.drawer{position:fixed;top:0;left:0;bottom:0;width:var(--sb);background:#fff;border-right:1px solid var(--bdr);z-index:300;transform:translateX(-100%);transition:transform .25s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow-y:auto;box-shadow:var(--shadow2);}
+.drawer.show{transform:translateX(0);}
+.drawer-head{height:var(--tb);display:flex;align-items:center;gap:10px;padding:0 18px;border-bottom:1px solid var(--bdr);}
+.ph{margin-bottom:24px;display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap;}
+.ph h1{font-size:1.55rem;font-weight:700;letter-spacing:-.02em;color:var(--dark2);}
+.ph p{color:var(--t2);font-size:.85rem;margin-top:3px;}
+.ph-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:20px;}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px;}
+.sc{background:#fff;border:1px solid var(--bdr);border-radius:var(--r2);padding:20px;position:relative;overflow:hidden;box-shadow:var(--shadow);transition:all .2s;}
+.sc:hover{box-shadow:0 4px 16px rgba(52,152,219,.1);transform:translateY(-1px);}
+.sc::after{content:"";position:absolute;top:0;left:0;right:0;height:3px;}
+.sc.primary::after{background:var(--primary);}
+.sc.green::after{background:var(--green);}
+.sc.dark::after{background:var(--dark);}
+.sc.orange::after{background:var(--orange);}
+.sc-l{font-size:.72rem;font-weight:500;color:var(--t3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;}
+.sc-v{font-size:1.7rem;font-weight:700;letter-spacing:-.02em;line-height:1.1;color:var(--dark2);}
+.sc-s{font-size:.78rem;color:var(--t3);margin-top:6px;}
+.sc-i{position:absolute;right:16px;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:10px;background:var(--surface);display:flex;align-items:center;justify-content:center;}
+.sc-i svg{width:18px;height:18px;stroke:var(--primary);fill:none;stroke-width:2;stroke-linecap:round;}
+.pn{background:#fff;border:1px solid var(--bdr);border-radius:var(--r2);overflow:hidden;margin-bottom:18px;box-shadow:var(--shadow);}
+.pn-h{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--bdr);flex-wrap:wrap;gap:8px;}
+.pn-h h3{font-size:.95rem;font-weight:600;color:var(--dark2);letter-spacing:-.01em;}
+.pn-b{padding:20px;}
+.tw{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:.85rem;}
+th{padding:10px 18px;text-align:left;font-size:.7rem;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--bdr);background:var(--surface);white-space:nowrap;}
+td{padding:13px 18px;border-bottom:1px solid var(--bdr);vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tbody tr:hover td{background:var(--surface);}
+.tm{font-weight:500;color:var(--dark2);}
+.ts{font-size:.78rem;color:var(--t3);}
+.bd{display:inline-flex;align-items:center;padding:4px 10px;border-radius:99px;font-size:.7rem;font-weight:600;white-space:nowrap;}
+.bd-pending{background:var(--orange-d);color:var(--orange);}
+.bd-approved{background:var(--green-d);color:var(--green);}
+.bd-paid{background:var(--primary-d);color:var(--primary-dark);}
+.bd-rejected{background:var(--red-d);color:var(--red);}
+.bd-converted{background:var(--green-d);color:var(--green);}
+.bd-signup{background:var(--primary-d);color:var(--primary-dark);}
+.bd-plan{background:rgba(52,73,94,.1);color:var(--dark);}
+.bd-verified{background:var(--green-d);color:var(--green);}
+.bd-missing{background:var(--red-d);color:var(--red);}
+.bd-uploaded{background:var(--primary-d);color:var(--primary-dark);}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.ff{display:flex;flex-direction:column;gap:6px;}
+.ff.full{grid-column:1/-1;}
+.ff label{font-size:.78rem;font-weight:600;color:var(--t2);}
+.inp{padding:11px 14px;background:#fff;border:1.5px solid var(--bdr);border-radius:var(--r);color:var(--t1);font-size:.9rem;font-family:'Poppins',sans-serif;outline:none;transition:all .2s;width:100%;}
+.inp:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-d);}
+.inp::placeholder{color:var(--t3);}
+.inp:disabled{opacity:.55;cursor:not-allowed;background:var(--surface);}
+.btn{padding:10px 18px;border-radius:var(--r);font-size:.85rem;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif;transition:all .2s;display:inline-flex;align-items:center;gap:7px;border:none;letter-spacing:-.005em;}
+.btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;}
+.btn-primary{background:var(--primary);color:#fff;}
+.btn-primary:hover{background:var(--primary-dark);box-shadow:var(--shadow2);}
+.btn-outline{background:transparent;border:1.5px solid var(--bdr2);color:var(--t2);}
+.btn-outline:hover{border-color:var(--primary);color:var(--primary);}
+.btn-sm{padding:6px 13px;font-size:.78rem;}
+.btn-danger{background:transparent;border:1.5px solid var(--red);color:var(--red);padding:7px 14px;font-size:.8rem;}
+.btn-danger:hover{background:var(--red-d);}
+.btn:disabled{opacity:.45;cursor:not-allowed;}
+.mb{display:none;padding:11px 14px;border-radius:var(--r);font-size:.83rem;line-height:1.5;margin-bottom:12px;}
+.mb.err{border-left:3px solid var(--red);background:var(--red-d);color:#c0392b;}
+.mb.ok{border-left:3px solid var(--green);background:var(--green-d);color:var(--green);}
+.mb.warn{border-left:3px solid var(--orange);background:var(--orange-d);color:#d35400;}
+.mb.info{border-left:3px solid var(--primary);background:var(--primary-d);color:var(--primary-dark);}
+.mb.show{display:block;}
+.alert-banner{display:flex;align-items:flex-start;gap:13px;padding:16px 18px;border-radius:var(--r2);margin-bottom:18px;border:1px solid;}
+.alert-banner.warn{background:var(--orange-d);border-color:rgba(230,126,34,.2);}
+.alert-banner.info{background:var(--primary-d);border-color:rgba(52,152,219,.2);}
+.alert-banner.ok{background:var(--green-d);border-color:rgba(39,174,96,.2);}
+.alert-banner svg{width:20px;height:20px;flex-shrink:0;margin-top:1px;stroke-width:2;stroke-linecap:round;fill:none;}
+.alert-banner.warn svg{stroke:var(--orange);}
+.alert-banner.info svg{stroke:var(--primary);}
+.alert-banner.ok svg{stroke:var(--green);}
+.alert-banner h4{font-size:.9rem;font-weight:600;color:var(--dark2);margin-bottom:3px;}
+.alert-banner p{font-size:.83rem;color:var(--t2);line-height:1.55;}
+.alert-banner a{color:var(--primary);font-weight:600;text-decoration:none;}
+.prog{margin:12px 0;}
+.prog-row{display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:6px;}
+.prog-track{height:8px;background:var(--surface2);border-radius:99px;overflow:hidden;}
+.prog-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--primary),var(--primary-light));transition:width .5s ease;}
+.prog-note{font-size:.75rem;color:var(--t3);margin-top:5px;}
+.drop-zone{border:2px dashed var(--bdr2);border-radius:var(--r2);padding:32px 20px;text-align:center;cursor:pointer;transition:all .2s;background:var(--surface);position:relative;}
+.drop-zone:hover,.drop-zone.drag-over{border-color:var(--primary);background:var(--primary-d);}
+.drop-zone input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.drop-zone svg{width:36px;height:36px;stroke:var(--t3);fill:none;stroke-width:1.5;stroke-linecap:round;margin-bottom:12px;transition:stroke .2s;}
+.drop-zone:hover svg,.drop-zone.drag-over svg{stroke:var(--primary);}
+.drop-zone h4{font-size:.9rem;font-weight:600;color:var(--dark);margin-bottom:4px;}
+.drop-zone p{font-size:.78rem;color:var(--t3);}
+.drop-zone .selected-file{margin-top:12px;padding:8px 14px;background:#fff;border:1px solid var(--bdr);border-radius:var(--r);font-size:.82rem;color:var(--dark2);display:none;text-align:left;}
+.drop-zone .selected-file.show{display:block;}
+.doc-item{display:flex;align-items:center;gap:13px;padding:13px 16px;background:var(--surface);border:1px solid var(--bdr);border-radius:var(--r);margin-bottom:9px;}
+.doc-ico{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.doc-ico svg{width:17px;height:17px;fill:none;stroke-width:2;stroke-linecap:round;}
+.doc-name{font-weight:500;font-size:.86rem;color:var(--dark2);}
+.doc-meta{font-size:.75rem;color:var(--t3);margin-top:2px;}
+.bank-card{background:linear-gradient(135deg,var(--dark2) 0%,var(--primary-dark) 100%);border-radius:var(--r2);padding:24px;color:#fff;position:relative;overflow:hidden;}
+.bank-card::before{content:"";position:absolute;top:-40px;right:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.06);pointer-events:none;}
+.bank-label{font-size:.68rem;font-weight:500;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px;}
+.bank-val{font-size:.92rem;color:rgba(255,255,255,.95);font-weight:500;}
+.bank-name{font-size:1.1rem;font-weight:700;color:#fff;letter-spacing:-.01em;margin-bottom:18px;}
+.copy-row{display:flex;border:1.5px solid var(--bdr);border-radius:var(--r);overflow:hidden;background:#fff;}
+.copy-row input{flex:1;padding:11px 14px;border:none;background:transparent;font-size:.83rem;color:var(--dark);outline:none;font-family:'Poppins',sans-serif;}
+.copy-row button{padding:11px 18px;background:var(--primary);border:none;cursor:pointer;font-size:.82rem;font-weight:600;color:#fff;font-family:'Poppins',sans-serif;transition:background .15s;}
+.copy-row button:hover{background:var(--primary-dark);}
+.stabs{display:flex;gap:3px;background:var(--surface);border-radius:var(--r);padding:3px;margin-bottom:18px;overflow-x:auto;}
+.stab{padding:8px 18px;border-radius:6px;font-size:.85rem;font-weight:500;cursor:pointer;border:none;background:transparent;color:var(--t3);font-family:'Poppins',sans-serif;transition:all .15s;white-space:nowrap;}
+.stab.on{background:#fff;color:var(--primary);font-weight:600;box-shadow:var(--shadow);}
+.loading{display:flex;align-items:center;justify-content:center;padding:60px;gap:12px;color:var(--t3);font-size:.88rem;}
+.spinner{width:18px;height:18px;border:2.5px solid var(--surface2);border-top-color:var(--primary);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.empty{text-align:center;padding:48px 16px;color:var(--t3);font-size:.86rem;}
+.empty svg{width:42px;height:42px;stroke:var(--bdr2);fill:none;stroke-width:1.5;display:block;margin:0 auto 12px;}
+.toasts{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:8px;max-width:340px;}
+.toast{background:var(--dark2);border-radius:var(--r);padding:12px 16px;font-size:.83rem;display:flex;align-items:center;gap:10px;box-shadow:var(--shadow2);animation:tin .2s ease;color:#fff;}
+.toast.ok{border-left:3px solid var(--green);}
+.toast.err{border-left:3px solid var(--red);}
+.toast.warn{border-left:3px solid var(--orange);}
+@keyframes tin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:1100px){.g4{grid-template-columns:1fr 1fr;}}
+@media(max-width:768px){
+  .app{grid-template-columns:1fr;}.sidebar{display:none;}.hamburger{display:flex;}
+  .tb-brand{width:auto;border-right:none;padding:0 12px;}.tb-user{display:none;}
+  .g4,.g3{grid-template-columns:1fr 1fr;}.g2{grid-template-columns:1fr;}
+  .fg{grid-template-columns:1fr;}.ff.full{grid-column:1;}
+  .mi{padding:18px 16px 60px;}.ph{flex-direction:column;}
+}
+@media(max-width:440px){.g4,.g3,.g2{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <div class="topbar">
+    <button class="hamburger" id="hamburger" aria-label="Menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+    <a class="tb-brand" href="#"><div class="brand-ico">QC</div><span class="brand-txt">QueryCrest <em>Affiliate</em></span></a>
+    <div class="tb-right">
+      <span class="tb-user">Hi, <strong id="tbName">—</strong></span>
+      <button class="btn-tb" id="switchBtn" style="display:none" onclick="window.location.href='/account/user-dashboard'">
+        <svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-7 10 7"/><path d="M6 10v8a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-8"/></svg>Student Dashboard
+      </button>
+      <button class="btn-tb" id="logoutBtn">Sign Out</button>
+    </div>
+  </div>
+  <div class="sidebar" id="sidebar">
+    <div class="ns">Main</div>
+    <button class="ni on" data-p="overview"><div class="ni-ico"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>Overview</button>
+    <button class="ni" data-p="earnings"><div class="ni-ico"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>Earnings</button>
+    <button class="ni" data-p="referrals"><div class="ni-ico"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>Referrals</button>
+    <button class="ni" data-p="withdraw"><div class="ni-ico"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>Withdraw</button>
+    <div class="ns">Account</div>
+    <button class="ni" data-p="documents"><div class="ni-ico"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>Documents</button>
+    <button class="ni" data-p="bank"><div class="ni-ico"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="1"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>Bank Details</button>
+    <button class="ni" data-p="settings"><div class="ni-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>Settings</button>
+    <button class="ni" data-p="howitworks"><div class="ni-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>How It Works</button>
+    <div class="sb-foot"><div class="ref-chip"><div class="rl">Referral Code</div><div class="rc" id="sbCode">—</div></div></div>
+  </div>
+  <div class="main"><div class="mi" id="main"><div class="loading"><div class="spinner"></div>Loading your dashboard…</div></div></div>
+</div>
+<div class="drawer-bg" id="drawerBg"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-head"><div class="brand-ico">QC</div><span class="brand-txt">QueryCrest <em>Affiliate</em></span></div>
+  <div id="drawerNav"></div>
+</div>
+<div class="toasts" id="toasts"></div>
+
+<script>
+const API = 'https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1';
+var token  = sessionStorage.getItem('affiliate_token') || '';
+var me     = null;
+var _cache = {};
+
+/* ── UTILS ── */
+function esc(s){ return s==null?'—':String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function fmtR(n){ return 'R\u202f'+(Math.max(0,Number(n)||0)).toLocaleString('en-ZA',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function fmtD(d){ if(!d)return'—'; return new Date(d).toLocaleDateString('en-ZA',{day:'2-digit',month:'short',year:'numeric'}); }
+function fmtDT(d){ if(!d)return'—'; var x=new Date(d); return x.toLocaleDateString('en-ZA',{day:'2-digit',month:'short'})+' '+x.toLocaleTimeString('en-ZA',{hour:'2-digit',minute:'2-digit'}); }
+function badge(s,lbl){ var m={'pending':'bd-pending','approved':'bd-approved','paid':'bd-paid','rejected':'bd-rejected','converted':'bd-converted','signup':'bd-signup','plan':'bd-plan','verified':'bd-verified','missing':'bd-missing','uploaded':'bd-uploaded'}; return '<span class="bd '+(m[s]||'bd-pending')+'">'+esc(lbl||s)+'</span>'; }
+function toast(msg,type){ var w=document.getElementById('toasts'); var t=document.createElement('div'); t.className='toast '+(type||''); t.innerHTML='<span style="font-size:1rem;flex-shrink:0">'+(type==='ok'?'✓':type==='err'?'✕':'ℹ')+'</span><span>'+esc(msg)+'</span>'; w.appendChild(t); setTimeout(function(){ t.style.opacity='0'; t.style.transition='opacity .3s'; setTimeout(function(){ t.remove(); },300); },3800); }
+function showMsg(id,text,type){ var el=document.getElementById(id); if(!el)return; el.textContent=text; el.className='mb '+(type||'err')+(text?' show':''); }
+function errBox(msg){ return '<div class="mb err show">'+esc(msg)+'</div>'; }
+function clearCache(){ _cache={}; }
+async function aff(action, extra) {
+  var ctrl = new AbortController();
+  var tmr  = setTimeout(function(){ ctrl.abort(); }, 15000);
+  var res;
+  try {
+    res = await fetch(API+'/affiliate', {
+      method:  'POST',
+      headers: { 'Content-Type':'application/json', 'Authorization':'Bearer '+token },
+      body:    JSON.stringify(Object.assign({ action: action }, extra || {})),
+      signal:  ctrl.signal,
+    });
+  } catch(e) {
+    clearTimeout(tmr);
+    if (e.name === 'AbortError') throw new Error('Request timed out');
+    throw e;
+  } finally { clearTimeout(tmr); }
+  if (res.status === 401) { doLogout(); throw new Error('Session expired'); }
+  var d = await res.json();
+  if (!res.ok) throw new Error(d.error || 'Request failed');
+  return d;
+}
+
+async function cached(key, fn, ttl) {
+  if (_cache[key] && Date.now()-_cache[key].t < (ttl||25000)) return _cache[key].d;
+  var d = await fn(); _cache[key] = { d:d, t:Date.now() }; return d;
+}
+
+/* ── checkDocs — via getUserDocuments edge function, no direct DB ── */
+async function checkDocs() {
+  try {
+    var res = await fetch(API+'/getUserDocuments', {
+      headers: { 'Authorization': 'Bearer '+token },
+    });
+    var data = await res.json();
+    var docs = (data.success && Array.isArray(data.documents)) ? data.documents : [];
+    var types = docs.map(function(d){ return (d.document_type||'').toLowerCase(); });
+    var hasId   = types.some(function(t){ return /id|identity|passport/.test(t); });
+    var hasBank = types.some(function(t){ return /bank|proof|address|statement/.test(t); });
+    return { docs: docs, hasId: hasId, hasBank: hasBank, verified: hasId && hasBank };
+  } catch(e) {
+    return { docs: [], hasId: false, hasBank: false, verified: false };
+  }
+}
+
+async function getBankAccount() {
+  try { var d = await aff('getBankAccount'); return d.account || d.bank || null; }
+  catch(e) { return null; }
+}
+
+/* ── NAVIGATION ── */
+document.getElementById('hamburger').addEventListener('click', function(){
+  document.getElementById('drawer').classList.toggle('show');
+  document.getElementById('drawerBg').classList.toggle('show');
+});
+document.getElementById('drawerBg').addEventListener('click', function(){
+  document.getElementById('drawer').classList.remove('show');
+  document.getElementById('drawerBg').classList.remove('show');
+});
+
+/* ── INIT — uses getUserProfile edge function, no direct REST call ── */
+(async function init(){
+  if (!token) { doLogout(); return; }
+  try {
+   
+    var res = await fetch(API+'/getUserProfile', {
+      headers: { 'Authorization': 'Bearer '+token },
+    });
+    if (res.status === 401) { doLogout(); return; }
+    var data = await res.json();
+    if (!data.success || !data.user) { doLogout(); return; }
+
+    var u = data.user;
+    me = u;
+
+    var roles = Array.isArray(u.role)
+      ? u.role.map(function(r){ return String(r).toLowerCase(); })
+      : String(u.role||'').replace(/[{}]/g,'').split(',').map(function(s){ return s.trim().toLowerCase(); });
+
+    if (!roles.includes('affiliate')) {
+      
+      try {
+        await fetch(API+'/affiliate', {
+          method:  'POST',
+          headers: { 'Content-Type':'application/json', 'Authorization':'Bearer '+token },
+          body:    JSON.stringify({ action:'addAffiliateRole' }),
+        });
+      } catch(e2) {}
+     
+      var res2 = await fetch(API+'/getUserProfile', { headers:{'Authorization':'Bearer '+token} });
+      var data2 = await res2.json();
+      var u2 = data2.user || {};
+      var roles2 = Array.isArray(u2.role)
+        ? u2.role.map(function(r){ return String(r).toLowerCase(); })
+        : String(u2.role||'').replace(/[{}]/g,'').split(',').map(function(s){ return s.trim().toLowerCase(); });
+      if (!roles2.includes('affiliate')) { doLogout(); return; }
+      me = u2;
+      roles = roles2;
+    }
+
+    if (roles.includes('user')) document.getElementById('switchBtn').style.display = 'inline-flex';
+    document.getElementById('tbName').textContent = me.first_name || 'Affiliate';
+    document.getElementById('sbCode').textContent = me.referral_code || '—';
+    /* Build referral link from code if not directly stored */
+    if (!me.referral_link && me.referral_code) {
+      me.referral_link = 'https://www.querycrest.com/?ref=' + me.referral_code;
+    }
+    setupNav();
+    loadPage('overview');
+  } catch(e) {
+    doLogout();
+  }
+})();
+
+function doLogout() {
+  sessionStorage.removeItem('affiliate_token');
+  window.location.href = '/affiliate/affiliate-login-signup.html';
+}
+document.getElementById('logoutBtn').addEventListener('click', doLogout);
+
+function setupNav() {
+  var dn = document.getElementById('drawerNav');
+  document.querySelectorAll('#sidebar .ns,#sidebar .ni').forEach(function(el){ dn.appendChild(el.cloneNode(true)); });
+  function activate(page) {
+    document.querySelectorAll('.ni[data-p]').forEach(function(b){ b.classList.remove('on'); });
+    document.querySelectorAll('.ni[data-p="'+page+'"]').forEach(function(b){ b.classList.add('on'); });
+    loadPage(page);
+    document.getElementById('drawer').classList.remove('show');
+    document.getElementById('drawerBg').classList.remove('show');
+  }
+  document.querySelectorAll('#sidebar .ni[data-p],#drawerNav .ni[data-p]').forEach(function(btn){
+    btn.addEventListener('click', function(){ activate(this.dataset.p); });
+  });
+}
+function navTo(page) {
+  document.querySelectorAll('.ni[data-p]').forEach(function(b){ b.classList.remove('on'); });
+  document.querySelectorAll('.ni[data-p="'+page+'"]').forEach(function(b){ b.classList.add('on'); });
+  loadPage(page);
+}
+function loadPage(page) {
+  document.getElementById('main').innerHTML = '<div class="loading"><div class="spinner"></div>Loading…</div>';
+  var pages = { overview:renderOverview, earnings:renderEarnings, referrals:renderReferrals, withdraw:renderWithdraw, documents:renderDocuments, bank:renderBank, settings:renderSettings, howitworks:renderHowItWorks };
+  if (pages[page]) pages[page]();
+}
+
+/* ═══════════════════════════════════════════════════════════
+   OVERVIEW
+═══════════════════════════════════════════════════════════ */
+async function renderOverview() {
+  var $m = document.getElementById('main');
+  try {
+    var [statsData, docData, bankAcc] = await Promise.all([
+      cached('stats', function(){ return aff('getStats'); }, 20000),
+      checkDocs(),
+      getBankAccount(),
+    ]);
+    var su = statsData.summary;
+    var refLink = me.referral_link || ('https://www.querycrest.com/?ref='+(me.referral_code||''));
+    var canWithdraw = su.canWithdraw && docData.verified && bankAcc;
+
+    $m.innerHTML = `
+<div class="ph"><div><h1>Overview</h1><p>${new Date().toLocaleDateString('en-ZA',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}</p></div>
+<div class="ph-actions"><button class="btn btn-outline btn-sm" onclick="clearCache();navTo('overview')">↻ Refresh</button></div></div>
+${!docData.verified?`<div class="alert-banner warn"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><div><h4>Documents required for withdrawals</h4><p>Upload your <strong>ID</strong> and <strong>bank statement or proof of address</strong>. <a href="#" onclick="navTo('documents');return false">Upload now →</a></p></div></div>`:''}
+${!bankAcc?`<div class="alert-banner info"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg><div><h4>Bank account not set up</h4><p>Add your bank details to receive payouts. <a href="#" onclick="navTo('bank');return false">Add bank details →</a></p></div></div>`:''}
+<div class="g4">
+  <div class="sc primary"><div class="sc-l">Available Balance</div><div class="sc-v">${fmtR(su.availableBalance)}</div><div class="sc-s">${canWithdraw?'<span style="color:var(--green);font-weight:600">Ready to withdraw</span>':su.canWithdraw?'Verify docs & bank':'R'+(su.minWithdrawal-su.availableBalance).toFixed(0)+' more needed'}</div><div class="sc-i"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div></div>
+  <div class="sc green"><div class="sc-l">Total Earned</div><div class="sc-v">${fmtR(su.totalEarned)}</div><div class="sc-s">${fmtR(su.pendingBalance)} pending</div></div>
+  <div class="sc dark"><div class="sc-l">Referrals</div><div class="sc-v">${su.totalReferrals}</div><div class="sc-s">${su.convertedReferrals} converted</div></div>
+  <div class="sc orange"><div class="sc-l">Paid Out</div><div class="sc-v">${fmtR(su.paidOut)}</div><div class="sc-s">Lifetime</div></div>
+</div>
+<div class="g2">
+  <div class="pn"><div class="pn-h"><h3>Your Referral Link</h3></div><div class="pn-b">
+    <p style="font-size:.84rem;color:var(--t2);margin-bottom:14px">Share to earn <strong style="color:var(--primary)">R40</strong> per signup + <strong style="color:var(--primary)">20%</strong> on first plan.</p>
+    <div class="copy-row"><input id="refLinkInput" type="text" value="${esc(refLink)}" readonly><button onclick="doCopy()">Copy</button></div>
+    <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+      <button class="btn btn-outline btn-sm" onclick="shareWA('${esc(refLink)}')"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>WhatsApp</button>
+    </div>
+  </div></div>
+  <div class="pn"><div class="pn-h"><h3>Withdrawal Progress</h3>${canWithdraw?'<button class="btn btn-primary btn-sm" onclick="navTo(\'withdraw\')">Withdraw →</button>':''}</div><div class="pn-b">
+    <div class="prog"><div class="prog-row"><span style="font-weight:500">Balance</span><span style="font-weight:600">${fmtR(su.availableBalance)}</span></div><div class="prog-track"><div class="prog-fill" style="width:${Math.min(100,Math.round(su.availableBalance/su.minWithdrawal*100))}%"></div></div><div class="prog-note">${fmtR(su.availableBalance)} of ${fmtR(su.minWithdrawal)} minimum</div></div>
+    <div style="margin-top:16px;display:flex;flex-direction:column;gap:8px">
+      ${[{label:'Documents',ok:docData.verified,page:'documents',fix:'Upload required docs'},{label:'Bank Account',ok:!!bankAcc,page:'bank',fix:'Add bank details'}].map(function(c){ return '<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--surface);border-radius:var(--r)"><div style="display:flex;align-items:center;gap:9px"><span style="width:8px;height:8px;border-radius:50%;background:'+(c.ok?'var(--green)':'var(--red)')+'"></span><span style="font-size:.85rem;font-weight:500">'+c.label+'</span></div>'+(c.ok?badge('verified'):'<a href="#" onclick="navTo(\''+c.page+'\');return false" style="font-size:.78rem;color:var(--primary);font-weight:600;text-decoration:none">'+c.fix+' →</a>')+'</div>'; }).join('')}
+    </div>
+  </div></div>
+</div>
+<div class="pn"><div class="pn-h"><h3>Recent Earnings</h3><button class="btn btn-outline btn-sm" onclick="navTo('earnings')">View all →</button></div>
+  <div class="tw">${!statsData.earnings.length?'<div class="empty"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>No earnings yet — share your link!</div>':
+  '<table><thead><tr><th>Type</th><th>Description</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead><tbody>'+statsData.earnings.slice(0,5).map(function(e){ return '<tr><td>'+badge(e.type)+'</td><td class="tm">'+esc(e.description||'—')+'</td><td style="font-weight:600;color:var(--green)">'+fmtR(e.amount)+'</td><td>'+badge(e.status)+'</td><td class="ts">'+fmtDT(e.created_at)+'</td></tr>'; }).join('')+'</tbody></table>'}</div>
+</div>`;
+  } catch(e) { document.getElementById('main').innerHTML='<div class="mi">'+errBox(e.message)+'</div>'; }
+}
+
+window.doCopy = function(){ var i=document.getElementById('refLinkInput'); if(!i)return; navigator.clipboard.writeText(i.value).then(function(){ toast('Link copied!','ok'); }).catch(function(){ i.select(); document.execCommand('copy'); toast('Link copied!','ok'); }); };
+window.shareWA = function(url){ window.open('https://wa.me/?text='+encodeURIComponent('Sign up for QueryCrest using my referral link: '+url),'_blank'); };
+
+/* ═══ EARNINGS ═══ */
+async function renderEarnings() {
+  var $m = document.getElementById('main');
+  try {
+    var s = await cached('stats', function(){ return aff('getStats'); }, 20000);
+    $m.innerHTML = `<div class="ph"><div><h1>Earnings</h1><p>${s.earnings.length} total records</p></div></div>
+<div class="g3"><div class="sc green"><div class="sc-l">Approved</div><div class="sc-v">${fmtR(s.summary.approvedBalance)}</div></div><div class="sc orange"><div class="sc-l">Pending</div><div class="sc-v">${fmtR(s.summary.pendingBalance)}</div></div><div class="sc primary"><div class="sc-l">Paid Out</div><div class="sc-v">${fmtR(s.summary.paidOut)}</div></div></div>
+<div class="pn"><div class="pn-h"><h3>All Earnings</h3><select class="inp" style="width:140px;padding:6px 12px;font-size:.82rem" onchange="filterE(this.value)"><option value="">All types</option><option value="signup">Signup (R40)</option><option value="plan">Plan (20%)</option></select></div>
+<div class="tw">${!s.earnings.length?'<div class="empty"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/></svg>No earnings yet.</div>':
+'<table><thead><tr><th>Type</th><th>Description</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead><tbody id="eTbody">'+s.earnings.map(function(e){ return '<tr data-t="'+e.type+'"><td>'+badge(e.type)+'</td><td class="tm">'+esc(e.description||'—')+'</td><td style="font-weight:600;color:var(--green)">'+fmtR(e.amount)+'</td><td>'+badge(e.status)+'</td><td class="ts">'+fmtDT(e.created_at)+'</td></tr>'; }).join('')+'</tbody></table>'}</div></div>`;
+  } catch(e) { document.getElementById('main').innerHTML='<div class="mi">'+errBox(e.message)+'</div>'; }
+}
+window.filterE = function(v){ document.querySelectorAll('#eTbody tr').forEach(function(r){ r.style.display=(!v||r.dataset.t===v)?'':'none'; }); };
+
+/* ═══ REFERRALS ═══ */
+async function renderReferrals() {
+  var $m = document.getElementById('main');
+  try {
+    var s = await cached('stats', function(){ return aff('getStats'); }, 20000);
+    $m.innerHTML = `<div class="ph"><div><h1>Referrals</h1><p>${s.referrals.length} people referred</p></div></div>
+<div class="pn"><div class="pn-h"><h3>All Referrals</h3></div><div class="tw">
+${!s.referrals.length?'<div class="empty"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>No referrals yet.</div>':
+'<table><thead><tr><th>Person</th><th>Signed Up</th><th>Status</th><th>Plan Commission</th></tr></thead><tbody>'+s.referrals.map(function(r){ var n=r.referred_name||(r.referred_email?r.referred_email.split('@')[0]:'Anonymous'); var pe=s.earnings.find(function(e){ return e.referral_id===r.id&&e.type==='plan'; }); return '<tr><td><div class="tm">'+esc(n)+'</div><div class="ts">'+(r.referred_email||'')+'</div></td><td class="ts">'+fmtD(r.created_at)+'</td><td>'+badge(r.status)+'</td><td style="color:var(--green);font-weight:600">'+(pe?fmtR(pe.amount):'—')+'</td></tr>'; }).join('')+'</tbody></table>'}</div></div>`;
+  } catch(e) { document.getElementById('main').innerHTML='<div class="mi">'+errBox(e.message)+'</div>'; }
+}
+
+/* ═══ WITHDRAW ═══ */
+async function renderWithdraw() {
+  var $m = document.getElementById('main');
+  try {
+    var [s, docData, bankAcc] = await Promise.all([cached('stats',function(){ return aff('getStats'); },20000), checkDocs(), getBankAccount()]);
+    var su = s.summary, canWithdraw = su.canWithdraw && docData.verified && bankAcc;
+    $m.innerHTML = `<div class="ph"><div><h1>Withdraw</h1><p>Minimum R500 · EFT within 3–5 business days</p></div></div>
+${!docData.verified?'<div class="alert-banner warn"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg><div><h4>Documents needed</h4><p>Upload your ID and bank statement first. <a href="#" onclick="navTo(\'documents\');return false">Upload →</a></p></div></div>':''}
+${docData.verified&&!bankAcc?'<div class="alert-banner info"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/></svg><div><h4>Bank account required</h4><p><a href="#" onclick="navTo(\'bank\');return false">Add now →</a></p></div></div>':''}
+<div class="g2">
+  <div class="pn"><div class="pn-h"><h3>Request Withdrawal</h3></div><div class="pn-b">
+    <div style="padding:18px;background:${canWithdraw?'var(--green-d)':'var(--surface)'};border-radius:var(--r);margin-bottom:18px"><div style="font-size:.7rem;color:var(--t3);text-transform:uppercase;font-weight:600;letter-spacing:.06em;margin-bottom:5px">Available Balance</div><div style="font-size:1.9rem;font-weight:700;color:${canWithdraw?'var(--green)':'var(--dark2)'}">${fmtR(su.availableBalance)}</div><div style="font-size:.78rem;color:var(--t3);margin-top:4px">${canWithdraw?'<span style="color:var(--green);font-weight:600">Ready to withdraw</span>':!docData.verified?'Upload documents first':!bankAcc?'Add bank details first':fmtR(su.minWithdrawal-su.availableBalance)+' more needed'}</div></div>
+    ${bankAcc?`<div style="padding:12px 14px;background:var(--surface);border-radius:var(--r);margin-bottom:14px"><div style="font-size:.7rem;color:var(--t3);text-transform:uppercase;font-weight:600;letter-spacing:.06em;margin-bottom:4px">Paying to</div><div style="font-weight:600;color:var(--dark2)">${esc(bankAcc.bank_name)}</div><div style="color:var(--t2);font-size:.82rem">${esc(bankAcc.account_holder)} · ****${esc(String(bankAcc.account_number||'').slice(-4))}</div><a href="#" onclick="navTo('bank');return false" style="font-size:.77rem;color:var(--primary);font-weight:600;text-decoration:none">Change →</a></div>`:''}
+    ${canWithdraw?`<div class="mb" id="wdMsg"></div><div class="ff full" style="margin-bottom:14px"><label>Amount</label><input class="inp" type="number" id="wdAmt" placeholder="Min R500" min="500" max="${su.availableBalance.toFixed(2)}" step="0.01"><div style="font-size:.74rem;color:var(--t3);margin-top:4px">Maximum: ${fmtR(su.availableBalance)}</div></div><button class="btn btn-primary" style="width:100%;justify-content:center" id="wdBtn" onclick="submitWD()">Request Withdrawal</button>`:'<p style="text-align:center;font-size:.85rem;color:var(--t3);padding:16px 0">Complete checklist to unlock withdrawals.</p>'}
+  </div></div>
+  <div class="pn"><div class="pn-h"><h3>Withdrawal History</h3></div><div class="tw">
+    ${!s.withdrawals.length?'<div class="empty"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/></svg>No withdrawals yet.</div>':
+    '<table><thead><tr><th>Amount</th><th>Status</th><th>Requested</th><th>Processed</th></tr></thead><tbody>'+s.withdrawals.map(function(w){ return '<tr><td style="font-weight:600">'+fmtR(w.amount)+'</td><td>'+badge(w.status)+'</td><td class="ts">'+fmtD(w.requested_at)+'</td><td class="ts">'+(w.processed_at?fmtD(w.processed_at):'—')+'</td></tr>'; }).join('')+'</tbody></table>'}</div></div>
+</div>`;
+  } catch(e) { document.getElementById('main').innerHTML='<div class="mi">'+errBox(e.message)+'</div>'; }
+}
+window.submitWD = async function(){
+  var amt = parseFloat(document.getElementById('wdAmt').value)||0;
+  if(amt<500){ showMsg('wdMsg','Minimum withdrawal is R500.','err'); return; }
+  var btn = document.getElementById('wdBtn'); btn.disabled=true; btn.textContent='Processing…';
+  try { await aff('requestWithdrawal',{amount:amt}); toast('Withdrawal request submitted!','ok'); clearCache(); setTimeout(function(){ navTo('withdraw'); },1000); }
+  catch(e){ showMsg('wdMsg',e.message,'err'); btn.disabled=false; btn.textContent='Request Withdrawal'; }
+};
+
+/* ═══ DOCUMENTS — via getUserDocuments edge function ═══ */
+async function renderDocuments() {
+  var $m = document.getElementById('main');
+  try {
+    var docData = await checkDocs();
+    var docs    = docData.docs;
+    $m.innerHTML = `<div class="ph"><div><h1>Documents</h1><p>Upload your ID and bank statement to verify.</p></div></div>
+<div class="g2">
+  <div class="pn"><div class="pn-h"><h3>Verification Status</h3>${docData.verified?badge('verified'):'<span class="bd bd-missing">Incomplete</span>'}</div><div class="pn-b">
+    <div style="display:flex;flex-direction:column;gap:9px;margin-bottom:22px">
+      ${[{label:'SA ID or Passport',ok:docData.hasId},{label:'Bank Statement or Proof of Address',ok:docData.hasBank}].map(function(c){ return '<div style="display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:var(--surface);border-radius:var(--r)"><div style="display:flex;align-items:center;gap:9px"><span style="width:8px;height:8px;border-radius:50%;background:'+(c.ok?'var(--green)':'var(--red)')+'"></span><span style="font-size:.85rem;font-weight:500;color:var(--dark2)">'+c.label+'</span></div>'+badge(c.ok?'uploaded':'missing')+'</div>'; }).join('')}
+    </div>
+    <div class="ff full" style="margin-bottom:12px"><label>Document Type</label>
+      <select class="inp" id="docType"><option value="">— Select type —</option>
+        <option value="ID Document">SA ID Document</option><option value="Passport">Passport</option>
+        <option value="Bank Statement">Bank Statement (last 3 months)</option><option value="Proof of Address">Proof of Address (last 3 months)</option>
+      </select></div>
+    <div class="drop-zone" id="dropZone">
+      <input type="file" id="fileInp" accept=".pdf,.jpg,.jpeg,.png" onchange="onFileSelected(this)">
+      <svg viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+      <h4>Click to choose or drag & drop</h4><p>PDF, JPG, PNG · max 10MB</p>
+      <div class="selected-file" id="selectedFile"></div>
+    </div>
+    <div class="mb" id="uploadMsg" style="margin-top:12px"></div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:12px" id="uploadBtn" onclick="doUpload()">Upload Document</button>
+  </div></div>
+  <div class="pn"><div class="pn-h"><h3>Uploaded Documents</h3><span style="font-size:.8rem;color:var(--t3)">${docs.length} file${docs.length!==1?'s':''}</span></div><div class="pn-b" style="padding:14px">
+    ${!docs.length?'<div class="empty" style="padding:32px 12px"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>No documents yet.</div>':
+    docs.map(function(d){ var dt=(d.document_type||'').toLowerCase(); var ok=/id|identity|passport|bank|proof|address|statement/.test(dt); var url=d.url||d.signed_url||'#'; return '<div class="doc-item"><div class="doc-ico" style="background:'+(ok?'var(--green-d)':'var(--surface)')+'"><svg viewBox="0 0 24 24" stroke="'+(ok?'var(--green)':'var(--t3)')+'"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div style="flex:1;min-width:0"><div class="doc-name">'+esc(d.document_type)+'</div><div class="doc-meta">'+esc(d.file_name)+'</div></div>'+(url&&url!=='#'?'<a href="'+url+'" target="_blank" class="btn btn-outline btn-sm">View</a>':'')+'</div>'; }).join('')}
+  </div></div>
+</div>`;
+    /* Drag and drop */
+    var dz=document.getElementById('dropZone');
+    if(dz){
+      dz.addEventListener('dragover',function(e){ e.preventDefault(); dz.classList.add('drag-over'); });
+      dz.addEventListener('dragleave',function(){ dz.classList.remove('drag-over'); });
+      dz.addEventListener('drop',function(e){ e.preventDefault(); dz.classList.remove('drag-over'); var f=e.dataTransfer.files[0]; if(f){ try{ var dt=new DataTransfer(); dt.items.add(f); document.getElementById('fileInp').files=dt.files; }catch(err){ window._dropFile=f; } showSelectedFile(f.name); } });
+    }
+  } catch(e) { document.getElementById('main').innerHTML='<div class="mi">'+errBox(e.message)+'</div>'; }
+}
+window._dropFile = null;
+window.onFileSelected = function(inp){ var f=inp.files[0]; if(f){ window._dropFile=null; showSelectedFile(f.name); } };
+function showSelectedFile(name){ var el=document.getElementById('selectedFile'); if(!el)return; el.textContent='✓ '+name; el.classList.add('show'); }
+window.doUpload = async function(){
+  var docType = document.getElementById('docType').value;
+  var fileInp = document.getElementById('fileInp');
+  var file    = (fileInp.files&&fileInp.files[0])||window._dropFile||null;
+  if(!docType){ showMsg('uploadMsg','Please select a document type.','err'); return; }
+  if(!file)   { showMsg('uploadMsg','Please choose a file.','err'); return; }
+  if(file.size>10*1024*1024){ showMsg('uploadMsg','File must be under 10MB.','err'); return; }
+  var btn=document.getElementById('uploadBtn'); btn.disabled=true; btn.textContent='Uploading…';
+  showMsg('uploadMsg','Uploading…','info');
+  try {
+    var fd=new FormData(); fd.append('documentType',docType); fd.append('documentFile',file);
+    var res=await fetch(API+'/uploadDocument',{method:'POST',headers:{'Authorization':'Bearer '+token},body:fd});
+    var data=await res.json();
+    if(!res.ok)throw new Error(data.error||'Upload failed');
+    toast(docType+' uploaded!','ok'); window._dropFile=null; clearCache(); renderDocuments();
+  } catch(e){ showMsg('uploadMsg',e.message,'err'); btn.disabled=false; btn.textContent='Upload Document'; }
+};
+
+/* ═══ BANK DETAILS ═══ */
+async function renderBank() {
+  var $m = document.getElementById('main');
+  try {
+    var [docData, existing] = await Promise.all([checkDocs(), getBankAccount()]);
+    $m.innerHTML = `<div class="ph"><div><h1>Bank Details</h1><p>Your saved bank account for payouts.</p></div></div>
+${!docData.verified?`<div class="alert-banner warn"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg><div><h4>Upload documents first</h4><p><a href="#" onclick="navTo('documents');return false">Go to Documents →</a></p></div></div>`:''}
+<div class="g2">
+  <div class="pn"><div class="pn-h"><h3>${existing?'Current Account':'No Bank Account'}</h3>${existing?badge('verified'):'<span class="bd bd-missing">Not set</span>'}</div><div class="pn-b">
+    ${existing?`<div class="bank-card"><div class="bank-name">${esc(existing.bank_name)}</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:14px"><div><div class="bank-label">Account Holder</div><div class="bank-val">${esc(existing.account_holder)}</div></div><div><div class="bank-label">Account No.</div><div class="bank-val">****${esc(String(existing.account_number||'').slice(-4))}</div></div><div><div class="bank-label">Branch Code</div><div class="bank-val">${esc(existing.branch_code)}</div></div><div><div class="bank-label">Added</div><div class="bank-val">${fmtD(existing.created_at)}</div></div></div></div><button class="btn btn-danger" style="margin-top:14px" onclick="removeBank()">Remove Bank Account</button>`:'<div class="empty" style="padding:30px 0"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/></svg>No bank account saved yet.</div>'}
+  </div></div>
+  <div class="pn"><div class="pn-h"><h3>${existing?'Update Account':'Add Account'}</h3></div><div class="pn-b">
+    ${!docData.verified?'<p style="font-size:.85rem;color:var(--t3);padding:14px 0">Upload your documents first.</p>':`
+    <div class="mb" id="bankMsg"></div>
+    <div style="display:flex;flex-direction:column;gap:13px">
+      <div class="ff"><label>Account Holder Name</label><input class="inp" type="text" id="bHolder" placeholder="Full name" value="${esc(existing?existing.account_holder:'')}"></div>
+      <div class="ff"><label>Bank</label><select class="inp" id="bBank"><option value="">Select bank…</option>${['ABSA','Capitec Bank','First National Bank (FNB)','Nedbank','Standard Bank','African Bank','Discovery Bank','Investec','Tyme Bank','Bidvest Bank'].map(function(b){ return '<option'+(existing&&existing.bank_name===b?' selected':'')+'>'+b+'</option>'; }).join('')}</select></div>
+      <div class="ff"><label>Branch Code</label><input class="inp" type="text" id="bBranch" placeholder="e.g. 632005" value="${esc(existing?existing.branch_code:'')}"></div>
+      <div class="ff"><label>Account Number</label><input class="inp" type="text" id="bAccNum" placeholder="Account number" value="${esc(existing?existing.account_number:'')}"></div>
+      <div class="ff"><label>Confirm Account Number</label><input class="inp" type="text" id="bAccNum2" placeholder="Re-enter" value="${esc(existing?existing.account_number:'')}"></div>
+      <button class="btn btn-primary" style="justify-content:center" id="saveBankBtn" onclick="saveBank()">${existing?'Update':'Save'} Bank Account</button>
+    </div>`}
+  </div></div>
+</div>`;
+  } catch(e) { document.getElementById('main').innerHTML='<div class="mi">'+errBox(e.message)+'</div>'; }
+}
+window.saveBank = async function(){
+  var holder=document.getElementById('bHolder').value.trim(), bank=document.getElementById('bBank').value, branch=document.getElementById('bBranch').value.trim(), accnum=document.getElementById('bAccNum').value.trim(), accnum2=document.getElementById('bAccNum2').value.trim();
+  if(!holder){ showMsg('bankMsg','Enter account holder name.','err'); return; }
+  if(!bank){ showMsg('bankMsg','Select your bank.','err'); return; }
+  if(!branch){ showMsg('bankMsg','Enter branch code.','err'); return; }
+  if(!accnum){ showMsg('bankMsg','Enter account number.','err'); return; }
+  if(accnum!==accnum2){ showMsg('bankMsg','Account numbers do not match.','err'); return; }
+  var btn=document.getElementById('saveBankBtn'); btn.disabled=true; btn.textContent='Saving…';
+  try { await aff('saveBankAccount',{bank_name:bank,account_holder:holder,account_number:accnum,branch_code:branch}); toast('Bank account saved!','ok'); clearCache(); renderBank(); }
+  catch(e){ showMsg('bankMsg',e.message,'err'); btn.disabled=false; btn.textContent='Save Bank Account'; }
+};
+window.removeBank = async function(){
+  if(!confirm('Remove your saved bank account?'))return;
+  try { await aff('deleteBankAccount'); toast('Bank account removed.','warn'); clearCache(); renderBank(); }
+  catch(e){ toast(e.message,'err'); }
+};
+
+/* ═══ SETTINGS — updateProfile via affiliate edge function ═══ */
+async function renderSettings() {
+  document.getElementById('main').innerHTML = `<div class="ph"><div><h1>Settings</h1></div></div>
+<div class="stabs"><button class="stab on" onclick="sTab('profile',this)">Profile</button><button class="stab" onclick="sTab('password',this)">Password</button></div>
+<div id="settingsPane"></div>`;
+  sTab('profile', document.querySelector('.stab.on'));
+}
+window.sTab = function(t, btn){
+  document.querySelectorAll('.stab').forEach(function(b){ b.classList.remove('on'); }); btn.classList.add('on');
+  var c = document.getElementById('settingsPane');
+  if(t==='profile'){
+    c.innerHTML = `<div class="pn"><div class="pn-h"><h3>Personal Information</h3></div><div class="pn-b">
+<div class="mb" id="pfMsg"></div>
+<div class="fg">
+  <div class="ff"><label>First Name</label><input class="inp" id="pfFN" value="${esc(me.first_name||'')}"></div>
+  <div class="ff"><label>Last Name</label><input class="inp" id="pfLN" value="${esc(me.last_name||'')}"></div>
+  <div class="ff full"><label>Email</label><input class="inp" value="${esc(me.email||'')}" disabled></div>
+</div>
+<button class="btn btn-primary" style="margin-top:16px" onclick="saveProfile()">Save Changes</button>
+</div></div>
+<div class="pn"><div class="pn-h"><h3>Referral Details</h3></div><div class="pn-b">
+<div class="ff" style="margin-bottom:14px"><label>Referral Code</label><input class="inp" value="${esc(me.referral_code||'—')}" readonly></div>
+<div class="ff"><label>Referral Link</label><div class="copy-row"><input id="settingsRefLink" type="text" value="${esc(me.referral_link||'')}" readonly><button onclick="navigator.clipboard.writeText(document.getElementById('settingsRefLink').value).then(function(){toast('Copied!','ok');})">Copy</button></div></div>
+</div></div>`;
+  } else {
+    c.innerHTML = `<div class="pn"><div class="pn-h"><h3>Change Password</h3></div><div class="pn-b">
+<div class="mb" id="pwMsg"></div>
+<div style="display:flex;flex-direction:column;gap:13px;max-width:400px">
+  <div class="ff"><label>New Password</label><input class="inp" type="password" id="newPW" placeholder="Min 8 characters"></div>
+  <div class="ff"><label>Confirm Password</label><input class="inp" type="password" id="newPW2" placeholder="Re-enter"></div>
+  <button class="btn btn-primary" onclick="changePassword()">Update Password</button>
+</div></div></div>`;
+  }
+};
+
+window.saveProfile = async function(){
+  var fn=document.getElementById('pfFN').value.trim(), ln=document.getElementById('pfLN').value.trim();
+  if(!fn||!ln){ showMsg('pfMsg','Both name fields required.','err'); return; }
+  try {
+    await aff('updateProfile', { first_name: fn, last_name: ln });
+    me.first_name=fn; me.last_name=ln;
+    document.getElementById('tbName').textContent=fn;
+    showMsg('pfMsg','Profile updated.','ok'); toast('Saved','ok');
+  } catch(e){ showMsg('pfMsg',e.message,'err'); }
+};
+
+window.changePassword = async function(){
+  var pw=document.getElementById('newPW').value, pw2=document.getElementById('newPW2').value;
+  if(!pw||pw.length<8){ showMsg('pwMsg','Password must be at least 8 characters.','err'); return; }
+  if(pw!==pw2){ showMsg('pwMsg','Passwords do not match.','err'); return; }
+  try {
+    var res=await fetch(API+'/resetPassword',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({newPassword:pw})});
+    var d=await res.json(); if(!res.ok)throw new Error(d.error||'Failed');
+    showMsg('pwMsg','Password updated.','ok'); toast('Password changed','ok');
+    document.getElementById('newPW').value=''; document.getElementById('newPW2').value='';
+  } catch(e){ showMsg('pwMsg',e.message,'err'); }
+};
+
+/* ═══ HOW IT WORKS ═══ */
+function renderHowItWorks() {
+  document.getElementById('main').innerHTML = `<div class="ph"><div><h1>How It Works</h1><p>Everything about the affiliate programme.</p></div></div>
+<div class="g3">${[['Share Your Link','Share your unique referral link with students who need help applying to SA universities.'],['They Sign Up','When someone registers using your link you earn R40. Commission logged within 48 hours.'],['They Buy a Plan','When your referred student buys their first paid plan, you earn 20% — automatically.']].map(function(s,i){ return '<div class="pn"><div class="pn-b"><div style="width:40px;height:40px;border-radius:50%;background:var(--primary-d);color:var(--primary);font-size:1rem;font-weight:700;display:flex;align-items:center;justify-content:center;margin-bottom:14px">'+(i+1)+'</div><h4 style="font-size:1rem;font-weight:600;margin-bottom:7px;color:var(--dark2)">'+s[0]+'</h4><p style="font-size:.85rem;color:var(--t2);line-height:1.65">'+s[1]+'</p></div></div>'; }).join('')}</div>
+<div class="g2">
+  <div class="pn"><div class="pn-h"><h3>Commission Table</h3></div><div class="tw"><table><thead><tr><th>Event</th><th>Your Earnings</th></tr></thead><tbody>${[['New user signup','R40 flat'],['Starter Plan (R100)','R20 (20%)'],['Standard Plan (R250)','R50 (20%)'],['Bundle Plan (R500)','R100 (20%)'],['All-In-One (R1,000)','R200 (20%)']].map(function(r){ return '<tr><td class="tm">'+r[0]+'</td><td style="font-weight:600;color:var(--green)">'+r[1]+'</td></tr>'; }).join('')}</tbody></table></div></div>
+  <div class="pn"><div class="pn-h"><h3>FAQs</h3></div><div class="pn-b" style="display:flex;flex-direction:column;gap:16px">${[['When do I get paid?','3–5 business days after withdrawal approval. Min R500.'],['What documents do I need?','SA ID (or passport) and a recent bank statement or proof of address.'],['How long does approval take?','Signup: 24–48h. Plan commissions: once payment clears.'],['Can I refer myself?','No — self-referrals are blocked.'],['Earnings limit?','None. Refer as many people as you want.']].map(function(q,i,a){ return '<div><div style="font-weight:600;font-size:.88rem;margin-bottom:4px;color:var(--dark2)">'+esc(q[0])+'</div><div style="font-size:.83rem;color:var(--t2);line-height:1.65">'+esc(q[1])+'</div></div>'+(i<a.length-1?'<div style="height:1px;background:var(--bdr)"></div>':''); }).join('')}</div></div>
+</div>`;
+}
+</script>
+</body>
+</html>

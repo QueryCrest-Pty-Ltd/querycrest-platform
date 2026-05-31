@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>QueryCrest Affiliates</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#f8fafc;--card:#ffffff;--surface:#f1f5f9;--surface2:#e2e8f0;
+  --primary:#3498db;--primary-dark:#2980b9;--primary-light:#5dade2;
+  --primary-d:rgba(52,152,219,.1);
+  --dark:#34495e;--dark2:#2c3e50;
+  --green:#27ae60;--red:#e74c3c;--orange:#e67e22;
+  --t1:#2c3e50;--t2:#5d6d7e;--t3:#95a5a6;
+  --bdr:#e8eef3;--bdr2:#cbd5e0;
+  --r:8px;--r2:14px;
+  --shadow:0 1px 3px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.04);
+  --shadow2:0 12px 40px rgba(52,152,219,.18);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;font-family:'Poppins',sans-serif;background:var(--bg);color:var(--t1);}
+body{overflow:hidden;}
+.page{display:grid;grid-template-columns:1fr 1fr;height:100vh;}
+.hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#eaf4fb 0%,#d6e9f5 50%,#b8dbf0 100%);}
+.slide{position:absolute;inset:0;opacity:0;transition:opacity .8s ease;pointer-events:none;display:flex;flex-direction:column;justify-content:flex-end;}
+.slide.active{opacity:1;pointer-events:auto;}
+.slide-bg{position:absolute;inset:0;background-size:cover;background-position:center;}
+.slide-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(52,73,94,.15) 0%,rgba(44,62,80,.78) 100%);}
+.slide-body{position:relative;padding:48px 56px 80px;color:#fff;z-index:2;}
+.slide-tag{display:inline-block;padding:5px 14px;background:rgba(52,152,219,.25);border:1px solid rgba(255,255,255,.25);border-radius:99px;font-size:.72rem;font-weight:600;color:#fff;letter-spacing:.05em;text-transform:uppercase;margin-bottom:16px;}
+.slide h2{font-size:clamp(1.6rem,2.6vw,2.2rem);font-weight:700;line-height:1.2;letter-spacing:-.02em;color:#fff;margin-bottom:12px;}
+.slide p{font-size:.95rem;color:rgba(255,255,255,.8);line-height:1.65;max-width:440px;}
+.hero-brand{position:absolute;top:0;left:0;right:0;z-index:3;height:60px;display:flex;align-items:center;gap:10px;padding:0 56px;}
+.brand-logo{width:32px;height:32px;border-radius:8px;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:800;color:#fff;}
+.brand-name{font-size:.95rem;font-weight:700;color:#fff;letter-spacing:-.01em;}
+.brand-name em{color:#5dade2;font-style:normal;}
+.back-home{position:absolute;top:0;right:0;height:60px;display:flex;align-items:center;padding:0 56px;color:rgba(255,255,255,.7);text-decoration:none;font-size:.82rem;font-weight:500;transition:color .15s;}
+.back-home:hover{color:#fff;}
+.dots{position:absolute;bottom:32px;left:56px;display:flex;gap:8px;z-index:3;}
+.dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.3);transition:all .3s;cursor:pointer;border:none;padding:0;}
+.dot.active{width:28px;background:#fff;border-radius:99px;}
+.form-side{background:var(--card);overflow-y:auto;display:flex;flex-direction:column;border-left:1px solid var(--bdr);}
+.form-inner{flex:1;display:flex;flex-direction:column;justify-content:center;padding:48px 56px;max-width:480px;margin:0 auto;width:100%;}
+.tabs{display:flex;background:var(--surface);border-radius:var(--r);padding:3px;margin-bottom:30px;}
+.tab{flex:1;padding:9px;border-radius:6px;font-size:.85rem;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--t3);font-family:'Poppins',sans-serif;transition:all .2s;}
+.tab.active{background:#fff;color:var(--primary);box-shadow:0 1px 3px rgba(0,0,0,.08);}
+.form-hd h2{font-size:1.45rem;font-weight:700;letter-spacing:-.02em;margin-bottom:5px;color:var(--dark2);}
+.form-hd p{font-size:.85rem;color:var(--t2);margin-bottom:24px;line-height:1.55;}
+.field{margin-bottom:14px;}
+.field label{display:block;font-size:.78rem;font-weight:600;color:var(--t2);margin-bottom:6px;}
+.inp{width:100%;padding:11px 14px;background:#fff;border:1.5px solid var(--bdr);border-radius:var(--r);color:var(--t1);font-size:.9rem;font-family:'Poppins',sans-serif;outline:none;transition:all .2s;}
+.inp:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-d);}
+.inp::placeholder{color:var(--t3);}
+.inp-wrap{position:relative;}.inp-wrap .inp{padding-right:42px;}
+.eye-btn{position:absolute;right:11px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--t3);cursor:pointer;padding:4px;display:flex;}
+.eye-btn:hover{color:var(--primary);}
+.eye-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.msg{display:none;padding:11px 14px;border-radius:var(--r);font-size:.83rem;line-height:1.5;margin-bottom:14px;}
+.msg.err {border-left:3px solid var(--red);background:rgba(231,76,60,.08);color:#c0392b;}
+.msg.ok  {border-left:3px solid var(--green);background:rgba(39,174,96,.08);color:var(--green);}
+.msg.warn{border-left:3px solid var(--orange);background:rgba(230,126,34,.08);color:#d35400;}
+.btn-submit{width:100%;padding:13px;background:var(--primary);color:#fff;border:none;border-radius:var(--r);font-size:.95rem;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif;letter-spacing:-.01em;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s;margin-top:6px;}
+.btn-submit:hover{background:var(--primary-dark);box-shadow:var(--shadow2);}
+.btn-submit:active{transform:scale(.98);}
+.btn-submit:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none;}
+.spin{width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:rot .7s linear infinite;display:none;}
+@keyframes rot{to{transform:rotate(360deg)}}
+.form-foot{margin-top:16px;text-align:center;font-size:.82rem;color:var(--t3);}
+.form-foot a{color:var(--primary);text-decoration:none;font-weight:600;}
+.form-foot a:hover{text-decoration:underline;}
+.terms{font-size:.74rem;color:var(--t3);line-height:1.55;margin-top:8px;}
+.terms a{color:var(--primary);text-decoration:none;}
+.forgot-link{display:block;text-align:center;margin-top:10px;font-size:.8rem;color:var(--t3);background:none;border:none;cursor:pointer;font-family:'Poppins',sans-serif;padding:0;transition:color .15s;}
+.forgot-link:hover{color:var(--primary);}
+@media(max-width:768px){
+  .page{grid-template-columns:1fr;}
+  .hero{display:none;}
+  .form-inner{padding:32px 24px;justify-content:flex-start;padding-top:48px;}
+  body{overflow:auto;}
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="hero">
+    <div class="hero-brand">
+      <div class="brand-logo">QC</div>
+      <span class="brand-name">QueryCrest <em>Affiliate</em></span>
+    </div>
+    <a class="back-home" href="/">← Back to QueryCrest</a>
+    <div class="slide active" id="slide0">
+      <div class="slide-bg" style="background-image:url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1200&q=80')"></div>
+      <div class="slide-body"><div class="slide-tag">Partner Programme</div><h2>Help students reach their<br>university dreams</h2><p>Connect South African students with the tools they need to apply to all 26 public universities — and earn for every successful referral.</p></div>
+    </div>
+    <div class="slide" id="slide1">
+      <div class="slide-bg" style="background-image:url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&q=80')"></div>
+      <div class="slide-body"><div class="slide-tag">Simple Process</div><h2>Share your link.<br>Earn automatically.</h2><p>Your unique referral link does the work. We track everything — you just need to share it with people who could benefit from QueryCrest.</p></div>
+    </div>
+    <div class="slide" id="slide2">
+      <div class="slide-bg" style="background-image:url('https://images.unsplash.com/photo-1606761568499-6d2451b23c66?w=1200&q=80')"></div>
+      <div class="slide-body"><div class="slide-tag">Trusted Platform</div><h2>Built for South Africa.<br>Made for students.</h2><p>QueryCrest helps thousands of South African students apply to universities and access bursaries. Be part of their journey.</p></div>
+    </div>
+    <div class="dots" id="dots">
+      <button class="dot active" onclick="goSlide(0)" aria-label="Slide 1"></button>
+      <button class="dot" onclick="goSlide(1)" aria-label="Slide 2"></button>
+      <button class="dot" onclick="goSlide(2)" aria-label="Slide 3"></button>
+    </div>
+  </div>
+
+  <div class="form-side">
+    <div class="form-inner">
+      <div class="tabs">
+        <button class="tab active" id="tabLogin"  onclick="showTab('login')">Sign In</button>
+        <button class="tab"        id="tabSignup" onclick="showTab('signup')">Sign Up</button>
+      </div>
+
+      <!-- LOGIN -->
+      <div id="panelLogin">
+        <div class="form-hd"><h2>Welcome back</h2><p>Sign in to your affiliate dashboard.</p></div>
+        <div class="msg" id="loginMsg"></div>
+        <div class="field"><label>Email Address</label><input class="inp" type="email" id="lEM" placeholder="you@example.com" autocomplete="email"></div>
+        <div class="field"><label>Password</label>
+          <div class="inp-wrap">
+            <input class="inp" type="password" id="lPW" placeholder="Your password" autocomplete="current-password">
+            <button class="eye-btn" type="button" onclick="toggleEye('lPW',this)"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+          </div>
+        </div>
+        <button class="btn-submit" id="loginBtn" onclick="doLogin()">
+          <span id="loginTxt">Sign In</span><span class="spin" id="loginSpin"></span>
+        </button>
+        <button class="forgot-link" onclick="doForgot()">Forgot your password?</button>
+        <p class="form-foot">No account? <a href="#" onclick="showTab('signup');return false">Create one →</a></p>
+      </div>
+
+      <!-- SIGNUP -->
+      <div id="panelSignup" style="display:none">
+        <div class="form-hd"><h2>Create your account</h2><p>Join the QueryCrest affiliate programme — it's free.</p></div>
+        <div class="msg" id="signupMsg"></div>
+        <div class="row2">
+          <div class="field"><label>First Name</label><input class="inp" type="text" id="sFN" placeholder="First name" autocomplete="given-name"></div>
+          <div class="field"><label>Last Name</label><input class="inp" type="text" id="sLN" placeholder="Last name" autocomplete="family-name"></div>
+        </div>
+        <div class="field"><label>Email Address</label><input class="inp" type="email" id="sEM" placeholder="you@example.com" autocomplete="email"></div>
+        <div class="field"><label>Phone Number</label><input class="inp" type="tel" id="sPH" placeholder="0812345678" autocomplete="tel"></div>
+        <div class="field"><label>Password</label>
+          <div class="inp-wrap">
+            <input class="inp" type="password" id="sPW" placeholder="Min 8 characters" autocomplete="new-password">
+            <button class="eye-btn" type="button" onclick="toggleEye('sPW',this)"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+          </div>
+        </div>
+        <div class="field"><label>Confirm Password</label>
+          <div class="inp-wrap">
+            <input class="inp" type="password" id="sPW2" placeholder="Re-enter password" autocomplete="new-password">
+            <button class="eye-btn" type="button" onclick="toggleEye('sPW2',this)"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+          </div>
+        </div>
+        <div class="field" id="refField" style="display:none">
+          <label>Referred By</label>
+          <input class="inp" type="text" id="sREF" placeholder="Referral code" readonly style="background:var(--surface);">
+        </div>
+        <p class="terms">By signing up you agree to our <a href="/privacy.html">Privacy Policy</a> and Affiliate Terms.</p>
+        <button class="btn-submit" id="signupBtn" onclick="doSignup()" style="margin-top:14px">
+          <span id="signupTxt">Create Account</span><span class="spin" id="signupSpin"></span>
+        </button>
+        <p class="form-foot">Already have an account? <a href="#" onclick="showTab('login');return false">Sign in →</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* Only the edge functions URL lives here — no anon key, no service key, no direct DB calls */
+const API = 'https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1';
+
+/* ── Slides ── */
+var curSlide = 0;
+function goSlide(n) {
+  document.getElementById('slide'+curSlide).classList.remove('active');
+  document.querySelectorAll('.dot')[curSlide].classList.remove('active');
+  curSlide = n;
+  document.getElementById('slide'+curSlide).classList.add('active');
+  document.querySelectorAll('.dot')[curSlide].classList.add('active');
+}
+setInterval(function(){ goSlide((curSlide+1)%3); }, 5500);
+
+/* ── Referral code from URL or localStorage ── */
+var refCode = new URLSearchParams(window.location.search).get('ref') || localStorage.getItem('qc_ref') || '';
+if (refCode) {
+  document.getElementById('sREF').value = refCode;
+  document.getElementById('refField').style.display = 'block';
+}
+
+/* ── Tabs ── */
+function showTab(t) {
+  var isL = t === 'login';
+  document.getElementById('panelLogin').style.display  = isL ? 'block' : 'none';
+  document.getElementById('panelSignup').style.display = isL ? 'none'  : 'block';
+  document.getElementById('tabLogin').classList.toggle('active', isL);
+  document.getElementById('tabSignup').classList.toggle('active', !isL);
+}
+
+/* ── Eye toggle ── */
+function toggleEye(id, btn) {
+  var i = document.getElementById(id), show = i.type === 'password';
+  i.type = show ? 'text' : 'password';
+  btn.querySelector('svg').innerHTML = show
+    ? '<line x1="1" y1="1" x2="23" y2="23"/><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 11 8 11 8a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 1 12s4 8 11 8a9.74 9.74 0 0 0 5.39-1.61"/>'
+    : '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+}
+
+/* ── Helpers ── */
+function setMsg(id, text, type) {
+  var el = document.getElementById(id);
+  el.textContent = text;
+  el.className = 'msg ' + (type || 'err');
+  el.style.display = text ? 'block' : 'none';
+}
+function setLoad(btnId, spinId, txtId, on, label) {
+  document.getElementById(btnId).disabled = on;
+  document.getElementById(txtId).textContent = on ? 'Please wait…' : label;
+  document.getElementById(spinId).style.display = on ? 'inline-block' : 'none';
+}
+
+/* ── LOGIN ────────────────────────────────────────────────────────────
+   Flow:
+   1. POST /loginUser  → get token (all auth logic server-side)
+   2. POST /affiliate {action:'addAffiliateRole'}  → server adds role if missing
+   3. Redirect to dashboard
+   No anon key. No direct DB calls. Role check is entirely server-side.
+──────────────────────────────────────────────────────────────────── */
+async function doLogin() {
+  setMsg('loginMsg', '', '');
+  var email = document.getElementById('lEM').value.trim();
+  var pass  = document.getElementById('lPW').value;
+  if (!email) { setMsg('loginMsg', 'Enter your email address.', 'err'); return; }
+  if (!pass)  { setMsg('loginMsg', 'Enter your password.', 'err'); return; }
+
+  setLoad('loginBtn', 'loginSpin', 'loginTxt', true, 'Sign In');
+  try {
+    /* Step 1 — authenticate */
+    var res  = await fetch(API + '/loginUser', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email, password: pass }),
+    });
+    var data = await res.json();
+    if (!res.ok || !data.success) {
+      setMsg('loginMsg', data.error || 'Incorrect email or password.', 'err');
+      return;
+    }
+    var tok = data.token;
+
+    /* Step 2 — ensure affiliate role exists (server-side logic, no client check) */
+    setMsg('loginMsg', 'Setting up affiliate access…', 'ok');
+    await fetch(API + '/affiliate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + tok },
+      body: JSON.stringify({ action: 'addAffiliateRole' }),
+    });
+
+    /* Step 3 — store token and redirect */
+    sessionStorage.setItem('affiliate_token', tok);
+    setMsg('loginMsg', 'Redirecting…', 'ok');
+    setTimeout(function() { window.location.href = '/affiliate/affiliate-dashboard.html'; }, 500);
+
+  } catch (e) {
+    setMsg('loginMsg', 'Network error: ' + e.message, 'err');
+  } finally {
+    setLoad('loginBtn', 'loginSpin', 'loginTxt', false, 'Sign In');
+  }
+}
+
+/* ── SIGNUP ── */
+async function doSignup() {
+  setMsg('signupMsg', '', '');
+  var fn  = document.getElementById('sFN').value.trim();
+  var ln  = document.getElementById('sLN').value.trim();
+  var em  = document.getElementById('sEM').value.trim();
+  var ph  = document.getElementById('sPH').value.trim();
+  var pw  = document.getElementById('sPW').value;
+  var pw2 = document.getElementById('sPW2').value;
+  var ref = document.getElementById('sREF').value.trim();
+
+  if (!fn)  { setMsg('signupMsg', 'Enter your first name.', 'err'); return; }
+  if (!ln)  { setMsg('signupMsg', 'Enter your last name.', 'err'); return; }
+  if (!em || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) { setMsg('signupMsg', 'Enter a valid email address.', 'err'); return; }
+  if (!ph)  { setMsg('signupMsg', 'Enter your phone number.', 'err'); return; }
+  var cleanPh = ph.replace(/\D/g, '');
+  if (cleanPh.length < 10) { setMsg('signupMsg', 'Phone must be at least 10 digits.', 'err'); return; }
+  if (!pw || pw.length < 8) { setMsg('signupMsg', 'Password must be at least 8 characters.', 'err'); return; }
+  if (pw !== pw2) { setMsg('signupMsg', 'Passwords do not match.', 'err'); return; }
+
+  setLoad('signupBtn', 'signupSpin', 'signupTxt', true, 'Create Account');
+  try {
+    /* Step 1 — create account */
+    var res  = await fetch(API + '/createUserAccount', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ firstName: fn, lastName: ln, email: em, password: pw, confirmPassword: pw, phone: cleanPh, referral_code: ref || null }),
+    });
+    var data = await res.json();
+
+    if (!res.ok) {
+      var errTxt = data.error || '';
+      if (errTxt.toLowerCase().includes('already registered') || errTxt.toLowerCase().includes('already exists')) {
+        setMsg('signupMsg', 'Account exists — signing you in…', 'warn');
+        document.getElementById('lEM').value = em;
+        document.getElementById('lPW').value = pw;
+        setTimeout(function() { showTab('login'); doLogin(); }, 1200);
+        return;
+      }
+      setMsg('signupMsg', errTxt || 'Signup failed.', 'err');
+      return;
+    }
+
+    setMsg('signupMsg', 'Account created! Setting up affiliate access…', 'ok');
+
+    /* Step 2 — log in to get token */
+    var loginRes  = await fetch(API + '/loginUser', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: em, password: pw }),
+    });
+    var loginData = await loginRes.json();
+    if (!loginData.success) {
+      setMsg('signupMsg', 'Account created — please sign in.', 'ok');
+      showTab('login');
+      return;
+    }
+    var tok = loginData.token;
+
+    /* Step 3 — add affiliate role server-side */
+    await fetch(API + '/affiliate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + tok },
+      body: JSON.stringify({ action: 'addAffiliateRole' }),
+    });
+
+    /* Step 4 — track referral if present */
+    if (ref) {
+      try {
+        await fetch(API + '/affiliate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + tok },
+          body: JSON.stringify({ action: 'trackReferral', ref_code: ref, referred_email: em }),
+        });
+        localStorage.removeItem('qc_ref');
+      } catch (e) { /* non-critical */ }
+    }
+
+    sessionStorage.setItem('affiliate_token', tok);
+    setMsg('signupMsg', 'Redirecting to your dashboard…', 'ok');
+    setTimeout(function() { window.location.href = '/affiliate/affiliate-dashboard.html'; }, 700);
+
+  } catch (e) {
+    setMsg('signupMsg', 'Error: ' + e.message, 'err');
+  } finally {
+    setLoad('signupBtn', 'signupSpin', 'signupTxt', false, 'Create Account');
+  }
+}
+
+/* ── FORGOT PASSWORD ── */
+async function doForgot() {
+  var email = document.getElementById('lEM').value.trim();
+  if (!email) { setMsg('loginMsg', 'Enter your email address above first.', 'err'); return; }
+  setMsg('loginMsg', 'Sending reset link…', 'ok');
+  try {
+    var res  = await fetch(API + '/forgotPassword', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email }),
+    });
+    var data = await res.json();
+    if (!res.ok) { setMsg('loginMsg', data.error || 'Failed. Please try again.', 'err'); return; }
+    setMsg('loginMsg', '✓ Reset link sent — check your inbox and spam folder.', 'ok');
+  } catch (e) {
+    setMsg('loginMsg', 'Network error. Please try again.', 'err');
+  }
+}
+
+/* ── Keyboard shortcuts ── */
+document.getElementById('lPW').addEventListener('keydown', function(e) { if (e.key === 'Enter') doLogin(); });
+document.getElementById('lEM').addEventListener('keydown', function(e) { if (e.key === 'Enter') document.getElementById('lPW').focus(); });
+document.getElementById('sPW2').addEventListener('keydown', function(e) { if (e.key === 'Enter') doSignup(); });
+</script>
+</body>
+</html>

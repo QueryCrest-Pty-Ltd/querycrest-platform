@@ -1,0 +1,2992 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Dashboard</title>
+  <link rel="stylesheet" href="../css/user-dashboard.css" />
+  <link rel="stylesheet" href="../css/dashboard-application-modal.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+  
+  <style>
+      .custom-modal {
+  display: none;
+  position: fixed;
+  z-index: 12000;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  justify-content: center;
+  align-items: center;
+  animation: fadeBackdrop 0.3s ease-out;
+}
+
+/* MODAL BOX */
+.custom-modal-content {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  width: 350px;
+  padding: 24px 26px;
+  border-radius: 18px;
+
+  /* Premium shadow */
+  box-shadow:
+    0 12px 35px rgba(0,0,0,0.18),
+    0 4px 10px rgba(0,0,0,0.08);
+
+  text-align: center;
+  animation: zoomIn 0.25s ease-out forwards;
+
+  /* Smooth border */
+  border: 1px solid rgba(255,255,255,0.6);
+}
+
+/* CLOSE BUTTON */
+.custom-modal-close {
+  float: right;
+  cursor: pointer;
+  font-size: 24px;
+  color: #888;
+  padding: 4px 8px;
+  transition: 0.2s;
+}
+
+.custom-modal-close:hover {
+  color: #000;
+  transform: scale(1.1);
+}
+
+/* MESSAGE TEXT */
+.custom-modal-message {
+  margin-top: 5px;
+  font-size: 17px;
+  color: #222;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+/* ANIMATIONS */
+@keyframes zoomIn {
+  from { opacity: 0; transform: scale(0.85); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes zoomOut {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.9); }
+}
+
+@keyframes fadeBackdrop {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fadeOut {
+  animation: zoomOut 0.25s ease-out forwards;
+}
+
+
+
+
+/* BACKDROP */
+.delete-modal-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(6px);
+  z-index: 999999; /* Highest element on page */
+  justify-content: center;
+  align-items: center;
+}
+
+/* MODAL CONTAINER */
+.delete-modal-box {
+  width: 90%;
+  max-width: 420px;
+  background: #fff;
+  border-radius: 14px;
+  padding: 28px 26px;
+  text-align: center;
+  position: relative;
+
+  /* Smooth shadow */
+  box-shadow:
+    0 15px 35px rgba(0,0,0,0.25),
+    0 6px 12px rgba(0,0,0,0.12);
+
+  animation: deleteZoomIn 0.25s ease-out;
+}
+
+/* WARNING ICON */
+.delete-icon {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+/* TITLES + TEXT */
+.delete-title {
+  font-size: 22px;
+  font-weight: bold;
+  color: #c92121;
+  margin: 5px 0 12px;
+}
+
+.delete-text {
+  font-size: 16px;
+  color: #2b2b2b;
+  line-height: 1.45;
+  margin-bottom: 22px;
+}
+
+/* CLOSE BUTTON */
+.delete-modal-close {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  font-size: 28px;
+  cursor: pointer;
+  color: #555;
+  transition: 0.2s;
+}
+
+.delete-modal-close:hover {
+  color: #000;
+  transform: scale(1.1);
+}
+
+/* BUTTON AREA */
+.delete-modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+}
+
+/* CONFIRM BUTTON */
+.delete-confirm-btn {
+  background: #d62828;
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: 0.2s;
+}
+
+.delete-confirm-btn:hover {
+  background: #b91d1d;
+}
+
+/* CANCEL BUTTON */
+.delete-cancel-btn {
+  background: #eee;
+  color: #333;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: 0.2s;
+}
+
+.delete-cancel-btn:hover {
+  background: #dcdcdc;
+}
+
+/* ANIMATION */
+@keyframes deleteZoomIn {
+  from { opacity: 0; transform: scale(0.85); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+
+
+.notif-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 9999;
+}
+
+.notif {
+    background: #323232;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 6px;
+    font-size: 14px;
+    opacity: 0;
+    transform: translateY(-10px);
+    animation: popIn 0.25s forwards;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+@keyframes popIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+}
+
+
+/* Mobile: make button stretch  */
+@media (max-width: 600px) {
+  #logoutAllBtn, #deleteAccountBtn {
+    width: auto;            
+    min-width: 100%;       
+    max-width: 300px;       
+    padding: 12px 20px;
+    display: block;        
+    margin: 10px auto;     
+    box-sizing: border-box;
+  }
+}
+
+
+
+
+.support-section {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.section-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #1f1c2c;
+}
+
+.section-description {
+  color: #666;
+  margin: 10px 0 30px;
+}
+
+/* ================= BUTTON ================= */
+.support-action {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.btn2-primary2 {
+  background: #1f6feb;
+  color: #fff;
+  padding: 12px 26px;
+  border-radius: 30px;
+  border: none;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.btn-primary:hover {
+  background: #174bbd;
+  transform: translateY(-2px);
+}
+
+/* ================= TICKETS ================= */
+.tickets-container {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ticket-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  border: 1px solid #e6e8ee;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+  transition: 0.3s ease;
+}
+
+.ticket-card:hover {
+  transform: translateY(-4px);
+}
+
+.ticket-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.ticket-header h4 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.ticket-badges {
+  display: flex;
+  gap: 6px;
+}
+
+.badge {
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.priority.high { background:#ffe1e1; color:#c82333; }
+.priority.medium { background:#fff0d8; color:#d98300; }
+.status.open { background:#e1ecff; color:#1f6feb; }
+.status.closed { background:#e1f7ec; color:#1e9d59; }
+
+.ticket-category {
+  margin: 12px 0;
+  color: #555;
+}
+
+.ticket-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #888;
+  border-top: 1px dashed #ddd;
+  padding-top: 12px;
+}
+
+/* ================= MODAL ================= */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 10000;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-box {
+  background: #fff;
+  width: 95%;
+  max-width: 480px;
+  border-radius: 18px;
+  padding: 25px;
+  animation: slideUp 0.3s ease;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(30px); opacity:0; }
+  to { transform: translateY(0); opacity:1; }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.close-btn {
+  font-size: 24px;
+  cursor: pointer;
+  
+}
+
+.modal-form .form-group {
+  margin-top: 18px;
+  text-align: left;
+}
+
+.modal-form label {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.modal-form input,
+.modal-form select,
+.modal-form textarea {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 25px;
+}
+
+.btn2-cancel2{
+  background: #f1f1f1;
+  padding: 12px 20px;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  color: black;
+}
+
+/* ================= SPINNER ================= */
+.spinner {
+  display: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #fff;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  margin-right: 6px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+
+
+
+
+
+#ucm_modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;              /* ALWAYS flex */
+  justify-content: center;
+  align-items: center;
+  background: rgba(0,0,0,0.6);
+  z-index: 9999;
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+#ucm_modal.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.hidden {
+  display: none;
+}
+
+.ucm_content {
+  background: #fff;
+  padding: 25px;
+  width: 90%;
+  max-width: 700px;
+  border-radius: 10px;
+}
+
+.ucm_row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.ucm_row select,
+.ucm_row input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+
+button {
+  padding: 10px 15px;
+  cursor: pointer;
+  border: none;
+  background: #007bff;
+  color: white;
+  border-radius: 5px;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+.ucm_table_wrapper {
+  overflow-x: auto;
+  margin-top: 15px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+
+th {
+  background: #f3f3f3;
+}
+
+#results_panel {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 8px;
+  background: #f9f9f9;
+}
+
+.pass {
+  color: green;
+  font-weight: bold;
+}
+
+.fail {
+  color: red;
+  font-weight: bold;
+}
+
+
+
+
+
+
+/* =========================
+   MODAL SCROLL FIX
+========================= */
+
+#ucm_modal {
+  overflow-y: auto;
+}
+
+.ucm_content {
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* =========================
+   RESPONSIVE FORM BEHAVIOR
+========================= */
+
+@media (max-width: 768px) {
+
+  /* Stack rows vertically */
+  .ucm_row {
+    flex-direction: column;
+  }
+
+  /* Full width inputs */
+  .ucm_row select,
+  .ucm_row input,
+  .ucm_row button {
+    width: 100%;
+  }
+
+  /* Better spacing */
+  .ucm_row {
+    gap: 12px;
+  }
+
+  /* Make modal padding tighter on small screens */
+  .ucm_content {
+    padding: 18px;
+  }
+
+}
+
+/* =========================
+   TABLE SCROLL IMPROVEMENT
+========================= */
+
+.ucm_table_wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Prevent table from squishing too much */
+table {
+  min-width: 600px;
+}
+
+.ucm_actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.ucm_reset_btn {
+  background: #ff6b35;
+  color: white;
+}
+
+.ucm_reset_btn:hover {
+  opacity: 0.9;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.ucm-cta-card {
+  position: relative;
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+
+  min-height: 180px; 
+  padding: 16px;
+
+  border-radius: inherit; 
+  z-index: 0;
+}
+
+
+.ucm-cta-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background-image: url("https://images.unsplash.com/photo-1522202176988-66273c2fd55f");
+  background-size: cover;
+  background-position: center;
+
+  transform: scale(1.08);
+  animation: slowPan 14s ease-in-out infinite;
+
+  z-index: -2;
+}
+
+
+.ucm-cta-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: rgba(255, 255, 255, 0.82);
+
+  z-index: -1;
+}
+
+/* slow movement */
+@keyframes slowPan {
+  0% { transform: scale(1.08) translateY(0px); }
+  50% { transform: scale(1.12) translateY(-6px); }
+  100% { transform: scale(1.08) translateY(0px); }
+}
+
+/* ensure content is always above image */
+.ucm-cta-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+
+.ucm-cta-card::marker,
+.ucm-cta-card::before-accent {
+  /* ignored - safe fallback */
+}
+
+.ucm-cta-card {
+  border-left: 4px solid #f97316; 
+}
+
+
+
+.ucm-cta-card h3 {
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 6px;
+}
+
+.ucm-cta-text {
+  color: #4b5563;
+  line-height: 1.4;
+  margin-bottom: 12px;
+}
+
+
+
+.ucm_cta_button {
+  margin-top: auto; 
+  align-self: flex-start;
+
+  background: #2563eb;
+  color: white;
+
+  padding: 10px 14px;
+  border-radius: 6px;
+
+  font-weight: 600;
+  border: none;
+
+  transition: all 0.2s ease;
+}
+
+/* hover */
+.ucm_cta_button:hover {
+  transform: translateY(-2px);
+  background: #1d4ed8;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+}
+
+/* click */
+.ucm_cta_button:active {
+  transform: scale(0.98);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.error-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+}
+
+.error-modal.hidden {
+  display: none;
+}
+
+.error-box {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  animation: pop 0.2s ease-out;
+}
+
+@keyframes pop {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+#error_close_btn {
+  margin-top: 15px;
+  background: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+#error_close_btn:hover {
+  opacity: 0.9;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Make it look like other links */
+.nav-link-with-action {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  padding: 10px 15px;
+}
+
+/* Hover same as others */
+.nav-link-with-action:hover {
+  background: rgba(0,0,0,0.05);
+}
+
+/* + icon styling */
+.expand-icon {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+/* Submenu positioning */
+.has-submenu {
+  position: relative;
+}
+
+.submenu {
+  position: absolute;
+  left: 100%;
+  top: 0;
+  width: 200px;
+  background: white;
+  border-radius: 10px;
+  padding: 10px;
+  list-style: none;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+  display: none;
+}
+
+.submenu.show {
+  display: block;
+}
+
+.submenu li {
+  margin: 8px 0;
+}
+
+.submenu a {
+  text-decoration: none;
+  color: white;
+}
+
+  </style>
+ 
+</head>
+<body>
+  <!-- Sidebar -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <h2>Student Dashboard</h2>
+    <span class="close-btn" id="closeBtn">&times;</span>
+  </div>
+  
+  <ul class="nav-links">
+
+    <li><a href="#dashboard">Dashboard</a></li>
+    <li><a href="#profile">Profile</a></li>
+    <li><a href="#applications">Applications</a></li>
+    <li><a href="#documents">Documents</a></li>
+    <li><a href="#nextOfKin">Next of Kin</a></li>
+    <li><a href="#notifications">Notifications</a></li>
+    <li><a href="#UnlockApplications">Unlock Applications</a></li>
+
+<li class="has-submenu">
+  <a href="#" class="nav-link-with-action" id="moreLink">
+    <span>More</span>
+    <span class="expand-icon" id="expandMenu">+</span>
+  </a>
+
+  <!-- Side submenu -->
+  <ul class="submenu" id="submenu">
+    <li><a href="https://www.querycrest.com/affiliate/affiliate-login-signup">Affiliate Dashboard</a></li>
+    
+    <li>
+  <a 
+    href="https://www.trustpilot.com/review/querycrest.com" 
+    target="_blank"
+    rel="noopener"
+    class="submenu-highlight"
+  >
+    ⭐ View Reviews
+  </a>
+</li>
+  </ul>
+</li>
+
+    <li><a href="#support">Help Center</a></li>
+    <li><a href="#settings">Settings</a></li>
+    <li><a href="#" id="logout">Logout</a></li>
+
+  </ul>
+</aside>
+
+    <!-- Trustpilot Script -->
+    <script type="text/javascript" src="https://widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" async></script>
+
+  <header class="topbar">
+    <span class="hamburger" id="hamburger">&#9776;</span>
+    <h1>Welcome, <span id="userName">User</span></h1>
+    <div class="notification-container">
+      <i class="fas fa-bell notification-icon"></i>
+      <span id="notificationBadge" class="notification-badge">0</span>
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <main class="main-content">
+    <!-- Dashboard Section -->
+    <section id="dashboard" class="section">
+      <div class="cards">
+        <!-- Application details card -->
+        <div class="card">
+        <h3>Application Details</h3>
+        <div class="application-detail">
+            <div class="detail-item">
+            <span class="detail-label">Current Plan:</span>
+            <span class="detail-value plan">loading...</span>
+            </div>
+            <div class="detail-item">
+            <span class="detail-label">Total Applications:</span>
+            <span class="detail-value total">loading...</span>
+            </div>
+            <div class="detail-item">
+            <span class="detail-label">Used Applications:</span>
+            <span class="detail-value used">loading...</span>
+            </div>
+            <div class="detail-item">
+            <span class="detail-label">Applications Remaining:</span>
+            <span class="detail-value remaining">loading...</span>
+            </div>
+        </div>
+        </div>
+
+
+        <!-- Other cards
+        <div class="ucm_card ucm_card_cta" id="ucm_card_cta_special">
+
+          <div class="ucm_card_inner">
+        
+            <h2 class="ucm_card_title ucm_cta_title">
+              Find Out If You Qualify Instantly 
+            </h2>
+        
+            <p class="ucm_card_text ucm_cta_text">
+              Stop guessing. Get real-time university eligibility results in seconds.
+            </p>
+        
+            <button id="ucm_open_btn" class="ucm_btn ucm_btn_primary ucm_cta_button">
+              Check My Chances
+            </button>
+        
+          </div>
+        
+        </div> -->
+        
+        <div class="card ucm-cta-card">
+
+          <h3>Find Out If You Qualify Instantly</h3>
+        
+          <!-- SAFE STATIC TEXT BLOCK -->
+          <div class="ucm-cta-text">
+            Stop guessing. Get real-time university eligibility results in seconds.
+          </div>
+        
+          <button id="ucm_open_btn" class="ucm_cta_button">
+            Check My Chances
+          </button>
+        
+        </div>
+
+        <div class="card">
+        <h3>Documents Uploaded</h3>
+        <p class="card-value">loading...</p>
+
+        <button class="view-more-btn" id="DocBtn">
+            View More
+        </button>
+        </div>
+
+        <div class="card">
+        <h3>Notifications</h3>
+        <p class="card-value">loading...</p>
+
+        <button class="view-more-btn" id="NotBtn">
+            View More
+        </button>
+        </div>
+      </div>
+    </section>
+
+    
+    
+   <!-- Unlock More Applications section -->
+    <section id="UnlockApplications" class="section" style="display: none;">
+        <h3>Unlock More Applications</h3>
+    
+        <!-- Application Plan Cards -->
+        <div id="plans-container" class="plan-cards-container">
+            
+        </div>
+    </section>
+    
+    
+    <div id="paymentSummaryModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeSummaryModal">&times;</span>
+            <h2>Payment Summary</h2>
+    
+            <p id="planNameSummary">Plan: -</p>
+            <p id="planPriceSummary">Price: -</p>
+            <p id="planApplicationsSummary">Number of Applications: -</p>
+    
+            <div class="modal-footer">
+                <button id="confirmPaymentBtn">Confirm Payment</button>
+                <button id="cancelPaymentBtn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Confirmation Modal -->
+    <div id="paymentConfirmationModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" id="closeConfirmationModal">&times;</span>
+        <h2>Payment Successful</h2>
+        <p>Your payment was successfully processed. Your applications have been updated!</p>
+        <div class="modal-footer">
+        <button id="goToDashboardBtn">Go to Dashboard</button>
+        </div>
+    </div>
+    </div>
+
+
+    <!-- Profile Section -->
+    <section id="profile" class="section" style="display: none;">
+    <h3>Profile</h3>
+
+    <!-- Personal Details Card -->
+    <div class="card">
+        <h3>Personal Details</h3>
+        <div class="personal-details">
+        <div class="personal-item">
+            <img src="https://tse1.mm.bing.net/th/id/OIP.hrSs5CgDui53E9ZM9NX8XgAAAA?cb=ucfimgc2&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Profile Icon" class="profile-icon" />
+        </div>
+        <div class="personal-item">
+            <label for="firstName">First Name:</label>
+            <input type="text" id="firstName" value="loading..." disabled />
+        </div>
+        <div class="personal-item">
+            <label for="lastName">Last Name:</label>
+            <input type="text" id="lastName" value="loading..." disabled />
+        </div>
+        <div class="personal-item">
+            <label for="phone">Phone:</label>
+            <input type="text" id="phone" value="loading..." disabled />
+        </div>
+        <div class="personal-item">
+            <label for="email">Email:</label>
+            <input type="email" id="email" value="loading..." disabled />
+        </div>
+        </div>
+        
+       
+       
+       <!-- Trigger -->
+      <!--<p id="openModal"
+         style="font-size:16px; color:#2563eb; text-decoration:underline; cursor:pointer;">
+        Complete your personal information
+      </p>-->
+
+       
+    </div>
+
+    <!-- Address Card -->
+    <div class="card">
+        <h3>Address</h3>
+        <div class="address-details">
+        <div class="address-item">
+            <label for="postalAddress">Postal Address:</label>
+            <input type="text" id="postalAddress" value="Add postal Address" disabled />
+        </div>
+        <div class="address-item">
+            <label for="physicalAddress">Physical Address:</label>
+            <input type="text" id="physicalAddress" value="Add Physical Address" disabled />
+        </div>
+        <div class="address-actions">
+            <button id="editAddressBtn" class="btn">Add/Edit Address</button>
+        </div>
+        </div>
+    </div>
+
+    <!-- Account and Account Type Card -->
+    <div class="card">
+      <h3>Account Details</h3>
+      <div class="account-details">
+
+        <div class="account-item current-plan">
+          <label>Current Plan:</label>
+          <p>loading...</p> 
+        </div>
+
+        <div class="account-item purchased-plans">
+          <label>Plans Purchased:</label>
+          <p>loading...</p> 
+          <ul>loading...</ul> 
+        </div>
+
+        <div class="account-item">
+          <button id="resetPasswordBtn" class="btn">Reset Password</button>
+        </div>
+
+      </div>
+    </div>
+    </section>
+
+    <!-- Applications Section -->
+    <section id="applications" class="section" style="display: none;">
+    <h3>Applications</h3>
+
+    <!-- Important Notice -->
+    <div class="important-notice">
+        <p><strong>Important:</strong> Applications cannot be deleted or edited. If you make a mistake, please contact support.</p>
+    </div>
+
+    <!-- Add Application Button -->
+    <div class="add-application-btn-container">
+        <button class="add-application-btn" id="openAddApplicationModal">
+            Add Application
+        </button>
+    </div>
+        
+
+    <div id="applicationCardsContainer"></div>
+    </section>
+
+    <!-- Documents Section -->
+    <section id="documents" class="section" style="display: none;">
+    <h3>Documents</h3>
+
+    <!-- Important Notice -->
+    <div class="important-notice">
+        <p><strong>Important:</strong> Please ensure that your documents are clear and legible. Certify your documents at your nearest police station if needed. <br> 
+        Upload the following document types: ID, Passport, Grade 11 Results, Grade 12 Results, Transcript, Motivational Letter, etc. <br>
+        We recommend uploading documents as images (JPEG, PNG) or PDF files.</p>
+    </div>
+
+    <!-- Bad vs Good Documents -->
+    <div class="document-example">
+        <h4>Examples of Good Documents:</h4>
+        <div class="example-doc">
+        <img src="https://images.sampletemplates.com/wp-content/uploads/2017/01/27173256/System-Design-Document-Example.jpg" alt="Good Document Example" class="example-doc-img" />
+        <p>Clear, well-lit image of a document.</p>
+        </div>
+
+        <h4>Examples of Bad Documents:</h4>
+        <div class="example-doc">
+        <img src="https://tse3.mm.bing.net/th/id/OIP.SC53_cwC8TMrDTSIFLoX_AHaE8?cb=ucfimgc2&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Bad Document Example" class="example-doc-img" />
+        <p>Blurry, dark, or cropped image of a document.</p>
+        </div>
+    </div>
+
+    <!-- Button to Add Documents -->
+    <div class="add-doc-button">
+        <button id="openAddDocumentModal" class="add-doc-btn">Add Document</button>
+    </div>
+
+    <!-- Uploaded Documents List -->
+    <h4>Your Uploaded Documents:</h4>
+    <div class="document-list"> </div>
+    </section>
+
+    <!-- Next of Kin Section -->
+    <section id="nextOfKin" class="section" style="display: none;">
+    <h3>Next of Kin</h3>
+
+    <!-- Add/Edit Button (outside the cards) -->
+    <div class="add-edit-kin">
+        <button class="add-kin-btn" id="openAddKinModal">Add New Next of Kin</button>
+    </div>
+
+    <!-- Important Info Section -->
+    <div class="important-info">
+        <p>Please make sure the details of your Next of Kin are accurate. You can add up to 2 Next of Kins.</p>
+    </div>
+
+    <!-- Next of Kin Cards (Stacked vertically) -->
+    <div class="next-of-kin-cards"></div>
+    </section>
+
+    <!-- Notifications Section -->
+    <section id="notifications" class="section">
+    <h3>Notifications</h3>
+
+    <!-- Filter Section -->
+    <div class="filter-bar">
+        <select class="filter-dropdown" id="filterDropdown">
+        <option value="all">All</option>
+        <option value="read">Read</option>
+        <option value="unread">Unread</option>
+        <option value="recent">Recent</option>
+        </select>
+
+        <div class="filter-buttons">
+        <button class="filter-btn" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="read">Read</button>
+        <button class="filter-btn" data-filter="unread">Unread</button>
+        <button class="filter-btn" data-filter="recent">Recent</button>
+        </div>
+    </div>
+
+    <div class="notification-cards" id="notificationCards">
+        <!-- Notifications will be dynamically inserted here -->
+    </div>
+    </section>
+
+    
+   <!-- Settings Section -->
+   <section id="settings" class="section" style="display: none;">
+      <h3>Settings</h3>
+
+      <!-- Tabs for Profile & Account Settings ONLY -->
+      <div class="settings-tabs">
+          <button class="tab-btn active" id="profileTab">Profile Settings</button>
+          <button class="tab-btn" id="accountTab">Account Settings</button>
+      </div>
+
+      <!-- Profile Settings Section (UNCHANGED) -->
+      <div id="profileSettings" class="settings-content active">
+          <div class="setting-card">
+              <h4>Profile Information</h4>
+
+              <div class="setting-item">
+                  <label for="firstName2">First Name:</label><br/>
+                  <input type="text" id="firstName2" value="loading" disabled />
+              </div>
+              <div class="setting-item">
+                  <label for="lastName2">Last Name:</label></br>
+                  <input type="text" id="lastName2" value="loading" disabled />
+              </div>
+              <div class="setting-item">
+                  <label for="phone2">Phone:</label><br>
+                  <input type="tel" id="phone2" value="loading" disabled />
+              </div>
+              <div class="setting-item">
+                  <label for="email2">Email:</label><br>
+                  <input type="email" id="email2" value="loading" disabled />
+              </div>
+          </div>
+      </div>
+
+      <!-- Account Settings (UPDATED + MINIMAL) -->
+      <div id="accountSettings" class="settings-content">
+          <div class="setting-card">
+              <h4>Account Settings</h4>
+
+              <!-- Email Notifications Toggle -->
+              <div class="setting-item">
+                  <label for="emailNotificationsToggle">Email Notifications:</label>
+                  <input type="checkbox" id="emailNotificationsToggle" />
+              </div>
+
+              <!-- Login Activity (READ ONLY) -->
+              <div class="setting-item">
+                  <label>Last Login:</label>
+                  <input type="text" id="lastLogin" value="loading..." disabled />
+              </div>
+
+              <div class="setting-item">
+                  <label>Last Login IP:</label>
+                  <input type="text" id="lastLoginIP" value="loading..." disabled />
+              </div>
+
+              <!-- Logout All Devices -->
+              <div class="setting-item">
+                  <button id="logoutAllBtn" class="secondary-btn">Log Out of All Devices</button>
+              </div>
+
+              <!-- Delete Account (UNCHANGED) -->
+              <div class="setting-item">
+                  <button class="danger-btn" id="deleteAccountBtn">Delete Account</button>
+              </div>
+          </div>
+      </div>
+  </section>
+
+
+    <section id="support" class="section support-section" style="display:none;">
+      <h3 class="section-title">Support Tickets</h3>
+    
+      <p class="section-description">
+        Need help? Open a support ticket and our team will get back to you.
+      </p>
+    
+      <!-- Important Notice -->
+      <div class="important-notice">
+        <p>
+          <strong>Important:</strong>
+          Our support team typically responds to tickets within 24–48 hours.
+          All communication and updates regarding your request will be sent directly to your email.
+          Please keep an eye on your inbox while we review and assist with your ticket.
+        </p>
+      </div>
+    
+      <!-- Open Ticket Button -->
+      <div class="support-action">
+        <button id="openSupportModal" class="btn-primary">
+          + Open New Ticket
+        </button>
+      </div>
+    
+      <div id="ticketsContainer" class="tickets-container">
+        <!-- 
+          Tickets will be injected here dynamically
+        -->
+      </div>
+    </section>
+
+
+  </main>
+ 
+ 
+ <!-- Modal for more-extended personal Info --> 
+ 
+  <!-- Modal -->
+  <div id="modal" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.65);
+    z-index:9999;
+    justify-content:center;
+    align-items:center;
+    padding:16px;
+  ">
+
+    <div style="
+      background:#fff;
+      width:100%;
+      max-width:720px;
+      border-radius:16px;
+      padding:28px;
+      box-shadow:0 25px 50px rgba(0,0,0,0.35);
+      max-height:92vh;
+      overflow-y:auto;
+    ">
+
+      <h2 style="margin:0 0 8px; font-size:24px; color:#111827;">
+        Personal Information
+      </h2>
+
+      <p style="font-size:15px; color:#374151; margin-bottom:24px;">
+        Universities and colleges require this information to assess and process your applications.
+      </p>
+
+      <form id="personalForm" style="display:flex; flex-direction:column; gap:18px;">
+
+        <!-- BASIC INFO -->
+        <div>
+          <label style="font-weight:600;">First Name</label>
+          <input type="text" value="John" readonly
+            style="width:100%; padding:12px; border-radius:8px; border:1px solid #d1d5db; background:#f9fafb;">
+        </div>
+
+        <div>
+          <label style="font-weight:600;">Email Address</label>
+          <input type="email" value="john@example.com" readonly
+            style="width:100%; padding:12px; border-radius:8px; border:1px solid #d1d5db; background:#f9fafb;">
+        </div>
+
+        <!-- TITLE -->
+        <div>
+          <label style="font-weight:600;">Title</label>
+          <select required style="width:100%; padding:12px; border-radius:8px; border:1px solid #d1d5db;">
+            <option value="">Select title</option>
+            <option>Mr</option>
+            <option>Ms</option>
+            <option>Mrs</option>
+            <option>Dr</option>
+            <option>Prof</option>
+          </select>
+        </div>
+
+        <!-- ID -->
+        <div>
+          <label style="font-weight:600;">South African ID Number</label>
+          <input id="idNumber" maxlength="13" required
+            placeholder="13-digit ID number"
+            style="width:100%; padding:12px; border-radius:8px; border:1px solid #d1d5db;">
+        </div>
+
+        <div>
+          <label style="font-weight:600;">Date of Birth</label>
+          <input id="dob" readonly placeholder="Auto-detected"
+            style="width:100%; padding:12px; border-radius:8px; border:1px solid #d1d5db; background:#f9fafb;">
+        </div>
+
+        <div>
+          <label style="font-weight:600;">Gender</label>
+          <input id="gender" readonly placeholder="Auto-detected"
+            style="width:100%; padding:12px; border-radius:8px; border:1px solid #d1d5db; background:#f9fafb;">
+        </div>
+
+        <!-- MARITAL -->
+        <div>
+          <label style="font-weight:600;">Marital Status</label>
+          <div style="margin-top:6px;">
+            <label><input type="radio" name="marital" required> Single</label>
+            <label style="margin-left:14px;"><input type="radio" name="marital"> Married</label>
+            <label style="margin-left:14px;"><input type="radio" name="marital"> Divorced</label>
+            <label style="margin-left:14px;"><input type="radio" name="marital"> Widowed</label>
+          </div>
+        </div>
+
+        <!-- OCCUPATION -->
+        <div>
+          <label style="font-weight:600;">Current Occupation</label>
+          <select required style="width:100%; padding:12px; border-radius:8px; border:1px solid #d1d5db;">
+            <option value="">Select your current situation</option>
+            <option>High school learner</option>
+            <option>Gap year student</option>
+            <option>University student</option>
+            <option>TVET college student</option>
+            <option>Graduate (seeking opportunities)</option>
+            <option>Employed full-time</option>
+            <option>Employed part-time</option>
+            <option>Self-employed</option>
+            <option>Unemployed</option>
+            <option>Intern</option>
+            <option>Apprentice</option>
+            <option>Learnership participant</option>
+            <option>Entrepreneur</option>
+            <option>Homemaker</option>
+            <option>Other</option>
+          </select>
+        </div>
+  
+        <!-- HOME LANGUAGE -->
+        <div>
+          <label style="font-weight:600;">Home Language</label>
+          <select style="width:100%; padding:12px; border-radius:8px; border:1px solid #d1d5db;">
+            <option value="">Select language</option>
+            <option>English</option>
+            <option>Afrikaans</option>
+            <option>Xitsonga</option>
+            <option>IsiZulu</option>
+            <option>Xitsonga</option>
+            <option>IsiXhosa</option>
+            <option>Sepedi</option>
+            <option>Setswana</option>
+            <option>Sesotho</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <!-- DISABILITY -->
+        <div>
+          <label style="font-weight:600;">Do you have a disability?</label>
+          <div style="margin-top:6px;">
+            <label><input type="radio" name="disability"> No</label>
+            <label style="margin-left:14px;"><input type="radio" name="disability"> Yes</label>
+          </div>
+        </div>
+
+        <!-- COUNTRY -->
+        <div>
+          <label style="font-weight:600;">Country</label>
+          <input value="South Africa" readonly
+            style="width:100%; padding:12px; border-radius:8px; border:1px solid #d1d5db; background:#f9fafb;">
+        </div>
+
+        <!-- ACTIONS -->
+        <div style="display:flex; justify-content:flex-end; gap:12px; margin-top:12px;">
+          <button type="button" id="closeModal"
+            style="padding:12px 22px; border-radius:8px; background:#e5e7eb; border:none;">
+            Cancel
+          </button>
+          <button type="submit"
+            style="padding:12px 22px; border-radius:8px; background:#2563eb; color:#fff; border:none; font-weight:600;">
+            Save Information
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+ 
+ 
+ 
+  
+  <div id="supportModal" class="modal-overlay">
+  <div class="modal-box">
+
+    <div class="modal-header">
+      <h3>Create Support Ticket</h3>
+      <span id="closeSupportModal" class="close-btn">&times;</span>
+    </div>
+
+    <form id="supportForm" class="modal-form">
+
+      <div class="form-group">
+        <label>Subject</label>
+        <input type="text" placeholder="Brief summary" required />
+      </div>
+
+      <div class="form-group">
+        <label>Category</label>
+        <select required>
+          <option value="">Select category</option>
+          <option>Technical Issue</option>
+          <option>Academic Guidance</option>
+          <option>Application Help</option>
+          <option>Billing</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Message</label>
+        <textarea rows="5" placeholder="Describe your issue..." required></textarea>
+      </div>
+
+      <div class="form2-group2">
+          <label for="documentFile2">Upload Document: (Optional)</label>
+          <input type="file" id="documentFile2" accept=".jpg, .jpeg, .png, .pdf">
+      </div>
+
+
+      <div class="modal-actions">
+        <button type="button" id="cancelSupport" class="btn2-cancel2">Cancel</button>
+        <button type="submit" class="btn2-primary2">
+          <span class="spinner"></span>
+          Submit Ticket
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+  <!-- Modal for Address Section: Profile Section-->
+  <div id="addressModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" id="closeAddressModal">&times;</span>
+
+        <h4>Add/Edit Address</h4>
+
+        <!-- Physical Address Section -->
+        <div class="modal-section physical-address">
+        <h5>Physical Address (South Africa)</h5>
+        <div class="modal-item">
+            <label for="streetAddress">Street Address:</label>
+            <input type="text" id="streetAddress" required />
+        </div>
+        <div class="modal-item">
+            <label for="suburb">Suburb / Township:</label>
+            <input type="text" id="suburb" required />
+        </div>
+        <div class="modal-item">
+            <label for="city">City / Town:</label>
+            <input type="text" id="city" required />
+        </div>
+        <div class="modal-item">
+            <label for="province">Province:</label>
+            <select id="province" required>
+            <option value="Gauteng">Gauteng</option>
+            <option value="Western Cape">Western Cape</option>
+            <option value="KwaZulu-Natal">KwaZulu-Natal</option>
+            <option value="Eastern Cape">Eastern Cape</option>
+            <option value="Northern Cape">Northern Cape</option>
+            <option value="Free State">Free State</option>
+            <option value="North West">North West</option>
+            <option value="Mpumalanga">Mpumalanga</option>
+            <option value="Limpopo">Limpopo</option>
+            </select>
+        </div>
+        <div class="modal-item">
+            <label for="postalCode">Postal Code:</label>
+            <input type="text" id="postalCode" pattern="\d{4}" maxlength="4" required />
+        </div>
+        </div>
+
+        <!-- "Is your physical address the same as your postal address?" Question -->
+        <div class="modal-item">
+        <label for="sameAddress" class="checkbox-label">Is your physical address the same as your postal address?</label>
+        <input type="checkbox" id="sameAddress" class="checkbox" />
+        </div>
+
+        <!-- Postal Address Section -->
+        <div class="modal-section postal-address">
+        <h5>Postal Address (South Africa)</h5>
+        <div class="modal-item">
+            <label for="postalStreet">Street / P.O. Box / Private Bag:</label>
+            <input type="text" id="postalStreet" required />
+        </div>
+        <div class="modal-item">
+            <label for="postalSuburb">Suburb / Township:</label>
+            <input type="text" id="postalSuburb" required />
+        </div>
+        <div class="modal-item">
+            <label for="postalCity">City / Town:</label>
+            <input type="text" id="postalCity" required />
+        </div>
+        <div class="modal-item">
+            <label for="postalProvince">Province:</label>
+            <select id="postalProvince">
+            <option value="Gauteng">Gauteng</option>
+            <option value="Western Cape">Western Cape</option>
+            <option value="KwaZulu-Natal">KwaZulu-Natal</option>
+            <option value="Eastern Cape">Eastern Cape</option>
+            <option value="Northern Cape">Northern Cape</option>
+            <option value="Free State">Free State</option>
+            <option value="North West">North West</option>
+            <option value="Mpumalanga">Mpumalanga</option>
+            <option value="Limpopo">Limpopo</option>
+            </select>
+        </div>
+        <div class="modal-item">
+            <label for="postalPostalCode">Postal Code:</label>
+            <input type="text" id="postalPostalCode" pattern="\d{4}" maxlength="4" required />
+        </div>
+        </div>
+
+        <!-- Save and Cancel Buttons -->
+        <div class="modal-footer">
+        <button type="button" class="save-btn" id="saveAddressBtn">Save Address</button>
+        <button type="button" id="cancelAddressBtn" class="cancel-btn">Cancel</button>
+
+        </div>
+    </div>
+  </div>
+
+  <!-- Reset Password Modal: Profile Section -->
+    <div id="resetPasswordModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" id="closeResetPasswordModal">&times;</span>
+
+        <h4>Reset Password</h4>
+
+        <!-- Password Reset Form -->
+        <div class="modal-section">
+        <div class="modal-item">
+            <label for="currentPassword">Current Password:</label>
+            <input type="password" id="currentPassword" required />
+        </div>
+        <div class="modal-item">
+            <label for="newPassword">New Password:</label>
+            <input type="password" id="newPassword" required />
+        </div>
+        <div class="modal-item">
+            <label for="confirmPassword">Confirm New Password:</label>
+            <input type="password" id="confirmPassword" required />
+        </div>
+        </div>
+        <p id="resetError" style="color:red; font-size: 14px; margin-top: 10px;"></p>
+        <!-- Save and Cancel Buttons -->
+        <div class="modal-footer">
+        <button type="button" class="save-btn" id="savePasswordBtn">Save</button>
+        <button type="button" class="cancel-btn" id="cancelPasswordResetBtn">Cancel</button>
+        </div>
+    </div>
+    </div>
+
+    
+<!-- Modal Structure for applications-->
+      <div id="addApplicationModal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; overflow:auto; background-color:rgba(0,0,0,0.5); z-index:1000;">
+  <div class="modal-content" style="background-color:white; margin:50px auto; padding:20px; border-radius:8px; width:90%; max-width:600px; box-shadow:0 2px 10px rgba(0,0,0,0.2);">
+    
+    <span id="closeAddApplicationModal" class="close-btn" style="float:right; font-size:24px; cursor:pointer;">&times;</span>
+    <h3 style="margin-top:0; margin-bottom:20px;">Add New Application</h3>
+
+    <form id="applicationForm">
+
+      <!-- University Name -->
+      <div class="add-app-form-row" style="display:flex; flex-wrap:wrap; gap:15px; margin-bottom:15px;">
+        <div class="add-app-form-group full-width" style="flex:100%;">
+          <label for="universityName" style="display:block; margin-bottom:6px; font-weight:500;">University Name: <span style="color:red">*</span></label>
+          <input type="text" id="universityName" placeholder="Enter University Name" required style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; font-size:14px; box-sizing:border-box;">
+        </div>
+      </div>
+
+      <!-- Program & Course Code Pairs -->
+      <div class="add-app-form-row" style="display:flex; flex-wrap:wrap; gap:15px; margin-bottom:15px;">
+        <div class="add-app-form-group" style="flex:1; min-width:150px;">
+          <label for="program1" style="display:block; margin-bottom:6px; font-weight:500;">Program/Course 1: <span style="color:red">*</span></label>
+          <input type="text" id="program1" placeholder="Enter Program or Course Name" required style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box;">
+        </div>
+        <div class="add-app-form-group" style="flex:1; min-width:150px;">
+          <label for="courseCode1" style="display:block; margin-bottom:6px; font-weight:500;">Course Code 1:<span style="color: red">*</span></label>
+          <input type="text" id="courseCode1" placeholder="Optional Course Code" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box;">
+        </div>
+      </div>
+
+      <div class="add-app-form-row" style="display:flex; flex-wrap:wrap; gap:15px; margin-bottom:15px;">
+        <div class="add-app-form-group" style="flex:1; min-width:150px;">
+          <label for="program2" style="display:block; margin-bottom:6px; font-weight:500;">Program/Course 2:</label>
+          <input type="text" id="program2" placeholder="Optional Program or Course Name" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box;">
+        </div>
+        <div class="add-app-form-group" style="flex:1; min-width:150px;">
+          <label for="courseCode2" style="display:block; margin-bottom:6px; font-weight:500;">Course Code 2:</label>
+          <input type="text" id="courseCode2" placeholder="Optional Course Code" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box;">
+        </div>
+      </div>
+
+      <div class="add-app-form-row" style="display:flex; flex-wrap:wrap; gap:15px; margin-bottom:15px;">
+        <div class="add-app-form-group" style="flex:1; min-width:150px;">
+          <label for="program3" style="display:block; margin-bottom:6px; font-weight:500;">Program/Course 3:</label>
+          <input type="text" id="program3" placeholder="Optional Program or Course Name" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box;">
+        </div>
+        <div class="add-app-form-group" style="flex:1; min-width:150px;">
+          <label for="courseCode3" style="display:block; margin-bottom:6px; font-weight:500;">Course Code 3:</label>
+          <input type="text" id="courseCode3" placeholder="Optional Course Code" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box;">
+        </div>
+      </div>
+
+      <!-- Buttons-->
+      <div class="add-app-form-row add-app-buttons" style="display:flex; justify-content:flex-end; gap:10px; margin-top:10px;">
+        <button type="button" id="saveApplicationBtn" class="btn btn-primary" style="padding:8px 16px; border:none; border-radius:4px; background-color:#007bff; color:white; cursor:pointer;">Save Application</button>
+        <button type="button" id="cancelAddApplicationModal" class="btn btn-cancel" style="padding:8px 16px; border:1px solid #ccc; border-radius:4px; background-color:#f0f0f0; color:#333; cursor:pointer;">Cancel</button>
+      </div>
+
+    </form>
+  </div>
+</div> 
+    
+    
+    
+    <!-- New Updated Applications Modal -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <!-- MODAL -->
+<div id="modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-card">
+ 
+    <!-- HEADER -->
+    <div class="modal-header">
+      <span class="modal-title" id="modalTitle">Add Application</span>
+      <button class="close-btn" onclick="closeModal()" aria-label="Close">&times;</button>
+    </div>
+ 
+    <!-- PROGRESS -->
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span id="progressText">Step 1 of 4</span>
+        <span id="progressPct">25%</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill" style="width:25%"></div>
+      </div>
+    </div>
+ 
+    <!-- BODY: STEPS -->
+    <div class="modal-body">
+ 
+      <!-- STEP 1: University -->
+      
+        <div id="step1" class="step active">
+        <p class="step-heading">Select your institution</p>
+        <p class="step-sub">Choose the university or college you're applying to.</p>
+
+        <div class="field-group">
+            <label class="field-label" for="universitySelect">
+            University / College <span class="req">*</span>
+            </label>
+
+            <select id="universitySelect">
+            <option value="">Select university…</option>
+
+            <!-- TEST OPTION (DO NOT REMOVE YET) -->
+            <option value="test_uni">Test University</option>
+
+            <!-- DYNAMIC UNIVERSITIES WILL BE INSERTED HERE -->
+            </select>
+        </div>
+
+        <div id="uniError" class="error-text"></div>
+        </div>
+        
+      <!-- STEP 2: Returning? -->
+      <div id="step2" class="step">
+        <p class="step-heading">Have you applied before?</p>
+        <p class="step-sub">This helps us tailor the form to your situation.</p>
+        <div class="radio-group">
+          <label class="radio-option">
+            <input type="radio" name="applied" value="no">
+            <span>No — this is my first time applying</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="applied" value="yes">
+            <span>Yes — I've applied before</span>
+          </label>
+          <div id="appliedError" class="error-text"></div>
+        </div>
+      </div>
+ 
+      <!-- STEP 3: Programs -->
+      <div id="step3" class="step">
+        <p class="step-heading">Your program choices</p>
+        <p class="step-sub">Enter up to 3 programs. At least one is required.</p>
+        <div class="grid-2">
+          <div class="field-group">
+            <label class="field-label" for="program1">Program 1 <span class="req">*</span></label>
+            <input type="text" id="program1" placeholder="e.g. Computer Science">
+            <div id="p1Error" class="error-text"></div>
+          </div>
+          
+          <div class="field-group">
+            <label class="field-label" for="code1">Code 1 <span class="req">*</span></label>
+            <input type="text" id="code1" placeholder="e.g. CS101">
+            <div id="c1Error" class="error-text"></div>
+          </div>
+          
+          <div class="field-group">
+            <label class="field-label" for="program2">Program 2</label>
+            <input type="text" id="program2" placeholder="Optional">
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="code2">Code 2</label>
+            <input type="text" id="code2" placeholder="Optional">
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="program3">Program 3</label>
+            <input type="text" id="program3" placeholder="Optional">
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="code3">Code 3</label>
+            <input type="text" id="code3" placeholder="Optional">
+          </div>
+        </div>
+      </div>
+ 
+      <!-- STEP 4: Returning student credentials -->
+      <div id="step4" class="step">
+        <p class="step-heading">Your student credentials</p>
+        <p class="step-sub">Enter your existing student details to link your application.</p>
+        <div class="field-group">
+          <label class="field-label" for="studentNumber">Student Number <span class="req">*</span></label>
+          <input type="text" id="studentNumber" placeholder="e.g. 210012345">
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="itsPin">ITS PIN <span class="req">*</span></label>
+          <input type="text" id="itsPin" placeholder="Enter your ITS PIN">
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="password">Password <span class="req">*</span></label>
+          <input type="password" id="password" placeholder="Enter your password">
+        </div>
+        <div class="checkbox-row">
+          <input type="checkbox" id="consentReturning">
+          <span>I have read and accept the <a href="#">Privacy Policy</a> and consent to my data being processed.</span>
+        </div>
+      </div>
+ 
+      <!-- STEP 5: First-time consent -->
+      <div id="step5" class="step">
+        <p class="step-heading">Almost done!</p>
+        <p class="step-sub">Please accept the privacy policy to complete your application.</p>
+        <div class="checkbox-row">
+          <input type="checkbox" id="consentFirst">
+          <span>I have read and accept the <a href="#">Privacy Policy</a> and consent to my data being processed.</span>
+        </div>
+      </div>
+ 
+      <!-- STEP 6: Success -->
+      <div id="step6" class="step">
+        <div class="success-screen">
+          <div class="success-icon">✓</div>
+          <p class="success-title">Application submitted!</p>
+          <p class="success-sub">We've received your application. Check your email for confirmation.</p>
+        </div>
+      </div>
+ 
+    </div><!-- /modal-body -->
+ 
+    <!-- FOOTER -->
+    <div class="modal-footer" id="modalFooter">
+      <button class="btn btn-secondary" id="backBtn"  onclick="handleBack()">Back</button>
+      <button class="btn btn-primary"   id="nextBtn"  onclick="handleNext()">Next</button>
+    </div>
+ 
+  </div>
+</div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <!-- Modal Structure for Adding Document -->
+    <div id="addDocumentModal" class="modal">
+        <div class="modal-content">
+            <span id="closeAddDocumentModal" class="close-btn">&times;</span>
+            <h3>Add New Document</h3>
+
+            <!-- Document Form -->
+            <form id="addDocumentForm">
+                <div class="form-group">
+                    <label for="documentType">Document Type:</label>
+                    <select id="documentType" required>
+                        <option value="">Select Document Type</option>
+                        <option value="ID">ID</option>
+                        <option value="Passport">Passport</option>
+                        <option value="Grade 11 Results">Grade 11 Results</option>
+                        <option value="Grade 12 Results">Grade 12 Results</option>
+                        <option value="Transcript">Transcript</option>
+                        <option value="Motivation Letter">Motivation Letter</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="documentFile">Upload Document:</label>
+                    <input type="file" id="documentFile" accept=".jpg, .jpeg, .png, .pdf" required>
+                </div>
+
+                <div class="form-group">
+                    <button type="button" id="saveDocumentBtn" class="btn btn-primary">Save Document</button>
+                    <button type="button" id="cancelAddDocumentModal" class="btn btn-cancel">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal for Adding/Editing Next of Kin -->
+    <div id="kinModal" class="modal">
+        <div class="modal-content">
+            <span id="closeKinModal" class="close-btn">&times;</span>
+            <h3 id="modalTitle">Add New Next of Kin</h3>
+            <form id="kinForm">
+                <div class="form-group">
+                    <label for="kinFirstName">First Name:</label>
+                    <input type="text" id="kinFirstName" required>
+                </div>
+                <div class="form-group">
+                    <label for="kinLastName">Last Name:</label>
+                    <input type="text" id="kinLastName" required>
+                </div>
+                <div class="form-group">
+                    <label for="kinRelationship">Relationship:</label>
+                    <input type="text" id="kinRelationship" required>
+                </div>
+                <div class="form-group">
+                    <label for="kinEmail">Email Address:</label>
+                    <input type="email" id="kinEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="kinPhone">Phone Number:</label>
+                    <input type="tel" id="kinPhone" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit" id="saveKinBtn" class="btn btn-primary">Save</button>
+                    <button type="button" id="cancelKinModal" class="btn btn-cancel">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    
+    
+    <!-- DELETE ACCOUNT MODAL (UNIQUE) -->
+  <div id="deleteAccountModal" class="delete-modal-backdrop">
+      <div class="delete-modal-box">
+
+          <!-- Close Button -->
+          <span id="closeDeleteModal" class="delete-modal-close">&times;</span>
+
+          <!-- Warning Icon -->
+          <div class="delete-icon">⚠️</div>
+
+          <h2 class="delete-title">Delete Account?</h2>
+
+          <p class="delete-text">
+              This action is permanent and cannot be undone.<br>
+              All your data, applications, and records will be permanently removed.
+          </p>
+
+          <!-- Buttons -->
+          <div class="delete-modal-actions">
+              <button id="confirmDeleteAccount" class="delete-confirm-btn">Yes, Delete</button>
+              <button id="cancelDeleteAccount" class="delete-cancel-btn">Cancel</button>
+          </div>
+
+      </div>
+  </div>
+
+    
+    <!-- DELETE DOCUMENT MODAL (UNIQUE) -->
+<div id="deleteDocumentModal" class="delete-modal-backdrop" style="display: none;">
+    <div class="delete-modal-box">
+
+        <!-- Close Button -->
+        <span id="closeDeleteDocumentModal" class="delete-modal-close">&times;</span>
+
+        <!-- Warning Icon -->
+        <div class="delete-icon"></div>
+
+        <h2 class="delete-title">Delete Document?</h2>
+
+        <p class="delete-text" id="deleteDocumentText">
+            Are you sure you want to delete this document?<br>
+            This action cannot be undone.
+        </p>
+
+        <!-- Buttons -->
+        <div class="delete-modal-actions">
+            <button id="confirmDeleteDocument" class="delete-confirm-btn">Delete</button>
+            <button id="cancelDeleteDocument" class="delete-cancel-btn">Cancel</button>
+        </div>
+
+    </div>
+</div>
+
+<!-- LOGOUT CONFIRMATION MODAL -->
+<div id="logoutModal" class="delete-modal-backdrop" style="display: none;">
+    <div class="delete-modal-box">
+
+        <!-- Close Button -->
+        <span id="closeLogoutModal" class="delete-modal-close">&times;</span>
+
+        <!-- Warning Icon -->
+        <div class="delete-icon"></div>
+
+        <h2 class="delete-title">Log Out?</h2>
+
+        <p class="delete-text">
+            Are you sure you want to log out?<br>
+            You will need to log in again to access your dashboard.
+        </p>
+
+        <!-- Buttons -->
+        <div class="delete-modal-actions">
+            <button id="confirmLogout" class="delete-confirm-btn">Yes, Log Out</button>
+            <button id="cancelLogout" class="delete-cancel-btn">Cancel</button>
+        </div>
+
+    </div>
+</div>
+ 
+ 
+ <!-- EXIT CONFIRMATION MODAL -->
+<div id="exitModal" class="delete-modal-backdrop" style="display:none;">
+    <div class="delete-modal-box">
+
+        <span id="closeExitModal" class="delete-modal-close">&times;</span>
+
+        <div class="delete-icon"></div>
+
+        <h2 class="delete-title">Exit Dashboard?</h2>
+
+        <p class="delete-text">
+            Are you sure you want to leave the dashboard?<br>
+            You will be logged out automatically.
+        </p>
+
+        <div class="delete-modal-actions">
+            <button id="confirmExit" class="delete-confirm-btn">Yes, Exit</button>
+            <button id="cancelExit" class="delete-cancel-btn">Stay</button>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- DELETE NEXT OF KIN MODAL (UNIQUE) -->
+<div id="deleteKinModal" class="delete-modal-backdrop" style="display: none;">
+    <div class="delete-modal-box">
+
+        <!-- Close Button -->
+        <span id="closeDeleteKinModal" class="delete-modal-close">&times;</span>
+
+        <!-- Warning Icon -->
+        <div class="delete-icon"></div>
+
+        <h2 class="delete-title">Delete Next of Kin?</h2>
+
+        <p class="delete-text" id="deleteKinText">
+            Are you sure you want to delete this Next of Kin?<br>
+            This action cannot be undone.
+        </p>
+
+        <!-- Buttons -->
+        <div class="delete-modal-actions">
+            <button id="confirmDeleteKin" class="delete-confirm-btn">Delete</button>
+            <button id="cancelDeleteKin" class="delete-cancel-btn">Cancel</button>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- Chat Icon -->
+<div id="chatIconWrapper">
+    <button id="chatButton" class="chat-icon-btn" title="Chat with Support">
+        <img src="https://img.icons8.com/ios-filled/50/ffffff/chat--v1.png" alt="Chat" style="width:28px;height:28px;">
+    </button>
+</div>
+
+<!-- Chat Modal -->
+<div id="chatModal" class="chat-modal">
+    <div class="chat-header">
+        <div class="bot-info">
+            <span class="bot-name">Zuzu</span>
+            <span class="bot-status online">● Online</span>
+        </div>
+        <div class="chat-actions">
+            <button id="leaveChat" title="Close">✖</button>
+        </div>
+    </div>
+    <div class="chat-body" id="chatBody">
+        <div class="message bot">Zuzu here, and I'm not leaving until your problem's solved</div>
+        <!--<div class="message bot">You can select a common question below or type your own message.</div>-->
+    </div>
+    <div class="typing-indicator" id="typingIndicator" style="display:none;">
+        <span>Zuzu is typing...</span>
+    </div>
+    <div class="chat-footer">
+        <textarea id="chatInput" placeholder="Type a message..."></textarea>
+        <button id="sendChat">
+    <!-- inline send icon (right arrow) -->
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#fff" width="20" height="20">
+        <polygon points="2,21 23,12 2,3 2,10 17,12 2,14"/>
+    </svg>
+</button>
+
+
+    </div>
+</div>
+
+
+
+<!-- Notification Stack -->
+<div id="notifContainer" class="notif-container"></div>
+   
+    
+    <!-- GLOBAL ERROR MODAL -->
+<div id="customModal" class="custom-modal">
+  <div class="custom-modal-content">
+      <span class="custom-modal-close">&times;</span>
+      <p class="custom-modal-message"></p>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<div id="ucm_modal" class="ucm_modal hidden">
+  <div class="ucm_content">
+
+    <h2>Admission Evaluation System</h2>
+
+    <!-- SELECTORS -->
+    <div class="ucm_row">
+      <select id="ucm_uni_select"></select>
+      <select id="ucm_course_select"></select>
+    </div>
+
+    <!-- SUBJECT INPUT -->
+    <div class="ucm_row">
+      <select id="subject_select"></select>
+      <input type="number" id="mark_input" placeholder="Mark %" />
+      <button id="add_subject_btn">Add</button>
+    </div>
+
+    <!-- TABLE -->
+    <div class="ucm_table_wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>University</th>
+            <th>Course</th>
+            <th>Subject</th>
+            <th>Mark</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="ucm_subjects_body"></tbody>
+      </table>
+    </div>
+
+
+    <!-- ACTION -->
+    <div class="ucm_actions">
+      <button id="check_btn">Check Eligibility</button>
+      <button id="reset_btn" class="ucm_reset_btn">Restart</button>
+    </div>
+
+    <!-- RESULTS -->
+    <div id="results_panel" class="hidden"></div>
+
+    <button id="ucm_close_btn">Close</button>
+
+  </div>
+</div>
+
+<!--  -->
+
+<div id="error_modal" class="error-modal hidden">
+  <div class="error-box">
+    <h3 id="error_title">Error</h3>
+    <p id="error_message"></p>
+    <button id="error_close_btn">OK</button>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+<!-- System Modal - Global -->
+<div id="systemModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; 
+     background:rgba(0,0,0,0.6); z-index:9999; justify-content:center; align-items:center; animation: fadeIn 0.3s;">
+  <div style="background:#fff; width:90%; max-width:480px; border-radius:12px; padding:30px 25px; 
+       text-align:center; box-shadow:0 12px 40px rgba(0,0,0,0.25); position:relative; font-family:'Poppins', sans-serif;
+       transform: scale(0.95); animation: popIn 0.3s forwards;">
+
+    <!-- Close X -->
+    <span id="closeSystemModal" style="position:absolute; top:12px; right:18px; font-size:26px; 
+          font-weight:bold; color:#6b7280; cursor:pointer; transition: color 0.2s;">
+      &times;
+    </span>
+
+    <h2 id="modalTitle22" style="font-size:26px; font-weight:700; color:#1e40af; margin-bottom:16px; line-height:1.2;">
+      Title
+    </h2>
+
+    <p id="modalMessage" style="font-size:17px; color:#374151; line-height:1.6; margin-bottom:25px;">
+      Message
+    </p>
+
+    <!-- Action Button -->
+    <button id="modalButton22" style="padding:14px 32px; background:linear-gradient(135deg,#2563eb,#3b82f6); 
+                   color:white; font-size:16px; font-weight:bold; border:none; border-radius:10px; 
+                   cursor:pointer; transition: transform 0.2s, box-shadow 0.2s;">
+        Continue
+    </button>
+  </div>
+</div>
+
+<style>
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes popIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+#modalButton22:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(37, 99, 235, 0.4);
+}
+
+#closeSystemModal:hover {
+  color: #111827;
+}
+</style>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const token = sessionStorage.getItem("access_token");
+  if (!token) return;
+
+  async function loadSystemModal() {
+    try {
+      const res = await fetch(
+        "https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/system-modal",
+        {
+          method: "GET",
+          headers: { "Authorization": `Bearer ${token}` },
+        }
+      );
+
+      if (!res.ok) throw new Error("Failed to fetch modal");
+
+      const data = await res.json();
+
+      console.log("Modal response:", data);
+
+      if (!data.modal) return;
+
+      const modal = data.modal;
+
+      const modalEl = document.getElementById("systemModal");
+      const btn = document.getElementById("modalButton22");
+      const closeX = document.getElementById("closeSystemModal");
+      const titleEl = document.getElementById("modalTitle22");
+      const messageEl = document.getElementById("modalMessage");
+
+      
+      if (titleEl) titleEl.innerText = modal.title || "Notice";
+      if (messageEl) messageEl.innerText = modal.message || "";
+
+      
+      if (!modal.button_link || modal.button_link.trim() === "") {
+        if (btn) {
+          btn.style.display = "none";
+        }
+      } else {
+        if (btn) {
+          btn.style.display = "inline-block";
+          btn.innerText = modal.button_text || "Continue";
+
+          btn.onclick = () => {
+            window.location.href = modal.button_link;
+          };
+        }
+      }
+
+      
+      if (closeX && modalEl) {
+        closeX.onclick = () => {
+          modalEl.style.display = "none";
+        };
+      }
+
+      
+      if (modalEl) {
+        modalEl.style.display = "flex";
+      }
+
+    } catch (err) {
+      console.error("Error loading modal:", err);
+    }
+  }
+
+  loadSystemModal();
+});
+</script>
+
+  <!-- Sidebar toggle functionality -->
+  <script>
+  const sidebar = document.getElementById('sidebar');
+  const hamburger = document.getElementById('hamburger');
+  const closeBtn = document.getElementById('closeBtn');
+
+  // ONLY select links that point to sections
+  const links = document.querySelectorAll('.sidebar a[href^="#"]:not(.no-section)');
+
+  const sections = document.querySelectorAll('.section');
+  const notificationIcon = document.querySelector('.notification-icon');
+
+  const AppBtn = document.getElementById('applBtn');
+  const DocBtn = document.getElementById('DocBtn');
+  const NotBtn = document.getElementById('NotBtn');
+  const support = document.getElementById('support');
+
+  // Sidebar open/close
+  hamburger.addEventListener('click', () => {
+    sidebar.classList.add('active');
+  });
+
+  closeBtn.addEventListener('click', () => {
+    sidebar.classList.remove('active');
+  });
+
+  // Handle section navigation ONLY
+  links.forEach(link => {
+  link.addEventListener('click', (e) => {
+    
+        // ✅ If it's the "More" button OR inside dropdown → do NOTHING here
+        if (
+          link.id === 'moreToggle' ||
+          link.closest('.more-menu')
+        ) {
+          return;
+        }
+    
+        e.preventDefault();
+    
+        const target = link.getAttribute('href')?.substring(1);
+    
+        if (target) {
+          showSection(target);
+        }
+    
+        sidebar.classList.remove('active'); // ✅ only for real nav links
+      });
+    });
+  function showSection(targetId) {
+    sections.forEach(section => {
+      section.style.display = (section.id === targetId) ? 'block' : 'none';
+    });
+  }
+
+  // Default section
+  document.addEventListener('DOMContentLoaded', () => {
+    showSection('dashboard');
+  });
+
+  // Icon shortcuts
+  notificationIcon.addEventListener('click', () => {
+    showSection('notifications');
+  });
+
+  AppBtn.addEventListener('click', () => {
+    showSection('applications');
+  });
+
+  DocBtn.addEventListener('click', () => {
+    showSection('documents');
+  });
+
+  NotBtn.addEventListener('click', () => {
+    showSection('notifications');
+  });
+
+  support.addEventListener('click', () => {
+    showSection('support');
+  });
+
+  
+  const logoutBtn = document.getElementById('logout');
+
+  logoutBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    logout();
+  });
+
+  function logout() {
+    sessionStorage.removeItem('user');
+    window.location.href = '/login';
+  }
+
+ 
+  const moreToggle = document.getElementById('moreToggle');
+  const moreMenu = document.getElementById('moreMenu');
+
+  moreToggle.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    moreMenu.classList.toggle('open');
+  });
+
+  // Close dropdown if clicking outside
+  document.addEventListener('click', (e) => {
+    if (!moreToggle.contains(e.target) && !moreMenu.contains(e.target)) {
+      moreMenu.classList.remove('open');
+    }
+  });
+</script>
+  
+  
+ <script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  const moreLink = document.getElementById("moreLink");
+  const submenu = document.getElementById("submenu");
+  const expandIcon = document.getElementById("expandMenu");
+
+  const sidebar = document.getElementById('sidebar');
+  const links = document.querySelectorAll('.sidebar a');
+
+  
+  moreLink.addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation(); // extra protection
+
+    submenu.classList.toggle("show");
+
+    // Toggle + / -
+    expandIcon.textContent = submenu.classList.contains("show") ? "−" : "+";
+  });
+
+  
+  submenu.addEventListener("click", (e) => {
+    e.stopPropagation();
+  });
+
+  
+  links.forEach(link => {
+    link.addEventListener("click", (e) => {
+
+      // ❌ Skip "More" button and submenu links
+      if (
+        link.id === "moreLink" ||
+        link.closest("#submenu")
+      ) {
+        return;
+      }
+
+      e.preventDefault();
+
+      const target = link.getAttribute("href")?.substring(1);
+
+      if (target) {
+        showSection(target);
+      }
+
+      
+      sidebar.classList.remove("active");
+    });
+  });
+
+  
+  document.addEventListener("click", () => {
+    submenu.classList.remove("show");
+    expandIcon.textContent = "+";
+  });
+
+});
+</script>
+  <!-- Tab switching functionality for settings: Profile, Account and Notifications tabs-->
+  <script>
+    // Tab switching functionality
+    const profileTab = document.getElementById('profileTab');
+    const accountTab = document.getElementById('accountTab');
+    const notificationTab = document.getElementById('notificationTab');
+
+    const profileSettings = document.getElementById('profileSettings');
+    const accountSettings = document.getElementById('accountSettings');
+    const notificationSettings = document.getElementById('notificationSettings');
+
+    // Function to handle the active tab and show corresponding content
+    function switchTab(activeTab, contentToShow) {
+    // Remove active class from all tabs
+    profileTab.classList.remove('active');
+    accountTab.classList.remove('active');
+    notificationTab.classList.remove('active');
+
+    // Add active class to the clicked tab
+    activeTab.classList.add('active');
+
+    // Hide all content sections
+    profileSettings.classList.remove('active');
+    accountSettings.classList.remove('active');
+    notificationSettings.classList.remove('active');
+
+    // Show the selected content
+    contentToShow.classList.add('active');
+    }
+
+    // Add event listeners for tab clicks
+    profileTab.addEventListener('click', () => {
+    switchTab(profileTab, profileSettings);
+    });
+
+    accountTab.addEventListener('click', () => {
+    switchTab(accountTab, accountSettings);
+    });
+
+    notificationTab.addEventListener('click', () => {
+    switchTab(notificationTab, notificationSettings);
+    });
+
+    // Initialize with profile tab active
+    switchTab(profileTab, profileSettings);
+  </script>
+  
+  <!-- Notifications Sections layout -->
+<script>
+  // Desktop buttons
+  document.querySelectorAll(".filter-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const filter = btn.dataset.filter;
+      filterNotifications(filter);
+    });
+  });
+
+  // Mobile dropdown
+  document.getElementById("filterDropdown").addEventListener("change", (e) => {
+    filterNotifications(e.target.value);
+  });
+
+  function filterNotifications(filter) {
+    const cards = document.querySelectorAll(".notification-card");
+    cards.forEach(card => {
+      card.style.display = "block"; // default show
+      if (filter === "read" && card.classList.contains("unread")) card.style.display = "none";
+      if (filter === "unread" && !card.classList.contains("unread")) card.style.display = "none";
+      if (filter === "recent") {
+        // Optionally sort or show only recent (example: last 24h)
+       
+      }
+    });
+  }
+</script>
+
+
+
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  const modal = document.getElementById("ucm_modal");
+  const openBtn = document.getElementById("ucm_open_btn");
+  const closeBtn = document.getElementById("ucm_close_btn");
+
+  const resetBtn = document.getElementById("reset_btn");
+
+  const uniSelect = document.getElementById("ucm_uni_select");
+  const courseSelect = document.getElementById("ucm_course_select");
+  const subjectSelect = document.getElementById("subject_select");
+  const markInput = document.getElementById("mark_input");
+
+  const subjectsBody = document.getElementById("ucm_subjects_body");
+  const resultsPanel = document.getElementById("results_panel");
+
+  const token = sessionStorage.getItem("access_token");
+  if (!token) window.location.href = "/login-signup";
+
+  let subjects = [];
+
+  // ----------------------------
+  // ERROR MODAL SYSTEM
+  // ----------------------------
+  const errorModal = document.getElementById("error_modal");
+  const errorMessage = document.getElementById("error_message");
+  const errorTitle = document.getElementById("error_title");
+  const errorCloseBtn = document.getElementById("error_close_btn");
+
+  let pendingReset = false;
+
+  function showError(message, title = "Error") {
+    errorTitle.textContent = title;
+    errorMessage.textContent = message;
+    errorModal.classList.remove("hidden");
+  }
+
+  function hideError() {
+    pendingReset = false;
+    errorCloseBtn.textContent = "OK";
+    errorModal.classList.add("hidden");
+  }
+
+  errorCloseBtn.onclick = () => {
+
+    // CONFIRM RESET MODE
+    if (pendingReset) {
+      pendingReset = false;
+      errorCloseBtn.textContent = "OK";
+      hideError();
+      resetAll();
+      return;
+    }
+
+    hideError();
+  };
+
+  errorModal.onclick = (e) => {
+    if (e.target === errorModal) hideError();
+  };
+
+  // ----------------------------
+  // LOAD DATA
+  // ----------------------------
+  async function loadData() {
+    const res = await fetch(
+      "https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/load-admissions-data"
+    );
+
+    const data = await res.json();
+
+    uniSelect.innerHTML = `<option value="">Select University</option>`;
+    data.universities.forEach(u => {
+      uniSelect.innerHTML += `<option value="${u.id}">${u.name}</option>`;
+    });
+
+    courseSelect.innerHTML = `<option value="">Select Course</option>`;
+    data.courses.forEach(c => {
+      courseSelect.innerHTML += `
+        <option value="${c.id}">
+          ${c.name}
+        </option>
+      `;
+    });
+
+    subjectSelect.innerHTML = `<option value="">Select Subject</option>`;
+    data.subjects.forEach(s => {
+      subjectSelect.innerHTML += `
+        <option value="${s.name}">
+          ${s.name}
+        </option>
+      `;
+    });
+  }
+
+  loadData();
+
+  // ----------------------------
+  // RESET SYSTEM
+  // ----------------------------
+  function resetAll() {
+    subjects = [];
+    subjectsBody.innerHTML = "";
+
+    uniSelect.disabled = false;
+    courseSelect.disabled = false;
+
+    uniSelect.value = "";
+    courseSelect.value = "";
+    subjectSelect.value = "";
+    markInput.value = "";
+
+    resultsPanel.innerHTML = "";
+    resultsPanel.classList.add("hidden");
+  }
+
+  resetBtn.onclick = () => {
+
+    if (subjects.length > 0) {
+      pendingReset = true;
+
+      showError(
+        "Are you sure you want to restart? This will clear all entered subjects.",
+        "Confirm Restart"
+      );
+
+      errorCloseBtn.textContent = "Confirm";
+      return;
+    }
+
+    resetAll();
+  };
+
+  // ----------------------------
+  // ADD SUBJECT
+  // ----------------------------
+  document.getElementById("add_subject_btn").addEventListener("click", () => {
+
+    const subject = subjectSelect.value;
+    const mark = parseFloat(markInput.value);
+
+    if (!subject || isNaN(mark)) {
+      showError("Please select a subject and enter a valid mark.", "Missing Information");
+      return;
+    }
+
+    if (mark > 100) {
+      showError("Marks cannot exceed 100%.", "Invalid Mark");
+      return;
+    }
+
+    const obj = { subject, mark };
+    subjects.push(obj);
+
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+      <td>${uniSelect.options[uniSelect.selectedIndex].text}</td>
+      <td>${courseSelect.options[courseSelect.selectedIndex].text}</td>
+      <td>${subject}</td>
+      <td>${mark}%</td>
+      <td><button class="remove">X</button></td>
+    `;
+
+    row.querySelector(".remove").onclick = () => {
+      subjects = subjects.filter(s => s !== obj);
+      row.remove();
+
+      if (subjects.length === 0) {
+        uniSelect.disabled = false;
+        courseSelect.disabled = false;
+      }
+    };
+
+    subjectsBody.appendChild(row);
+
+    uniSelect.disabled = true;
+    courseSelect.disabled = true;
+
+    subjectSelect.value = "";
+    markInput.value = "";
+  });
+
+  // ----------------------------
+  // CHECK ELIGIBILITY
+  // ----------------------------
+  document.getElementById("check_btn").addEventListener("click", async () => {
+
+    if (!uniSelect.value || !courseSelect.value || subjects.length === 0) {
+      showError("Please complete all fields before continuing.", "Incomplete Form");
+      return;
+    }
+
+    if (subjects.length < 5) {
+      showError("Please select at least 5 subjects (excluding Life Orientation).", "Not Enough Subjects");
+      return;
+    }
+
+    if (subjects.length > 9) {
+      showError("You can only select a maximum of 9 subjects.", "Too Many Subjects");
+      return;
+    }
+
+    resultsPanel.innerHTML = `<p>Calculating...</p>`;
+    resultsPanel.classList.remove("hidden");
+
+    const payload = {
+      university_id: uniSelect.value,
+      course_id: courseSelect.value,
+      subjects
+    };
+
+    try {
+
+      const res = await fetch(
+        "https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/student-results",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          },
+          body: JSON.stringify(payload)
+        }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        resultsPanel.innerHTML = `
+          <div style="padding:15px; background:#ffe5e5; border-radius:8px;">
+            <h3>Not Available</h3>
+            <p>${data.error || "Unable to calculate eligibility at this time."}</p>
+          </div>
+        `;
+        return;
+      }
+
+      if (!data.result) {
+        resultsPanel.innerHTML = `
+          <div style="padding:15px; background:#ffe5e5; border-radius:8px;">
+            <h3>Error</h3>
+            <p>Invalid response from server.</p>
+          </div>
+        `;
+        return;
+      }
+
+      const r = data.result;
+
+      resultsPanel.innerHTML = `
+        <div style="padding:15px; border-radius:10px; background:#f4f7ff;">
+          <h2 style="color:${r.status === "Qualified" ? "green" : "red"}">
+            ${r.status}
+          </h2>
+
+          <p><b>APS:</b> ${r.aps}</p>
+          <p><b>Average:</b> ${r.average}%</p>
+          <p><b>Reason:</b> ${r.reason}</p>
+        </div>
+      `;
+
+    } catch (err) {
+      console.error(err);
+      showError("Something went wrong. Please try again.", "System Error");
+    }
+  });
+
+  // ----------------------------
+  // MODAL CONTROLS
+  // ----------------------------
+  openBtn.onclick = () => modal.classList.add("show");
+  closeBtn.onclick = () => modal.classList.remove("show");
+
+});
+</script>
+
+
+<script type="module" src="../js/dashboard-loadUsername.js"></script>
+<script type="module" src="../js/dashboard-logOut.js"></script>
+<script src="../js/dashboard-applications.js"></script>
+<script type="module" src="../js/dashboard-documents.js"></script>
+<script type="module" src="../js/dashboard-nextofkin.js"></script>
+<script type="module" src="../js/dashboard-notifications.js"></script>
+<script type="module" src="../js/dashboard-user-profile.js"></script>
+<script type="module" src="../js/dashboard-profile-address.js"></script>
+<script type="module" src="../js/dashboard-counts.js"></script>
+<script type="module" src="../js/dashboard-settings-profile.js"></script>
+<script type="module" src="../js/dashboard-reset-password.js"></script>
+<script type="module" src="../js/dashboard-payments.js"></script>
+<script type="module" src="../js/dashboard-update-account-plan.js"></script>
+<script type="module" src="../js/dashboard-process-payment.js"></script>
+<script type="module" src="../js/dashboard-delete-account.js"></script>
+<script src="../js/dashboard-exit.js"></script>
+<script type="module" src="../js/dashboard-getAccount-history.js"></script>
+<script type="module" src="../js/dashboard-account-settings.js"></script>
+<script type="module" src="../js/dashboard-support-bot.js"></script>
+<script type="module" src="../js/dashboard-support-tickets.js"></script>
+<script type="module" src="../js/dashboard-extended-personal-info.js"></script>
+
+</body>
+</html>

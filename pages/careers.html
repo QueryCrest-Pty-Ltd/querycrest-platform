@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+  (function(){
+    try{var ref=new URLSearchParams(window.location.search).get('ref');if(ref&&ref.trim())localStorage.setItem('referral_code',ref.trim().toUpperCase());}catch(e){}
+  })();
+  </script>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Internship Programme | QueryCrest</title>
+  <meta name="description" content="Apply for an internship at QueryCrest — South Africa's growing EdTech platform.">
+  <link rel="icon" href="../favicon.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/pages.css">
+  <link rel="stylesheet" href="../css/cookie.css">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7ZT9W8F7T5"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-7ZT9W8F7T5');</script>
+
+<style>
+header{position:fixed!important;top:0;left:0;right:0;height:64px;background:rgba(255,255,255,0.97)!important;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;padding:0 40px;z-index:2000;box-shadow:0 1px 3px rgba(0,0,0,.07);}
+header h1{font-size:1.1rem;font-weight:700;color:#2563eb;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0;}
+.hamburger{display:none;font-size:22px;cursor:pointer;background:none;border:none;color:#0f172a;padding:4px;line-height:1;flex-shrink:0;}
+#nav-links{display:flex!important;gap:4px;align-items:center;flex-shrink:0;position:static!important;background:transparent!important;height:auto!important;padding:0!important;flex-direction:row!important;overflow:visible!important;}
+#nav-links a{color:#334155!important;text-decoration:none;font-size:.88rem;font-weight:500;padding:7px 12px;border-radius:8px;transition:background .18s,color .18s;white-space:nowrap;}
+#nav-links a:hover{background:#eff6ff!important;color:#2563eb!important;}
+#nav-links a.login-btn{background:#2563eb!important;color:#fff!important;font-weight:600;padding:8px 18px;border-radius:8px;}
+#nav-links a.login-btn:hover{background:#1d4ed8!important;}
+.nav-close-btn{display:none!important;}
+@media(max-width:900px){
+  header{padding:0 20px!important;}
+  .hamburger{display:block!important;}
+  #nav-links{display:none!important;position:fixed!important;top:0!important;left:0!important;right:0!important;bottom:0!important;width:100%!important;height:100vh!important;background:#0f172a!important;backdrop-filter:none!important;flex-direction:column!important;align-items:flex-start!important;padding:72px 32px 40px!important;z-index:3000!important;gap:0!important;overflow-y:auto!important;}
+  #nav-links.show{display:flex!important;}
+  #nav-links a{color:rgba(255,255,255,.85)!important;font-size:1.05rem!important;font-weight:500!important;padding:14px 0!important;border-bottom:1px solid rgba(255,255,255,.08)!important;width:100%!important;border-radius:0!important;background:transparent!important;}
+  #nav-links a:hover{color:#fff!important;background:transparent!important;}
+  #nav-links a.login-btn{background:#2563eb!important;color:#fff!important;border-radius:8px!important;padding:14px 20px!important;border-bottom:none!important;margin-top:16px!important;display:block!important;width:100%!important;text-align:center!important;}
+  .nav-close-btn{display:block!important;position:absolute!important;top:18px!important;right:22px!important;font-size:1.9rem!important;color:rgba(255,255,255,.6)!important;background:none!important;border:none!important;cursor:pointer!important;line-height:1!important;z-index:3001!important;}
+}
+
+*,*::before,*::after{box-sizing:border-box;}
+:root{
+  --blue:#2563eb;--blue-d:#1d4ed8;--blue-l:#eff6ff;--blue-m:#dbeafe;
+  --green:#16a34a;--green-l:#f0fdf4;
+  --amber:#d97706;--amber-l:#fffbeb;
+  --red:#dc2626;--red-l:#fef2f2;
+  --slate:#0f172a;--slate-2:#1e293b;--slate-3:#334155;
+  --muted:#64748b;--border:#e2e8f0;--bg:#f8fafc;
+  --radius:12px;--radius-sm:8px;
+  --shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.04);
+}
+body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--slate);margin:0;padding-top:64px;}
+
+.page-body{max-width:900px;margin:0 auto;padding:3rem 5vw 5rem;}
+.card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:2rem;margin-bottom:1.5rem;box-shadow:var(--shadow);}
+.card h2{font-size:1.25rem;font-weight:700;color:var(--slate);margin:0 0 .9rem;display:flex;align-items:center;gap:.6rem;}
+.card h2 svg{width:22px;height:22px;flex-shrink:0;}
+.card p{font-size:.97rem;color:var(--muted);line-height:1.8;margin:0 0 .8rem;}
+.card p:last-child{margin-bottom:0;}
+.callout{display:flex;align-items:flex-start;gap:.75rem;padding:.9rem 1.1rem;border-radius:var(--radius-sm);font-size:.9rem;font-weight:500;margin:1rem 0;}
+.callout svg{width:18px;height:18px;flex-shrink:0;margin-top:1px;}
+.callout-blue{background:var(--blue-l);color:#1e40af;border:1px solid var(--blue-m);}
+.callout-green{background:var(--green-l);color:#166534;border:1px solid #bbf7d0;}
+.callout-amber{background:var(--amber-l);color:#92400e;border:1px solid #fde68a;}
+.roles-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;margin-top:1.2rem;}
+.role-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.2rem;transition:border-color .2s,box-shadow .2s;}
+.role-card:hover{border-color:#93c5fd;box-shadow:0 4px 14px rgba(37,99,235,.1);}
+.role-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:.8rem;}
+.role-icon svg{width:22px;height:22px;}
+.ri-blue{background:var(--blue-l);}
+.ri-green{background:var(--green-l);}
+.ri-purple{background:#f3e8ff;}
+.ri-amber{background:var(--amber-l);}
+.ri-red{background:var(--red-l);}
+.ri-teal{background:#ccfbf1;}
+.ri-indigo{background:#e0e7ff;}
+.ri-pink{background:#fce7f3;}
+.role-title{font-weight:700;font-size:.97rem;color:var(--slate);margin-bottom:.3rem;}
+.role-desc{font-size:.83rem;color:var(--muted);line-height:1.6;margin-bottom:.8rem;}
+.role-tags{display:flex;flex-wrap:wrap;gap:.35rem;}
+.rtag{font-size:.72rem;font-weight:600;padding:.2rem .55rem;border-radius:5px;background:var(--blue-m);color:#1e40af;}
+ul.perks{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:.55rem;}
+ul.perks li{display:flex;align-items:flex-start;gap:.65rem;font-size:.95rem;color:var(--muted);}
+ul.perks li svg{width:18px;height:18px;flex-shrink:0;color:var(--green);margin-top:2px;}
+
+/* ── MULTI-STEP FORM ─────────────────────────────────────── */
+.apply-anchor{display:block;height:80px;margin-top:-80px;visibility:hidden;}
+.apply-card{background:#fff;border:2px solid var(--blue);border-radius:var(--radius);padding:2.2rem;margin-bottom:1.5rem;box-shadow:0 0 0 4px rgba(37,99,235,.06);}
+.apply-card h2{font-size:1.3rem;font-weight:800;color:var(--slate);margin:0 0 .35rem;display:flex;align-items:center;gap:.6rem;}
+.apply-card h2 svg{width:24px;height:24px;flex-shrink:0;}
+.apply-subtitle{font-size:.9rem;color:var(--muted);margin:0 0 1.6rem;}
+
+.step-progress-wrap{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:2rem;position:relative;}
+.step-progress-wrap::before{content:'';position:absolute;top:15px;left:16px;right:16px;height:2px;background:var(--border);z-index:0;}
+.step-progress-bar{position:absolute;top:15px;left:16px;height:2px;background:var(--blue);z-index:1;transition:width .35s ease;width:0%;}
+.step-item{display:flex;flex-direction:column;align-items:center;gap:.35rem;position:relative;z-index:2;}
+.step-circle{width:32px;height:32px;border-radius:50%;border:2px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;color:var(--muted);transition:all .25s;}
+.step-label{font-size:.68rem;font-weight:600;color:var(--muted);text-align:center;white-space:nowrap;}
+.step-item.active .step-circle{border-color:var(--blue);background:var(--blue);color:#fff;}
+.step-item.active .step-label{color:var(--blue);}
+.step-item.done .step-circle{border-color:var(--blue);background:var(--blue);color:#fff;}
+.step-item.done .step-label{color:var(--blue);}
+
+.step-panel{display:none;}
+.step-panel.active{display:block;}
+
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;}
+.form-full{grid-column:1/-1;}
+.fgroup{display:flex;flex-direction:column;gap:.35rem;}
+.fgroup label{font-size:.78rem;font-weight:600;color:var(--slate-3);text-transform:uppercase;letter-spacing:.05em;display:flex;align-items:center;gap:.4rem;}
+.fgroup label svg{width:14px;height:14px;color:var(--muted);}
+.fgroup input,.fgroup select,.fgroup textarea{
+  width:100%;padding:.75rem .95rem;
+  border:1.5px solid var(--border);border-radius:var(--radius-sm);
+  font-family:'Poppins',sans-serif;font-size:.93rem;color:var(--slate);
+  background:#fff;outline:none;transition:border-color .2s,box-shadow .2s;
+}
+.fgroup input::placeholder,.fgroup textarea::placeholder{color:#94a3b8;}
+.fgroup input:focus,.fgroup select:focus,.fgroup textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.1);}
+.fgroup input.error,.fgroup select.error,.fgroup textarea.error{border-color:var(--red);box-shadow:0 0 0 3px rgba(220,38,38,.08);}
+.fgroup input.ok,.fgroup select.ok,.fgroup textarea.ok{border-color:var(--green);}
+.fgroup select{
+  appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right .8rem center;padding-right:2.5rem;
+}
+.fgroup textarea{resize:vertical;min-height:110px;line-height:1.6;}
+.field-hint{font-size:.74rem;color:var(--muted);}
+.field-error{font-size:.74rem;color:var(--red);display:none;}
+.field-error.show{display:block;}
+.char-count{font-size:.73rem;color:var(--muted);text-align:right;margin-top:.2rem;}
+
+.role-selector{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-top:.4rem;}
+.role-opt{
+  display:flex;align-items:center;gap:.7rem;
+  padding:.8rem .9rem;border:1.5px solid var(--border);
+  border-radius:var(--radius-sm);cursor:pointer;
+  background:#fff;transition:border-color .2s,background .2s;
+  user-select:none;
+}
+.role-opt:hover{border-color:#93c5fd;background:var(--blue-l);}
+.role-opt.selected{border-color:var(--blue);background:var(--blue-l);}
+.role-opt input[type="radio"]{display:none;}
+.rdot{width:18px;height:18px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.role-opt.selected .rdot{border-color:var(--blue);background:var(--blue);}
+.role-opt.selected .rdot::after{content:'';width:6px;height:6px;border-radius:50%;background:#fff;}
+.rname{font-size:.87rem;font-weight:600;color:var(--slate);}
+.rsub{font-size:.72rem;color:var(--muted);}
+
+/* ── DOCUMENT UPLOADS ── */
+.doc-uploads-grid{display:flex;flex-direction:column;gap:.75rem;margin-top:.4rem;}
+.doc-upload-row{border:1.5px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;}
+.doc-upload-header{display:flex;align-items:center;justify-content:space-between;padding:.7rem 1rem;background:var(--bg);border-bottom:1px solid var(--border);}
+.doc-upload-label{font-size:.82rem;font-weight:600;color:var(--slate-3);display:flex;align-items:center;gap:.5rem;}
+.doc-upload-label svg{width:15px;height:15px;color:var(--muted);}
+.doc-req-badge{font-size:.66rem;font-weight:700;padding:.15rem .55rem;border-radius:4px;}
+.doc-req-badge.required{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca;}
+.doc-req-badge.optional{background:var(--blue-l);color:#1e40af;border:1px solid var(--blue-m);}
+.doc-drop-area{padding:.9rem 1rem;display:flex;align-items:center;gap:.75rem;cursor:pointer;transition:background .18s;}
+.doc-drop-area:hover{background:var(--blue-l);}
+.doc-drop-area input{display:none;}
+.doc-drop-icon{width:34px;height:34px;border-radius:8px;background:var(--surface,#f1f5f9);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.doc-drop-icon svg{width:16px;height:16px;color:var(--muted);}
+.doc-drop-text{flex:1;}
+.doc-drop-title{font-size:.82rem;font-weight:600;color:var(--slate);margin-bottom:.1rem;}
+.doc-drop-sub{font-size:.72rem;color:var(--muted);}
+.doc-chosen{display:none;align-items:center;gap:.65rem;padding:.65rem 1rem;background:var(--green-l);border-top:1px solid #bbf7d0;}
+.doc-chosen.show{display:flex;}
+.doc-chosen svg{width:16px;height:16px;color:var(--green);flex-shrink:0;}
+.doc-chosen-name{font-size:.8rem;font-weight:500;color:#166534;flex:1;}
+.doc-remove{background:none;border:none;cursor:pointer;color:#166534;font-size:1rem;line-height:1;padding:0;}
+
+.step-summary{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.2rem;margin-bottom:1rem;}
+.sum-row{display:flex;justify-content:space-between;gap:1rem;font-size:.84rem;padding:.3rem 0;border-bottom:1px solid var(--border);}
+.sum-row:last-child{border-bottom:none;}
+.sum-lbl{color:var(--muted);font-weight:500;}
+.sum-val{color:var(--slate);font-weight:600;text-align:right;max-width:55%;}
+
+.step-nav{display:flex;gap:.75rem;margin-top:1.5rem;}
+.btn-back{flex:0 0 auto;background:transparent;color:var(--slate-3);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.8rem 1.4rem;font-family:'Poppins',sans-serif;font-size:.9rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:.4rem;transition:border-color .2s,color .2s;}
+.btn-back:hover{border-color:var(--blue);color:var(--blue);}
+.btn-next{flex:1;background:var(--blue);color:#fff;border:none;border-radius:var(--radius-sm);padding:.85rem;font-family:'Poppins',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.5rem;transition:background .2s,transform .15s;}
+.btn-next:hover:not(:disabled){background:var(--blue-d);transform:translateY(-1px);}
+.btn-next:disabled{opacity:.55;cursor:not-allowed;transform:none;}
+.btn-next svg,.btn-back svg{width:15px;height:15px;flex-shrink:0;}
+
+.form-response{display:none;margin-top:1.1rem;padding:1rem 1.2rem;border-radius:var(--radius-sm);font-size:.92rem;font-weight:500;align-items:flex-start;gap:.65rem;}
+.form-response.show{display:flex;}
+.form-response svg{width:20px;height:20px;flex-shrink:0;margin-top:1px;}
+.form-response.ok{background:var(--green-l);color:#166534;border:1px solid #bbf7d0;}
+.form-response.err{background:var(--red-l);color:#991b1b;border:1px solid #fecaca;}
+.privacy-note{font-size:.76rem;color:var(--muted);text-align:center;margin-top:1rem;display:flex;align-items:center;justify-content:center;gap:.4rem;}
+.privacy-note svg{width:13px;height:13px;}
+
+@media(max-width:640px){
+  .form-grid{grid-template-columns:1fr;}
+  .form-full{grid-column:1;}
+  .role-selector{grid-template-columns:1fr;}
+  .apply-card{padding:1.4rem;}
+  .step-label{display:none;}
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── CONFIRMATION MODAL ── */
+.modal-overlay{display:none;position:fixed;inset:0;z-index:9000;background:rgba(15,23,42,.55);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:1.5rem;}
+.modal-overlay.show{display:flex;}
+.modal-box{background:#fff;border-radius:var(--radius);padding:2.4rem 2rem 2rem;width:100%;max-width:480px;box-shadow:0 24px 60px rgba(0,0,0,.18);animation:modalIn .28s ease;position:relative;}
+@keyframes modalIn{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:none}}
+.modal-icon{width:64px;height:64px;border-radius:50%;background:var(--green-l);border:3px solid #bbf7d0;display:flex;align-items:center;justify-content:center;margin:0 auto 1.2rem;}
+.modal-icon svg{width:30px;height:30px;color:var(--green);}
+.modal-title{font-size:1.25rem;font-weight:800;color:var(--slate);text-align:center;margin-bottom:.4rem;}
+.modal-sub{font-size:.92rem;color:var(--muted);text-align:center;line-height:1.7;margin-bottom:1.4rem;}
+.modal-summary{margin-bottom:1.4rem;}
+.modal-sum-title{font-size:.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.5rem;}
+.modal-row{display:flex;justify-content:space-between;font-size:.84rem;padding:.3rem 0;border-bottom:1px solid var(--border);}
+.modal-row:last-child{border-bottom:none;}
+.modal-row-lbl{color:var(--muted);font-weight:500;}
+.modal-row-val{color:var(--slate);font-weight:600;text-align:right;max-width:55%;}
+.modal-note{background:var(--blue-l);border:1px solid var(--blue-m);border-radius:var(--radius-sm);padding:.7rem .9rem;font-size:.82rem;color:#1e40af;margin-bottom:1.5rem;display:flex;align-items:flex-start;gap:.55rem;}
+.modal-note svg{width:16px;height:16px;flex-shrink:0;margin-top:1px;}
+.modal-close{width:100%;background:var(--blue);color:#fff;border:none;border-radius:var(--radius-sm);padding:.85rem;font-family:'Poppins',sans-serif;font-size:.97rem;font-weight:700;cursor:pointer;transition:background .2s;}
+.modal-close:hover{background:var(--blue-d);}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>QueryCrest Student Portal</h1>
+  <button class="hamburger" id="hamburger">&#9776;</button>
+  <nav id="nav-links">
+    <button class="nav-close-btn" id="nav-close">&times;</button>
+    <a href="../index.html">Home</a>
+    <a href="Prospectus.html">Prospectuses</a>
+    <a href="Bursaries.html">Bursaries</a>
+    <a href="howToApply.html">How to Apply</a>
+    <a href="StudyAbroad.html">Study Abroad</a>
+    <a href="tipsAndTutorials.html">Study Tips</a>
+    <a href="../account/plans.html">Pricing</a>
+    <a href="FAQ.html">FAQ</a>
+    <a href="../account/login-signup.html" class="login-btn">My Account</a>
+  </nav>
+</header>
+
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <span class="page-hero-label">Internship Programme</span>
+    <h1>Join the <span>QueryCrest</span> Team</h1>
+    <p>Gain real-world industry experience at a growing South African EdTech platform. We are looking for motivated students ready to apply their skills and make a genuine impact.</p>
+  </div>
+</div>
+
+<div class="page-body">
+
+  <div class="card">
+    <h2><svg viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>About the Internship</h2>
+    <p>QueryCrest is a South African EdTech platform helping students navigate university applications, bursaries, and student life. Our internship programme gives students hands-on, industry-standard experience on a product used by thousands of real students across the country.</p>
+    <p>You will not be doing coffee runs or sitting in orientation sessions. From day one you will work on real features, real content, and real challenges — with direct mentorship from our core team.</p>
+    <div class="callout callout-blue">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span>This is a <strong>Work Integrated Learning (WIL) internship placement</strong>. Applicants must be registered for WIL through their institution to be eligible.</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><svg viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>Open Internship Roles</h2>
+    <p>We are accepting internship students across the following disciplines. All roles are remote-first and run for the full duration of your WIL placement period as required by your institution.</p>
+    <div class="roles-grid">
+      <div class="role-card">
+        <div class="role-icon ri-blue"><svg viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+        <div class="role-title">Full-Stack Web Developer</div>
+        <div class="role-desc">Build and maintain full-stack features on the QueryCrest platform using modern web technologies and Supabase.</div>
+        <div class="role-tags"><span class="rtag">HTML/CSS/JS</span><span class="rtag">Supabase</span><span class="rtag">APIs</span><span class="rtag">Full-time</span></div>
+      </div>
+      <div class="role-card">
+        <div class="role-icon ri-purple"><svg viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2"><circle cx="12" cy="12" r="2"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg></div>
+        <div class="role-title">UI / UX Designer</div>
+        <div class="role-desc">Design and prototype new features in Figma, improve user flows, and produce polished design assets.</div>
+        <div class="role-tags"><span class="rtag">Figma</span><span class="rtag">UI Design</span><span class="rtag">Prototyping</span></div>
+      </div>
+      <div class="role-card">
+        <div class="role-icon ri-green"><svg viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
+        <div class="role-title">Content Writer</div>
+        <div class="role-desc">Write SEO-optimised articles about university applications, bursaries, and student life for South African students.</div>
+        <div class="role-tags"><span class="rtag">Writing</span><span class="rtag">SEO</span><span class="rtag">Research</span></div>
+      </div>
+      <div class="role-card">
+        <div class="role-icon ri-amber"><svg viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg></div>
+        <div class="role-title">Social Media Manager</div>
+        <div class="role-desc">Grow QueryCrest's TikTok, Instagram and Facebook presence targeting matric and first-year South African students.</div>
+        <div class="role-tags"><span class="rtag">TikTok</span><span class="rtag">Instagram</span><span class="rtag">Content</span></div>
+      </div>
+      <div class="role-card">
+        <div class="role-icon ri-teal"><svg viewBox="0 0 24 24" fill="none" stroke="#0891b2" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        <div class="role-title">Junior Business Analyst</div>
+        <div class="role-desc">Analyse platform data, document requirements, map user journeys, and produce insights that guide product decisions.</div>
+        <div class="role-tags"><span class="rtag">Data Analysis</span><span class="rtag">Requirements</span><span class="rtag">Reporting</span></div>
+      </div>
+      <div class="role-card">
+        <div class="role-icon ri-indigo"><svg viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+        <div class="role-title">IT Support Technician</div>
+        <div class="role-desc">Assist with platform support queries, troubleshoot technical issues, and help maintain internal systems and tools.</div>
+        <div class="role-tags"><span class="rtag">Technical Support</span><span class="rtag">Troubleshooting</span></div>
+      </div>
+      <div class="role-card">
+        <div class="role-icon ri-pink"><svg viewBox="0 0 24 24" fill="none" stroke="#db2777" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <div class="role-title">Education Consultant</div>
+        <div class="role-desc">Guide students through university application processes. Knowledge of South African higher education required.</div>
+        <div class="role-tags"><span class="rtag">Advising</span><span class="rtag">SA Education</span></div>
+      </div>
+      <div class="role-card">
+        <div class="role-icon ri-green"><svg viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+        <div class="role-title">Digital Marketing Intern</div>
+        <div class="role-desc">Plan and execute digital campaigns, manage email newsletters, run paid ads, and grow organic reach across channels.</div>
+        <div class="role-tags"><span class="rtag">Email Marketing</span><span class="rtag">Paid Ads</span><span class="rtag">Analytics</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><svg viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>What to Expect</h2>
+    <p>We are a lean, mission-driven team that genuinely cares about the students we serve. You will have real ownership over your work and direct exposure to how a tech product is built and grown.</p>
+    <ul class="perks">
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Work on a live product used by thousands of South African students</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Remote-first — work from anywhere in South Africa</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Direct mentorship and regular feedback from the core team</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Flexible working hours that fit around your academic schedule</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Industry experience that directly supports your WIL academic requirements</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Reference letter and full internship documentation upon completion</li>
+    </ul>
+    <div class="callout callout-green" style="margin-top:1.2rem;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <span>No corporate bureaucracy. No endless meetings. Just meaningful work with a supportive, small team.</span>
+    </div>
+  </div>
+
+  <!-- APPLICATION FORM -->
+  <span class="apply-anchor" id="apply"></span>
+  <div class="apply-card">
+    <h2>
+      <svg viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      Apply for the Internship
+    </h2>
+    <p class="apply-subtitle">Complete all four steps to submit your application.</p>
+    <div class="callout callout-amber">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span>You must be enrolled in a WIL programme through your institution to be eligible. Uploading a WIL letter in Step 4 will strengthen your application.</span>
+    </div>
+
+    <div class="step-progress-wrap" id="stepWrap">
+      <div class="step-progress-bar" id="progressBar"></div>
+      <div class="step-item active" data-step="1"><div class="step-circle" id="sc1">1</div><div class="step-label">Personal</div></div>
+      <div class="step-item" data-step="2"><div class="step-circle" id="sc2">2</div><div class="step-label">Role</div></div>
+      <div class="step-item" data-step="3"><div class="step-circle" id="sc3">3</div><div class="step-label">About You</div></div>
+      <div class="step-item" data-step="4"><div class="step-circle" id="sc4">4</div><div class="step-label">Documents</div></div>
+    </div>
+
+    <form id="wilForm" novalidate>
+
+      <!-- STEP 1: Personal -->
+      <div class="step-panel active" id="panel1">
+        <div class="form-grid">
+          <div class="fgroup">
+            <label for="first_name"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>First Name</label>
+            <input type="text" id="first_name" name="first_name" placeholder="Your first name" autocomplete="given-name">
+            <span class="field-error" id="e_first_name"></span>
+          </div>
+          <div class="fgroup">
+            <label for="last_name"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Last Name</label>
+            <input type="text" id="last_name" name="last_name" placeholder="Your last name" autocomplete="family-name">
+            <span class="field-error" id="e_last_name"></span>
+          </div>
+          <div class="fgroup">
+            <label for="phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.81a16 16 0 0 0 6.29 6.29l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>Phone Number</label>
+            <input type="tel" id="phone" name="phone" placeholder="10-digit number starting with 0" maxlength="10" inputmode="numeric" autocomplete="tel">
+            <span class="field-hint">Numbers only — e.g. 0812345678</span>
+            <span class="field-error" id="e_phone"></span>
+          </div>
+          <div class="fgroup">
+            <label for="email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>Email Address</label>
+            <input type="email" id="email" name="email" placeholder="Your email address" inputmode="email" autocomplete="email">
+            <span class="field-error" id="e_email"></span>
+          </div>
+        </div>
+        <div class="step-nav">
+          <button type="button" class="btn-next" id="btn_next1">Next — Role Selection <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></button>
+        </div>
+      </div>
+
+      <!-- STEP 2: Role -->
+      <div class="step-panel" id="panel2">
+        <div class="fgroup" style="margin-bottom:1.2rem">
+          <label>Which role are you applying for?</label>
+          <div class="role-selector" id="roleSelector">
+            <label class="role-opt"><input type="radio" name="role" value="Full-Stack Web Developer"><span class="rdot"></span><div><div class="rname">Full-Stack Web Developer</div><div class="rsub">HTML · CSS · JS · Supabase</div></div></label>
+            <label class="role-opt"><input type="radio" name="role" value="UI/UX Designer"><span class="rdot"></span><div><div class="rname">UI/UX Designer</div><div class="rsub">Figma · Wireframing</div></div></label>
+            <label class="role-opt"><input type="radio" name="role" value="Content Writer"><span class="rdot"></span><div><div class="rname">Content Writer</div><div class="rsub">Articles · SEO</div></div></label>
+            <label class="role-opt"><input type="radio" name="role" value="Social Media Manager"><span class="rdot"></span><div><div class="rname">Social Media Manager</div><div class="rsub">TikTok · Instagram</div></div></label>
+            <label class="role-opt"><input type="radio" name="role" value="Junior Business Analyst"><span class="rdot"></span><div><div class="rname">Junior Business Analyst</div><div class="rsub">Data · Requirements</div></div></label>
+            <label class="role-opt"><input type="radio" name="role" value="IT Support Technician"><span class="rdot"></span><div><div class="rname">IT Support Technician</div><div class="rsub">Technical Support</div></div></label>
+            <label class="role-opt"><input type="radio" name="role" value="Digital Marketing Intern"><span class="rdot"></span><div><div class="rname">Digital Marketing Intern</div><div class="rsub">Campaigns · Analytics</div></div></label>
+            <label class="role-opt" style="grid-column:1/-1"><input type="radio" name="role" value="Education Consultant"><span class="rdot"></span><div><div class="rname">Education Consultant</div><div class="rsub">Student Guidance · SA Education</div></div></label>
+          </div>
+          <span class="field-error" id="e_role"></span>
+        </div>
+        <div class="form-grid">
+          <div class="fgroup form-full">
+            <label for="institution"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>Institution / University</label>
+            <input type="text" id="institution" name="institution" placeholder="Name of your university or college" autocomplete="organization">
+            <span class="field-error" id="e_institution"></span>
+          </div>
+          <div class="fgroup">
+            <label for="qualification"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>Qualification / Programme</label>
+            <input type="text" id="qualification" name="qualification" placeholder="e.g. Diploma in IT, BSc Computer Science">
+            <span class="field-error" id="e_qualification"></span>
+          </div>
+          <div class="fgroup">
+            <label for="year_of_study"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Year of Study</label>
+            <select id="year_of_study" name="year_of_study">
+              <option value="" disabled selected>Select your year</option>
+              <option>1st Year</option><option>2nd Year</option><option>3rd Year</option><option>4th Year</option><option>Post-Graduate</option>
+            </select>
+            <span class="field-error" id="e_year_of_study"></span>
+          </div>
+        </div>
+        <div class="step-nav">
+          <button type="button" class="btn-back" id="btn_back2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Back</button>
+          <button type="button" class="btn-next" id="btn_next2">Next — About You <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></button>
+        </div>
+      </div>
+
+      <!-- STEP 3: About You -->
+      <div class="step-panel" id="panel3">
+        <div class="fgroup" style="margin-bottom:1.2rem">
+          <label for="motivation"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>Motivation / Cover Letter</label>
+          <textarea id="motivation" name="motivation" maxlength="1000" placeholder="Tell us why you want to intern at QueryCrest, what skills you bring, and what you hope to gain. Minimum 80 characters."></textarea>
+          <div class="char-count"><span id="motivCount">0</span> / 1000</div>
+          <span class="field-error" id="e_motivation"></span>
+        </div>
+        <div class="form-grid">
+          <div class="fgroup">
+            <label for="availability"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Availability to Start</label>
+            <select id="availability" name="availability">
+              <option value="" disabled selected>Select your availability</option>
+              <option>Immediately</option><option>Within 1 month</option><option>Within 3 months</option><option>Flexible</option>
+            </select>
+            <span class="field-error" id="e_availability"></span>
+          </div>
+          <div class="fgroup">
+            <label for="how_heard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>How did you hear about us? <span style="font-weight:400;color:var(--muted);text-transform:none;">(optional)</span></label>
+            <select id="how_heard" name="how_heard">
+              <option value="">Select an option</option>
+              <option>Social Media</option><option>University / Lecturer</option><option>Friend / Colleague</option><option>Google Search</option><option>QueryCrest Platform</option><option>Other</option>
+            </select>
+          </div>
+          <div class="fgroup form-full">
+            <label for="portfolio_url"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>Portfolio / GitHub / LinkedIn URL <span style="font-weight:400;color:var(--muted);text-transform:none;">(optional)</span></label>
+            <input type="url" id="portfolio_url" name="portfolio_url" placeholder="https://github.com/username or https://yourportfolio.com">
+            <span class="field-error" id="e_portfolio_url"></span>
+          </div>
+        </div>
+        <div class="step-nav">
+          <button type="button" class="btn-back" id="btn_back3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Back</button>
+          <button type="button" class="btn-next" id="btn_next3">Next — Upload Documents <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></button>
+        </div>
+      </div>
+
+      <!-- STEP 4: Documents -->
+      <div class="step-panel" id="panel4">
+        <p style="font-size:.88rem;color:var(--muted);margin-bottom:1.2rem;line-height:1.7;">Upload your supporting documents below. Your CV and WIL Letter are required. All other documents are optional but strengthen your application.</p>
+
+        <div class="doc-uploads-grid">
+
+          <!-- CV (required) -->
+          <div class="doc-upload-row">
+            <div class="doc-upload-header">
+              <div class="doc-upload-label">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                Curriculum Vitae (CV)
+              </div>
+              <span class="doc-req-badge required">Required</span>
+            </div>
+            <div class="doc-drop-area" id="cvDrop">
+              <input type="file" id="cv" name="cv" accept=".pdf,application/pdf">
+              <div class="doc-drop-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+              <div class="doc-drop-text"><div class="doc-drop-title">Click to upload or drag & drop</div><div class="doc-drop-sub">PDF only · Max 5 MB</div></div>
+            </div>
+            <div class="doc-chosen" id="cvChosen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg><span class="doc-chosen-name" id="cvName"></span><button type="button" class="doc-remove" data-target="cv">&#x2715;</button></div>
+            <span class="field-error" id="e_cv" style="padding:.4rem 1rem;display:none;"></span>
+          </div>
+
+          <!-- WIL Letter (required) -->
+          <div class="doc-upload-row">
+            <div class="doc-upload-header">
+              <div class="doc-upload-label">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                WIL / Placement Letter from Institution
+              </div>
+              <span class="doc-req-badge optional">Optional</span>
+            </div>
+            <div class="doc-drop-area" id="wilDrop">
+              <input type="file" id="wil_letter" name="wil_letter" accept=".pdf,application/pdf">
+              <div class="doc-drop-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+              <div class="doc-drop-text"><div class="doc-drop-title">Click to upload or drag & drop</div><div class="doc-drop-sub">Official letter from your department confirming WIL enrolment (if available) · PDF only · Max 5 MB</div></div>
+            </div>
+            <div class="doc-chosen" id="wilChosen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg><span class="doc-chosen-name" id="wilName"></span><button type="button" class="doc-remove" data-target="wil_letter">&#x2715;</button></div>
+            <span class="field-error" id="e_wil_letter" style="padding:.4rem 1rem;display:none;"></span>
+          </div>
+
+          <!-- Motivation Letter (optional) -->
+          <div class="doc-upload-row">
+            <div class="doc-upload-header">
+              <div class="doc-upload-label">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                Formal Motivation Letter
+              </div>
+              <span class="doc-req-badge optional">Optional</span>
+            </div>
+            <div class="doc-drop-area" id="motivDrop">
+              <input type="file" id="motivation_letter" name="motivation_letter" accept=".pdf,application/pdf">
+              <div class="doc-drop-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+              <div class="doc-drop-text"><div class="doc-drop-title">Click to upload or drag & drop</div><div class="doc-drop-sub">Separate formal motivation letter if you have one · PDF only · Max 5 MB</div></div>
+            </div>
+            <div class="doc-chosen" id="motivChosen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg><span class="doc-chosen-name" id="motivDocName"></span><button type="button" class="doc-remove" data-target="motivation_letter">&#x2715;</button></div>
+          </div>
+
+          <!-- Additional Doc (optional) -->
+          <div class="doc-upload-row">
+            <div class="doc-upload-header">
+              <div class="doc-upload-label">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
+                Academic Record/Transcript
+              </div>
+              <span class="doc-req-badge optional">Optional</span>
+            </div>
+            <div class="doc-drop-area" id="extraDrop">
+              <input type="file" id="extra_doc" name="extra_doc" accept=".pdf,application/pdf">
+              <div class="doc-drop-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+              <div class="doc-drop-text"><div class="doc-drop-title">Click to upload or drag & drop</div><div class="doc-drop-sub">Portfolio, transcript, certificate, or any other relevant document · PDF only · Max 5 MB</div></div>
+            </div>
+            <div class="doc-chosen" id="extraChosen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg><span class="doc-chosen-name" id="extraName"></span><button type="button" class="doc-remove" data-target="extra_doc">&#x2715;</button></div>
+          </div>
+
+        </div>
+
+        <!-- Summary -->
+        <div style="margin-top:1.4rem;margin-bottom:1.2rem;">
+          <div style="font-size:.78rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.6rem;">Application Summary</div>
+          <div class="step-summary">
+            <div class="sum-row"><span class="sum-lbl">Name</span><span class="sum-val" id="sum_name"></span></div>
+            <div class="sum-row"><span class="sum-lbl">Email</span><span class="sum-val" id="sum_email"></span></div>
+            <div class="sum-row"><span class="sum-lbl">Phone</span><span class="sum-val" id="sum_phone"></span></div>
+            <div class="sum-row"><span class="sum-lbl">Role</span><span class="sum-val" id="sum_role"></span></div>
+            <div class="sum-row"><span class="sum-lbl">Institution</span><span class="sum-val" id="sum_inst"></span></div>
+            <div class="sum-row"><span class="sum-lbl">Qualification</span><span class="sum-val" id="sum_qual"></span></div>
+            <div class="sum-row"><span class="sum-lbl">Year of Study</span><span class="sum-val" id="sum_year"></span></div>
+            <div class="sum-row"><span class="sum-lbl">Availability</span><span class="sum-val" id="sum_avail"></span></div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-next" id="btn_submit">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Submit Application
+        </button>
+        <div class="form-response" id="formResponse">
+          <svg id="respIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"></svg>
+          <span id="respText"></span>
+        </div>
+        <p class="privacy-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Your details and documents are stored securely and only used for this application process.</p>
+        <div class="step-nav" style="margin-top:.5rem">
+          <button type="button" class="btn-back" id="btn_back4" style="flex:1;justify-content:center;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Back — Edit Responses</button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+
+  <div class="card">
+    <h2><svg viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Questions?</h2>
+    <p>If you have any questions about the internship programme, eligibility, or the application process, feel free to reach out directly.</p>
+    <a href="mailto:careers@querycrest.com" style="display:inline-flex;align-items:center;gap:.5rem;background:var(--blue);color:#fff;font-size:.9rem;font-weight:600;padding:.75rem 1.4rem;border-radius:var(--radius-sm);text-decoration:none;transition:background .2s;" onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      Email info@querycrest.com
+    </a>
+  </div>
+
+</div>
+
+<!-- CONFIRMATION MODAL -->
+<div class="modal-overlay" id="confirmModal">
+  <div class="modal-box">
+    <div class="modal-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <div class="modal-title">Application Submitted!</div>
+    <div class="modal-sub">Your application has been received. We will review it and be in touch via email within a few business days.</div>
+    <div class="modal-summary">
+      <div class="modal-sum-title">Your Application</div>
+      <div class="modal-row"><span class="modal-row-lbl">Name</span><span class="modal-row-val" id="modal_name"></span></div>
+      <div class="modal-row"><span class="modal-row-lbl">Email</span><span class="modal-row-val" id="modal_email"></span></div>
+      <div class="modal-row"><span class="modal-row-lbl">Role Applied</span><span class="modal-row-val" id="modal_role"></span></div>
+      <div class="modal-row"><span class="modal-row-lbl">Institution</span><span class="modal-row-val" id="modal_inst"></span></div>
+      <div class="modal-row"><span class="modal-row-lbl">Availability</span><span class="modal-row-val" id="modal_avail"></span></div>
+    </div>
+    <div class="modal-note">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span>Only one application per email address is accepted. Duplicate submissions will be declined.</span>
+    </div>
+    <button class="modal-close" id="modalCloseBtn">Done — Close</button>
+  </div>
+</div>
+
+<a href="https://wa.me/27692483470?text=Hi%20QueryCrest%20👋" target="_blank" style="position:fixed;right:20px;bottom:90px;width:54px;height:54px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,.22);z-index:99;transition:transform .2s" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" style="width:26px;height:26px;" alt="WhatsApp">
+</a>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand"><h3>QueryCrest</h3><p>Empowering South African students to reach their dream universities.</p></div>
+    <div class="footer-col"><h4>Platform</h4><ul><li><a href="../account/login-signup.html">My Account</a></li><li><a href="../account/plans.html">Pricing</a></li><li><a href="FAQ.html">FAQ</a></li></ul></div>
+    <div class="footer-col"><h4>Resources</h4><ul><li><a href="Prospectus.html">Prospectuses</a></li><li><a href="Bursaries.html">Bursaries</a></li><li><a href="StudyAbroad.html">Study Abroad</a></li><li><a href="tipsAndTutorials.html">Study Tips</a></li></ul></div>
+    <div class="footer-col"><h4>Legal</h4><ul><li><a href="privacy.html">Privacy</a></li><li><a href="disclaimer.html">Disclaimer</a></li></ul></div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 QueryCrest</span>
+    <span><a href="privacy.html">Privacy</a>&nbsp;&nbsp;<a href="disclaimer.html">Disclaimer</a></span>
+  </div>
+</footer>
+
+<script src="../js/cookie.js"></script>
+<script>
+(function(){
+  var nav=document.getElementById('nav-links'),hb=document.getElementById('hamburger'),nc=document.getElementById('nav-close');
+  if(!nav||!hb)return;
+  function openNav(){nav.classList.add('show');document.body.style.overflow='hidden';}
+  function closeNav(){nav.classList.remove('show');document.body.style.overflow='';}
+  hb.addEventListener('click',function(e){e.stopPropagation();openNav();});
+  if(nc)nc.addEventListener('click',closeNav);
+  document.addEventListener('click',function(e){if(nav.classList.contains('show')&&!nav.contains(e.target)&&!hb.contains(e.target))closeNav();});
+  nav.querySelectorAll('a').forEach(function(a){a.addEventListener('click',closeNav);});
+})();
+
+(function(){
+  var ENDPOINT='https://xkjsydeavdcarwkthppz.supabase.co/functions/v1/apply-wil';
+  var MAX_SIZE=5*1024*1024;
+  var step=1;
+
+  function g(id){return document.getElementById(id);}
+  function v(id){return(g(id)||{value:''}).value.trim();}
+
+  /* ── Step navigation ── */
+  function goStep(n){
+    g('panel'+step).classList.remove('active');
+    step=n;
+    g('panel'+step).classList.add('active');
+    [1,2,3,4].forEach(function(i){
+      var el=document.querySelector('.step-item[data-step="'+i+'"]');
+      el.classList.remove('active','done');
+      if(i===step)el.classList.add('active');
+      if(i<step)el.classList.add('done');
+    });
+    g('progressBar').style.width=(((step-1)/3)*100)+'%';
+    g('apply').scrollIntoView({behavior:'smooth',block:'start'});
+  }
+
+  function setErr(id,msg){
+    var e=g('e_'+id),inp=g(id);
+    if(e){e.textContent=msg;e.style.display=msg?'block':'none';}
+    if(inp){inp.classList.toggle('error',!!msg);inp.classList.toggle('ok',!msg&&(inp.value||'').trim().length>0);}
+  }
+
+
+  function ok1(){
+    var pass=true;
+    var fn=v('first_name');
+    if(!fn||fn.length<2){setErr('first_name','Enter your first name (at least 2 characters).');pass=false;}
+    else if(!/^[a-zA-Z\s\-']+$/.test(fn)){setErr('first_name','Letters only please.');pass=false;}
+    else setErr('first_name','');
+    var ln=v('last_name');
+    if(!ln||ln.length<2){setErr('last_name','Enter your last name.');pass=false;}
+    else if(!/^[a-zA-Z\s\-']+$/.test(ln)){setErr('last_name','Letters only please.');pass=false;}
+    else setErr('last_name','');
+    var ph=g('phone').value.trim();
+    if(!/^\d{10}$/.test(ph)){setErr('phone','Must be exactly 10 digits.');pass=false;}
+    else if(!ph.startsWith('0')){setErr('phone','Must start with 0.');pass=false;}
+    else setErr('phone','');
+    var em=v('email');
+    if(!em||!em.includes('@')||em.split('@')[1].indexOf('.')===-1){setErr('email','Enter a valid email address.');pass=false;}
+    else setErr('email','');
+    return pass;
+  }
+
+  function ok2(){
+    var pass=true;
+    var r=document.querySelector('input[name="role"]:checked');
+    if(!r){setErr('role','Please select a role.');pass=false;}else setErr('role','');
+    if(!v('institution')||v('institution').length<2){setErr('institution','Enter your institution.');pass=false;}else setErr('institution','');
+    if(!v('qualification')||v('qualification').length<2){setErr('qualification','Enter your qualification.');pass=false;}else setErr('qualification','');
+    if(!g('year_of_study').value){setErr('year_of_study','Select your year.');pass=false;}else setErr('year_of_study','');
+    return pass;
+  }
+
+  function ok3(){
+    var pass=true;
+    if(!v('motivation')||v('motivation').length<80){setErr('motivation','Please write at least 80 characters.');pass=false;}else setErr('motivation','');
+    if(!g('availability').value){setErr('availability','Select your availability.');pass=false;}else setErr('availability','');
+    var pu=v('portfolio_url');
+    if(pu){try{new URL(pu);setErr('portfolio_url','');}catch(_){setErr('portfolio_url','Enter a valid URL starting with https://');pass=false;}}
+    return pass;
+  }
+
+  function ok4(){
+    var pass=true;
+    if(!g('cv').files||!g('cv').files[0]){
+      var e=g('e_cv');if(e){e.textContent='Please upload your CV.';e.style.display='block';}pass=false;
+    } else setErr('cv','');
+    return pass;
+  }
+
+  function fillSummary(){
+    var r=document.querySelector('input[name="role"]:checked');
+    g('sum_name').textContent=v('first_name')+' '+v('last_name');
+    g('sum_email').textContent=v('email');
+    g('sum_phone').textContent=g('phone').value.trim();
+    g('sum_role').textContent=r?r.value:'—';
+    g('sum_inst').textContent=v('institution');
+    g('sum_qual').textContent=v('qualification');
+    g('sum_year').textContent=g('year_of_study').value||'—';
+    g('sum_avail').textContent=g('availability').value||'—';
+  }
+
+
+  var docMap={
+    cv:               {drop:'cvDrop',   chosen:'cvChosen',    name:'cvName',       input:'cv'},
+    wil_letter:       {drop:'wilDrop',  chosen:'wilChosen',   name:'wilName',      input:'wil_letter'},
+    motivation_letter:{drop:'motivDrop',chosen:'motivChosen', name:'motivDocName', input:'motivation_letter'},
+    extra_doc:        {drop:'extraDrop',chosen:'extraChosen', name:'extraName',    input:'extra_doc'},
+  };
+
+  Object.keys(docMap).forEach(function(key){
+    var cfg=docMap[key];
+    var drop=g(cfg.drop), inp=g(cfg.input), chosen=g(cfg.chosen), nameEl=g(cfg.name);
+    if(!drop||!inp)return;
+
+    function showFile(f){
+      if(!f)return;
+      if(f.size>MAX_SIZE){
+        if(key==='cv'||key==='wil_letter'){
+          var e=g('e_'+key);if(e){e.textContent='File must be under 5 MB.';e.style.display='block';}
+        }
+        inp.value='';return;
+      }
+      if(f.type!=='application/pdf'&&!f.name.toLowerCase().endsWith('.pdf')){
+        if(key==='cv'||key==='wil_letter'){
+          var e=g('e_'+key);if(e){e.textContent='Must be a PDF file.';e.style.display='block';}
+        }
+        inp.value='';return;
+      }
+      nameEl.textContent=f.name+' ('+(f.size/1024/1024).toFixed(2)+' MB)';
+      chosen.classList.add('show');
+      var e=g('e_'+key);if(e)e.style.display='none';
+    }
+
+    drop.addEventListener('click',function(){inp.click();});
+    inp.addEventListener('change',function(){showFile(inp.files[0]);});
+    drop.addEventListener('dragover',function(e){e.preventDefault();drop.style.background='var(--blue-l)';});
+    drop.addEventListener('dragleave',function(){drop.style.background='';});
+    drop.addEventListener('drop',function(e){
+      e.preventDefault();drop.style.background='';
+      var f=e.dataTransfer.files[0];
+      if(f){var dt=new DataTransfer();dt.items.add(f);inp.files=dt.files;showFile(f);}
+    });
+  });
+
+  document.querySelectorAll('.doc-remove').forEach(function(btn){
+    btn.addEventListener('click',function(e){
+      e.stopPropagation();
+      var key=btn.getAttribute('data-target');
+      var cfg=docMap[key];if(!cfg)return;
+      var inp=g(cfg.input),chosen=g(cfg.chosen),nameEl=g(cfg.name);
+      if(inp)inp.value='';
+      if(chosen)chosen.classList.remove('show');
+      if(nameEl)nameEl.textContent='';
+    });
+  });
+
+
+  document.querySelectorAll('.role-opt').forEach(function(opt){
+    opt.addEventListener('click',function(){
+      document.querySelectorAll('.role-opt').forEach(function(o){o.classList.remove('selected');});
+      opt.classList.add('selected');
+      setErr('role','');
+    });
+  });
+
+
+  g('motivation').addEventListener('input',function(){g('motivCount').textContent=this.value.length;});
+  g('phone').addEventListener('input',function(){this.value=this.value.replace(/\D/g,'').slice(0,10);});
+
+
+  g('btn_next1').addEventListener('click',function(){if(ok1())goStep(2);});
+  g('btn_back2').addEventListener('click',function(){goStep(1);});
+  g('btn_next2').addEventListener('click',function(){if(ok2())goStep(3);});
+  g('btn_back3').addEventListener('click',function(){goStep(2);});
+  g('btn_next3').addEventListener('click',function(){if(ok3()){fillSummary();goStep(4);}});
+  g('btn_back4').addEventListener('click',function(){goStep(3);});
+
+ 
+  function showResp(type,msg){
+    var el=g('formResponse'),txt=g('respText'),ico=g('respIcon');
+    el.className='form-response show '+type;
+    txt.textContent=msg;
+    ico.innerHTML=type==='ok'?'<polyline points="20 6 9 17 4 12"/>':'<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>';
+  }
+  function setBusy(on){
+    var btn=g('btn_submit');
+    btn.disabled=on;
+    btn.innerHTML=on
+      ?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 1s linear infinite;width:18px;height:18px;"><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/></svg> Submitting...'
+      :'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Submit Application';
+  }
+
+  
+  g('modalCloseBtn').addEventListener('click',function(){g('confirmModal').classList.remove('show');});
+  g('confirmModal').addEventListener('click',function(e){if(e.target===this)this.classList.remove('show');});
+
+
+  g('wilForm').addEventListener('submit',async function(e){
+    e.preventDefault();
+    if(!ok4())return;
+    g('formResponse').className='form-response';
+    setBusy(true);
+
+    var fd=new FormData();
+    fd.append('first_name',v('first_name'));
+    fd.append('last_name',v('last_name'));
+    fd.append('phone',g('phone').value.trim());
+    fd.append('email',v('email'));
+    fd.append('role',(document.querySelector('input[name="role"]:checked')||{value:''}).value);
+    fd.append('institution',v('institution'));
+    fd.append('qualification',v('qualification'));
+    fd.append('year_of_study',g('year_of_study').value);
+    fd.append('availability',g('availability').value);
+    fd.append('motivation',g('motivation').value.trim());
+    fd.append('portfolio_url',v('portfolio_url'));
+    fd.append('how_heard',g('how_heard').value);
+    
+    fd.append('cv',g('cv').files[0]);
+   
+    if(g('wil_letter').files&&g('wil_letter').files[0])
+      fd.append('wil_letter',g('wil_letter').files[0]);
+    if(g('motivation_letter').files&&g('motivation_letter').files[0])
+      fd.append('motivation_letter',g('motivation_letter').files[0]);
+    if(g('extra_doc').files&&g('extra_doc').files[0])
+      fd.append('extra_doc',g('extra_doc').files[0]);
+
+    try{
+      var res=await fetch(ENDPOINT,{method:'POST',body:fd});
+      var data=await res.json();
+      if(res.ok&&data.success){
+        var r=document.querySelector('input[name="role"]:checked');
+        g('modal_name').textContent=v('first_name')+' '+v('last_name');
+        g('modal_email').textContent=v('email').toLowerCase();
+        g('modal_role').textContent=r?r.value:'—';
+        g('modal_inst').textContent=v('institution');
+        g('modal_avail').textContent=g('availability').value||'—';
+        g('confirmModal').classList.add('show');
+        g('wilForm').reset();
+        document.querySelectorAll('.role-opt').forEach(function(o){o.classList.remove('selected');});
+        document.querySelectorAll('.doc-chosen').forEach(function(d){d.classList.remove('show');});
+        document.querySelectorAll('.doc-chosen-name').forEach(function(d){d.textContent='';});
+        g('motivCount').textContent='0';
+        goStep(1);
+      }else{
+        showResp('err',data.error||'Something went wrong. Please try again.');
+      }
+    }catch(_){
+      showResp('err','Network error — please check your connection and try again.');
+    }finally{
+      setBusy(false);
+    }
+  });
+})();
+</script>
+</body>
+</html>

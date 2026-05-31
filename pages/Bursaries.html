@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+     <script>
+(function () {
+  try {
+    var ref = new URLSearchParams(window.location.search).get('ref');
+    if (ref && ref.trim()) {
+      localStorage.setItem('referral_code', ref.trim().toUpperCase());
+      console.log('[referral] ✓ Captured:', ref.trim().toUpperCase());
+    }
+  } catch (e) {}
+})();
+</script>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Bursaries & Funding | QueryCrest</title>
+  <meta name="description" content="Find top bursaries, NSFAS guides, and scholarship opportunities for South African students.">
+  <link rel="icon" href="../favicon.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/pages.css">
+  <link rel="stylesheet" href="../css/cookie.css">
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7ZT9W8F7T5"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-7ZT9W8F7T5');</script>
+  <!-- AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2099814834007515" crossorigin="anonymous"></script>
+
+<style>
+/* NAV INLINE â€” cannot be overridden */
+header{position:fixed!important;top:0;left:0;right:0;height:64px;background:rgba(255,255,255,0.97)!important;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;padding:0 40px;z-index:2000;box-shadow:0 1px 3px rgba(0,0,0,.07);}
+header h1{font-size:1.1rem;font-weight:700;color:#2563eb;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0;}
+.hamburger{display:none;font-size:22px;cursor:pointer;background:none;border:none;color:#0f172a;padding:4px;line-height:1;flex-shrink:0;}
+#nav-links{display:flex!important;gap:4px;align-items:center;flex-shrink:0;position:static!important;background:transparent!important;height:auto!important;padding:0!important;flex-direction:row!important;overflow:visible!important;}
+#nav-links a{color:#334155!important;text-decoration:none;font-size:.88rem;font-weight:500;padding:7px 12px;border-radius:8px;transition:background .18s,color .18s;white-space:nowrap;}
+#nav-links a:hover{background:#eff6ff!important;color:#2563eb!important;}
+#nav-links a.login-btn{background:#2563eb!important;color:#fff!important;font-weight:600;padding:8px 18px;border-radius:8px;}
+#nav-links a.login-btn:hover{background:#1d4ed8!important;}
+.nav-close-btn{display:none!important;}
+@media(max-width:900px){
+  header{padding:0 20px!important;}
+  .hamburger{display:block!important;}
+  #nav-links{
+    display:none!important;
+    position:fixed!important;
+    top:0!important;left:0!important;right:0!important;bottom:0!important;
+    width:100%!important;height:100vh!important;
+    background:#0f172a!important;
+    -webkit-backdrop-filter:none!important;
+    backdrop-filter:none!important;
+    flex-direction:column!important;
+    align-items:flex-start!important;
+    padding:72px 32px 40px!important;
+    z-index:3000!important;
+    gap:0!important;
+    overflow-y:auto!important;
+  }
+  #nav-links.show{display:flex!important;}
+  #nav-links a{
+    color:rgba(255,255,255,.85)!important;
+    font-size:1.05rem!important;
+    font-weight:500!important;
+    padding:14px 0!important;
+    border-bottom:1px solid rgba(255,255,255,.08)!important;
+    width:100%!important;
+    border-radius:0!important;
+    background:transparent!important;
+  }
+  #nav-links a:hover{color:#fff!important;background:transparent!important;}
+  #nav-links a.login-btn{
+    background:#2563eb!important;
+    color:#fff!important;
+    border-radius:8px!important;
+    padding:14px 20px!important;
+    border-bottom:none!important;
+    margin-top:16px!important;
+    display:block!important;
+    width:100%!important;
+    text-align:center!important;
+  }
+  .nav-close-btn{
+    display:block!important;
+    position:absolute!important;
+    top:18px!important;right:22px!important;
+    font-size:1.9rem!important;
+    color:rgba(255,255,255,.6)!important;
+    background:none!important;
+    border:none!important;
+    cursor:pointer!important;
+    line-height:1!important;
+    z-index:3001!important;
+  }
+}
+</style>
+</head>
+<body>
+<div></div><div></div><div></div></div>
+  </div>
+</div><header>
+  <h1>QueryCrest Student Portal</h1>
+  <button class="hamburger" id="hamburger">&#9776;</button>
+  <nav id="nav-links">
+    <button class="nav-close-btn" id="nav-close">&times;</button>
+    <a href="../index.html">Home</a>
+    <a href="Prospectus.html">Prospectuses</a>
+    <a href="Bursaries.html">Bursaries</a>
+    <a href="howToApply.html">How to Apply</a>
+    <a href="StudyAbroad.html">Study Abroad</a>
+    <a href="tipsAndTutorials.html">Study Tips</a>
+    <a href="../account/plans.html">Pricing</a>
+    <a href="FAQ.html">FAQ</a>
+    <a href="../account/login-signup.html" class="login-btn">My Account</a>
+  </nav>
+</header>
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <span class="page-hero-label">Funding & Bursaries</span>
+    <h1>Find Your <span>Bursary</span></h1>
+    <p>Discover top bursaries, scholarships, and NSFAS funding available to South African students in 2025 and 2026.</p>
+  </div>
+</div>
+
+<div class="page-body">
+  <div class="two-col">
+    <div class="main-col">
+
+      <div class="content-card">
+        <h2>Top Bursaries &amp; Funding Opportunities</h2>
+        <p>Finding the right bursary can make the difference between studying and missing out. South Africa has hundreds of funding opportunities â€” from government programmes like NSFAS to corporate bursaries from major companies. The key is knowing where to look and applying early.</p>
+        <div class="quick-links">
+          <a href="https://www.nsfas.org.za" class="quick-link" target="_blank" rel="noopener">NSFAS Official</a>
+          <a href="https://www.zabursaries.co.za" class="quick-link" target="_blank" rel="noopener">ZA Bursaries</a>
+          <a href="https://www.funza.co.za" class="quick-link" target="_blank" rel="noopener">Funza Lushaka</a>
+        </div>
+      </div>
+
+      <div class="content-card">
+        <h2>Popular Bursaries in 2025/2026</h2>
+        <div class="card-grid">
+          <div class="item-card"><span class="item-badge badge-blue">Government</span><h3>NSFAS</h3><p>Covers tuition, accommodation, meals, transport, and a personal care allowance for qualifying students at public universities and TVET colleges.</p><a href="https://www.nsfas.org.za" target="_blank" rel="noopener">Apply on NSFAS</a></div>
+          <div class="item-card"><span class="item-badge badge-green">Teaching</span><h3>Funza Lushaka</h3><p>Full bursary for students studying to become teachers at public universities. Covers all costs including accommodation and learning materials.</p><a href="https://www.funza.co.za" target="_blank" rel="noopener">Learn more</a></div>
+          <div class="item-card"><span class="item-badge badge-blue">Research</span><h3>CSIR Bursary</h3><p>For students in science, engineering, and technology fields. Covers undergraduate and postgraduate studies at South African universities.</p><a href="https://www.csir.co.za/bursaries" target="_blank" rel="noopener">Apply at CSIR</a></div>
+          <div class="item-card"><span class="item-badge badge-orange">Development</span><h3>IDC Bursary</h3><p>The Industrial Development Corporation offers bursaries for students in fields that support South Africa's economic development goals.</p><a href="https://www.idc.co.za/bursaries/" target="_blank" rel="noopener">IDC Programme</a></div>
+          <div class="item-card"><span class="item-badge badge-blue">International</span><h3>NAC International</h3><p>Bursaries for students wanting to study internationally. Covers arts, culture, and creative industry fields at international institutions.</p><a href="https://www.nac.org.za" target="_blank" rel="noopener">NAC Bursaries</a></div>
+          <div class="item-card"><span class="item-badge badge-green">General</span><h3>Zabursaries Database</h3><p>A comprehensive database of hundreds of bursaries across all fields of study. Updated regularly with closing dates and application links.</p><a href="https://www.zabursaries.co.za" target="_blank" rel="noopener">Browse all</a></div>
+        </div>
+      </div>
+
+      <div class="ad-slot">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2099814834007515" crossorigin="anonymous"></script>
+  <ins class="adsbygoogle" style="display:block;width:100%;overflow:hidden;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-2099814834007515" data-ad-slot="2058791620"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+
+      <div class="content-card">
+        <h2>How to Apply for a Bursary</h2>
+        <div class="callout callout-blue"><span class="callout-icon"></span><span>Most bursaries open applications between <strong>March and September</strong> for the following academic year. Apply early â€” spots are limited.</span></div>
+        <h4><span class="step-num">1</span> Check the requirements</h4>
+        <p>Each bursary has its own criteria â€” academic results, field of study, financial need, or citizenship. Read the requirements carefully before investing time in an application.</p>
+        <h4><span class="step-num">2</span> Gather your documents</h4>
+        <p>Most applications need: certified ID copy, latest academic results, proof of household income (parents' payslips or SASSA letter), and a motivational letter.</p>
+        <h4><span class="step-num">3</span> Write a strong motivational letter</h4>
+        <p>Your motivational letter should explain why you need the bursary, what you're studying, and what you plan to do with your qualification. Be specific and genuine.</p>
+        <h4><span class="step-num">4</span> Submit before the deadline</h4>
+        <p>Never submit on the last day. Technical issues happen. Aim to submit at least a week before the closing date and save your confirmation email.</p>
+        <h4><span class="step-num">5</span> Follow up</h4>
+        <p>If you haven't heard back two weeks after the deadline, it's acceptable to send a polite follow-up email asking about the status of your application.</p>
+      </div>
+
+      <div class="ad-slot">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2099814834007515" crossorigin="anonymous"></script>
+  <ins class="adsbygoogle" style="display:block;width:100%;overflow:hidden;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-2099814834007515" data-ad-slot="2058791620"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+
+      <div class="content-card">
+        <h2>Application Tips</h2>
+        <ul>
+          <li>Apply to multiple bursaries â€” there's no rule against receiving more than one offer</li>
+          <li>Keep your academic records and certified documents updated at all times</li>
+          <li>Follow the bursary provider on social media for deadline reminders</li>
+          <li>Ask your school guidance counsellor for lesser-known local bursaries</li>
+          <li>NSFAS only covers public universities and TVET colleges â€” private institutions are not eligible</li>
+        </ul>
+      </div>
+
+      <div class="content-card">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-list">
+          <div class="faq-item"><div class="faq-q">Can I apply for NSFAS and a corporate bursary at the same time?</div><div class="faq-a">Yes. You can apply for multiple funding sources simultaneously. However, some bursary providers may require you to disclose other funding you have received.</div></div>
+          <div class="faq-item"><div class="faq-q">What if I don't qualify for NSFAS?</div><div class="faq-a">There are hundreds of other bursaries available that don't use the same income threshold as NSFAS. Corporate bursaries, provincial bursaries, and sector-specific funding often have different criteria.</div></div>
+          <div class="faq-item"><div class="faq-q">Do bursaries need to be repaid?</div><div class="faq-a">NSFAS converts to a bursary (not a loan) if you pass your modules. Most corporate bursaries require you to work for the company for a set period after graduation, or they become repayable.</div></div>
+          <div class="faq-item"><div class="faq-q">When should I start applying?</div><div class="faq-a">As soon as possible â€” ideally in your final year of high school. Many bursaries close by October or November for the following academic year.</div></div>
+        </div>
+      </div>
+
+    </div>
+    <aside>
+      <div class="sidebar-card">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="howToApply.html">How to Apply for University</a></li>
+          <li><a href="Prospectus.html">University Prospectuses</a></li>
+          <li><a href="StudyAbroad.html">Study Abroad Guide</a></li>
+          <li><a href="tipsAndTutorials.html">Study Tips &amp; Tools</a></li>
+          <li><a href="FAQ.html">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-card">
+        <h3>Top Bursary Sites</h3>
+        <ul>
+          <li><a href="https://www.nsfas.org.za" target="_blank" rel="noopener">NSFAS</a></li>
+          <li><a href="https://www.zabursaries.co.za" target="_blank" rel="noopener">ZA Bursaries</a></li>
+          <li><a href="https://www.funza.co.za" target="_blank" rel="noopener">Funza Lushaka</a></li>
+          <li><a href="https://www.csir.co.za/bursaries" target="_blank" rel="noopener">CSIR</a></li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+</div>
+<a href="https://wa.me/27692483470?text=Hi%20QueryCrest%20ðŸ‘‹%20I%20have%20a%20quick%20question."
+  target="_blank" aria-label="Chat on WhatsApp"
+  style="position:fixed;right:20px;bottom:90px;width:54px;height:54px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,0.22);z-index:99;transition:transform .2s;"
+  onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" style="width:26px;height:26px;">
+</a>
+<a href="#" class="back-to-top" id="backToTop">&#8593;</a>
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <h3>QueryCrest</h3>
+      <p>Empowering South African students to reach their dream universities â€” one application at a time.</p>
+      <div class="footer-social">
+        <a href="https://www.facebook.com/share/1H9bGWww4S/" aria-label="Facebook">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.5 9.95v-7.05h-2.3v-2.9h2.3V9.8c0-2.28 1.36-3.54 3.44-3.54.99 0 2.02.18 2.02.18v2.22h-1.14c-1.12 0-1.47.69-1.47 1.4v1.68h2.5l-.4 2.9h-2.1v7.05A10 10 0 0 0 22 12z"/></svg>
+        </a>
+        <a href="https://www.tiktok.com/@querycrest" aria-label="TikTok">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M21 8.062a6.565 6.565 0 0 1-3.773-1.188v7.538a6.25 6.25 0 1 1-6.25-6.25c.35 0 .692.036 1.023.104v2.18a3.98 3.98 0 1 0 2.227 3.596V2h2.08A6.56 6.56 0 0 0 21 8.062z"/></svg>
+        </a>
+        <a href="https://youtube.com/@querycrest" aria-label="YouTube">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M19.615 3.184A2.997 2.997 0 0 0 17.846 3H6.154a3 3 0 0 0-1.769.184A3.004 3.004 0 0 0 3 6.154v11.692a3.004 3.004 0 0 0 1.385 2.97A2.997 2.997 0 0 0 6.154 21h11.692a3 3 0 0 0 1.769-.184A3.004 3.004 0 0 0 21 17.846V6.154a3.004 3.004 0 0 0-1.385-2.97zM10 15V9l5 3-5 3z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Platform</h4>
+      <ul>
+        <li><a href="../account/login-signup.html">My Account</a></li>
+        <li><a href="../account/plans.html">Pricing</a></li>
+        <li><a href="FAQ.html">FAQ</a></li>
+        <li><a href="../affiliate/affiliate-public.html">Become A Partner</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <ul>
+        <li><a href="Prospectus.html">Prospectuses</a></li>
+        <li><a href="Bursaries.html">Bursaries</a></li>
+        <li><a href="StudyAbroad.html">Study Abroad</a></li>
+        <li><a href="tipsAndTutorials.html">Study Tips</a></li>
+        <li><a href="howToApply.html">How to Apply</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <ul>
+        <li><a href="privacy.html">Privacy Policy</a></li>
+        <li><a href="disclaimer.html">Disclaimer</a></li>
+        <li><a href="about.html">About Us</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 QueryCrest. All rights reserved.</span>
+    <span>
+      <a href="privacy.html">Privacy</a>&nbsp;&nbsp;
+      <a href="disclaimer.html">Disclaimer</a>
+    </span>
+  </div>
+</footer>
+
+<script src="../js/cookie.js"></script>
+
+<script>
+/* NAV JS */
+(function(){
+  var nav=document.getElementById("nav-links");
+  var hb=document.getElementById("hamburger");
+  var nc=document.getElementById("nav-close");
+  if(!nav||!hb)return;
+  function openNav(){nav.classList.add("show");document.body.style.overflow="hidden";}
+  function closeNav(){nav.classList.remove("show");document.body.style.overflow="";}
+  hb.addEventListener("click",function(e){e.stopPropagation();openNav();});
+  if(nc)nc.addEventListener("click",closeNav);
+  document.addEventListener("click",function(e){
+    if(nav.classList.contains("show")&&!nav.contains(e.target)&&!hb.contains(e.target))closeNav();
+  });
+  nav.querySelectorAll("a").forEach(function(a){a.addEventListener("click",closeNav);});
+})();
+</script>
+<script>
+document.querySelectorAll('.faq-q').forEach(q => {
+  q.addEventListener('click', () => {
+    q.parentElement.classList.toggle('open');
+  });
+});
+</script>
+</body>
+</html>
