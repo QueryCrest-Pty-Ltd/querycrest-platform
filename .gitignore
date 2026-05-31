@@ -1,0 +1,18 @@
+# Environment variables and secrets
+.env
+.env.local
+.env.production
+
+# Supabase local config
+.supabase/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Editor folders
+.vscode/
+.idea/
+
+# Node modules if you ever use them
+node_modules/
