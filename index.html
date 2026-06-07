@@ -604,5 +604,712 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
   fetchNews();
 })();
 </script>
+
+
+
+
+
+
+ 
+<style>
+#preApplyModal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(4px);
+  z-index: 4000;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: paFadeIn .2s ease;
+}
+#preApplyModal.open { display: flex; }
+@keyframes paFadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.pa-card {
+  background: #fff;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 660px;
+  max-height: 92vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 32px 80px rgba(0,0,0,.28);
+  animation: paSlideUp .25s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes paSlideUp {
+  from { opacity: 0; transform: translateY(24px) scale(.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Header */
+.pa-hdr {
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid #e2e8f0;
+  flex-shrink: 0;
+}
+.pa-hdr-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.pa-hdr-left h2 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 3px;
+  font-family: 'Poppins', sans-serif;
+}
+.pa-hdr-left p {
+  font-size: .82rem;
+  color: #64748b;
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+}
+.pa-close {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: #f1f5f9;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background .15s, color .15s;
+  font-family: 'Poppins', sans-serif;
+}
+.pa-close:hover { background: #fee2e2; color: #dc2626; }
+
+/* Progress */
+.pa-prog-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+.pa-prog-label { font-size: .72rem; font-weight: 600; color: #64748b; font-family: 'Poppins', sans-serif; }
+.pa-prog-pct   { font-size: .72rem; font-weight: 700; color: #2563eb; font-family: 'Poppins', sans-serif; }
+.pa-prog-track { height: 5px; background: #e2e8f0; border-radius: 99px; overflow: hidden; }
+.pa-prog-fill  { height: 100%; background: linear-gradient(90deg, #1e40af, #2563eb); border-radius: 99px; transition: width .35s ease; }
+
+/* Badge */
+.pa-badge {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  padding: 6px 12px;
+  margin-top: 10px;
+  font-size: .8rem;
+  font-weight: 600;
+  color: #1d4ed8;
+  font-family: 'Poppins', sans-serif;
+}
+.pa-badge.on { display: flex; }
+.pa-badge-lbl { font-weight: 400; color: #64748b; }
+
+/* Body */
+.pa-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+}
+.pa-step { display: none; }
+.pa-step.on { display: block; }
+
+.pa-sh {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 4px;
+  font-family: 'Poppins', sans-serif;
+}
+.pa-ss {
+  font-size: .83rem;
+  color: #64748b;
+  margin: 0 0 20px;
+  line-height: 1.55;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Form fields */
+.pa-f  { margin-bottom: 16px; }
+.pa-lbl {
+  display: block;
+  font-size: .78rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 5px;
+  font-family: 'Poppins', sans-serif;
+}
+.pa-req { color: #2563eb; margin-left: 2px; }
+.pa-in {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 9px;
+  font-size: .9rem;
+  font-family: 'Poppins', sans-serif;
+  color: #0f172a;
+  background: #fff;
+  outline: none;
+  transition: border-color .18s, box-shadow .18s;
+  box-sizing: border-box;
+}
+.pa-in:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,.1); }
+.pa-in.bad   { border-color: #dc2626; background: #fff5f5; }
+
+/* Grid */
+.pa-g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; }
+
+/* Custom select dropdown */
+.pa-cw { position: relative; }
+.pa-ct {
+  width: 100%;
+  padding: 11px 36px 11px 14px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 9px;
+  font-size: .9rem;
+  font-family: 'Poppins', sans-serif;
+  color: #0f172a;
+  background: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: border-color .18s, box-shadow .18s;
+  user-select: none;
+  box-sizing: border-box;
+  position: relative;
+}
+.pa-ct.ph { color: #94a3b8; }
+.pa-ct.oc,
+.pa-ct:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,.1); outline: none; }
+.pa-ct.bad   { border-color: #dc2626; background: #fff5f5; }
+.pa-ca {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #94a3b8;
+  transition: transform .18s;
+}
+.pa-ct.oc ~ .pa-ca { transform: translateY(-50%) rotate(180deg); }
+.pa-cd {
+  display: none;
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0; right: 0;
+  background: #fff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 9px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  z-index: 60;
+  overflow: hidden;
+}
+.pa-cd.oc { display: block; }
+.pa-csw {
+  padding: 10px;
+  border-bottom: 1px solid #e2e8f0;
+  position: relative;
+}
+.pa-cs {
+  width: 100%;
+  padding: 8px 10px 8px 32px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  font-family: 'Poppins', sans-serif;
+  font-size: .83rem;
+  color: #0f172a;
+  background: #f8fafc;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color .18s;
+}
+.pa-cs:focus { border-color: #2563eb; }
+.pa-csi {
+  position: absolute;
+  left: 20px; top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  pointer-events: none;
+}
+.pa-cl { max-height: 190px; overflow-y: auto; }
+.pa-co {
+  padding: 10px 14px;
+  font-size: .88rem;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  color: #0f172a;
+  transition: background .15s;
+}
+.pa-co:hover  { background: #eff6ff; color: #1d4ed8; }
+.pa-co.sel    { background: #eff6ff; color: #1d4ed8; font-weight: 600; }
+.pa-co.hid    { display: none; }
+.pa-cem {
+  padding: 14px;
+  font-size: .83rem;
+  color: #94a3b8;
+  text-align: center;
+  display: none;
+}
+.pa-cem.on { display: block; }
+
+/* Radio options */
+.pa-rg { display: flex; flex-direction: column; gap: 10px; }
+.pa-ro {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 9px;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  transition: border-color .15s, background .15s;
+}
+.pa-ro:hover { border-color: #2563eb; background: #eff6ff; }
+.pa-ro.bad   { border-color: #dc2626; }
+.pa-ro input[type=radio] { accent-color: #2563eb; width: 16px; height: 16px; flex-shrink: 0; }
+.pa-ro span { font-size: .88rem; font-weight: 500; color: #374151; }
+
+/* Error hints */
+.pa-err {
+  display: none;
+  align-items: center;
+  gap: 5px;
+  font-size: .75rem;
+  color: #dc2626;
+  margin-top: 5px;
+  font-weight: 500;
+  font-family: 'Poppins', sans-serif;
+}
+.pa-err.on { display: flex; }
+
+/* Login nudge (step 3 / 4) */
+.pa-nudge {
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  border: 1px solid #93c5fd;
+  border-left: 4px solid #2563eb;
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  font-size: .82rem;
+  color: #1e3a8a;
+  line-height: 1.6;
+  font-family: 'Poppins', sans-serif;
+}
+.pa-nudge strong { font-weight: 700; }
+
+/* Footer */
+.pa-ftr {
+  padding: 16px 24px;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.pa-btn {
+  flex: 1;
+  padding: 12px;
+  border-radius: 9px;
+  font-family: 'Poppins', sans-serif;
+  font-size: .9rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: background .15s, transform .12s;
+}
+.pa-btn:active { transform: scale(.98); }
+.pa-btn.primary {
+  background: #2563eb;
+  color: #fff;
+}
+.pa-btn.primary:hover { background: #1d4ed8; }
+.pa-btn.secondary {
+  background: #f1f5f9;
+  color: #374151;
+  border: 1.5px solid #e2e8f0;
+}
+.pa-btn.secondary:hover { background: #e2e8f0; }
+
+/* Responsive */
+@media (max-width: 600px) {
+  .pa-g2      { grid-template-columns: 1fr; }
+  .pa-card    { max-height: 95vh; }
+  .pa-body    { padding: 18px; }
+  .pa-ftr     { flex-direction: column-reverse; }
+  .pa-btn     { flex: unset; width: 100%; }
+}
+</style>
+
+<!-- ── PRE-APPLY MODAL HTML ──────────────────────────────────── -->
+<div id="preApplyModal" role="dialog" aria-modal="true" aria-labelledby="paTitle">
+  <div class="pa-card">
+
+    <!-- Header -->
+    <div class="pa-hdr">
+      <div class="pa-hdr-top">
+        <div class="pa-hdr-left">
+          <h2 id="paTitle">Start Your Application</h2>
+          <p>Fill in your details — we'll save your progress</p>
+        </div>
+        <button class="pa-close" onclick="closePreApply()" aria-label="Close">&times;</button>
+      </div>
+      <div class="pa-prog-row">
+        <span class="pa-prog-label" id="paPT">Step 1 of 3 — Institution</span>
+        <span class="pa-prog-pct"  id="paPP">33%</span>
+      </div>
+      <div class="pa-prog-track">
+        <div class="pa-prog-fill" id="paPF" style="width:33%"></div>
+      </div>
+      <div class="pa-badge" id="paBadge">
+        🎓&nbsp;<span class="pa-badge-lbl">Applying to:</span>
+        <span id="paBadgeName"></span>
+      </div>
+    </div>
+
+    <!-- Body -->
+    <div class="pa-body">
+
+      <!-- Step 1: University -->
+      <div class="pa-step on" id="paS1">
+        <p class="pa-sh">Which university are you applying to?</p>
+        <p class="pa-ss">Select the South African university or college you want to apply to.</p>
+        <div class="pa-f">
+          <label class="pa-lbl">University / College <span class="pa-req">*</span></label>
+          <div class="pa-cw" id="paCW">
+            <div class="pa-ct ph" id="paCT" tabindex="0"
+                 onclick="paTD()" onkeydown="paTK(event)">
+              Select university…
+            </div>
+            <svg class="pa-ca" width="16" height="16" viewBox="0 0 24 24"
+                 fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 9l6 6 6-6"/>
+            </svg>
+            <div class="pa-cd" id="paDD">
+              <div class="pa-csw">
+                <svg class="pa-csi" width="14" height="14" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"/>
+                  <path d="M21 21l-4.35-4.35"/>
+                </svg>
+                <input class="pa-cs" id="paCS" type="text"
+                       placeholder="Search universities…"
+                       oninput="paFO()" onkeydown="paSK(event)">
+              </div>
+              <div class="pa-cl" id="paCL"></div>
+              <div class="pa-cem" id="paCE">No universities found</div>
+            </div>
+          </div>
+          <!-- Hidden native select for value storage -->
+          <select id="paUniSelect" style="display:none;" aria-hidden="true">
+            <option value="">Select university…</option>
+          </select>
+          <div class="pa-err" id="paEU">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2.5">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="8" x2="12.01" y2="8"/>
+              <line x1="12" y1="12" x2="12" y2="16"/>
+            </svg>
+            Please select a university.
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Programs -->
+      <div class="pa-step" id="paS2">
+        <p class="pa-sh">What do you want to study?</p>
+        <p class="pa-ss">Enter up to 3 programs. Your first choice and its course code are required.</p>
+        <div class="pa-g2">
+          <div class="pa-f">
+            <label class="pa-lbl" for="paP1">Program 1 <span class="pa-req">*</span></label>
+            <input class="pa-in" type="text" id="paP1" placeholder="e.g. Computer Science">
+            <div class="pa-err" id="paEP1">Required.</div>
+          </div>
+          <div class="pa-f">
+            <label class="pa-lbl" for="paC1">Course Code 1 <span class="pa-req">*</span></label>
+            <input class="pa-in" type="text" id="paC1" placeholder="e.g. CS101">
+            <div class="pa-err" id="paEC1">Required.</div>
+          </div>
+          <div class="pa-f">
+            <label class="pa-lbl" for="paP2">Program 2</label>
+            <input class="pa-in" type="text" id="paP2" placeholder="Optional">
+          </div>
+          <div class="pa-f">
+            <label class="pa-lbl" for="paC2">Course Code 2</label>
+            <input class="pa-in" type="text" id="paC2" placeholder="Optional">
+          </div>
+          <div class="pa-f">
+            <label class="pa-lbl" for="paP3">Program 3</label>
+            <input class="pa-in" type="text" id="paP3" placeholder="Optional">
+          </div>
+          <div class="pa-f">
+            <label class="pa-lbl" for="paC3">Course Code 3</label>
+            <input class="pa-in" type="text" id="paC3" placeholder="Optional">
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3: Applied before? + login nudge -->
+      <div class="pa-step" id="paS3">
+        <p class="pa-sh">One last thing</p>
+        <p class="pa-ss">Have you applied to this university before? This helps us tailor your application.</p>
+        <div class="pa-rg">
+          <label class="pa-ro">
+            <input type="radio" name="paApp" value="no">
+            <span>No — this is my first time applying</span>
+          </label>
+          <label class="pa-ro">
+            <input type="radio" name="paApp" value="yes">
+            <span>Yes — I've applied here before</span>
+          </label>
+        </div>
+        <div class="pa-err" id="paEA" style="margin-top:8px;">Please select an option.</div>
+
+        <!-- Login nudge — shown after they've filled everything in -->
+        <div class="pa-nudge" style="margin-top:20px;">
+          <strong>Almost there!</strong> To submit your application you'll need to
+          sign in or create a free account — it only takes a minute. Your details
+          are saved and will be waiting for you when you get back.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="pa-ftr" id="paFTR">
+      <button class="pa-btn secondary" id="paBK" onclick="paBkBtn()">Cancel</button>
+      <button class="pa-btn primary"   id="paNX" onclick="paNtBtn()">Next →</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── PRE-APPLY MODAL SCRIPT ────────────────────────────────── -->
+<script>
+(function () {
+  var PA_KEY = 'qc_pre_apply';   // sessionStorage key
+  var paStep = 1;
+  var paUni  = { v: '', l: '' };
+  var paIsRet = false;
+
+  var STEPS = {
+    1: { t: 'Step 1 of 3 — Institution', p: 33  },
+    2: { t: 'Step 2 of 3 — Programs',    p: 66  },
+    3: { t: 'Step 3 of 3 — Confirm',     p: 100 },
+  };
+
+  /* ── Open / Close ── */
+  window.openPreApply = function () {
+    loadUniversities();
+    document.getElementById('preApplyModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    showStep(1);
+  };
+  window.closePreApply = function () {
+    document.getElementById('preApplyModal').classList.remove('open');
+    document.body.style.overflow = '';
+  };
+
+  /* Close on backdrop click */
+  document.getElementById('preApplyModal').addEventListener('click', function (e) {
+    if (e.target === this) window.closePreApply();
+  });
+  /* Close on Escape */
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') window.closePreApply();
+  });
+
+  /* ── Step navigation ── */
+  function showStep(s) {
+    paStep = s;
+    document.querySelectorAll('.pa-step').forEach(function (el) {
+      el.classList.remove('on');
+    });
+    document.getElementById('paS' + s).classList.add('on');
+
+    var m = STEPS[s] || STEPS[1];
+    document.getElementById('paPT').textContent = m.t;
+    document.getElementById('paPP').textContent = m.p + '%';
+    document.getElementById('paPF').style.width  = m.p + '%';
+
+    document.getElementById('paBK').textContent = s === 1 ? 'Cancel' : '← Back';
+    document.getElementById('paNX').textContent = s === 3 ? 'Sign In & Submit →' : 'Next →';
+
+    /* Badge */
+    var badge = document.getElementById('paBadge');
+    if (s > 1 && paUni.l) {
+      document.getElementById('paBadgeName').textContent = paUni.l;
+      badge.classList.add('on');
+    } else {
+      badge.classList.remove('on');
+    }
+  }
+
+  window.paNtBtn = function () {
+    clearErrors();
+    if (paStep === 1) return step1();
+    if (paStep === 2) return step2();
+    if (paStep === 3) return step3();
+  };
+  window.paBkBtn = function () {
+    clearErrors();
+    if (paStep === 1) return window.closePreApply();
+    showStep(paStep - 1);
+  };
+
+  function step1() {
+    if (!paUni.v) {
+      document.getElementById('paCT').classList.add('bad');
+      document.getElementById('paEU').classList.add('on');
+      return;
+    }
+    showStep(2);
+  }
+
+  function step2() {
+    var p1 = g('paP1').value.trim();
+    var c1 = g('paC1').value.trim();
+    var ok = true;
+    if (!p1) { g('paP1').classList.add('bad'); g('paEP1').classList.add('on'); ok = false; }
+    if (!c1) { g('paC1').classList.add('bad'); g('paEC1').classList.add('on'); ok = false; }
+    if (!ok) return;
+    showStep(3);
+  }
+
+  function step3() {
+    var sel = document.querySelector('input[name="paApp"]:checked');
+    if (!sel) {
+      document.querySelectorAll('.pa-ro').forEach(function (r) { r.classList.add('bad'); });
+      document.getElementById('paEA').classList.add('on');
+      return;
+    }
+    paIsRet = sel.value === 'yes';
+
+    /* Save everything to sessionStorage */
+    var payload = {
+      university_name:  paUni.l,
+      university_id:    paUni.v,
+      programs:         [g('paP1').value.trim(), g('paP2').value.trim(), g('paP3').value.trim()].filter(Boolean),
+      course_codes:     [g('paC1').value.trim(), g('paC2').value.trim(), g('paC3').value.trim()].filter(Boolean),
+      has_applied_before: paIsRet,
+      attempt_type:     paIsRet ? 'second_time' : 'first_time',
+    };
+    try {
+      sessionStorage.setItem(PA_KEY, JSON.stringify(payload));
+    } catch (e) { /* storage full or private mode */ }
+
+    /* Redirect to login, flagging we have a pending application */
+    window.location.href = 'account/login-signup.html?next=apply';
+  }
+
+  function clearErrors() {
+    document.querySelectorAll('#preApplyModal .pa-err').forEach(function (e) {
+      e.classList.remove('on');
+    });
+    document.querySelectorAll('#preApplyModal .bad').forEach(function (e) {
+      e.classList.remove('bad');
+    });
+    document.querySelectorAll('.pa-ro').forEach(function (r) { r.classList.remove('bad'); });
+  }
+
+  /* ── University dropdown ── */
+  var _uniLoaded = false;
+  function loadUniversities() {
+    if (_uniLoaded) return;
+    _uniLoaded = true;
+    fetch('https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/load-universities')
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        var list = document.getElementById('paCL');
+        var sel  = document.getElementById('paUniSelect');
+        list.innerHTML = '';
+        (data.universities || []).forEach(function (u) {
+          /* Dropdown option */
+          var div = document.createElement('div');
+          div.className = 'pa-co';
+          div.dataset.value = u.id;
+          div.textContent = u.name;
+          div.onclick = function () { paSO(u.id, u.name); };
+          list.appendChild(div);
+          /* Hidden select option */
+          var opt = document.createElement('option');
+          opt.value = u.id;
+          opt.textContent = u.name;
+          sel.appendChild(opt);
+        });
+      })
+      .catch(function () { /* silently degrade */ });
+  }
+
+  /* Toggle dropdown */
+  window.paTD = function () {
+    var ct = g('paCT'), dd = g('paDD');
+    if (dd.classList.contains('oc')) { paDrop(); }
+    else { ct.classList.add('oc'); dd.classList.add('oc'); setTimeout(function () { g('paCS').focus(); }, 40); }
+  };
+  function paDrop() {
+    g('paCT').classList.remove('oc'); g('paDD').classList.remove('oc');
+    g('paCS').value = ''; paFO();
+  }
+
+  /* Select a university */
+  window.paSO = function (v, l) {
+    paUni = { v: v, l: l };
+    var ct = g('paCT');
+    ct.textContent = l;
+    ct.classList.remove('ph', 'bad', 'oc');
+    document.querySelectorAll('.pa-co').forEach(function (o) {
+      o.classList.toggle('sel', o.dataset.value === v);
+    });
+    g('paUniSelect').value = v;
+    g('paEU').classList.remove('on');
+    paDrop();
+  };
+
+  /* Filter options */
+  window.paFO = function () {
+    var q = g('paCS').value.toLowerCase();
+    var n = 0;
+    document.querySelectorAll('.pa-co').forEach(function (o) {
+      var m = o.textContent.toLowerCase().indexOf(q) > -1;
+      o.classList.toggle('hid', !m);
+      if (m) n++;
+    });
+    g('paCE').classList.toggle('on', n === 0);
+  };
+
+  /* Keyboard nav */
+  window.paTK = function (e) {
+    if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown') { e.preventDefault(); paTD(); }
+  };
+  window.paSK = function (e) {
+    if (e.key === 'Escape') paDrop();
+    if (e.key === 'Enter') {
+      var f = document.querySelector('.pa-co:not(.hid)'); if (f) f.click();
+    }
+  };
+
+  /* Close dropdown on outside click */
+  document.addEventListener('click', function (e) {
+    var cw = document.getElementById('paCW');
+    if (cw && !cw.contains(e.target)) paDrop();
+  });
+
+  function g(id) { return document.getElementById(id); }
+})();
+</script>
 </body>
 </html>
