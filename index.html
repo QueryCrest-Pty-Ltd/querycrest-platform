@@ -1009,9 +1009,13 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
     if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
-  document.getElementById('preApplyModal').addEventListener('click', function (e) {
-    if (e.target === this) window.closePreApply();
-  });
+  /* Safe listeners — element guaranteed present since HTML is above this script */
+  var _modal = document.getElementById('preApplyModal');
+  if (_modal) {
+    _modal.addEventListener('click', function (e) {
+      if (e.target === this) window.closePreApply();
+    });
+  }
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') window.closePreApply();
   });
@@ -1079,9 +1083,16 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
 
   function g(id) { return document.getElementById(id); }
 
-  /* ── Init ── */
-  document.addEventListener('DOMContentLoaded', buildGrid);
+  /* ── Init ── 
+     Use DOMContentLoaded if DOM not ready yet, otherwise run immediately.
+     This handles being placed anywhere in the page — top or bottom.        */
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', buildGrid);
+  } else {
+    buildGrid();
+  }
 })();
 </script>
+
 </body>
 </html>
