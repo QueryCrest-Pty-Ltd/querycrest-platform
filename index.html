@@ -740,7 +740,7 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
   font-family: 'Poppins', sans-serif;
 }
 
-/* University picker — renders OUTSIDE/below the input */
+/* University picker */
 .pa-uni-wrap { position: relative; margin-bottom: 16px; }
 .pa-uni-trigger {
   width: 100%;
@@ -766,17 +766,17 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
 .pa-uni-trigger svg { flex-shrink: 0; transition: transform .2s; }
 .pa-uni-trigger.open svg { transform: rotate(180deg); }
 
-/* The panel drops BELOW the trigger, outside the scroll area */
+/* The panel is now rendered outside the modal (appended to <body>) and
+   positioned with fixed coordinates that track the trigger's location,
+   so it is never clipped by the modal's scroll/overflow container. */
 .pa-uni-panel {
   display: none;
-  position: absolute;
-  top: calc(100% + 6px);
-  left: 0; right: 0;
+  position: fixed;
   background: #fff;
   border: 1.5px solid #e2e8f0;
   border-radius: 12px;
   box-shadow: 0 16px 40px rgba(0,0,0,.14);
-  z-index: 10;
+  z-index: 5000;
   overflow: hidden;
 }
 .pa-uni-panel.open { display: block; }
@@ -814,26 +814,10 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
   color: #0f172a;
   cursor: pointer;
   transition: background .12s;
-  display: flex;
-  align-items: center;
-  gap: 10px;
 }
 .pa-uni-opt:hover { background: #eff6ff; color: #1d4ed8; }
 .pa-uni-opt.sel   { background: #eff6ff; color: #1d4ed8; font-weight: 600; }
 .pa-uni-opt.hid   { display: none; }
-.pa-uni-abbr {
-  width: 38px; height: 38px;
-  border-radius: 9px;
-  background: linear-gradient(135deg, #1e3a8a, #2563eb);
-  color: #fff;
-  font-size: .65rem;
-  font-weight: 800;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-  letter-spacing: -.02em;
-}
-.pa-uni-no { padding: 14px; text-align: center; font-size: .82rem; color: #94a3b8; display: none; font-family: 'Poppins', sans-serif; }
-.pa-uni-no.on { display: block; }
 
 /* Form fields */
 .pa-f { margin-bottom: 14px; }
@@ -979,7 +963,7 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
     </div>
 
     <!-- Body -->
-    <div class="pa-body">
+    <div class="pa-body" id="paBody">
 
       <!-- ── Step 1: University ── -->
       <div class="pa-step on" id="paS1">
@@ -998,20 +982,6 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
                 <path d="M6 9l6 6 6-6"/>
               </svg>
             </button>
-            <!-- Panel drops below, still inside .pa-uni-wrap so it stays in flow -->
-            <div class="pa-uni-panel" id="paUniPanel" role="listbox">
-              <div class="pa-uni-search-wrap">
-                <svg class="pa-uni-search-ico" width="14" height="14"
-                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
-                </svg>
-                <input class="pa-uni-search" id="paUniSearch" type="text"
-                       placeholder="Search universities…"
-                       oninput="paFilterUni()" onkeydown="paSearchKey(event)">
-              </div>
-              <div class="pa-uni-list" id="paUniList"></div>
-              <div class="pa-uni-no" id="paUniNo">No universities found</div>
-            </div>
           </div>
           <div class="pa-err" id="paEU">Please select a university.</div>
         </div>
@@ -1053,7 +1023,7 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
 
       <!-- ── Step 3: Returning? ── -->
       <div class="pa-step" id="paS3">
-        <p class="pa-sh">Have you applied here before?</p>
+        <p class="pa-sh" id="paS3Heading">Have you applied here before?</p>
         <p class="pa-ss">This helps us tailor the process for you.</p>
         <div class="pa-rg">
           <label class="pa-ro">
@@ -1095,6 +1065,20 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
   </div>
 </div>
 
+<!-- University picker panel — lives outside the modal DOM/scroll container -->
+<div class="pa-uni-panel" id="paUniPanel" role="listbox">
+  <div class="pa-uni-search-wrap">
+    <svg class="pa-uni-search-ico" width="14" height="14"
+         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+    </svg>
+    <input class="pa-uni-search" id="paUniSearch" type="text"
+           placeholder="Search universities…"
+           oninput="paFilterUni()" onkeydown="paSearchKey(event)">
+  </div>
+  <div class="pa-uni-list" id="paUniList"></div>
+</div>
+
 <!-- ── SCRIPT ──────────────────────────────────────────────── -->
 <script>
 (function () {
@@ -1102,7 +1086,7 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
   var paStep = 1;
   var paUni  = { v: '', l: '' };
 
-  /* ── All 26 South African public universities ── */
+  /* ── All 26 South African public universities (hardcoded — no endpoint fetch) ── */
   var UNIVERSITIES = [
     { id:'uct',     name:'University of Cape Town',                    abbr:'UCT'    },
     { id:'wits',    name:'University of the Witwatersrand',            abbr:'Wits'   },
@@ -1127,12 +1111,11 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
     { id:'mut',     name:'Mangosuthu University of Technology',        abbr:'MUT'    },
     { id:'tut',     name:'Tshwane University of Technology',           abbr:'TUT'    },
     { id:'vut',     name:'Vaal University of Technology',              abbr:'VUT'    },
-    { id:'smj',     name:'Sefako Makgatho Health Sciences University', abbr:'SMU'    },
-    { id:'smu',     name:'Sol Plaatje University',                     abbr:'SPU'    },
+    { id:'smu',     name:'Sefako Makgatho Health Sciences University', abbr:'SMU'    },
     { id:'univen',  name:'University of Venda',                        abbr:'Univen' },
   ];
 
-  /* ── Build university list in panel ── */
+  /* ── Build university list in panel (plain-text names, no colored abbreviation chip) ── */
   function buildUniList() {
     var list = document.getElementById('paUniList');
     if (!list || list.children.length > 0) return; // already built
@@ -1141,12 +1124,21 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
       div.className = 'pa-uni-opt';
       div.setAttribute('role', 'option');
       div.dataset.value = u.id;
-      div.innerHTML =
-        '<div class="pa-uni-abbr">' + u.abbr.slice(0,5) + '</div>' +
-        '<span>' + u.name + '</span>';
+      div.textContent = u.name + ' (' + u.abbr + ')';
       div.addEventListener('click', function () { paSelectUni(u); });
       list.appendChild(div);
     });
+  }
+
+  /* ── Position the panel against the trigger, since it now lives outside the modal ── */
+  function paPositionPanel() {
+    var trigger = document.getElementById('paUniTrigger');
+    var panel   = document.getElementById('paUniPanel');
+    if (!trigger || !panel) return;
+    var r = trigger.getBoundingClientRect();
+    panel.style.top   = (r.bottom + 6) + 'px';
+    panel.style.left  = r.left + 'px';
+    panel.style.width = r.width + 'px';
   }
 
   /* ── Toggle picker panel ── */
@@ -1158,6 +1150,7 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
     if (isOpen) {
       paClosePicker();
     } else {
+      paPositionPanel();
       trigger.classList.add('open');
       panel.classList.add('open');
       setTimeout(function () {
@@ -1168,23 +1161,33 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
   };
 
   function paClosePicker() {
-    document.getElementById('paUniTrigger').classList.remove('open');
-    document.getElementById('paUniPanel').classList.remove('open');
+    var trigger = document.getElementById('paUniTrigger');
+    var panel   = document.getElementById('paUniPanel');
+    if (trigger) trigger.classList.remove('open');
+    if (panel) panel.classList.remove('open');
     var s = document.getElementById('paUniSearch');
     if (s) { s.value = ''; paFilterUni(); }
   }
 
-  /* ── Filter list ── */
+  /* Keep the panel aligned with the trigger if the window resizes while open,
+     and close it if the modal body is scrolled (so it never drifts out of place). */
+  window.addEventListener('resize', function () {
+    var panel = document.getElementById('paUniPanel');
+    if (panel && panel.classList.contains('open')) paPositionPanel();
+  });
+  document.addEventListener('DOMContentLoaded', function () {
+    var body = document.getElementById('paBody');
+    if (body) body.addEventListener('scroll', paClosePicker);
+  });
+
+  /* ── Filter list (no "No universities found" message — list is always complete) ── */
   window.paFilterUni = function () {
     var q = (document.getElementById('paUniSearch').value || '').toLowerCase().trim();
     var opts = document.querySelectorAll('.pa-uni-opt');
-    var shown = 0;
     opts.forEach(function (o) {
       var match = !q || o.textContent.toLowerCase().indexOf(q) > -1;
       o.classList.toggle('hid', !match);
-      if (match) shown++;
     });
-    document.getElementById('paUniNo').classList.toggle('on', shown === 0);
   };
 
   /* Search keyboard: Enter picks first visible */
@@ -1211,10 +1214,11 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
     paClosePicker();
   }
 
-  /* Close picker on outside click */
+  /* Close picker on outside click (trigger OR the now-external panel) */
   document.addEventListener('click', function (e) {
-    var wrap = document.getElementById('paUniWrap');
-    if (wrap && !wrap.contains(e.target)) paClosePicker();
+    var wrap  = document.getElementById('paUniWrap');
+    var panel = document.getElementById('paUniPanel');
+    if (wrap && panel && !wrap.contains(e.target) && !panel.contains(e.target)) paClosePicker();
   });
 
   /* ── Open / Close modal ── */
@@ -1266,6 +1270,14 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
     document.getElementById('paPF').style.width  = m.p + '%';
     document.getElementById('paNX').textContent  = s === 3 ? 'Save & Continue →' : 'Next →';
     document.getElementById('paBK').textContent  = s === 1 ? 'Cancel' : '← Back';
+
+    /* Dynamic step-3 question: "Have you applied to [University Name] before?" */
+    if (s === 3) {
+      var heading = document.getElementById('paS3Heading');
+      heading.textContent = paUni.l
+        ? 'Have you applied to ' + paUni.l + ' before?'
+        : 'Have you applied here before?';
+    }
 
     var chip = document.getElementById('paChip');
     if (s > 1 && paUni.l) {
@@ -1344,3 +1356,4 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
 
 </body>
 </html>
+
