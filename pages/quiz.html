@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="robots" content="noindex,nofollow"/>
+<title>QueryCrest — Technical Assessment</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+/* ── RESET ───────────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:15px;}
+body{
+  font-family:'Poppins',sans-serif;
+  background:#020817;
+  color:#e2e8f0;
+  min-height:100vh;
+  overflow-x:hidden;
+  /* ANTI-COPY */
+  -webkit-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  user-select:none;
+}
+
+/* ── ANIMATED BACKGROUND ────────────────────────────────── */
+.bg-canvas{
+  position:fixed;inset:0;z-index:0;
+  background:radial-gradient(ellipse 80% 60% at 50% -10%,
+    rgba(37,99,235,.18) 0%,
+    rgba(30,58,138,.10) 40%,
+    transparent 70%),
+    #020817;
+  overflow:hidden;
+}
+.bg-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(37,99,235,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(37,99,235,.04) 1px, transparent 1px);
+  background-size:56px 56px;
+  mask-image:radial-gradient(ellipse 70% 70% at 50% 50%, #000 40%, transparent 100%);
+}
+.bg-orb{
+  position:absolute;border-radius:50%;pointer-events:none;filter:blur(80px);
+}
+.orb-1{width:500px;height:500px;background:rgba(37,99,235,.12);top:-120px;left:-100px;animation:orbFloat 18s infinite alternate ease-in-out;}
+.orb-2{width:380px;height:380px;background:rgba(30,58,138,.15);bottom:-80px;right:-80px;animation:orbFloat 22s infinite alternate-reverse ease-in-out;}
+.orb-3{width:260px;height:260px;background:rgba(59,130,246,.08);top:40%;left:55%;animation:orbFloat 14s infinite alternate ease-in-out;}
+@keyframes orbFloat{0%{transform:translate(0,0)scale(1);}100%{transform:translate(40px,30px)scale(1.15);}}
+
+/* ── TOPBAR ─────────────────────────────────────────────── */
+.topbar{
+  position:fixed;top:0;left:0;right:0;z-index:50;
+  height:60px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 32px;
+  background:rgba(2,8,23,.75);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(37,99,235,.15);
+}
+.topbar-brand{display:flex;align-items:center;gap:10px;}
+.brand-mark{
+  width:34px;height:34px;border-radius:9px;
+  background:linear-gradient(135deg,#1e3a8a,#2563eb);
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:800;color:#fff;
+  box-shadow:0 0 0 1px rgba(37,99,235,.4),0 4px 14px rgba(37,99,235,.3);
+}
+.brand-name{font-size:14px;font-weight:700;color:#fff;letter-spacing:-.01em;}
+.brand-tag{
+  font-size:10px;font-weight:600;color:#60a5fa;
+  background:rgba(37,99,235,.12);border:1px solid rgba(37,99,235,.25);
+  padding:2px 8px;border-radius:99px;letter-spacing:.05em;text-transform:uppercase;
+}
+.topbar-right{display:flex;align-items:center;gap:12px;}
+.timer-pill{
+  display:none;align-items:center;gap:8px;
+  background:rgba(2,8,23,.8);border:1px solid rgba(37,99,235,.3);
+  padding:6px 14px;border-radius:99px;
+}
+.timer-pill.show{display:flex;}
+.timer-label{font-size:10px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:.07em;}
+.timer-value{
+  font-size:18px;font-weight:800;color:#60a5fa;
+  font-variant-numeric:tabular-nums;
+  transition:color .3s;
+}
+.timer-value.warn{color:#f59e0b;}
+.timer-value.danger{color:#ef4444;animation:timerPulse 1s infinite;}
+@keyframes timerPulse{0%,100%{opacity:1;}50%{opacity:.5;}}
+.status-dot{
+  display:flex;align-items:center;gap:6px;
+  font-size:11px;color:#475569;font-weight:500;
+}
+.dot{width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 6px rgba(34,197,94,.6);animation:dotPulse 2s infinite;}
+@keyframes dotPulse{0%,100%{box-shadow:0 0 6px rgba(34,197,94,.6);}50%{box-shadow:0 0 14px rgba(34,197,94,.4);}}
+
+/* ── MAIN LAYOUT ────────────────────────────────────────── */
+.main{
+  position:relative;z-index:10;
+  min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  padding:80px 20px 40px;
+}
+
+/* ── ENTRY CARD ─────────────────────────────────────────── */
+.entry-card{
+  width:100%;max-width:460px;
+  background:rgba(15,23,42,.7);
+  border:1px solid rgba(37,99,235,.2);
+  border-radius:20px;
+  padding:44px 40px;
+  backdrop-filter:blur(20px);
+  box-shadow:
+    0 0 0 1px rgba(37,99,235,.08),
+    0 32px 80px rgba(0,0,0,.5),
+    inset 0 1px 0 rgba(255,255,255,.05);
+  animation:cardIn .4s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes cardIn{from{opacity:0;transform:translateY(20px)scale(.97);}to{opacity:1;transform:none;}}
+
+.entry-icon{
+  width:56px;height:56px;
+  background:linear-gradient(135deg,#1e3a8a,#2563eb);
+  border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;font-weight:800;color:#fff;
+  margin:0 auto 24px;
+  box-shadow:0 0 0 8px rgba(37,99,235,.1),0 8px 24px rgba(37,99,235,.35);
+}
+.entry-title{
+  font-size:22px;font-weight:800;color:#f8fafc;
+  text-align:center;margin-bottom:6px;letter-spacing:-.02em;
+}
+.entry-sub{
+  font-size:13px;color:#64748b;text-align:center;
+  line-height:1.6;margin-bottom:32px;
+}
+
+.input-label{
+  display:block;font-size:11px;font-weight:700;
+  color:#94a3b8;text-transform:uppercase;letter-spacing:.08em;
+  margin-bottom:8px;
+}
+.code-input{
+  width:100%;padding:14px 18px;
+  background:rgba(2,8,23,.6);
+  border:2px solid rgba(37,99,235,.2);
+  border-radius:12px;
+  color:#fff;font-size:17px;font-weight:700;
+  letter-spacing:.2em;text-align:center;text-transform:uppercase;
+  font-family:'Poppins',sans-serif;
+  outline:none;
+  transition:border-color .2s,box-shadow .2s,background .2s;
+  margin-bottom:16px;
+  /* allow typing */
+  -webkit-user-select:text;
+  -moz-user-select:text;
+  user-select:text;
+}
+.code-input:focus{
+  border-color:#2563eb;
+  background:rgba(37,99,235,.06);
+  box-shadow:0 0 0 4px rgba(37,99,235,.15);
+}
+.code-input::placeholder{color:rgba(148,163,184,.4);font-weight:400;letter-spacing:0;font-size:14px;}
+
+.btn-begin{
+  width:100%;padding:14px;
+  background:linear-gradient(135deg,#1e3a8a,#2563eb);
+  color:#fff;border:none;border-radius:12px;
+  font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;
+  cursor:pointer;
+  position:relative;overflow:hidden;
+  box-shadow:0 4px 20px rgba(37,99,235,.4),0 0 0 1px rgba(37,99,235,.3);
+  transition:transform .18s,box-shadow .18s,opacity .18s;
+  letter-spacing:.02em;
+}
+.btn-begin::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.12),transparent);
+  opacity:0;transition:opacity .2s;
+}
+.btn-begin:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 28px rgba(37,99,235,.5),0 0 0 1px rgba(37,99,235,.4);
+}
+.btn-begin:hover::before{opacity:1;}
+.btn-begin:active{transform:translateY(0);box-shadow:0 2px 12px rgba(37,99,235,.3);}
+.btn-begin:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none;}
+.btn-begin .spinner{
+  display:none;width:16px;height:16px;
+  border:2.5px solid rgba(255,255,255,.3);
+  border-top-color:#fff;border-radius:50%;
+  animation:spin .7s linear infinite;
+  margin:0 auto;
+}
+.btn-begin.loading .btn-text{display:none;}
+.btn-begin.loading .spinner{display:block;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+.error-msg{
+  margin-top:10px;padding:10px 14px;
+  background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);
+  border-radius:8px;font-size:13px;color:#fca5a5;
+  text-align:center;display:none;line-height:1.5;
+}
+.error-msg.show{display:block;animation:errIn .2s ease;}
+@keyframes errIn{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:none;}}
+
+.entry-note{
+  margin-top:20px;font-size:11.5px;color:#475569;
+  text-align:center;line-height:1.7;
+}
+.entry-note strong{color:#64748b;}
+
+/* ── QUIZ CARD ──────────────────────────────────────────── */
+.quiz-card{
+  width:100%;max-width:720px;display:none;
+  background:rgba(15,23,42,.75);
+  border:1px solid rgba(37,99,235,.2);
+  border-radius:20px;
+  box-shadow:
+    0 0 0 1px rgba(37,99,235,.08),
+    0 32px 80px rgba(0,0,0,.5),
+    inset 0 1px 0 rgba(255,255,255,.05);
+  backdrop-filter:blur(20px);
+  overflow:hidden;
+  animation:cardIn .35s cubic-bezier(.34,1.56,.64,1);
+}
+.quiz-header{
+  padding:20px 28px 18px;
+  border-bottom:1px solid rgba(37,99,235,.12);
+  display:flex;align-items:center;justify-content:space-between;
+  gap:14px;flex-wrap:wrap;
+}
+.q-section-tag{
+  font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:#60a5fa;background:rgba(37,99,235,.12);border:1px solid rgba(37,99,235,.25);
+  padding:4px 10px;border-radius:6px;
+}
+.q-section-tag.code-section{
+  color:#34d399;background:rgba(52,211,153,.08);border-color:rgba(52,211,153,.2);
+}
+.q-counter{
+  font-size:11px;color:#475569;font-weight:600;
+  background:rgba(15,23,42,.8);border:1px solid rgba(255,255,255,.06);
+  padding:4px 10px;border-radius:6px;font-family:'Poppins',sans-serif;
+}
+/* Progress bar */
+.progress-track{
+  height:3px;background:rgba(37,99,235,.1);
+  border-radius:0;
+}
+.progress-fill{
+  height:100%;border-radius:0;
+  background:linear-gradient(90deg,#1e3a8a,#2563eb,#60a5fa);
+  transition:width .45s cubic-bezier(.4,0,.2,1);
+}
+.quiz-body{padding:28px;}
+.q-text{
+  font-size:15px;font-weight:600;color:#f1f5f9;
+  line-height:1.7;margin-bottom:8px;
+}
+.q-note{
+  font-size:12px;color:#64748b;line-height:1.5;margin-bottom:20px;
+}
+.q-code{
+  background:#020817;border:1px solid rgba(37,99,235,.2);
+  border-left:3px solid #2563eb;
+  border-radius:8px;padding:16px 18px;
+  font-family:'Courier New',monospace;font-size:12px;
+  color:#34d399;line-height:1.75;
+  white-space:pre;overflow-x:auto;
+  margin-bottom:18px;
+  pointer-events:none;
+}
+.options{display:flex;flex-direction:column;gap:9px;margin-bottom:8px;}
+.opt-label{
+  display:flex;align-items:flex-start;gap:13px;
+  padding:13px 16px;
+  background:rgba(2,8,23,.5);
+  border:1.5px solid rgba(37,99,235,.15);
+  border-radius:10px;cursor:pointer;
+  transition:border-color .18s,background .18s,transform .12s;
+}
+.opt-label:hover{
+  border-color:rgba(37,99,235,.45);
+  background:rgba(37,99,235,.06);
+  transform:translateX(3px);
+}
+.opt-label input[type=radio]{
+  accent-color:#2563eb;width:15px;height:15px;
+  flex-shrink:0;margin-top:2px;cursor:pointer;
+}
+.opt-label input[type=radio]:checked ~ .opt-text{color:#93c5fd;}
+.opt-label:has(input:checked){
+  border-color:#2563eb;background:rgba(37,99,235,.1);
+}
+.opt-key{
+  font-size:10px;font-weight:700;color:#475569;
+  width:18px;flex-shrink:0;margin-top:2px;
+  letter-spacing:.04em;
+}
+.opt-text{font-size:13px;color:#94a3b8;line-height:1.55;flex:1;}
+
+/* Tab warning */
+.tab-banner{
+  display:none;
+  background:rgba(220,38,38,.15);border-bottom:1px solid rgba(220,38,38,.3);
+  padding:9px 28px;
+  font-size:12px;font-weight:600;color:#fca5a5;letter-spacing:.02em;
+  text-align:center;
+}
+
+/* Quiz footer */
+.quiz-footer{
+  padding:16px 28px;
+  border-top:1px solid rgba(37,99,235,.1);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.foot-hint{font-size:12px;color:#334155;}
+.btn-next,.btn-submit{
+  padding:11px 28px;border-radius:10px;
+  font-family:'Poppins',sans-serif;font-size:13px;font-weight:700;
+  cursor:pointer;border:none;
+  position:relative;overflow:hidden;
+  transition:transform .18s,box-shadow .18s,opacity .18s;
+  letter-spacing:.02em;
+}
+.btn-next{
+  background:linear-gradient(135deg,#1e3a8a,#2563eb);color:#fff;
+  box-shadow:0 4px 16px rgba(37,99,235,.35);
+}
+.btn-next::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.12),transparent);
+  opacity:0;transition:opacity .2s;
+}
+.btn-next:hover:not(:disabled){
+  transform:translateY(-2px);
+  box-shadow:0 8px 24px rgba(37,99,235,.45);
+}
+.btn-next:hover:not(:disabled)::after{opacity:1;}
+.btn-next:active:not(:disabled){transform:translateY(0);}
+.btn-next:disabled{
+  background:rgba(37,99,235,.15);color:rgba(37,99,235,.4);
+  cursor:not-allowed;box-shadow:none;transform:none;
+}
+.btn-submit{
+  display:none;
+  background:linear-gradient(135deg,#065f46,#059669);color:#fff;
+  box-shadow:0 4px 16px rgba(5,150,105,.35);
+}
+.btn-submit:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 24px rgba(5,150,105,.45);
+}
+.btn-submit:active{transform:translateY(0);}
+
+/* ── RESULT CARD ────────────────────────────────────────── */
+.result-card{
+  width:100%;max-width:460px;display:none;
+  background:rgba(15,23,42,.75);
+  border:1px solid rgba(37,99,235,.2);
+  border-radius:20px;
+  padding:48px 40px;
+  text-align:center;
+  backdrop-filter:blur(20px);
+  box-shadow:0 32px 80px rgba(0,0,0,.5);
+  animation:cardIn .4s cubic-bezier(.34,1.56,.64,1);
+}
+.result-icon{
+  width:66px;height:66px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;margin:0 auto 20px;
+}
+.result-icon.pass{background:rgba(34,197,94,.1);box-shadow:0 0 0 8px rgba(34,197,94,.08);color:#4ade80;}
+.result-icon.timeout{background:rgba(239,68,68,.1);box-shadow:0 0 0 8px rgba(239,68,68,.08);color:#f87171;}
+.result-icon.warn{background:rgba(245,158,11,.1);box-shadow:0 0 0 8px rgba(245,158,11,.08);color:#fbbf24;}
+.result-title{font-size:22px;font-weight:800;color:#f8fafc;margin-bottom:8px;letter-spacing:-.02em;}
+.result-sub{font-size:13.5px;color:#64748b;line-height:1.7;margin-bottom:24px;}
+.score-display{
+  font-size:48px;font-weight:800;color:#60a5fa;
+  letter-spacing:-.03em;margin:16px 0;
+}
+.score-sub{font-size:12px;color:#475569;margin-top:-10px;margin-bottom:16px;}
+.result-divider{height:1px;background:rgba(37,99,235,.1);margin:20px 0;}
+.result-note{font-size:12px;color:#475569;line-height:1.65;}
+
+/* ── FOOTER ─────────────────────────────────────────────── */
+.page-footer{
+  position:relative;z-index:10;
+  border-top:1px solid rgba(37,99,235,.08);
+  background:rgba(2,8,23,.6);
+  padding:14px 32px;
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:11px;color:#334155;
+}
+.footer-secure{
+  display:flex;align-items:center;gap:6px;color:#22c55e;font-weight:600;
+}
+.footer-dot{
+  width:6px;height:6px;border-radius:50%;background:#22c55e;
+  box-shadow:0 0 6px rgba(34,197,94,.5);
+}
+
+/* Transition helpers */
+.fade-out{animation:fadeOut .2s ease forwards;}
+@keyframes fadeOut{to{opacity:0;transform:scale(.97);}}
+
+@media(max-width:520px){
+  .entry-card,.result-card{padding:32px 22px;}
+  .quiz-body{padding:20px 18px;}
+  .quiz-footer{padding:14px 18px;}
+  .topbar{padding:0 16px;}
+}
+</style>
+</head>
+<body oncontextmenu="return false;">
+
+<!-- Background -->
+<div class="bg-canvas">
+  <div class="bg-grid"></div>
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+  <div class="bg-orb orb-3"></div>
+</div>
+
+<!-- Topbar -->
+<header class="topbar">
+  <div class="topbar-brand">
+    <div class="brand-mark">QC</div>
+    <span class="brand-name">QueryCrest</span>
+    <span class="brand-tag">Technical Assessment</span>
+  </div>
+  <div class="topbar-right">
+    <div class="timer-pill" id="timerPill">
+      <span class="timer-label">Time</span>
+      <span class="timer-value" id="timerVal">06:00</span>
+    </div>
+    <div class="status-dot">
+      <div class="dot"></div>
+      <span>Secure</span>
+    </div>
+  </div>
+</header>
+
+<!-- Tab-switch warning (inside quiz) -->
+<div class="tab-banner" id="tabBanner">
+  Tab switch detected and recorded. Return to this page immediately.
+</div>
+
+<!-- Main -->
+<main class="main">
+
+  <!-- ENTRY CARD -->
+  <div class="entry-card" id="entryCard">
+    <div class="entry-icon">QC</div>
+    <h1 class="entry-title">Assessment Access</h1>
+    <p class="entry-sub">
+      Enter the personal access code from your interview email to begin.<br/>
+      Each code is single-use and expires after submission.
+    </p>
+    <label class="input-label" for="accessInput">Your access code</label>
+    <input
+      id="accessInput" class="code-input"
+      type="text" placeholder="QC-XXXX-XX"
+      maxlength="20" autocomplete="off"
+      autocorrect="off" autocapitalize="characters" spellcheck="false"
+    />
+    <button class="btn-begin" id="btnBegin" onclick="verifyAccessCode()">
+      <span class="btn-text">Begin Assessment</span>
+      <div class="spinner"></div>
+    </button>
+    <div class="error-msg" id="entryError"></div>
+    <p class="entry-note">
+      Once started, a <strong>6-minute timer</strong> counts down immediately.<br/>
+      The assessment has <strong>10 questions</strong>. Do not close this tab.
+    </p>
+  </div>
+
+  <!-- QUIZ CARD -->
+  <div class="quiz-card" id="quizCard">
+    <div class="quiz-header">
+      <span class="q-section-tag" id="sectionTag">API Fundamentals</span>
+      <span class="q-counter" id="qCounter">Question 1 / 10</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill" style="width:10%;"></div>
+    </div>
+    <div class="quiz-body">
+      <div id="questionsWrap">
+
+        <!-- ─ Q1 ─ HTTP Methods: PUT vs PATCH ─ -->
+        <div class="question-step" data-index="1">
+          <p class="q-text">1. A developer needs to update only the email address of an existing user record through a REST API, leaving all other fields unchanged. Which HTTP method is the correct choice and why?</p>
+          <div class="options">
+            <label class="opt-label"><input type="radio" name="q1" value="0" onchange="enableNext(1)"><span class="opt-key">A</span><span class="opt-text">PUT — because it is specifically designed for partial field updates and only modifies the fields included in the request body.</span></label>
+            <label class="opt-label"><input type="radio" name="q1" value="1" onchange="enableNext(1)"><span class="opt-key">B</span><span class="opt-text">PATCH — because it is designed for partial updates, sending only the changed fields without replacing the entire resource.</span></label>
+            <label class="opt-label"><input type="radio" name="q1" value="2" onchange="enableNext(1)"><span class="opt-key">C</span><span class="opt-text">POST — because updating an existing resource creates a new state, which is what POST is designed for.</span></label>
+            <label class="opt-label"><input type="radio" name="q1" value="3" onchange="enableNext(1)"><span class="opt-key">D</span><span class="opt-text">DELETE followed by POST — to cleanly remove the old record before inserting the updated version.</span></label>
+            <label class="opt-label"><input type="radio" name="q1" value="4" onchange="enableNext(1)"><span class="opt-key">E</span><span class="opt-text">GET — because some REST APIs support field-level updates through URL query parameters without needing a body.</span></label>
+          </div>
+        </div>
+
+        <!-- ─ Q2 ─ 401 vs 403 ─ -->
+        <div class="question-step hidden" data-index="2">
+          <p class="q-text">2. An authenticated user tries to access an admin-only dashboard endpoint. The server correctly returns a 403. A junior developer argues the server should return 401 instead, saying "both mean access was denied." What is wrong with that reasoning?</p>
+          <div class="options">
+            <label class="opt-label"><input type="radio" name="q2" value="0" onchange="enableNext(2)"><span class="opt-key">A</span><span class="opt-text">Nothing is wrong — 401 and 403 are fully interchangeable and either can be used whenever access is denied.</span></label>
+            <label class="opt-label"><input type="radio" name="q2" value="1" onchange="enableNext(2)"><span class="opt-key">B</span><span class="opt-text">401 means the request is missing or has invalid credentials — the client needs to authenticate. 403 means the client is already authenticated but lacks permission. Using 401 would wrongly instruct the client to re-authenticate.</span></label>
+            <label class="opt-label"><input type="radio" name="q2" value="2" onchange="enableNext(2)"><span class="opt-key">C</span><span class="opt-text">403 is only valid in OAuth 2.0 flows, while 401 applies to all other authentication systems.</span></label>
+            <label class="opt-label"><input type="radio" name="q2" value="3" onchange="enableNext(2)"><span class="opt-key">D</span><span class="opt-text">A 401 response causes all major browsers to automatically redirect the user to a login page, making it safer to use.</span></label>
+            <label class="opt-label"><input type="radio" name="q2" value="4" onchange="enableNext(2)"><span class="opt-key">E</span><span class="opt-text">Both 401 and 403 cause the browser to block all future network requests to the same API domain.</span></label>
+          </div>
+        </div>
+
+        <!-- ─ Q3 ─ Missing await on res.json() ─ -->
+        <div class="question-step hidden" data-index="3">
+          <p class="q-text">3. This function is meant to return the parsed user data from an API, but it keeps returning unexpected values. What is wrong?</p>
+          <div class="q-code">async function getUser(id) {
+  const res = await fetch(`/api/users/${id}`);
+  const data = res.json();
+  return data;
+}</div>
+          <div class="options">
+            <label class="opt-label"><input type="radio" name="q3" value="0" onchange="enableNext(3)"><span class="opt-key">A</span><span class="opt-text">fetch() cannot accept template literals in the URL — the ID must be passed as a query parameter instead.</span></label>
+            <label class="opt-label"><input type="radio" name="q3" value="1" onchange="enableNext(3)"><span class="opt-key">B</span><span class="opt-text">The async keyword is unnecessary here because fetch() handles asynchronous behaviour internally without it.</span></label>
+            <label class="opt-label"><input type="radio" name="q3" value="2" onchange="enableNext(3)"><span class="opt-key">C</span><span class="opt-text">res.json() is not awaited — it returns a Promise, not the actual parsed object. The function ends up returning an unresolved Promise instead of the user data.</span></label>
+            <label class="opt-label"><input type="radio" name="q3" value="3" onchange="enableNext(3)"><span class="opt-key">D</span><span class="opt-text">The function will not work without a try/catch block — unhandled promises cause JavaScript to crash silently.</span></label>
+            <label class="opt-label"><input type="radio" name="q3" value="4" onchange="enableNext(3)"><span class="opt-key">E</span><span class="opt-text">Template literals prevent direct variable access inside fetch() URL strings in strict mode environments.</span></label>
+          </div>
+        </div>
+
+        <!-- ─ Q4 ─ REST naming: nouns not verbs ─ -->
+        <div class="question-step hidden" data-index="4">
+          <p class="q-text">4. A developer designs a REST API with the endpoint <code style="font-family:monospace;font-size:12px;color:#93c5fd;">POST /api/getUserData</code>. A senior engineer rejects it in code review. What specific REST design principle is being violated?</p>
+          <div class="options">
+            <label class="opt-label"><input type="radio" name="q4" value="0" onchange="enableNext(4)"><span class="opt-key">A</span><span class="opt-text">POST cannot return data — only GET requests are permitted to include response bodies in REST APIs.</span></label>
+            <label class="opt-label"><input type="radio" name="q4" value="1" onchange="enableNext(4)"><span class="opt-key">B</span><span class="opt-text">REST endpoints must use nouns to represent resources, not verbs describing the action. The correct form would be GET /api/users/{id}, letting the HTTP method communicate the intended action.</span></label>
+            <label class="opt-label"><input type="radio" name="q4" value="2" onchange="enableNext(4)"><span class="opt-key">C</span><span class="opt-text">The endpoint name is too short — REST requires endpoints to contain at least two path segments describing the full operation.</span></label>
+            <label class="opt-label"><input type="radio" name="q4" value="3" onchange="enableNext(4)"><span class="opt-key">D</span><span class="opt-text">All REST APIs must include a /v1/ version prefix in the path or they are considered non-compliant by definition.</span></label>
+            <label class="opt-label"><input type="radio" name="q4" value="4" onchange="enableNext(4)"><span class="opt-key">E</span><span class="opt-text">getUserData is a reserved function name in the HTTP specification and cannot be used in production endpoints.</span></label>
+          </div>
+        </div>
+
+        <!-- ─ Q5 ─ RLS with no policies ─ -->
+        <div class="question-step hidden" data-index="5">
+          <p class="q-text">5. A developer enables Row Level Security (RLS) on a Supabase table but does not create any policies. What happens when an authenticated user sends a SELECT query to that table?</p>
+          <div class="options">
+            <label class="opt-label"><input type="radio" name="q5" value="0" onchange="enableNext(5)"><span class="opt-key">A</span><span class="opt-text">The user can see all rows — RLS without policies defaults to open access for authenticated users as a safe starting point.</span></label>
+            <label class="opt-label"><input type="radio" name="q5" value="1" onchange="enableNext(5)"><span class="opt-key">B</span><span class="opt-text">The user sees only rows they personally created, because Supabase applies automatic user-based filtering when no policies exist.</span></label>
+            <label class="opt-label"><input type="radio" name="q5" value="2" onchange="enableNext(5)"><span class="opt-key">C</span><span class="opt-text">All access is denied and the query returns zero rows — when RLS is enabled with no policies defined, no role can access any row by default.</span></label>
+            <label class="opt-label"><input type="radio" name="q5" value="3" onchange="enableNext(5)"><span class="opt-key">D</span><span class="opt-text">Supabase throws a 403 Forbidden HTTP error and the JavaScript client receives an unhandled exception.</span></label>
+            <label class="opt-label"><input type="radio" name="q5" value="4" onchange="enableNext(5)"><span class="opt-key">E</span><span class="opt-text">RLS only restricts write operations by default — read operations remain open to all authenticated users unless a separate read policy blocks them.</span></label>
+          </div>
+        </div>
+
+        <!-- ─ Q6 ─ Service role key in frontend ─ -->
+        <div class="question-step hidden" data-index="6">
+          <p class="q-text">6. A developer stores the Supabase service role key directly inside a React frontend component to make database calls. What is the critical security risk of this approach?</p>
+          <div class="options">
+            <label class="opt-label"><input type="radio" name="q6" value="0" onchange="enableNext(6)"><span class="opt-key">A</span><span class="opt-text">React cannot process environment variables, so the key will cause a compilation failure before the app is built.</span></label>
+            <label class="opt-label"><input type="radio" name="q6" value="1" onchange="enableNext(6)"><span class="opt-key">B</span><span class="opt-text">The service role key will be visible in the browser's JavaScript bundle — anyone who opens DevTools or views the page source gets full database access, completely bypassing all RLS policies.</span></label>
+            <label class="opt-label"><input type="radio" name="q6" value="2" onchange="enableNext(6)"><span class="opt-key">C</span><span class="opt-text">Service role keys automatically expire every 24 hours in browser environments, causing the app to break repeatedly.</span></label>
+            <label class="opt-label"><input type="radio" name="q6" value="3" onchange="enableNext(6)"><span class="opt-key">D</span><span class="opt-text">React's virtual DOM layer encrypts all stored string values before rendering them in the browser, keeping keys safe.</span></label>
+            <label class="opt-label"><input type="radio" name="q6" value="4" onchange="enableNext(6)"><span class="opt-key">E</span><span class="opt-text">The Supabase JavaScript client automatically detects and rejects service role keys when running in a browser environment.</span></label>
+          </div>
+        </div>
+
+        <!-- ─ Q7 ─ Missing Content-Type header ─ -->
+        <div class="question-step hidden" data-index="7">
+          <p class="q-text">7. This function sends a POST request and gets a 200 response, but the server always fails to read the request body. What is the missing piece?</p>
+          <div class="q-code">async function createUser(userData) {
+  const res = await fetch('/api/users', {
+    method: 'POST',
+    body: JSON.stringify(userData)
+  });
+  return res.json();
+}</div>
+          <div class="options">
+            <label class="opt-label"><input type="radio" name="q7" value="0" onchange="enableNext(7)"><span class="opt-key">A</span><span class="opt-text">The method should be 'CREATE' — the POST method is reserved for form submissions and cannot carry a JSON body.</span></label>
+            <label class="opt-label"><input type="radio" name="q7" value="1" onchange="enableNext(7)"><span class="opt-key">B</span><span class="opt-text">JSON.stringify() converts the data into a format that the fetch() API cannot transmit over the network.</span></label>
+            <label class="opt-label"><input type="radio" name="q7" value="2" onchange="enableNext(7)"><span class="opt-key">C</span><span class="opt-text">The Content-Type: application/json header is missing. Without it, the server doesn't know the body is JSON and may fail to parse it correctly.</span></label>
+            <label class="opt-label"><input type="radio" name="q7" value="3" onchange="enableNext(7)"><span class="opt-key">D</span><span class="opt-text">res.json() must be called before the return statement for the async chain to resolve in the correct order.</span></label>
+            <label class="opt-label"><input type="radio" name="q7" value="4" onchange="enableNext(7)"><span class="opt-key">E</span><span class="opt-text">The async keyword prevents POST requests from attaching a body to the request before it is sent.</span></label>
+          </div>
+        </div>
+
+        <!-- ─ Q8 ─ What is Supabase? ─ -->
+        <div class="question-step hidden" data-index="8">
+          <p class="q-text">8. A startup wants to build a mobile app with user authentication, a relational database, and file storage — without managing their own servers. A developer recommends Supabase. Which description best explains why Supabase fits this requirement?</p>
+          <div class="options">
+            <label class="opt-label"><input type="radio" name="q8" value="0" onchange="enableNext(8)"><span class="opt-key">A</span><span class="opt-text">Supabase is a JavaScript front-end framework built on top of React, designed for building real-time user interfaces with built-in state management.</span></label>
+            <label class="opt-label"><input type="radio" name="q8" value="1" onchange="enableNext(8)"><span class="opt-key">B</span><span class="opt-text">Supabase is an open-source backend-as-a-service built on PostgreSQL that provides a database, authentication, real-time subscriptions, serverless edge functions, and file storage — removing the need to build and manage a backend.</span></label>
+            <label class="opt-label"><input type="radio" name="q8" value="2" onchange="enableNext(8)"><span class="opt-key">C</span><span class="opt-text">Supabase is a CDN service that caches static files and delivers them from edge locations closest to the end user for faster load times.</span></label>
+            <label class="opt-label"><input type="radio" name="q8" value="3" onchange="enableNext(8)"><span class="opt-key">D</span><span class="opt-text">Supabase is a serverless compute platform similar to AWS Lambda, designed exclusively for Python and Go workloads running in isolated containers.</span></label>
+            <label class="opt-label"><input type="radio" name="q8" value="4" onchange="enableNext(8)"><span class="opt-key">E</span><span class="opt-text">Supabase is a database migration tool that converts existing MySQL databases to PostgreSQL format using automated schema mapping.</span></label>
+          </div>
+        </div>
+
+        <!-- ─ Q9 ─ Promise chain: catch returns value ─ -->
+        <div class="question-step hidden" data-index="9">
+          <p class="q-text">9. Study this Promise chain carefully. If the API returns an empty array <code style="font-family:monospace;font-size:12px;color:#93c5fd;">[]</code>, what gets logged to the console?</p>
+          <div class="q-code">fetch('/api/items')
+  .then(res => res.json())
+  .then(data => {
+    if (data.length === 0) throw new Error('No items found');
+    return data;
+  })
+  .catch(err => {
+    console.log('Caught:', err.message);
+    return [];
+  })
+  .then(result => console.log('Result:', result));</div>
+          <div class="options">
+            <label class="opt-label"><input type="radio" name="q9" value="0" onchange="enableNext(9)"><span class="opt-key">A</span><span class="opt-text">Only 'Caught: No items found' — throwing an error inside .then() permanently stops any further execution in the chain.</span></label>
+            <label class="opt-label"><input type="radio" name="q9" value="1" onchange="enableNext(9)"><span class="opt-key">B</span><span class="opt-text">Nothing is logged — throw inside a .then() always creates an unhandled rejection that the .catch() positioned after it cannot intercept.</span></label>
+            <label class="opt-label"><input type="radio" name="q9" value="2" onchange="enableNext(9)"><span class="opt-key">C</span><span class="opt-text">'Caught: No items found' then 'Result: []' — the .catch() handles the error, returns an empty array, and the chain continues to the next .then().</span></label>
+            <label class="opt-label"><input type="radio" name="q9" value="3" onchange="enableNext(9)"><span class="opt-key">D</span><span class="opt-text">Only 'Result: []' — .catch() only intercepts network-level connection failures, not errors manually thrown inside .then() blocks.</span></label>
+            <label class="opt-label"><input type="radio" name="q9" value="4" onchange="enableNext(9)"><span class="opt-key">E</span><span class="opt-text">The entire chain fails silently without any output because .catch() cannot appear after a resolved .then() block.</span></label>
+          </div>
+        </div>
+
+        <!-- ─ Q10 ─ Supabase filtering on embedded relation ─ -->
+        <div class="question-step hidden" data-index="10">
+          <p class="q-text">10. A developer runs this Supabase query expecting to get only orders belonging to users named "John". What unexpected result will actually be returned?</p>
+          <div class="q-code">const { data, error } = await supabase
+  .from('orders')
+  .select('id, total, users(id, name)')
+  .eq('users.name', 'John');</div>
+          <div class="options">
+            <label class="opt-label"><input type="radio" name="q10" value="0" onchange="enableNext(10)"><span class="opt-key">A</span><span class="opt-text">Only orders linked to users named 'John' are returned — the filter on the embedded relation is applied to the parent table rows as expected.</span></label>
+            <label class="opt-label"><input type="radio" name="q10" value="1" onchange="enableNext(10)"><span class="opt-key">B</span><span class="opt-text">ALL orders are returned. For orders whose related user is not named 'John', the embedded users object will be null or empty — because PostgREST applies the filter on the relationship, not the parent table.</span></label>
+            <label class="opt-label"><input type="radio" name="q10" value="2" onchange="enableNext(10)"><span class="opt-key">C</span><span class="opt-text">The query throws a syntax error — PostgREST does not support filtering on fields inside embedded relationships.</span></label>
+            <label class="opt-label"><input type="radio" name="q10" value="3" onchange="enableNext(10)"><span class="opt-key">D</span><span class="opt-text">Supabase automatically rewrites this into an inner join, which correctly returns only matching orders and strips the users field from results.</span></label>
+            <label class="opt-label"><input type="radio" name="q10" value="4" onchange="enableNext(10)"><span class="opt-key">E</span><span class="opt-text">The query returns zero rows — filtering on embedded relationships always produces empty results in PostgREST by design.</span></label>
+          </div>
+        </div>
+
+      </div><!-- /questionsWrap -->
+    </div><!-- /quiz-body -->
+
+    <div class="quiz-footer">
+      <span class="foot-hint" id="footHint">Select an answer to continue</span>
+      <button class="btn-next" id="btnNext" onclick="nextQuestion()" disabled>
+        Next &rarr;
+      </button>
+      <button class="btn-submit" id="btnSubmit" onclick="submitAssessment(false)">
+        Submit Assessment
+      </button>
+    </div>
+  </div>
+
+  <!-- RESULT CARD -->
+  <div class="result-card" id="resultCard">
+    <div class="result-icon" id="resultIcon"></div>
+    <h2 class="result-title" id="resultTitle"></h2>
+    <p class="result-sub" id="resultSub"></p>
+    <div class="score-display" id="scoreDisplay" style="display:none;"></div>
+    <p class="score-sub" id="scoreSub" style="display:none;"></p>
+    <div class="result-divider"></div>
+    <p class="result-note" id="resultNote"></p>
+  </div>
+
+</main>
+
+<!-- Footer -->
+<footer class="page-footer">
+  <span>&copy; 2026 QueryCrest (Pty) Ltd &mdash; Reg No: 2025/766220/07</span>
+  <div class="footer-secure">
+    <div class="footer-dot"></div>
+    <span>Session Secured</span>
+  </div>
+</footer>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   CONFIG — endpoint unchanged
+   ═══════════════════════════════════════════════════════ */
+const EDGE_FUNC_URL = "https://xkjsydeavdcarwkthppz.supabase.co/functions/v1/fetch-interview-results";
+
+/* ═══════════════════════════════════════════════════════════
+   ANTI-CHEAT
+   ═══════════════════════════════════════════════════════ */
+// Block keyboard shortcuts
+document.addEventListener('keydown', e => {
+  const ctrl = e.ctrlKey || e.metaKey;
+  if (ctrl && ['c','a','u','s','p','j','i','f'].includes(e.key.toLowerCase())) {
+    e.preventDefault(); return false;
+  }
+  if (['F12','F11','F10'].includes(e.key)) { e.preventDefault(); return false; }
+  if (e.key === 'PrintScreen') {
+    e.preventDefault();
+    navigator.clipboard?.writeText('').catch(()=>{});
+  }
+  if (ctrl && e.shiftKey && ['i','j','c','k'].includes(e.key.toLowerCase())) {
+    e.preventDefault(); return false;
+  }
+});
+
+// Block drag
+document.addEventListener('dragstart', e => e.preventDefault());
+
+// Devtools size detection
+let devtoolsOpen = false;
+const threshold = 160;
+setInterval(()=>{
+  if(window.outerWidth - window.innerWidth > threshold ||
+     window.outerHeight - window.innerHeight > threshold) {
+    if (!devtoolsOpen) {
+      devtoolsOpen = true;
+      tabSwitches++;
+    }
+  } else { devtoolsOpen = false; }
+}, 1000);
+
+/* ═══════════════════════════════════════════════════════════
+   STATE
+   ═══════════════════════════════════════════════════════ */
+let activeAccessCode = "";
+let countdownTimer   = null;
+let timeRemaining    = 360;
+let startTime        = null;
+let currentQ         = 1;
+let tabSwitches      = 0;
+let testStarted      = false;
+
+/* ═══════════════════════════════════════════════════════════
+   TAB SWITCH DETECTION
+   ═══════════════════════════════════════════════════════ */
+document.addEventListener('visibilitychange', () => {
+  if (!testStarted) return;
+  if (document.hidden) {
+    tabSwitches++;
+    document.getElementById('tabBanner').style.display = 'block';
+    if (tabSwitches >= 3) submitAssessment(false);
+  } else {
+    setTimeout(() => {
+      document.getElementById('tabBanner').style.display = 'none';
+    }, 5000);
+  }
+});
+window.addEventListener('blur', () => { if (testStarted) tabSwitches++; });
+
+/* ═══════════════════════════════════════════════════════════
+   HELPERS
+   ═══════════════════════════════════════════════════════ */
+function pad(n) { return String(n).padStart(2,'0'); }
+
+function showError(msg) {
+  const el = document.getElementById('entryError');
+  el.textContent = msg;
+  el.classList.add('show');
+}
+
+function hide(id) { document.getElementById(id).style.display = 'none'; }
+function show(id, d='block') { document.getElementById(id).style.display = d; }
+
+/* ═══════════════════════════════════════════════════════════
+   ENTRY: Enter key support
+   ═══════════════════════════════════════════════════════ */
+document.getElementById('accessInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') verifyAccessCode();
+});
+
+/* ═══════════════════════════════════════════════════════════
+   VERIFY CODE — logic identical to original
+   ═══════════════════════════════════════════════════════ */
+async function verifyAccessCode() {
+  const input  = document.getElementById('accessInput').value.trim();
+  const errEl  = document.getElementById('entryError');
+  const btn    = document.getElementById('btnBegin');
+
+  errEl.classList.remove('show');
+  if (!input || input.length < 2) {
+    showError('Please enter your access code before continuing.');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.classList.add('loading');
+
+  try {
+    const response = await fetch(EDGE_FUNC_URL, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ action: 'verify', accessCode: input }),
+    });
+    const data = await response.json();
+
+    if (data.valid) {
+      activeAccessCode = input;
+      // Transition to quiz
+      const card = document.getElementById('entryCard');
+      card.classList.add('fade-out');
+      setTimeout(() => {
+        card.style.display = 'none';
+        const quiz = document.getElementById('quizCard');
+        quiz.style.display = 'block';
+        renderQuestion(1);
+        document.getElementById('timerPill').classList.add('show');
+        startTime    = Date.now();
+        testStarted  = true;
+        startClock();
+      }, 200);
+    } else {
+      showError(data.message || 'That code was not recognised. Please check your interview email and try again.');
+      btn.disabled = false;
+      btn.classList.remove('loading');
+    }
+
+  } catch {
+    showError('Could not connect to the server. Check your internet connection and try again.');
+    btn.disabled = false;
+    btn.classList.remove('loading');
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TIMER
+   ═══════════════════════════════════════════════════════ */
+function startClock() {
+  countdownTimer = setInterval(() => {
+    timeRemaining--;
+    const tv = document.getElementById('timerVal');
+    tv.textContent = pad(Math.floor(timeRemaining/60)) + ':' + pad(timeRemaining%60);
+    tv.classList.remove('warn','danger');
+    if      (timeRemaining <= 30)  tv.classList.add('danger');
+    else if (timeRemaining <= 60)  tv.classList.add('warn');
+    if (timeRemaining <= 0) {
+      clearInterval(countdownTimer);
+      submitAssessment(true);
+    }
+  }, 1000);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   QUESTION RENDERING
+   ═══════════════════════════════════════════════════════ */
+function renderQuestion(index) {
+  document.querySelectorAll('.question-step').forEach(el => el.classList.add('hidden'));
+  const el = document.querySelector(`.question-step[data-index="${index}"]`);
+  if (el) el.classList.remove('hidden');
+
+  document.getElementById('qCounter').textContent     = `Question ${index} / 10`;
+  document.getElementById('progressFill').style.width = `${index * 10}%`;
+
+  const tag = document.getElementById('sectionTag');
+  if (index <= 5) {
+    tag.textContent = 'API Fundamentals';
+    tag.className   = 'q-section-tag';
+  } else {
+    tag.textContent = 'Code & Supabase';
+    tag.className   = 'q-section-tag code-section';
+  }
+
+  const nextBtn   = document.getElementById('btnNext');
+  const submitBtn = document.getElementById('btnSubmit');
+  if (index === 10) {
+    nextBtn.style.display   = 'none';
+    submitBtn.style.display = 'block';
+    submitBtn.disabled      = true;
+  } else {
+    nextBtn.style.display   = 'block';
+    submitBtn.style.display = 'none';
+    nextBtn.disabled        = true;
+  }
+
+  document.getElementById('footHint').textContent = 'Select an answer to continue';
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ENABLE NEXT when option selected — identical name to original
+   ═══════════════════════════════════════════════════════ */
+function enableNext(index) {
+  if (index !== currentQ) return;
+  const nextBtn   = document.getElementById('btnNext');
+  const submitBtn = document.getElementById('btnSubmit');
+  if (index === 10) submitBtn.disabled = false;
+  else              { nextBtn.disabled = false; }
+  document.getElementById('footHint').textContent = 'Answer selected — click to continue';
+}
+// Keep original name for compatibility
+function enableNextButton(index) { enableNext(index); }
+
+/* ═══════════════════════════════════════════════════════════
+   NEXT QUESTION — wraps original transitionNextQuestion logic
+   ═══════════════════════════════════════════════════════ */
+function nextQuestion() {
+  currentQ++;
+  renderQuestion(currentQ);
+}
+// Original name alias
+function transitionNextQuestion() { nextQuestion(); }
+
+/* ═══════════════════════════════════════════════════════════
+   SUBMIT — logic identical to original, only UI messages changed
+   ═══════════════════════════════════════════════════════ */
+async function submitAssessment(isTimeout = false) {
+  clearInterval(countdownTimer);
+  testStarted = false;
+
+  const form     = document.getElementById('quiz-form') || document.querySelector('form');
+  const answers  = {};
+  for (let i = 1; i <= 10; i++) {
+    const radios = document.querySelectorAll(`input[name="q${i}"]`);
+    let val = -1;
+    radios.forEach(r => { if (r.checked) val = parseInt(r.value); });
+    answers[`q${i}`] = val;
+  }
+  const timeSpent = Math.floor((Date.now() - startTime) / 1000);
+
+  // Hide quiz
+  const quiz = document.getElementById('quizCard');
+  quiz.classList.add('fade-out');
+  document.getElementById('timerPill').classList.remove('show');
+  document.getElementById('tabBanner').style.display = 'none';
+
+  setTimeout(async () => {
+    quiz.style.display = 'none';
+    const rc = document.getElementById('resultCard');
+    rc.style.display = 'block';
+  }, 200);
+
+  const icon  = document.getElementById('resultIcon');
+  const title = document.getElementById('resultTitle');
+  const sub   = document.getElementById('resultSub');
+  const score = document.getElementById('scoreDisplay');
+  const ssub  = document.getElementById('scoreSub');
+  const note  = document.getElementById('resultNote');
+
+  try {
+    const response = await fetch(EDGE_FUNC_URL, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({
+        action:      'submit',
+        accessCode:  activeAccessCode,
+        answers:     answers,
+        timeSpent:   timeSpent,
+        isTimeout:   isTimeout,
+        tabSwitches: tabSwitches,
+      }),
+    });
+    const data = await response.json();
+
+    if (isTimeout || data.timeout) {
+      icon.className    = 'result-icon timeout';
+      icon.textContent  = '✕';
+      title.textContent = "Time's Up";
+      sub.textContent   = 'Your 6 minutes elapsed before you could complete all questions. Your progress has been automatically submitted and recorded.';
+      score.style.display = 'none';
+      note.textContent  = 'The QueryCrest team will review your submission. You will be contacted at the email address linked to your application.';
+    } else {
+      icon.className    = 'result-icon pass';
+      icon.textContent  = '✓';
+      title.textContent = 'Assessment Complete';
+      sub.textContent   = 'Your answers have been successfully submitted. Well done for completing the assessment within the time limit.';
+      score.textContent = `${data.score} / ${data.total}`;
+      score.style.display = 'block';
+      ssub.textContent  = 'Questions answered correctly';
+      ssub.style.display  = 'block';
+      note.textContent  = 'The QueryCrest team will review your results and contact you at the email address provided in your application within the coming days.';
+    }
+
+  } catch {
+    icon.className    = 'result-icon warn';
+    icon.textContent  = '!';
+    title.textContent = 'Submission Recorded';
+    sub.textContent   = 'Your answers were captured but we could not confirm the server response. This may be a temporary connection issue.';
+    note.textContent  = 'Please notify your interviewer immediately so they can confirm your submission was received. Do not close this page.';
+  }
+}
+
+// Original aliases for HTML onclick compatibility
+window.verifyAccessCode       = verifyAccessCode;
+window.submitAssessment       = submitAssessment;
+window.transitionNextQuestion = nextQuestion;
+window.enableNextButton       = enableNext;
+</script>
+</body>
+</html>
