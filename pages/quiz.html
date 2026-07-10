@@ -677,14 +677,11 @@ body{
 </footer>
 
 <script>
-/* ═══════════════════════════════════════════════════════════
-   CONFIG — endpoint unchanged
-   ═══════════════════════════════════════════════════════ */
+
 const EDGE_FUNC_URL = "https://xkjsydeavdcarwkthppz.supabase.co/functions/v1/fetch-interview-results";
 
-/* ═══════════════════════════════════════════════════════════
-   ANTI-CHEAT
-   ═══════════════════════════════════════════════════════ */
+/* 
+   ANTI-CHEAT*/
 // Block keyboard shortcuts
 document.addEventListener('keydown', e => {
   const ctrl = e.ctrlKey || e.metaKey;
@@ -717,9 +714,9 @@ setInterval(()=>{
   } else { devtoolsOpen = false; }
 }, 1000);
 
-/* ═══════════════════════════════════════════════════════════
+/* 
    STATE
-   ═══════════════════════════════════════════════════════ */
+   */
 let activeAccessCode = "";
 let countdownTimer   = null;
 let timeRemaining    = 360;
@@ -745,9 +742,7 @@ document.addEventListener('visibilitychange', () => {
 });
 window.addEventListener('blur', () => { if (testStarted) tabSwitches++; });
 
-/* ═══════════════════════════════════════════════════════════
-   HELPERS
-   ═══════════════════════════════════════════════════════ */
+
 function pad(n) { return String(n).padStart(2,'0'); }
 
 function showError(msg) {
@@ -759,16 +754,16 @@ function showError(msg) {
 function hide(id) { document.getElementById(id).style.display = 'none'; }
 function show(id, d='block') { document.getElementById(id).style.display = d; }
 
-/* ═══════════════════════════════════════════════════════════
+/* 
    ENTRY: Enter key support
-   ═══════════════════════════════════════════════════════ */
+*/
 document.getElementById('accessInput').addEventListener('keydown', e => {
   if (e.key === 'Enter') verifyAccessCode();
 });
 
-/* ═══════════════════════════════════════════════════════════
+/*
    VERIFY CODE — logic identical to original
-   ═══════════════════════════════════════════════════════ */
+ */
 async function verifyAccessCode() {
   const input  = document.getElementById('accessInput').value.trim();
   const errEl  = document.getElementById('entryError');
@@ -819,9 +814,9 @@ async function verifyAccessCode() {
   }
 }
 
-/* ═══════════════════════════════════════════════════════════
+/* 
    TIMER
-   ═══════════════════════════════════════════════════════ */
+    */
 function startClock() {
   countdownTimer = setInterval(() => {
     timeRemaining--;
@@ -837,9 +832,9 @@ function startClock() {
   }, 1000);
 }
 
-/* ═══════════════════════════════════════════════════════════
+/* 
    QUESTION RENDERING
-   ═══════════════════════════════════════════════════════ */
+    */
 function renderQuestion(index) {
   document.querySelectorAll('.question-step').forEach(el => el.classList.add('hidden'));
   const el = document.querySelector(`.question-step[data-index="${index}"]`);
@@ -872,9 +867,9 @@ function renderQuestion(index) {
   document.getElementById('footHint').textContent = 'Select an answer to continue';
 }
 
-/* ═══════════════════════════════════════════════════════════
+/* 
    ENABLE NEXT when option selected — identical name to original
-   ═══════════════════════════════════════════════════════ */
+  */
 function enableNext(index) {
   if (index !== currentQ) return;
   const nextBtn   = document.getElementById('btnNext');
@@ -886,9 +881,9 @@ function enableNext(index) {
 // Keep original name for compatibility
 function enableNextButton(index) { enableNext(index); }
 
-/* ═══════════════════════════════════════════════════════════
+/* 
    NEXT QUESTION — wraps original transitionNextQuestion logic
-   ═══════════════════════════════════════════════════════ */
+    */
 function nextQuestion() {
   currentQ++;
   renderQuestion(currentQ);
@@ -896,8 +891,8 @@ function nextQuestion() {
 // Original name alias
 function transitionNextQuestion() { nextQuestion(); }
 
-/* ═══════════════════════════════════════════════════════════
-   SUBMIT — logic identical to original, only UI messages changed
+/* 
+   SUBMIT 
    ═══════════════════════════════════════════════════════ */
 async function submitAssessment(isTimeout = false) {
   clearInterval(countdownTimer);
@@ -975,7 +970,7 @@ async function submitAssessment(isTimeout = false) {
   }
 }
 
-// Original aliases for HTML onclick compatibility
+
 window.verifyAccessCode       = verifyAccessCode;
 window.submitAssessment       = submitAssessment;
 window.transitionNextQuestion = nextQuestion;
