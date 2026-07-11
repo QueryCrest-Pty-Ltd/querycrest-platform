@@ -23,6 +23,15 @@ body{
   user-select:none;
 }
 
+/* ── UTILITY: STEP-HIDING CLASS ─────────────────────────────
+   Required by spec: question containers must hide by default
+   using a structural helper class, not per-element inline
+   display toggling. This is the piece that was previously
+   missing — without it, every .question-step (a <div>, which
+   defaults to display:block) rendered simultaneously instead
+   of one at a time. */
+.hidden { display: none !important; }
+
 /* ── ANIMATED BACKGROUND ────────────────────────────────── */
 .bg-canvas{
   position:fixed;inset:0;z-index:0;
