@@ -1,0 +1,79 @@
+// ============================================================
+// PROMO VALIDATION KERNEL — paste this block into every function
+// that needs pricing (ProcessPayment, submit-bursary-application,
+// validate-promo-code). It's duplicated on purpose per your
+// self-contained-functions convention, not left as a shared import.
+// ============================================================
+//
+// async function _applyPromo(
+//   svc: ReturnType<typeof _SVC>,
+//   rawCode: string | undefined,
+//   serviceType: string,
+//   userId: string,
+//   basePriceCents: number
+// ): Promise<
+//   | { ok: true; promo: any | null; discountCents: number; finalCents: number }
+//   | { ok: false; error: string }
+// > {
+//   if (!rawCode) return { ok: true, promo: null, discountCents: 0, finalCents: basePriceCents };
+//
+//   const code = _clean(rawCode, 40).toUpperCase();
+//   if (!code) return { ok: true, promo: null, discountCents: 0, finalCents: basePriceCents };
+//
+//   const { data: promo, error } = await svc
+//     .from("promo_codes")
+//     .select("*")
+//     .eq("code", code)
+//     .eq("active", true)
+//     .maybeSingle();
+//
+//   if (error || !promo) return { ok: false, error: "Invalid or expired promo code." };
+//
+//   const now = new Date();
+//   if (promo.starts_at && new Date(promo.starts_at) > now)
+//     return { ok: false, error: "This promo code isn't active yet." };
+//   if (promo.expires_at && new Date(promo.expires_at) < now)
+//     return { ok: false, error: "This promo code has expired." };
+//
+//   const appliesTo: string[] = promo.applies_to || [];
+//   if (!appliesTo.includes("*") && !appliesTo.includes(serviceType))
+//     return { ok: false, error: "This promo code doesn't apply to this service." };
+//
+//   if (promo.max_redemptions != null && promo.redemptions_count >= promo.max_redemptions)
+//     return { ok: false, error: "This promo code has reached its redemption limit." };
+//
+//   const { count: userRedemptions } = await svc
+//     .from("promo_code_redemptions")
+//     .select("*", { count: "exact", head: true })
+//     .eq("promo_code_id", promo.id)
+//     .eq("user_id", userId);
+//
+//   if ((userRedemptions ?? 0) >= promo.max_redemptions_per_user)
+//     return { ok: false, error: "You've already used this promo code." };
+//
+//   let discountCents = 0;
+//   if (promo.discount_type === "free") {
+//     discountCents = basePriceCents;
+//   } else if (promo.discount_type === "percentage") {
+//     discountCents = Math.round(basePriceCents * (Number(promo.discount_value) / 100));
+//   } else if (promo.discount_type === "fixed_amount") {
+//     discountCents = Math.round(Number(promo.discount_value));
+//   }
+//   discountCents = Math.max(0, Math.min(discountCents, basePriceCents));
+//   const finalCents = basePriceCents - discountCents;
+//
+//   return { ok: true, promo, discountCents, finalCents };
+// }
+//
+// NOTES:
+// - Redemption is NOT recorded here — this only checks eligibility and
+//   computes the discount. Actual redemption (the atomic
+//   redeem_promo_code RPC + a promo_code_redemptions insert) only
+//   happens at the moment a purchase actually completes:
+//     - Free orders (discount covers 100%): redeem immediately, inline,
+//       in ProcessPayment / submit-bursary-application.
+//     - Paid orders: redeem inside the ITN webhook, only once PayFast
+//       confirms COMPLETE — so an abandoned checkout never burns a
+//       redemption slot on a limited code.
+// - This is why a code can be "validated" via validate-promo-code any
+//   number of times with no side effects — it's read-only.
