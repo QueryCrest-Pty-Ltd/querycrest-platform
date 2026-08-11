@@ -218,7 +218,7 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
 </head>
 <body>
 <header>
-  <h1>QueryCrest Student Portal </h1>
+  <h1>QueryCrest Student Portal</h1>
   <button class="hamburger" id="hamburger">&#9776;</button>
   <nav id="nav-links">
     <button class="nav-close-btn" id="nav-close">&times;</button>
@@ -939,6 +939,15 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
 .pa-type-text h4 { font-size: .92rem; font-weight: 700; color: #0f172a; margin: 0 0 3px; }
 .pa-type-text p  { font-size: .78rem; color: #64748b; margin: 0; line-height: 1.5; }
 .pa-type-arrow   { margin-left: auto; color: #94a3b8; flex-shrink: 0; }
+.pa-type-card.selected { border-color: #2563eb; background: #eff6ff; }
+.pa-type-card.selected .pa-type-icon { background: #2563eb; color: #fff; }
+.pa-type-card.bad { border-color: #ef4444; }
+.pa-skip-link {
+  display: block; margin: 14px auto 0; background: none; border: none;
+  color: #2563eb; font-size: .82rem; font-weight: 600; cursor: pointer;
+  text-decoration: underline; font-family: 'Poppins', sans-serif; padding: 4px;
+}
+.pa-skip-link:hover { color: #1d4ed8; }
 
 /* Privacy consent (Bursary) */
 .pa-privacy-box {
@@ -1070,6 +1079,46 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
         </div>
       </div>
 
+      <!-- ── Step: Bursary — Choose which bursary to apply for (external redirect) ── -->
+      <div class="pa-step" id="paSC">
+        <p class="pa-sh">Which bursary would you like to apply for?</p>
+        <p class="pa-ss">Select a bursary below — we'll open its official application page in a new tab so you can apply directly, and keep helping you track it here.</p>
+        <div class="pa-type-grid" id="paBursaryChooseGrid">
+          <button type="button" class="pa-type-card" data-id="nsfas" onclick="paChooseBursary('nsfas')">
+            <div class="pa-type-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 6v12M18 6v12"/></svg></div>
+            <div class="pa-type-text"><h4>NSFAS</h4><p>Covers tuition, accommodation, meals and transport for qualifying students.</p></div>
+            <svg class="pa-type-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+          <button type="button" class="pa-type-card" data-id="funza" onclick="paChooseBursary('funza')">
+            <div class="pa-type-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 6v12M18 6v12"/></svg></div>
+            <div class="pa-type-text"><h4>Funza Lushaka</h4><p>Full bursary for future teachers — tuition, accommodation and materials.</p></div>
+            <svg class="pa-type-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+          <button type="button" class="pa-type-card" data-id="csir" onclick="paChooseBursary('csir')">
+            <div class="pa-type-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 6v12M18 6v12"/></svg></div>
+            <div class="pa-type-text"><h4>CSIR Bursary</h4><p>For students in science, engineering and technology fields.</p></div>
+            <svg class="pa-type-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+          <button type="button" class="pa-type-card" data-id="idc" onclick="paChooseBursary('idc')">
+            <div class="pa-type-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 6v12M18 6v12"/></svg></div>
+            <div class="pa-type-text"><h4>IDC Bursary</h4><p>Supports students in fields tied to South Africa's economic development.</p></div>
+            <svg class="pa-type-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+          <button type="button" class="pa-type-card" data-id="nac" onclick="paChooseBursary('nac')">
+            <div class="pa-type-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 6v12M18 6v12"/></svg></div>
+            <div class="pa-type-text"><h4>NAC International</h4><p>For students pursuing arts, culture and creative industries, including study abroad.</p></div>
+            <svg class="pa-type-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+          <button type="button" class="pa-type-card" data-id="zabursaries" onclick="paChooseBursary('zabursaries')">
+            <div class="pa-type-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 6v12M18 6v12"/></svg></div>
+            <div class="pa-type-text"><h4>Zabursaries Database</h4><p>A database of hundreds of bursaries across every field of study.</p></div>
+            <svg class="pa-type-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+        </div>
+        <button type="button" class="pa-skip-link" onclick="paSkipChoose()">I haven't decided yet — skip for now</button>
+        <div class="pa-err" id="paEC" style="margin-top:8px;">Please select a bursary above, or skip for now.</div>
+      </div>
+
       <!-- ── Step: Institution (University or TVET) ── -->
       <div class="pa-step" id="paS1">
         <p class="pa-sh" id="paS1Heading">Which university are you applying to?</p>
@@ -1165,7 +1214,7 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
       <!-- ── Step: Returning applicant? ── -->
       <div class="pa-step" id="paS3">
         <p class="pa-sh" id="paS3Heading">Have you applied here before?</p>
-        <p class="pa-ss">This helps us tailor the process for you.</p>
+        <p class="pa-ss" id="paS3Sub">This helps us tailor the process for you.</p>
         <div class="pa-rg">
           <label class="pa-ro">
             <input type="radio" name="paApp" value="no">
@@ -1177,25 +1226,6 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
           </label>
         </div>
         <div class="pa-err" id="paEA" style="margin-top:8px;">Please select an option.</div>
-      </div>
-
-      <!-- ── Step: Bursary — Which bursary have you applied for? ── -->
-      <div class="pa-step" id="paSW">
-        <p class="pa-sh">Which bursary have you applied for?</p>
-        <p class="pa-ss">Select every bursary you've already applied to through QueryCrest — you can choose more than one.</p>
-        <div class="pa-rg" id="paBursaryList">
-          <label class="pa-ro"><input type="checkbox" name="paBursary" value="nsfas"><span>NSFAS</span></label>
-          <label class="pa-ro"><input type="checkbox" name="paBursary" value="funza"><span>Funza Lushaka</span></label>
-          <label class="pa-ro"><input type="checkbox" name="paBursary" value="csir"><span>CSIR Bursary</span></label>
-          <label class="pa-ro"><input type="checkbox" name="paBursary" value="idc"><span>IDC Bursary</span></label>
-          <label class="pa-ro"><input type="checkbox" name="paBursary" value="nac"><span>NAC International</span></label>
-          <label class="pa-ro"><input type="checkbox" name="paBursary" value="zabursaries"><span>Zabursaries Database</span></label>
-        </div>
-        <div class="pa-f" style="margin-top:14px;">
-          <label class="pa-lbl" for="paBursaryOther">Other bursary <span style="font-weight:400;color:#94a3b8;">(optional)</span></label>
-          <input class="pa-in" type="text" id="paBursaryOther" placeholder="Not listed? Type the bursary name">
-        </div>
-        <div class="pa-err" id="paEW" style="margin-top:8px;">Please select at least one bursary, or enter one above.</div>
       </div>
 
       <!-- ── Step: Redirect message ── -->
@@ -1245,7 +1275,17 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
   var PA_KEY = 'qc_pre_apply';
   var paUni  = { v: '', l: '' };
   var paIsReturning     = false;
-  var paBursariesApplied = [];
+  var paChosenBursary = null;
+
+  /* Bursaries a user can pick to be redirected to the official application site */
+  var BURSARIES = [
+    { id: 'nsfas',       name: 'NSFAS',                 url: 'https://www.nsfas.org.za' },
+    { id: 'funza',       name: 'Funza Lushaka',          url: 'https://www.funza.co.za' },
+    { id: 'csir',        name: 'CSIR Bursary',           url: 'https://www.csir.co.za/bursaries' },
+    { id: 'idc',         name: 'IDC Bursary',            url: 'https://www.idc.co.za/bursaries/' },
+    { id: 'nac',         name: 'NAC International',      url: 'https://www.nac.org.za' },
+    { id: 'zabursaries', name: 'Zabursaries Database',   url: 'https://www.zabursaries.co.za' },
+  ];
 
   /* ── All 26 South African public universities (hardcoded — no endpoint fetch) ── */
   var UNIVERSITIES = [
@@ -1455,12 +1495,12 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
     paType = null;
     paUni  = { v: '', l: '' };
     paIsReturning = false;
-    paBursariesApplied = [];
-    ['paP1','paC1','paP2','paC2','paP3','paC3','paBursaryOther'].forEach(function (id) {
+    paChosenBursary = null;
+    ['paP1','paC1','paP2','paC2','paP3','paC3'].forEach(function (id) {
       var el = g(id); if (el) el.value = '';
     });
     document.querySelectorAll('input[name="paApp"]').forEach(function (r) { r.checked = false; });
-    document.querySelectorAll('input[name="paBursary"]').forEach(function (r) { r.checked = false; });
+    document.querySelectorAll('#paBursaryChooseGrid .pa-type-card').forEach(function (c) { c.classList.remove('selected', 'bad'); });
     var pc = g('paPrivacyCheck'); if (pc) pc.checked = false;
     var trig = g('paUniTrigger'), trigTxt = g('paUniTriggerTxt');
     if (trig) trig.classList.remove('has-val', 'bad');
@@ -1488,7 +1528,7 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
   var FLOWS = {
     uni:     ['type', 'inst', 'programs', 'returning', 'redirect'],
     tvet:    ['type', 'inst', 'programs', 'returning', 'redirect'],
-    bursary: ['type', 'privacy', 'docs', 'returning', 'which', 'redirect'],
+    bursary: ['type', 'returning', 'choose', 'privacy', 'docs', 'redirect'],
   };
 
   /* Step element + label lookup */
@@ -1496,10 +1536,10 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
     type:      { el: 'paS0',  label: 'Application Type' },
     inst:      { el: 'paS1',  label: null /* set dynamically */ },
     programs:  { el: 'paS2',  label: 'Programs' },
+    returning: { el: 'paS3',  label: 'Experience' },
+    choose:    { el: 'paSC',  label: 'Choose Bursary' },
     privacy:   { el: 'paSBP', label: 'Privacy' },
     docs:      { el: 'paSBD', label: 'How to Apply' },
-    returning: { el: 'paS3',  label: 'Experience' },
-    which:     { el: 'paSW',  label: 'Bursary Applied' },
     redirect:  { el: 'paS4',  label: 'Done' },
   };
 
@@ -1531,7 +1571,8 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
     document.getElementById('paPT').textContent = 'Step ' + stepNum + ' of ' + total + ' — ' + label;
     document.getElementById('paPP').textContent  = pct + '%';
     document.getElementById('paPF').style.width  = pct + '%';
-    document.getElementById('paNX').textContent  = (key === 'returning' || key === 'which') ? 'Save & Continue →' : 'Next →';
+    var isFinalStep = (key === 'returning' && paType !== 'bursary') || key === 'docs';
+    document.getElementById('paNX').textContent  = isFinalStep ? 'Save & Continue →' : 'Next →';
     document.getElementById('paBK').textContent  = key === 'type' ? 'Cancel' : '← Back';
 
     /* Institution step: swap labels/placeholder for University vs TVET */
@@ -1546,12 +1587,15 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
     /* Dynamic "returning applicant" question, phrased for the chosen type */
     if (key === 'returning') {
       var heading = document.getElementById('paS3Heading');
+      var sub3    = document.getElementById('paS3Sub');
       if (paType === 'bursary') {
-        heading.textContent = 'Have you applied for a bursary with us before?';
+        heading.textContent = 'Is this your first time applying for a bursary?';
+        sub3.textContent = 'If you\u2019ve applied before, we\u2019ll take you straight to the bursary\u2019s official site so you can apply.';
       } else {
         heading.textContent = paUni.l
           ? 'Have you applied to ' + paUni.l + ' before?'
           : 'Have you applied here before?';
+        sub3.textContent = 'This helps us tailor the process for you.';
       }
     }
 
@@ -1559,7 +1603,9 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
     if (key === 'redirect') {
       var sub = document.getElementById('paRedirectSub');
       if (paType === 'bursary') {
-        sub.textContent = 'You\u2019re being taken to sign in so we can match your profile with bursary funders. Your documents checklist will be waiting for you on your dashboard.';
+        sub.textContent = paChosenBursary
+          ? 'You\u2019ve opened ' + paChosenBursary.name + '\u2019s official application page in a new tab. Meanwhile, we\u2019re signing you in so your documents checklist is ready on your dashboard.'
+          : 'You\u2019re being taken to sign in so we can match your profile with bursary funders. Your documents checklist will be waiting for you on your dashboard.';
       } else {
         sub.innerHTML = 'You\u2019re being taken to sign in so we can submit your application to <strong id="paRedirectUniName"></strong>. Your details will be pre-filled and ready to go.';
         g('paRedirectUniName').textContent = paUni.l;
@@ -1567,8 +1613,11 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
     }
 
     var chip = document.getElementById('paChip');
-    if (key !== 'type' && paUni.l && paType !== 'bursary') {
+    if (key !== 'type' && key !== 'choose' && paUni.l && paType !== 'bursary') {
       document.getElementById('paChipName').textContent = paUni.l;
+      chip.classList.add('on');
+    } else if (key !== 'type' && key !== 'choose' && paType === 'bursary' && paChosenBursary) {
+      document.getElementById('paChipName').textContent = paChosenBursary.name;
       chip.classList.add('on');
     } else {
       chip.classList.remove('on');
@@ -1584,17 +1633,22 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
 
   window.paNtBtn = function () {
     clearErrors();
+    if (paKey === 'choose')    return sChoose();
     if (paKey === 'inst')      return sInst();
     if (paKey === 'programs')  return sPrograms();
     if (paKey === 'privacy')   return sPrivacy();
     if (paKey === 'docs')      return sDocs();
     if (paKey === 'returning') return sReturning();
-    if (paKey === 'which')     return sWhich();
   };
 
   window.paBkBtn = function () {
     clearErrors();
     if (paKey === 'type') { window.closePreApply(); return; }
+    /* First-time bursary applicants skip 'choose', so send them back to 'returning' not 'choose' */
+    if (paKey === 'privacy' && paType === 'bursary' && !paIsReturning) {
+      showStep('returning');
+      return;
+    }
     var flow = currentFlow();
     var idx  = flow.indexOf(paKey);
     if (idx <= 0) { window.closePreApply(); return; }
@@ -1605,6 +1659,38 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
     var flow = currentFlow();
     var idx  = flow.indexOf(paKey);
     showStep(flow[idx + 1]);
+  }
+
+  /* ── Bursary: choose one and get redirected to its official site ── */
+  window.paChooseBursary = function (id) {
+    var b = null;
+    for (var i = 0; i < BURSARIES.length; i++) { if (BURSARIES[i].id === id) { b = BURSARIES[i]; break; } }
+    if (!b) return;
+    paChosenBursary = b;
+    document.querySelectorAll('#paBursaryChooseGrid .pa-type-card').forEach(function (c) { c.classList.remove('selected', 'bad'); });
+    var card = document.querySelector('#paBursaryChooseGrid .pa-type-card[data-id="' + id + '"]');
+    if (card) card.classList.add('selected');
+    var err = g('paEC'); if (err) err.classList.remove('on');
+
+    /* Open the real bursary application site in a new tab */
+    window.open(b.url, '_blank', 'noopener');
+
+    /* Give the highlight a moment to show, then continue the QueryCrest flow */
+    setTimeout(function () { paGoNext(); }, 450);
+  };
+
+  window.paSkipChoose = function () {
+    paChosenBursary = null;
+    paGoNext();
+  };
+
+  function sChoose() {
+    if (!paChosenBursary) {
+      document.querySelectorAll('#paBursaryChooseGrid .pa-type-card').forEach(function (c) { c.classList.add('bad'); });
+      g('paEC').classList.add('on');
+      return;
+    }
+    paGoNext();
   }
 
   function sInst() {
@@ -1635,8 +1721,8 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
   }
 
   function sDocs() {
-    /* Purely informational — no validation, just move on */
-    paGoNext();
+    /* Purely informational, and the last content step before redirecting */
+    finishApplication();
   }
 
   function sReturning() {
@@ -1648,25 +1734,14 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
     }
     paIsReturning = sel.value === 'yes';
 
-    /* Bursary applicants who've applied before are asked which bursary(ies) first */
-    if (paType === 'bursary' && paIsReturning) {
-      showStep('which');
+    if (paType === 'bursary') {
+      /* Not their first time → let them pick a bursary and go apply on its real site */
+      if (paIsReturning) { showStep('choose'); return; }
+      /* First time → skip straight to privacy consent, no bursary chosen yet */
+      showStep('privacy');
       return;
     }
-    finishApplication();
-  }
-
-  function sWhich() {
-    var checked = Array.prototype.slice.call(document.querySelectorAll('input[name="paBursary"]:checked'));
-    var other   = g('paBursaryOther').value.trim();
-    if (!checked.length && !other) {
-      document.querySelectorAll('#paBursaryList .pa-ro').forEach(function (r) { r.classList.add('bad'); });
-      g('paEW').classList.add('on');
-      return;
-    }
-    var names = checked.map(function (c) { return c.parentElement.querySelector('span').textContent; });
-    if (other) names.push(other);
-    paBursariesApplied = names;
+    /* University / TVET: this is the final data step before redirecting */
     finishApplication();
   }
 
@@ -1679,7 +1754,10 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
     };
     if (paType === 'bursary') {
       payload.privacy_accepted = true;
-      if (paIsReturning) payload.bursaries_applied = paBursariesApplied;
+      if (paChosenBursary) {
+        payload.bursary_choice = paChosenBursary.name;
+        payload.bursary_choice_url = paChosenBursary.url;
+      }
     } else {
       payload.university_name = paUni.l;
       payload.university_id   = paUni.v;
