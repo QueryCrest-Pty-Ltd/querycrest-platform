@@ -1,18 +1,4 @@
-/**
- * js/terms-of-service.js
- *
- * Fetches Terms of Service content from the terms-of-service Edge Function
- * and renders it into #terms-of-service-content on termsOfService.html.
- *
- * The page must never fall back to hardcoded ToS text in the HTML — that
- * would defeat the point of making content admin-editable in the database.
- */
-
 const EDGE_FUNCTION_URL = "https://xkjsydeavdcarwkthppz.supabase.co/functions/v1/terms-of-service";
-// Supabase's anon/public key. This is NOT a secret — it's designed to be
-// used in frontend JavaScript. It only grants access allowed by your
-// Row Level Security policies, unlike the service-role key.
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhranN5ZGVhdmRjYXJ3a3RocHB6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE2NTQwMDMsImV4cCI6MjA3NzIzMDAwM30.elwK1K_mBfNGFrmzeJ3-Os1Zy_hrDJ1PPI0guFTGUrk";
 const CONTAINER_ID = "terms-of-service-content";
 
 async function loadTermsOfService() {
@@ -28,11 +14,7 @@ async function loadTermsOfService() {
   try {
     response = await fetch(EDGE_FUNCTION_URL, {
       method: "GET",
-      headers: {
-        Accept: "application/json",
-        apikey: SUPABASE_ANON_KEY,
-        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-      },
+      headers: { Accept: "application/json" },
     });
   } catch (networkError) {
     console.error("Terms of Service: network error", networkError);
