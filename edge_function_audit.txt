@@ -1,0 +1,722 @@
+﻿
+==================================================
+Edge Function: add-bursary
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/add-bursary
+Response:
+HTTP 405 (no response body)
+==================================================
+
+==================================================
+Edge Function: addNextOfKin
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/addNextOfKin
+Response:
+HTTP 405 (no response body)
+==================================================
+
+==================================================
+Edge Function: addOrUpdateAddress
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/addOrUpdateAddress
+Response:
+HTTP 405 (no response body)
+==================================================
+
+==================================================
+Edge Function: addUserAddress
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/addUserAddress
+Response:
+HTTP 400 (no response body)
+==================================================
+
+==================================================
+Edge Function: admin-chat
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/admin-chat
+Response:
+HTTP 405 (no response body)
+==================================================
+
+==================================================
+Edge Function: admin-router
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/admin-router
+Response:
+HTTP 405 (no response body)
+==================================================
+
+==================================================
+Edge Function: adminLogin
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/adminLogin
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: affiliate
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/affiliate
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: assignReferralCode
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/assignReferralCode
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: chatbot
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/chatbot
+Response:
+HTTP 405 (no response body)
+==================================================
+
+==================================================
+Edge Function: createNotification
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/createNotification
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: createSupportTicket
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/createSupportTicket
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: createUserAccount
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/createUserAccount
+Response:
+HTTP 405 (no response body)
+==================================================
+
+==================================================
+Edge Function: deleteDocument
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/deleteDocument
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: deleteNextOfKin
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/deleteNextOfKin
+Response:
+HTTP 405 (no response body)
+==================================================
+
+==================================================
+Edge Function: deleteUserAccount
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/deleteUserAccount
+Response:
+HTTP 405 (no response body)
+==================================================
+
+==================================================
+Edge Function: display-student-results
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/display-student-results
+Response:
+HTTP 500 (no response body)
+==================================================
+
+==================================================
+Edge Function: email-automation-worker
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/email-automation-worker
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: extended-personal-Info
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/extended-personal-Info
+Response:
+HTTP 400 (no response body)
+==================================================
+
+==================================================
+Edge Function: fetch_messages
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/fetch_messages
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: fetch_sessions
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/fetch_sessions
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: forgotPassword
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/forgotPassword
+Response:
+HTTP 500 (no response body)
+==================================================
+
+==================================================
+Edge Function: get_categories
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/get_categories
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: get_predefined_questions
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/get_predefined_questions
+Response:
+HTTP 400 (no response body)
+==================================================
+
+==================================================
+Edge Function: get-accommodations
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/get-accommodations
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: get-bursary-applications
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/get-bursary-applications
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: get-personal-info
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/get-personal-info
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: getAccountData
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/getAccountData
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: getAccountHistory
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/getAccountHistory
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: getAccountHistory
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/getAccountHistory
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: getDashboardCounts
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/getDashboardCounts
+Response:
+HTTP 400 (no response body)
+==================================================
+
+==================================================
+Edge Function: getDashboardState
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/getDashboardState
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: getExtended-personal-Info
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/getExtended-personal-Info
+Response:
+HTTP 400 (no response body)
+==================================================
+
+==================================================
+Edge Function: getNextOfKin
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/getNextOfKin
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: getNotifications
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/getNotifications
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: GetPlans
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/GetPlans
+Response:
+{"success":true,"plans":[{"plan_id":"c5bc8046-7711-4f70-b48a-47778b499da9","plan_name":"Starter Plan","price":60,"applications":1,"benefits":["Dashboard tracking","Basic resources & guidance","Email support"]},{"plan_id":"1c9e9ad0-8e35-4a12-943e-312572050491","plan_name":"Essential Plan","price":100,"applications":2,"benefits":["Dashboard tracking","Personalised acceptance tips","Motivational guidance","Basic course recommendations","Email & WhatsApp support"]},{"plan_id":"0404b78f-048c-47c4-891e-079df646e0b1","plan_name":"Standard Plan","price":250,"applications":4,"benefits":["Dashboard tracking","Personalised acceptance tips","Submission checklist & deadline alerts","Career & course recommendations","Dedicated Advisor","WhatsApp, Email, & Call Support"]},{"plan_id":"83989b29-36c3-4200-ae11-c2bff62d25ae","plan_name":"Bundle Plan","price":500,"applications":6,"benefits":["Dashboard tracking","Document review & tips","Submission checklist & alerts","Detailed career recommendations","Dedicated Advisor","Priority support - All Channels"]},{"plan_id":"eb053337-fa24-4f9d-9a5a-2c1654c68b10","plan_name":"All-In-One Plan ","price":1000,"applications":11,"benefits":["Full dashboard tracking","Comprehensive submission guidance","Document review & tips","Priority Processing","Comprehensive Personalised career recommendations","Dedicated Advisor","Deadline alerts & priority support - All Channels"]}]}
+==================================================
+
+==================================================
+Edge Function: getUserAddress
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/getUserAddress
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: getUserDetails
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/getUserDetails
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: getUserDocuments
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/getUserDocuments
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: getUserProfile
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/getUserProfile
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: googleAuth
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/googleAuth
+Response:
+HTTP 400 (no response body)
+==================================================
+
+==================================================
+Edge Function: load-admissions-data
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/load-admissions-data
+Response:
+{"success":true,"universities":[{"id":"0d3f2904-109f-4012-8ff3-298f340d0e7b","name":"Boland TVET College"},{"id":"07671757-2ca4-4772-b8af-8bc395f2ed9a","name":"Buffalo City TVET College"},{"id":"b67df738-4cfd-4e7c-b13c-848491d18292","name":"Cape Peninsula University of Technology"},{"id":"646cf6a9-b3cc-409b-ba62-111a1ae39472","name":"Capricorn TVET College"},{"id":"8ec2b606-f7ac-4814-82a1-163af0c08ffd","name":"Central Johannesburg TVET College"},{"id":"fd03972e-1de9-4ffd-87b9-70c299904158","name":"Central University of Technology"},{"id":"a13937a8-be71-4c29-bf58-36ec6b42e97c","name":"Coastal TVET College"},{"id":"b78f4605-6323-44d0-9795-0ba50f5967ad","name":"College of Cape Town"},{"id":"57d07a7d-e09d-4f1b-8faa-23ed7f52458c","name":"Durban University of Technology"},{"id":"c75c4186-c780-467a-b372-485ed76b5aa4","name":"Eastcape Midlands TVET College"},{"id":"98da2c29-5f53-4ad3-922a-5f0a124f2d8f","name":"Ehlanzeni TVET College"},{"id":"9873ae76-cc2c-45bf-923e-c5c980fb1c14","name":"Ekurhuleni East TVET College"},{"id":"7546072e-af51-42dd-94de-5f1c904a3d77","name":"Ekurhuleni West TVET College"},{"id":"c41641b3-4c1a-4657-be72-fca7ff347c44","name":"Elangeni TVET College"},{"id":"0ea0338b-c2f9-4749-bee4-4b0e89aaa907","name":"Esayidi TVET College"},{"id":"7c3c0349-d9be-485e-9879-4bc0108ec1a3","name":"False Bay TVET College"},{"id":"4c3c8cd4-1df0-4297-b952-df85ae5e3590","name":"Flavius Mareka TVET College"},{"id":"b936b424-cb7f-43ac-b463-779e966ec9e1","name":"Gert Sibande TVET College"},{"id":"78d343ab-d219-423f-a777-aa4eafe9b304","name":"Goldfields TVET College"},{"id":"9813cb76-5662-4d61-8b8c-983bdfc23175","name":"Ikhala TVET College"},{"id":"812d5a94-1026-4e4c-bc05-6c1c330b8cdb","name":"Ingwe TVET College"},{"id":"f47fb81c-d946-4eaf-8982-d7362af516c3","name":"King Hintsa TVET College"},{"id":"4e2db18d-0d69-4560-ab4a-9d263ee53dcd","name":"King Sabata Dalindyebo TVET College"},{"id":"15c3ddb2-3b23-4c34-b239-e34da8041612","name":"Lephalale TVET College"},{"id":"05578d04-1422-4b5b-8256-60aee52257d9","name":"Letaba TVET College"},{"id":"5fc86483-be0a-4667-8541-19cdf590c0a8","name":"Lovedale TVET College"},{"id":"81eb3572-667e-4e8f-9ed7-bb7991a15928","name":"Majuba TVET College"},{"id":"00d070a9-9299-4050-9f9b-25fd35bd6bc2","name":"Maluti TVET College"},{"id":"e54f7fec-724f-4a9b-883d-480f7f7c600b","name":"Mangosuthu University of Technology"},{"id":"1f96f0d1-7c66-4fbd-99f1-f5fe66f8c18a","name":"Mnambithi TVET College"},{"id":"656bf3ff-e607-4bec-ba77-ff66f679fd79","name":"Mopani South East TVET College"},{"id":"ad5c4525-ddc1-4d98-8784-08d84ddcb195","name":"Motheo TVET College"},{"id":"dc7c1c0b-75c3-4c66-8d97-4f806e0908e0","name":"Mthashana TVET College"},{"id":"bc00e65f-e563-468d-9d5e-1c60890526dc","name":"Nelson Mandela University"},{"id":"a3c1aa9f-949d-42a8-87a1-cbb0dde56ea0","name":"Nkangala TVET College"},{"id":"70fbfcd3-b80b-40ac-a5ac-9b9041893506","name":"North-West University"},{"id":"32028fe6-1135-45a7-ac2f-e75a97ffb721","name":"Northern Cape Rural TVET College"},{"id":"7dd0c571-15ed-4734-a683-e800a9234d54","name":"Northern Cape Urban TVET College"},{"id":"19b1dd2d-b76d-440f-9609-eab19c862f10","name":"Northlink TVET College"},{"id":"39a26316-b907-428e-a74d-fca90b5ed40c","name":"Orbit TVET College"},{"id":"1509d0a9-b82a-413e-9aca-2f89623b4870","name":"Port Elizabeth TVET College"},{"id":"0547b451-4e7f-40ed-8ad8-49fbbe666e11","name":"Rhodes University"},{"id":"3a519b81-23df-4ba9-8bda-3bac078d993f","name":"Sedibeng TVET College"},{"id":"5d31058c-3818-4ffd-bda2-c58ae9b4b882","name":"Sefako Makgatho Health Sciences University"},{"id":"6fed8bba-5cd0-4b66-835a-bec2f2c9a2ba","name":"Sekhukhune TVET College"},{"id":"2191baa6-59c3-4e68-9ab2-bf7715207d97","name":"Sol Plaatje University"},{"id":"2d8bdcb3-3c37-432b-865f-b12c5305389d","name":"South Cape TVET College"},{"id":"df854504-0afe-4df2-bef2-199e7414fcca","name":"South West Gauteng TVET College"},{"id":"37daef51-4699-4624-9ac4-a37a10aab95c","name":"Stellenbosch University"},{"id":"f17c63b7-d9e5-4238-92ee-a7d251db5c40","name":"Taletso TVET College"},{"id":"984f5bb0-ad22-42ec-867c-d64aac14d454","name":"Thekwini TVET College"},{"id":"cfee765b-fd4a-4d42-af74-c272bab09144","name":"Tshwane North TVET College"},{"id":"d5fe8843-c0bb-4a2e-9e66-267b2bfd2725","name":"Tshwane South TVET College"},{"id":"983d88d3-d1ca-49f8-91e2-e0d6c3c9967f","name":"Tshwane University of Technology"},{"id":"5b442615-51ba-4d30-99cd-212251f6d249","name":"Umfolozi TVET College"},{"id":"955b34c0-fdb2-49c6-9bd6-e10a09fc3f23","name":"Umgungundlovu TVET College"},{"id":"aa714583-c4a7-4d6b-a267-6f5c3c3ed241","name":"University of Cape Town"},{"id":"a6a0736c-3f3a-4c16-8ee6-dd1c2001bad2","name":"University of Fort Hare"},{"id":"42baab9c-7f51-4870-97b1-975268fa532a","name":"University of Johannesburg"},{"id":"b817332f-4de2-4cef-8352-bed6bb789aaf","name":"University of KwaZulu-Natal"},{"id":"ed3b4ada-a6a2-4673-94b7-6bea7b75b6cc","name":"University of Limpopo"},{"id":"4f19064a-1f27-47ea-862f-de0857617914","name":"University of Mpumalanga"},{"id":"12e5cd69-c3ce-44e1-9ac0-8fd2785e16c4","name":"University of Pretoria"},{"id":"59c8deb6-dbd6-42fd-a1f7-c026d9118f39","name":"University of South Africa"},{"id":"b2e6aad3-c3d1-4637-9490-fa3e64a704f6","name":"University of the Free State"},{"id":"c30b18f9-080a-4640-ba1b-c094e9014b6e","name":"University of the Western Cape"},{"id":"55690745-abb9-43a2-be4e-57879a020e98","name":"University of the Witwatersrand"},{"id":"4d8a4993-c2a5-4b84-b13c-8dc516aa17ea","name":"University of Venda"},{"id":"4d80bf68-e370-4b30-8e70-97e996963141","name":"University of Zululand"},{"id":"5ec3bcf4-3eb0-4792-92d2-8b63a46e4300","name":"Vaal University of Technology"},{"id":"fab01497-2775-48e4-88c4-47903107abef","name":"Vhembe TVET College"},{"id":"1923515b-a0d0-47bb-a7a6-262df6ad873b","name":"Vuselela TVET College"},{"id":"4445b173-8191-4265-aab3-974fa3842ec8","name":"Walter Sisulu University"},{"id":"f3ec5f9f-019b-4931-b6a6-a62ebc651d4d","name":"Waterberg TVET College"},{"id":"bd907c73-1e06-4951-bcaa-67531aad3361","name":"West Coast TVET College"},{"id":"782a3041-d188-4246-bd10-b12373ee863d","name":"Western TVET College"}],"courses":[{"id":"255edffc-4eb3-498f-94d2-6600482ea3ee","name":"Bachelor of Arts","university_id":"12e5cd69-c3ce-44e1-9ac0-8fd2785e16c4","aps_requirement":30},{"id":"85f5524e-e25d-44ec-bcdd-5e674d7f8645","name":"Bachelor of Medicine","university_id":null,"aps_requirement":45},{"id":"b30b04b7-cf0c-4326-b3b0-d035ee43d006","name":"BCom Accounting","university_id":"12e5cd69-c3ce-44e1-9ac0-8fd2785e16c4","aps_requirement":30},{"id":"cb190c76-059f-4c39-a1ff-3720e287247e","name":"BCom Economics","university_id":"42baab9c-7f51-4870-97b1-975268fa532a","aps_requirement":32},{"id":"959be5f6-ed0e-440f-9d75-dac1f566ba20","name":"BSc Computer Science","university_id":"12e5cd69-c3ce-44e1-9ac0-8fd2785e16c4","aps_requirement":36},{"id":"60dcab1f-2e75-4d2a-9c16-9fd71a873da8","name":"Engineering","university_id":"aa714583-c4a7-4d6b-a267-6f5c3c3ed241","aps_requirement":42},{"id":"fd06308d-9c7d-40a9-be8f-34e8f8190feb","name":"Law","university_id":"aa714583-c4a7-4d6b-a267-6f5c3c3ed241","aps_requirement":35}],"subjects":[{"id":"822f4951-39ee-4f66-94fc-e5a1a2265741","name":"Accounting"},{"id":"fc11943a-a06c-499e-a275-2ce4d0cb773c","name":"Afrikaans"},{"id":"8778a9b3-6e17-456c-9b84-8be198581f88","name":"Agricultural Sciences"},{"id":"a821bedb-9bcc-40c6-87ba-ee774b80ae68","name":"Business Studies"},{"id":"44fee7ad-1040-40a1-9f5d-e652dc69b295","name":"Computer Applications Technology"},{"id":"e8291f23-c6c5-4111-ad61-21b75ce17bad","name":"Consumer Studies"},{"id":"b9e87333-8b15-4613-84be-b732f3a25fa1","name":"Dramatic Arts"},{"id":"d4f2c5d1-14a1-40d6-a4f8-494366fbc3b3","name":"Economics"},{"id":"349a6cbc-89c9-4084-b417-e4af64fcfb33","name":"Engineering Graphics and Design"},{"id":"e843c3c8-c539-4277-87e7-fcf1a983239a","name":"English"},{"id":"66222766-d44e-4b5c-b6a8-c20c46b4ab11","name":"French"},{"id":"124f54bd-c823-44f0-a14b-18579313e025","name":"Geography"},{"id":"be7413ed-59e7-4c11-a948-01cf38801bb0","name":"German"},{"id":"6e62c4bb-ee43-4f47-ad9c-1dbb59c96425","name":"History"},{"id":"c8aac9f2-7ff1-4d33-9558-07fc4f42a83a","name":"Hospitality Studies"},{"id":"c6529ee1-0569-4fbf-bfd0-bdf5aab2787e","name":"Information Technology"},{"id":"18d67fff-00b5-45ad-bbcd-4aa7453d6903","name":"isiXhosa"},{"id":"3541b558-0b53-430c-8837-ece64cc95dd8","name":"isiZulu"},{"id":"1f35fdd1-5af2-46a6-a586-5e9393eee88c","name":"Life Orientation"},{"id":"5e5329b9-ffe8-43b7-bfb9-55a1afe0b7b6","name":"Life Sciences"},{"id":"11617f7a-95b0-4d8d-a690-1e8406952b50","name":"Mathematical Literacy"},{"id":"170f7cbe-22b6-4c98-9a8a-49d7e1d93079","name":"Mathematics"},{"id":"3c052e43-c00b-49f3-91d6-a9538602ae72","name":"Music"},{"id":"7b695b54-31f6-4ce3-9bd7-6e6950ce05a4","name":"Physical Sciences"},{"id":"a607ba3c-eee9-49b9-b71a-03830bc4f0dc","name":"Portuguese"},{"id":"8d6004f8-e204-4502-a537-9410f5a2fa2c","name":"Sepedi"},{"id":"f319aaf2-68d4-49b9-bf8e-468098b53436","name":"Sesotho"},{"id":"5cecce6d-d9ca-46e4-a522-0be010a9ee0a","name":"Setswana"},{"id":"3df85f30-090f-4a38-8a63-41a86b21d352","name":"siSwati"},{"id":"146223da-98e5-44ef-8ba4-98f3f6c0c7a4","name":"Tourism"},{"id":"e2d98114-414b-4128-907f-38088efbac46","name":"Tshivenda"},{"id":"54da0a10-6c00-4df3-8d0b-ebdbcdb7d815","name":"Visual Arts"},{"id":"e44bb2f9-4aae-402f-b755-2fe6f2aa9981","name":"Xitsonga"}]}
+==================================================
+
+==================================================
+Edge Function: load-Applications
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/load-Applications
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: load-bursaries
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/load-bursaries
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: load-universities
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/load-universities
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: loginUser
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/loginUser
+Response:
+HTTP 405 (no response body)
+==================================================
+
+==================================================
+Edge Function: logout
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/logout
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: logout-User
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/logout-User
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: mark_read
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/mark_read
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: mark_read
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/mark_read
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: markNotificationRead
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/markNotificationRead
+Response:
+HTTP 405 (no response body)
+==================================================
+
+==================================================
+Edge Function: no-application-reminder
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/no-application-reminder
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: PayFast_WebHook
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/PayFast_WebHook
+Response:
+HTTP 400 (no response body)
+==================================================
+
+==================================================
+Edge Function: PayFastITN
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/PayFastITN
+Response:
+HTTP 400 (no response body)
+==================================================
+
+==================================================
+Edge Function: personal-info
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/personal-info
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: ProcessPayment
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/ProcessPayment
+Response:
+HTTP 405 (no response body)
+==================================================
+
+==================================================
+Edge Function: querycrest-cron-reminders
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/querycrest-cron-reminders
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: querycrest-email-automation
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/querycrest-email-automation
+Response:
+HTTP 500 (no response body)
+==================================================
+
+==================================================
+Edge Function: resetPassword
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/resetPassword
+Response:
+HTTP 405 (no response body)
+==================================================
+
+==================================================
+Edge Function: resetPasswordWithToken
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/resetPasswordWithToken
+Response:
+HTTP 500 (no response body)
+==================================================
+
+==================================================
+Edge Function: reviews
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/reviews
+Response:
+HTTP 405 (no response body)
+==================================================
+
+==================================================
+Edge Function: send_message
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/send_message
+Response:
+HTTP 405 (no response body)
+==================================================
+
+==================================================
+Edge Function: sendEmailNotification
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/sendEmailNotification
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: sendNotification
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/sendNotification
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: sendPushNotification
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/sendPushNotification
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: state-check
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/state-check
+Response:
+HTTP 546 (no response body)
+==================================================
+
+==================================================
+Edge Function: student-results
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/student-results
+Response:
+HTTP 405 (no response body)
+==================================================
+
+==================================================
+Edge Function: submit-bursary-application
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/submit-bursary-application
+Response:
+HTTP 405 (no response body)
+==================================================
+
+==================================================
+Edge Function: submitApplication
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/submitApplication
+Response:
+HTTP 405 (no response body)
+==================================================
+
+==================================================
+Edge Function: supportTickets
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/supportTickets
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: system-modal
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/system-modal
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: track-applications
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/track-applications
+Response:
+HTTP 546 (no response body)
+==================================================
+
+==================================================
+Edge Function: university-autocomplete
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/university-autocomplete
+Response:
+HTTP 405 (no response body)
+==================================================
+
+==================================================
+Edge Function: updateAdminDashboardSettings
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/updateAdminDashboardSettings
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: updateApplicationStatus
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/updateApplicationStatus
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: updateNextOfKin
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/updateNextOfKin
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: updateTransactionStatus
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/updateTransactionStatus
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: updateUserAddress
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/updateUserAddress
+Response:
+HTTP 400 (no response body)
+==================================================
+
+==================================================
+Edge Function: updateUserPreferrence
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/updateUserPreferrence
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: uploadDocument
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/uploadDocument
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: user-settings
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/user-settings
+Response:
+HTTP 405 (no response body)
+==================================================
+
+==================================================
+Edge Function: validate-promo-code
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/validate-promo-code
+Response:
+HTTP 405 (no response body)
+==================================================
+
+==================================================
+Edge Function: verifyPayment
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/verifyPayment
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: verifyUser
+URL: https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1/verifyUser
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: verify-user
+URL: https://xkjsydeavdcarwkthppz.supabase.co/functions/v1/verify-user
+Response:
+HTTP 404 (no response body)
+==================================================
+
+==================================================
+Edge Function: PayFast
+URL: https://xkjsydeavdcarwkthppz.supabase.co/functions/v1/PayFast
+Response:
+HTTP 404 (no response body)
+==================================================
+
+==================================================
+Edge Function: PayFast_WebHook
+URL: https://xkjsydeavdcarwkthppz.supabase.co/functions/v1/PayFast_WebHook
+Response:
+HTTP 404 (no response body)
+==================================================
+
+==================================================
+Edge Function: auth
+URL: https://xkjsydeavdcarwkthppz.supabase.co/functions/v1/auth
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: admin-login
+URL: https://xkjsydeavdcarwkthppz.supabase.co/functions/v1/admin-login
+Response:
+HTTP 500 (no response body)
+==================================================
+
+==================================================
+Edge Function: admin-signup
+URL: https://xkjsydeavdcarwkthppz.supabase.co/functions/v1/admin-signup
+Response:
+HTTP 500 (no response body)
+==================================================
+
+==================================================
+Edge Function: validate-admin
+URL: https://xkjsydeavdcarwkthppz.supabase.co/functions/v1/validate-admin
+Response:
+HTTP 401 (no response body)
+==================================================
+
+==================================================
+Edge Function: list-universities
+URL: https://xkjsydeavdcarwkthppz.supabase.co/functions/v1/list-universities
+Response:
+{"data":[{"id":5,"name":"University of Pretoria","type":"Public","opening_date":"2026-03-01","closing_date":"2026-09-01","status":"Open","is_private":false,"created_at":"2025-12-10T22:28:28.514668"},{"id":7,"name":"University of the Witwatersrand","type":"Public","opening_date":"2026-03-01","closing_date":"2026-09-01","status":"Open","is_private":false,"created_at":"2025-12-10T22:28:28.514668"},{"id":98,"name":"Rustenburg College of Technology","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":99,"name":"Saldanha Bay College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":100,"name":"Sedibeng College of Agriculture","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":14,"name":"University of the Free State","type":"University","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:28.514668"},{"id":15,"name":"Central University of Technology","type":"University of Technology","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:28.514668"},{"id":62,"name":"Eastern College of Technology","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":true,"created_at":"2025-12-10T22:57:33.946334"},{"id":63,"name":"Ekurhuleni Technical College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":65,"name":"False Bay College of Technology","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":135,"name":"University of Limpopo College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":136,"name":"University of Fort Hare College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":44,"name":"West Coast College","type":"TVET College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:47.735688"},{"id":45,"name":"Ehlanzeni TVET College","type":"TVET College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:47.735688"},{"id":6,"name":"Sefako Makgatho Health Sciences University","type":"University","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:28.514668"},{"id":149,"name":"Sefako Makgatho College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":38,"name":"Tshwane North TVET College","type":"TVET College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:47.735688"},{"id":53,"name":"Umgungundlovu TVET College","type":"TVET College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:47.735688"},{"id":54,"name":"Capricorn TVET College","type":"TVET College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:47.735688"},{"id":145,"name":"University of Mpumalanga College 2","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":146,"name":"University of Zululand College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":70,"name":"Greytown College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":157,"name":"Tshwane College of Technology","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":22,"name":"Rhodes University","type":"University","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:28.514668"},{"id":93,"name":"Port Alfred College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":18,"name":"Sol Plaatje University","type":"University","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:28.514668"},{"id":61,"name":"East Cape College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":91,"name":"Piet Retief College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":68,"name":"Gert Sibande College of Agriculture","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":true,"created_at":"2025-12-10T22:57:33.946334"},{"id":39,"name":"Tshwane South TVET College","type":"TVET College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:47.735688"},{"id":25,"name":"University of KwaZulu-Natal","type":"University","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:28.514668"},{"id":21,"name":"Nelson Mandela University","type":"University","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:28.514668"},{"id":17,"name":"Mangosuthu University of Technology","type":"University of Technology","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:28.514668"},{"id":2,"name":"Stellenbosch University","type":"University","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:28.514668"},{"id":27,"name":"Buffalo City TVET College","type":"TVET College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:47.735688"},{"id":28,"name":"Eastcape Midlands TVET College","type":"TVET College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:47.735688"},{"id":71,"name":"Hlanganani College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":true,"created_at":"2025-12-10T22:57:33.946334"},{"id":19,"name":"University of Mpumalanga","type":"University","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:28.514668"},{"id":50,"name":"Esayidi TVET College","type":"TVET College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:47.735688"},{"id":29,"name":"Ikhala TVET College","type":"TVET College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:47.735688"},{"id":88,"name":"Oudtshoorn College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":144,"name":"Walter Sisulu University College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":152,"name":"Cape Peninsula University of Technology College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":156,"name":"Vaal College of Technology","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":8,"name":"University of Johannesburg","type":"University","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:28.514668"},{"id":86,"name":"North West College of Technology","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":89,"name":"Paarl Technical College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":90,"name":"Pietermaritzburg College of Agriculture","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":true,"created_at":"2025-12-10T22:57:33.946334"},{"id":72,"name":"Inanda College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":73,"name":"Inkomati College of Agriculture","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":true,"created_at":"2025-12-10T22:57:33.946334"},{"id":11,"name":"University of South Africa","type":"University","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:28.514668"},{"id":94,"name":"Pretoria College of Technology","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":true,"created_at":"2025-12-10T22:57:33.946334"},{"id":92,"name":"Polokwane Technical College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":150,"name":"University of the Witwatersrand College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":151,"name":"University of Johannesburg College 2","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":41,"name":"Boland College","type":"TVET College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:47.735688"},{"id":80,"name":"Limpopo Technical College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":82,"name":"Maluti Technical College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":16,"name":"Durban University of Technology","type":"University of Technology","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:28.514668"},{"id":23,"name":"University of Limpopo","type":"University","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:28.514668"},{"id":51,"name":"Majuba TVET College","type":"TVET College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:47.735688"},{"id":95,"name":"Queenstown College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":96,"name":"Randburg Technical College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":56,"name":"Lephalale TVET College","type":"TVET College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:47.735688"},{"id":20,"name":"Walter Sisulu University","type":"University","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:28.514668"},{"id":33,"name":"Lovedale TVET College","type":"TVET College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:47.735688"},{"id":34,"name":"Port Elizabeth TVET College","type":"TVET College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:47.735688"},{"id":74,"name":"Isipingo College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":3,"name":"University of the Western Cape","type":"University","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:28.514668"},{"id":4,"name":"Cape Peninsula University of Technology","type":"University of Technology","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:28.514668"},{"id":134,"name":"University of KwaZulu-Natal College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":140,"name":"Tshwane University of Technology College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":141,"name":"Vaal University of Technology College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":142,"name":"Mangosuthu University of Technology College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":143,"name":"Sol Plaatje University College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":37,"name":"South West Gauteng TVET College","type":"TVET College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:47.735688"},{"id":75,"name":"Johannesburg Technical Institute","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":true,"created_at":"2025-12-10T22:57:33.946334"},{"id":148,"name":"University of South Africa College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":137,"name":"University of Venda College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":138,"name":"Central University of Technology College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":12,"name":"North-West University","type":"University","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:28.514668"},{"id":13,"name":"University of Fort Hare","type":"University","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:28.514668"},{"id":133,"name":"Rhodes University College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":9,"name":"Tshwane University of Technology","type":"University of Technology","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:28.514668"},{"id":97,"name":"Richmond College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":101,"name":"Sekhukhune Technical College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":102,"name":"Sibuyile College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":true,"created_at":"2025-12-10T22:57:33.946334"},{"id":139,"name":"Durban University of Technology College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":40,"name":"Sedibeng TVET College","type":"TVET College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:47.735688"},{"id":42,"name":"False Bay TVET College","type":"TVET College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:47.735688"},{"id":35,"name":"Central Johannesburg TVET College","type":"TVET College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:47.735688"},{"id":36,"name":"Ekurhuleni East TVET College","type":"TVET College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:47.735688"},{"id":59,"name":"Cachalia College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":true,"created_at":"2025-12-10T22:57:33.946334"},{"id":69,"name":"Goldfields Technical College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":46,"name":"Gert Sibande TVET College","type":"TVET College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:47.735688"},{"id":10,"name":"Vaal University of Technology","type":"University of Technology","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:28.514668"},{"id":64,"name":"Elim College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":132,"name":"Nelson Mandela University College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":57,"name":"Vhembe TVET College","type":"TVET College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:47.735688"},{"id":58,"name":"Boland University College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":78,"name":"Kokstad College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":66,"name":"Fort Hare Technical College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":67,"name":"George Technical College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":77,"name":"King Dinizulu College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":79,"name":"KwaZulu College of Technology","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":true,"created_at":"2025-12-10T22:57:33.946334"},{"id":81,"name":"Mafikeng College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":26,"name":"University of Zululand","type":"University","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:28.514668"},{"id":24,"name":"University of Venda","type":"University","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:28.514668"},{"id":30,"name":"Ingwe TVET College","type":"TVET College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:47.735688"},{"id":31,"name":"King Hintsa TVET College","type":"TVET College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:47.735688"},{"id":32,"name":"King Sabata Dalindyebo TVET College","type":"TVET College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:47.735688"},{"id":83,"name":"Mpumalanga Technical Institute","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":true,"created_at":"2025-12-10T22:57:33.946334"},{"id":84,"name":"Nkangala Technical College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":85,"name":"North Cape Technical College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":87,"name":"Northlink Technical College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":147,"name":"University of the Free State College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":52,"name":"Umfolozi TVET College","type":"TVET College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:47.735688"},{"id":60,"name":"Dr Beyers Naudé College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":true,"created_at":"2025-12-10T22:57:33.946334"},{"id":1,"name":"University of Cape Town","type":"University","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:28.514668"},{"id":76,"name":"Katlehong Technical College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":55,"name":"Sekhukhune TVET College","type":"TVET College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:47.735688"},{"id":153,"name":"Sol Plaatje College of Technology","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":154,"name":"Mangosuthu College of Technology","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":155,"name":"Durban College of Technology","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":47,"name":"Nkangala TVET College","type":"TVET College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:47.735688"},{"id":48,"name":"Coastal TVET College","type":"TVET College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:47.735688"},{"id":49,"name":"Elangeni TVET College","type":"TVET College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:47.735688"},{"id":43,"name":"Northlink College","type":"TVET College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:28:47.735688"},{"id":158,"name":"Central College of Technology","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":159,"name":"Walter College of Technology","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":160,"name":"Fort Hare College of Technology","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":161,"name":"Nelson Mandela College of Technology","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":103,"name":"Sol Plaatje Technical College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":104,"name":"South Cape College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":105,"name":"Stanger College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":106,"name":"Tshwane South College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":107,"name":"Tshwane North Technical College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":108,"name":"Umfolozi College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":109,"name":"Umgungundlovu College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":110,"name":"University of Mpumalanga College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":111,"name":"Vaal Technical College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":112,"name":"Vhembe College of Technology","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":113,"name":"Walter Sisulu Technical College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":114,"name":"West Coast Technical College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":115,"name":"Western Cape Technical Institute","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":116,"name":"Winburg College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":117,"name":"Zululand Technical College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":118,"name":"South African College of Arts","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":true,"created_at":"2025-12-10T22:57:33.946334"},{"id":119,"name":"National School of Arts","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":true,"created_at":"2025-12-10T22:57:33.946334"},{"id":120,"name":"Pretoria College of Art","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":true,"created_at":"2025-12-10T22:57:33.946334"},{"id":121,"name":"Johannesburg College of Music","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":true,"created_at":"2025-12-10T22:57:33.946334"},{"id":122,"name":"Cape Town College of Music","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":true,"created_at":"2025-12-10T22:57:33.946334"},{"id":123,"name":"Durban College of Music","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":true,"created_at":"2025-12-10T22:57:33.946334"},{"id":124,"name":"Bloemfontein College of Music","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":true,"created_at":"2025-12-10T22:57:33.946334"},{"id":125,"name":"Grahamstown College of Art","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":true,"created_at":"2025-12-10T22:57:33.946334"},{"id":126,"name":"University of Johannesburg College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":127,"name":"University of Pretoria College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":128,"name":"University of Cape Town College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":129,"name":"Stellenbosch University College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":130,"name":"University of the Western Cape College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"},{"id":131,"name":"North-West University College","type":"College","opening_date":null,"closing_date":null,"status":"Closed","is_private":false,"created_at":"2025-12-10T22:57:33.946334"}]}
+==================================================
+
+==================================================
+Edge Function: add-university
+URL: https://xkjsydeavdcarwkthppz.supabase.co/functions/v1/add-university
+Response:
+HTTP 500 (no response body)
+==================================================
+
+==================================================
+Edge Function: update-deadline
+URL: https://xkjsydeavdcarwkthppz.supabase.co/functions/v1/update-deadline
+Response:
+HTTP 500 (no response body)
+==================================================
+
+==================================================
+Edge Function: getPage
+URL: https://xkjsydeavdcarwkthppz.supabase.co/functions/v1/getPage
+Response:
+HTTP 400 (no response body)
+==================================================
+
+==================================================
+Edge Function: getMarquee
+URL: https://xkjsydeavdcarwkthppz.supabase.co/functions/v1/getMarquee
+Response:
+{"marquee":{"content":"NSFAS TVET Trimester 3 Applications are now open â¢ South African Reserve Bank External Bursary 2027 Applications Now Open â¢ StudyTrust Bursary 2027 Applications Open â¢ Capitec Bursary 2027 Applications Open â¢ Transnet Bursary 2027 Applications Open â¢  UJ Applications Open â¢  TUT Applications Open â¢ UL Applications Open â¢ Accommodation Finder Now Available on QueryCrest â¢ We Help Students Apply to Universities, Colleges & Bursaries â¢ Best of Luck to All 2026 Matric Learnersâ¥ï¸\n"}}
+==================================================
+
+==================================================
+Edge Function: subscribe
+URL: https://xkjsydeavdcarwkthppz.supabase.co/functions/v1/subscribe
+Response:
+HTTP 400 (no response body)
+==================================================
+
+==================================================
+Edge Function: getProspectuses
+URL: https://xkjsydeavdcarwkthppz.supabase.co/functions/v1/getProspectuses
+Response:
+{"prospectuses":[{"id":"b283ed1d-4163-4c8f-81a6-7148acdb0faf","institution":"Sedibeng TVET College ","description":"A public college in Gauteng that offers practical, career-focused courses in engineering, business and vocational skills","open":"September 1, 2026","close":"November 2026","extra":null,"apply":"https://querycrest.com/account/login-signup","file":"https://xkjsydeavdcarwkthppz.supabase.co/storage/v1/object/public/prospectuses/sedibeng.pdf","type":null},{"id":"dd158a30-c576-4bc1-82aa-365be7641f15","institution":"Waterberg TVET College","description":"A Limpopo-based vocational college providing practical training designed to meet the needs of local industries and employers.","open":"August 2026","close":null,"extra":null,"apply":"https://querycrest.com/account/login-signup","file":null,"type":null},{"id":"3a204299-acc4-4e15-9638-2d7c7d76d022","institution":"Vhembe TVET College","description":"A community-driven college focused on vocational training and skills development in engineering, agriculture, and business fields.","open":"03 Sept 2026","close":"30 September 2026","extra":null,"apply":"https://querycrest.com/account/login-signup","file":"https://xkjsydeavdcarwkthppz.supabase.co/storage/v1/object/public/prospectuses/vehmbe.pdf","type":null},{"id":"9b5c7576-dc60-4594-abd3-aa6966c30d93","institution":"Nkangala TVET College","description":"A respected technical college providing career-oriented programmes in engineering, information technology, and business.","open":null,"close":null,"extra":null,"apply":"https://www.querycrest.com/account/login-signup","file":null,"type":null},{"id":"3682dc71-e492-41bf-b912-761653b7f8f8","institution":"Mopani South East TVET College","description":"A vocational training institution offering programmes in engineering, business studies, and hospitality across multiple campuses.","open":"Currently Open - 2nd Semester","close":"31 May 2026","extra":null,"apply":"https://querycrest.com/account/login-signup","file":"https://xkjsydeavdcarwkthppz.supabase.co/storage/v1/object/public/prospectuses/mopane.pdf","type":null},{"id":"cb311be2-fdd3-42e6-8553-6b6ec7f452ed","institution":"Lephalale TVET College","description":"A growing vocational college focused on technical education and skills development aligned with regional industry needs.","open":"September 2026","close":"30 September 2026","extra":null,"apply":"https://querycrest.com/account/login-signup","file":null,"type":null},{"id":"f45469e7-3dcb-4cb8-b4b6-fc0b83944d67","institution":"Capricorn TVET College","description":"A Limpopo-based college offering practical training in engineering, business, and hospitality to equip students with workplace-ready skills.","open":"March 2026 ","close":"30 September 2025","extra":null,"apply":"https://querycrest.com/account/login-signup","file":"https://xkjsydeavdcarwkthppz.supabase.co/storage/v1/object/public/prospectuses/Capricorn.pdf","type":null},{"id":"80a1f849-29c3-4e8e-8896-80e3435106ff","institution":"South West Gauteng TVET College","description":"A major vocational education provider in Gauteng offering technical programmes that prepare students for employment and entrepreneurship.","open":"1 September 2026","close":"30 October 2026","extra":null,"apply":"https://querycrest.com/account/login-signup","file":"https://xkjsydeavdcarwkthppz.supabase.co/storage/v1/object/public/prospectuses/SWGC.pdf","type":null},{"id":"385c3369-3c55-493d-a57f-f039f44f668f","institution":"Westcol TVET College","description":"A community-focused college providing career-oriented training in engineering, business studies, and vocational programmes.","open":"September 2026","close":null,"extra":null,"apply":"https://querycrest.com/account/login-signup","file":"https://xkjsydeavdcarwkthppz.supabase.co/storage/v1/object/public/prospectuses/Westcol.com","type":null},{"id":"4373244b-2a9d-443e-8e75-fd5b91c96a26","institution":"Central Johannesburg TVET College","description":"A diverse urban college offering vocational and occupational programmes aimed at building practical skills for the workplace.","open":"August 2026","close":"September 2026","extra":null,"apply":"https://querycrest.com/account/login-signup","file":null,"type":null},{"id":"37dfffb9-187f-4a87-9efb-3128161adb89","institution":"Ekurhuleni East TVET College","description":"A modern vocational training college dedicated to developing skilled professionals through practical education and industry partnerships.","open":"September 2026","close":"October 2026","extra":null,"apply":"https://querycrest.com/account/login-signup","file":"https://xkjsydeavdcarwkthppz.supabase.co/storage/v1/object/public/prospectuses/eec.pdf","type":null},{"id":"d180eec1-4fba-41e9-96e5-cab8f922ea3a","institution":"Ekurhuleni West TVET College","description":"A well-established TVET college offering industry-relevant programmes in engineering, business, and information technology.","open":"September 2026","close":"October 2026","extra":null,"apply":"https://querycrest.com/account/login-signup","file":"https://xkjsydeavdcarwkthppz.supabase.co/storage/v1/object/public/prospectuses/eec.pdf","type":null},{"id":"811c378f-88a6-4f7f-aa69-d9cb95bfd35c","institution":"Tshwane South TVET College","description":"A career-focused institution providing technical and vocational training designed to prepare students for employment and entrepreneurship.","open":"September 2026","close":null,"extra":null,"apply":"https://querycrest.com/account/login-signup","file":"https://xkjsydeavdcarwkthppz.supabase.co/storage/v1/object/public/prospectuses/TNC.pdf","type":null},{"id":"a3ff729b-a929-48d7-be82-9f9428c96498","institution":"Tshwane North TVET College","description":"A leading TVET college in Gauteng offering practical vocational programmes in engineering, business studies, IT, and hospitality.","open":"October 2026","close":null,"extra":null,"apply":"https://querycrest.com/account/login-signup","file":"https://xkjsydeavdcarwkthppz.supabase.co/storage/v1/object/public/prospectuses/TNC.pdf","type":null},{"id":"edfc8d2a-54a4-4a15-b2dc-51158246452e","institution":"University of the Western Cape (UWC)","description":"A research-led university known for academic excellence, social justice values, and strong programmes in law, health sciences, and natural sciences.","open":"01 April 2026","close":"30 September 2026","extra":null,"apply":"https://www.querycrest.com/account/login-signup","file":"https://xkjsydeavdcarwkthppz.supabase.co/storage/v1/object/public/prospectuses/uwc.pdf","type":null},{"id":"39f981e4-5cd6-4441-9678-0555d06ae938","institution":"Walter Sisulu University","description":"A comprehensive university dedicated to community development, innovation, and accessible higher education in the Eastern Cape.","open":"2 April 2026","close":"30 September 2026","extra":null,"apply":"https://www.querycrest.com/account/login-signup","file":"https://xkjsydeavdcarwkthppz.supabase.co/storage/v1/object/public/prospectuses/wsu.pdf","type":null},{"id":"13ed9b8f-da1a-451e-8cfc-009377e2b04f","institution":"Cape Peninsula University of Technology (CPUT)","description":"A technology-driven university offering career-focused programmes in engineering, business, design, and applied sciences.","open":"May 2026","close":"September 2026","extra":null,"apply":"https://www.querycrest.com/account/login-signup","file":"https://xkjsydeavdcarwkthppz.supabase.co/storage/v1/object/public/prospectuses/https://www.cput.ac.za/study-at-cput/undergraduate/prospectus","type":null},{"id":"80d9bc0a-4f3c-42ed-921f-6b79dc43f29d","institution":"Nelson Mandela University","description":"A forward-thinking university committed to social justice, innovation, and academic excellence in the Eastern Cape.","open":" April 2026","close":"30 September 2026 (some programs may close earlier)","extra":null,"apply":"https://www.querycrest.com/account/login-signup","file":"https://xkjsydeavdcarwkthppz.supabase.co/storage/v1/object/public/prospectuses/nmu.pdf","type":null},{"id":"0a8afc58-e79e-4d71-b9e1-d1853023c74d","institution":"University of South Africa (UNISA)","description":"Africaâs largest open distance learning institution, providing flexible education opportunities for students locally and internationally.","open":"17 August 2026","close":"9 October 2026","extra":null,"apply":"https://www.querycrest.com/account/login-signup","file":"https://xkjsydeavdcarwkthppz.supabase.co/storage/v1/object/public/prospectuses/unisa.pdf","type":null},{"id":"2fc64072-7c0b-4fa5-9c58-279ced09f901","institution":"University of Pretoria (UP)","description":"A leading research-intensive university known for high academic standards, strong global rankings, and diverse programmes across many disciplines.","open":"01 April 2026","close":"31 May 2026 (Veterinary Science)","extra":"30 June 2026 (all other undergraduate programmes)","apply":"https://www.querycrest.com/account/login-signup","file":"https://xkjsydeavdcarwkthppz.supabase.co/storage/v1/object/public/prospectuses/up.pdf","type":null},{"id":"5f1fbbd1-4880-4240-939c-89cdb89ceda1","institution":"Sefako Makgatho Health Sciences University","description":"A specialised university dedicated to health sciences education, producing healthcare professionals and advancing medical research in South Africa.","open":"1 April 2026","close":"31 July 2026 (undergraduate)","extra":"29 August 2026 (postgraduate)  ","apply":"https://www.querycrest.com/account/login-signup","file":"https://xkjsydeavdcarwkthppz.supabase.co/storage/v1/object/public/prospectuses/SMU2026.pdf","type":null},{"id":"bbbfc3a3-2320-4f8c-95ae-c36fb9e1b96c","institution":"University of Venda (Univen)","description":"A vibrant institution in Limpopo focused on community development, research, and producing graduates equipped to contribute to regional and global progress.","open":"1 March 2026","close":"26 September 2026","extra":null,"apply":"https://www.querycrest.com/account/login-signup","file":"https://xkjsydeavdcarwkthppz.supabase.co/storage/v1/object/public/prospectuses/univen.pdf","type":null},{"id":"411ce459-ba6f-41b4-9abf-d059879e0a4c","institution":"University of Mpumalanga (UMP)","description":"A growing modern university offering innovative programmes in agriculture, education, development studies, and natural sciences.","open":"01 June 2026","close":"30 November 2026","extra":null,"apply":"https://www.querycrest.com/account/login-signup","file":"https://xkjsydeavdcarwkthppz.supabase.co/storage/v1/object/public/prospectuses/ump.pdf","type":null},{"id":"2208d786-dcb0-45c3-8e0e-657050e1409a","institution":"University of the Witwatersrand (Wits)","description":"A prestigious research university based in Johannesburg, known for producing influential leaders and groundbreaking research across many disciplines.","open":"01 March 2026","close":"30 September 2026","extra":"30 June 2026 (Faculty of Health Sciences)","apply":"https://www.querycrest.com/account/login-signup","file":"https://xkjsydeavdcarwkthppz.supabase.co/storage/v1/object/public/prospectuses/wits.pdf","type":null},{"id":"cca2880b-f22a-4853-a1d0-fa489e619f55","institution":"Durban University of Technology (DUT)","description":"A technology-focused university offering practical and career-driven programmes in engineering, applied sciences, management, and creative industries.","open":"April 2026","close":null,"extra":null,"apply":"https://www.querycrest.com/account/login-signup","file":"https://xkjsydeavdcarwkthppz.supabase.co/storage/v1/object/public/prospectuses/dut.pdf","type":null},{"id":"0e55fcc0-5db5-4bf5-bbc8-db4024551395","institution":"University of Cape Town (UCT)","description":"South Africaâs top-ranked university globally, renowned for world-class research, academic excellence, and a vibrant campus located in Cape Town.","open":"1 April 2026","close":"31 July 2026","extra":null,"apply":"https://www.querycrest.com/account/login-signup","file":"https://xkjsydeavdcarwkthppz.supabase.co/storage/v1/object/public/prospectuses/uct.pdf","type":null},{"id":"5e4a35b8-b416-4082-9996-b4c5fccc9a0f","institution":"University of the Free State (UFS)","description":"A respected institution known for academic excellence, inclusive education, and strong research contributions in fields ranging from science to humanities.","open":"1 April 2026","close":"31 August 2026","extra":null,"apply":"https://www.querycrest.com/account/login-signup","file":"https://xkjsydeavdcarwkthppz.supabase.co/storage/v1/object/public/prospectuses/ufs_compressed.pdf","type":null},{"id":"1c4010b0-272e-4b40-bc67-d4763e1bb76a","institution":"University of Johannesburg (UJ)","description":"A dynamic and internationally recognised university offering diverse academic programmes with strong research, innovation, and industry partnerships.","open":"01 April 2026","close":"31 October 2026 at 12:00","extra":null,"apply":"https://www.querycrest.com/account/login-signup","file":"https://xkjsydeavdcarwkthppz.supabase.co/storage/v1/object/public/prospectuses/UJ.pdf","type":null},{"id":"3d9209a6-8ce8-48e7-957d-a2be62da3af2","institution":"University of Limpopo","description":"A comprehensive university dedicated to empowering communities through education, research, and development in health sciences, education, and agriculture.","open":"April 2026","close":null,"extra":null,"apply":"https://www.querycrest.com/account/login-signup","file":"https://xkjsydeavdcarwkthppz.supabase.co/storage/v1/object/public/prospectuses/ul.pdf","type":null},{"id":"a15f4836-7cf3-4f6c-ac2b-a31bd7c4b95f","institution":"Tshwane University Of Technology","description":"A leading South African university focused on career-oriented education, innovation, and practical training across engineering, science, business, and the arts.","open":"1 April 2026","close":"30 September 2026","extra":null,"apply":"https://www.querycrest.com/account/login-signup","file":"https://xkjsydeavdcarwkthppz.supabase.co/storage/v1/object/public/prospectuses/tut.pdf","type":null}]}
+==================================================
+
+==================================================
+Edge Function: apply-wil
+URL: https://xkjsydeavdcarwkthppz.supabase.co/functions/v1/apply-wil
+Response:
+HTTP 405 (no response body)
+==================================================
+
+==================================================
+Edge Function: send-wil-confirmation
+URL: https://xkjsydeavdcarwkthppz.supabase.co/functions/v1/send-wil-confirmation
+Response:
+HTTP 500 (no response body)
+==================================================
+
+==================================================
+Edge Function: get-news-posts
+URL: https://xkjsydeavdcarwkthppz.supabase.co/functions/v1/get-news-posts
+Response:
+{"posts":[{"id":"88138f09-de0d-4270-85e5-0e623a25ba59","title":"Introducing the QueryCrest University Eligibility Checker","slug":"university-eligibility-checker","excerpt":"We have launched a new tool that lets South African students check which university programmes they qualify for based on their academic results â before they apply. The Eligibility Checker is free to use and covers institutions across the country.","cover_image":"https://querycrest.com/images/Eligibility-Checker.PNG","category":"Platform Update","author":"QueryCrest Newsdesk ","published_at":null,"cta_url":"https://querycrest.com/account/login-signup.html","cta_label":"Try the Eligibility Checker"},{"id":"f6bf08a5-7a9a-4737-8423-4a5d41dd7ff2","title":"Nedbank External Bursary Programme â Applications Now Open","slug":"nedbank-external-bursary-2027","excerpt":"Nedbank has opened applications for its 2027 External Bursary Programme. South African students pursuing full-time undergraduate or honours degrees in STEM and Green Economy fields at public universities can apply before 31 August 2026.","cover_image":"https://querycrest.com/images/Nedbank_Bursay_Programme.PNG","category":"Bursaries","author":"QueryCrest Newsdesk ","published_at":null,"cta_url":"https://group.nedbank.co.za/careers/graduates-and-bursaries.html","cta_label":"Apply on Nedbank's Official Site"},{"id":"20eca0c3-ed77-48a3-b3ba-8efb6f29b1ae","title":"Earn While You Help Students â Join the QueryCrest Affiliate Programme","slug":"affiliate-programme-launch","excerpt":"The QueryCrest Affiliate Programme is live. Refer students to QueryCrest and earn a commission for every successful signup through your unique referral link. Whether you are a student, content creator, or education professional â this is your opportunity to earn.","cover_image":"https://www.shutterstock.com/image-photo/portrait-happy-young-black-student-260nw-2627769095.jpg","category":"Affiliate","author":"QueryCrest Newsdesk ","published_at":null,"cta_url":"https://querycrest.com/affiliate/affiliate-public.html","cta_label":"Join the Affiliate Programme"},{"id":"e5aaf405-439b-4d86-95be-fb5a46e38f4f","title":"NSFAS Closes 2026 TVET Trimester 2 Funding Applications","slug":"nsfas-closes-2026-tvet-trimester-2-funding-applications","excerpt":"NSFAS has officially closed applications for 2026 TVET College Trimester 2 (T2) funding. Applicants should monitor their myNSFAS accounts for updates.","cover_image":"https://xkjsydeavdcarwkthppz.supabase.co/storage/v1/object/sign/documents/Screenshot-2025-11-11-195508.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81NjQ0YWU0MS0wZGRjLTRlZGYtOGRjZi03YTQ0NTliZDcxZTAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJkb2N1bWVudHMvU2NyZWVuc2hvdC0yMDI1LTExLTExLTE5NTUwOC5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzgxODg0OTkzLCJleHAiOjE4MTM0MjA5OTN9.CQFRiWF1JiOWuu5KElDbtcwO0jI0qFR3RkHDbxEEB-s","category":"NSFAS","author":"NSFAS","published_at":"2026-06-19T15:55:02.407535+00:00","cta_url":"https://www.nsfas.org.za","cta_label":"Visit NSFAS"},{"id":"4c666423-e5f9-4e67-b5f7-044f18f90555","title":"Find Student Accommodation with Ease on QueryCrest","slug":"find-student-accommodation-with-ease","excerpt":"Students can now discover and apply for accommodation opportunities directly through QueryCrest, making it easier to find housing that suits their needs, budget, and preferred location. Whether you're searching for accommodation near your campus or exploring options in a new city, QueryCrest provides a simple and convenient way to browse available listings and submit applications all in one place. QueryCrest helps students spend less time searching and more time preparing for a successful academic journey.","cover_image":"https://querycrest.com/images/AccomodationFinder.PNG","category":"Accommodation","author":"QueryCrest Team","published_at":"2026-05-30T18:17:44.004041+00:00","cta_url":"https://querycrest.com/account/login-signup","cta_label":"Find Accommodation"}],"total":5,"limit":6,"offset":0,"hasMore":false}
+==================================================
+
+==================================================
+Edge Function: fetch-interview-results
+URL: https://xkjsydeavdcarwkthppz.supabase.co/functions/v1/fetch-interview-results
+Response:
+HTTP 403 (no response body)
+==================================================
+
+==================================================
+Edge Function: terms-of-service
+URL: https://xkjsydeavdcarwkthppz.supabase.co/functions/v1/terms-of-service
+Response:
+{"content":"\r\n    <div class=\"policy-section\">\r\n      <h3>Introduction</h3>\r\n      <p>These Terms of Service govern your use of the QueryCrest website, platform and services.<br>\r\n       By creating an account or using QueryCrest, you agree to comply with these Terms. If you do not agree with these\r\n       Terms, you should not use the QueryCrest platform.</p>\r\n      <p>QueryCrest (Pty) Ltd provides technology and support services designed to assist students with university, college,\r\n       bursary and related applications.</p>\r\n    </div>\r\n\r\n    <div class=\"policy-section\">\r\n      <h3>Definitions</h3>\r\n      <p>For these Terms:</p>\r\n      <ul>\r\n        <li><q>QueryCrest</q>, <q>we</q>, <q>us </q> or <q>our</q> refers to QueryCrest (Pty) Ltd.</li>\r\n        <li><q>Platform</q> refers to the QueryCrest website, account system and related services.</li>\r\n        <li><q>User</q> or <q>Student</q> refers to a person using QueryCrest.</li>\r\n        <li><q>Application</q>refers to a university, college, bursary or other application submitted or managed through QueryCrest.</li>\r\n        <li><q>Application Plan</q> refers to a paid QueryCrest package that provides a specified number of application services.</li>\r\n        <li><q>Documents</q>refers to information or files provided by a user, including academic results, identification documents and other supporting documentation.</li>\r\n      </ul>\r\n    </div>\r\n\r\n    <div class=\"policy-section\">\r\n      <h3>Eligibility</h3>\r\n      <p>Users must provide accurate and truthful information when using QueryCrest.\r\n      <br>Users must have the legal authority to provide infor\r\n       mation and documents submitted through their account.</p>\r\n      <p>Where a user is required to obtain consent from a parent, guardian or other authorised person, the user is responsible for obtaining such consent.</p>\r\n    </div>\r\n\r\n    <div class=\"policy-section\">\r\n      <h3>Account Registration</h3>\r\n      <p>Users are responsible for ensuring that information provided during registration is accurate. <br>\r\n       Users are responsible for protecting their login credentials and must not knowingly allow unauthorised persons to\r\n       access their accounts.</p>\r\n      <p>QueryCrest may suspend or restrict accounts where there is evidence of fraud, misuse, unauthorised access or violation of these Terms.</p>\r\n    </div>\r\n\r\n    <div class=\"policy-section\">\r\n      <h3>QueryCrest Services</h3>\r\n      <p>QueryCrest may provide services including:</p>\r\n      <ul>\r\n        <li>University applications</li>\r\n        <li>College applications</li>\r\n        <li>Bursary applications</li>\r\n        <li>Application tracking</li>\r\n        <li>Eligibility information</li>\r\n        <li>Course and institution recommendations</li>\r\n        <li>Student application support</li>\r\n        <li>Other education-related services introduced by QueryCrest</li>\r\n      </ul>\r\n      <p>The services available to a user may depend on the user's selected plan.</p>\r\n    </div>\r\n\r\n    <div class=\"policy-section\">\r\n      <h3>University and College Applications</h3>\r\n      <p>QueryCrest assists users with preparing, managing and/or submitting applications to educational institutions. QueryCrest does not control admission decisions. Admission, rejection, waiting-list decisions and other institutional decisions are made solely by the relevant university, college or institution.</p>\r\n      <p>QueryCrest does not guarantee admission into any institution or programme. Users remain responsible for ensuring that information supplied to QueryCrest is accurate. Application deadlines and admission requirements may change. Users should review relevant institutional requirements where necessary.</p>\r\n    </div>\r\n\r\n    <div class=\"policy-section\">\r\n      <h3>Bursary Applications</h3>\r\n      <p>QueryCrest may assist users with identifying, preparing and submitting bursary applications.\r\n      QueryCrest does not control bursary selection decisions.\r\n      Bursary providers independently determine whether an applicant receives funding.\r\n      QueryCrest therefore does not guarantee that a user will receive a bursary or other financial assistance.\r\n       Users are responsible for providing accurate information and legitimate supporting documentation.</p>\r\n    </div>\r\n\r\n    <div class=\"policy-section\">\r\n      <h3> Application Plans and Payments</h3>\r\n      <p>Application Plans provide users with access to the services specified for the relevant plan. <br>Purchasing an Application Plan does not guarantee:</p>\r\n      <ul>\r\n        <li>University admission</li>\r\n        <li>College admission</li>\r\n        <li>Bursary funding</li>\r\n        <li>Employment</li>\r\n        <li>Any other specific outcome </li>\r\n      </ul>\r\n      <p>An application may be considered used when QueryCrest has performed the relevant application service in accordance with the applicable plan.</p>\r\n      <p>Users should review the details and conditions of the plan they purchase.</p>\r\n    </div>\r\n\r\n    <div class=\"policy-section\">\r\n      <h3>Refunds and Cancellations</h3>\r\n      <p>Refunds and cancellations are subject to QueryCrest's applicable Refund and Cancellation Policy and applicable South African consumer law.</p>\r\n      <p>All service fees are once-off.Due to the manual nature of our application processing, payments are non-refundable once our team has begun processing your files.</p>\r\n      <p>Users may contact QueryCrest regarding refund requests or disputes relating to purchased services.</p>\r\n      <p>QueryCrest reserves the right to investigate refund requests before processing them.</p>\r\n    </div>\r\n\r\n    <div class=\"policy-section\">\r\n      <h3>User Responsibilities</h3>\r\n      <p>Users agree to:</p>\r\n      <ul>\r\n        <li>Provide truthful and accurate information.</li>\r\n        <li>Submit legitimate documents.</li>\r\n        <li>Keep their account information secure.</li>\r\n        <li>Use QueryCrest lawfully.</li>\r\n        <li>Follow applicable application requirements.</li>\r\n        <li>Review information provided to QueryCrest where required.</li>\r\n        <li>Avoid actions that could compromise QueryCrest systems or other users.</li>\r\n      </ul>\r\n    </div>\r\n\r\n    <div class=\"policy-section\">\r\n      <h3>Prohibited Activities</h3>\r\n      <p>Users may not:</p>\r\n      <ul>\r\n        <li>Submit fraudulent information.</li>\r\n        <li>Upload forged or altered academic documents.</li>\r\n        <li>Impersonate another person.</li>\r\n        <li>Access another user's account.</li>\r\n        <li>Attempt to bypass QueryCrest payment systems.</li>\r\n        <li>Attempt to gain unauthorised access to QueryCrest systems.</li>\r\n        <li>Introduce malicious software.</li>\r\n        <li>Abuse QueryCrest staff or other users.</li>\r\n        <li>Scrape, copy or reproduce QueryCrest systems or proprietary content without permission.</li>\r\n        <li>Use QueryCrest for unlawful activities.</li>\r\n      </ul>\r\n      <p>QueryCrest may suspend or terminate accounts involved in prohibited activities.</p>\r\n    </div>\r\n\r\n    <div class=\"policy-section\">\r\n      <h3>Student Documents and Personal Information</h3>\r\n      <p>QueryCrest may receive personal in formation and documents necessary to provide its services. </p>\r\n      <p>This may include:</p>\r\n      <ul>\r\n        <li>Names</li>\r\n        <li>Contact details</li>\r\n        <li>Addresses</li>\r\n        <li>Identification documents</li>\r\n        <li>Academic results</li>\r\n        <li>Proof of residence</li>\r\n        <li>Application information</li>\r\n        <li>Other supporting documents</li>\r\n      </ul>\r\n      <p>The collection, processing, storage and protection of personal information are governed by the QueryCrest Privacy Policy and applicable law.</p>\r\n      <p>  Users should review the QueryCrest Privacy Policy for further information about how their personal information is handled.</p>\r\n    </div>\r\n\r\n    <div class=\"policy-section\">\r\n      <h3>Third-Party Institutions and Services</h3>\r\n      <p>QueryCrest may interact with universities, colleges, bursary providers and third-party systems.</p>\r\n      <p>QueryCrest does not control third-party systems and cannot guarantee their:</p>\r\n      <ul>\r\n        <li>Availability</li>\r\n        <li>Accuracy</li>\r\n        <li>Processing times</li>\r\n        <li>Admission decisions</li>\r\n        <li>Bursary decisions</li>\r\n        <li>Requirements</li>\r\n        <li>Deadlines</li>\r\n      </ul>\r\n      <p>Changes or outages affecting third-party systems may affect the delivery of QueryCrest services.</p>\r\n    </div>\r\n\r\n    <div class=\"policy-section\">\r\n      <h3>Recommendations and Eligibility Information</h3>\r\n      <p>QueryCrest may provide course recommendations, institution recommendations and eligibility information.</p>\r\n      <p>Such information is provided as guidance and should not be interpreted as a guarantee of admission or eligibility. Institutional admission requirements may change, and the relevant institution retains final authority regarding eligibility and admission.</p>\r\n    </div>\r\n\r\n    <div class=\"policy-section\">\r\n      <h3>Intellectual Property</h3>\r\n      <p>The QueryCrest website, software, branding, designs, content and systems are owned by or licensed to QueryCrest(Pty) Ltd unless otherwise stated.</p>\r\n      <p>Users may use QueryCrest for its intended purpose but do not acquire ownership of QueryCrest intellectual property through use of the platform. </p>\r\n      <p>Unauthorised copying, reproduction, modification or distribution of QueryCrest intellectual property is prohibited.</p>\r\n    </div>\r\n\r\n    <div class=\"policy-section\">\r\n      <h3>Platform Availability</h3>\r\n      <p>QueryCrest aims to maintain reliable access to its platform but does not guarantee uninterrupted availability. </p>\r\n      <p>The platform may temporarily become unavailable due to:</p>\r\n      <ul>\r\n        <li>Maintenance</li>\r\n        <li>Technical failures</li>\r\n        <li>Internet failures</li>\r\n        <li>Hosting problems</li>\r\n        <li>Third-party system failures</li>\r\n        <li>Security incidents</li>\r\n        <li>Other circumstances outside QueryCrest's reasonable control</li>\r\n      </ul>\r\n    </div>\r\n\r\n    <div class=\"policy-section\">\r\n      <h3>Limitation of Liability</h3>\r\n      <p>To the extent permitted by applicable law, QueryCrest will not be responsible for outcomes controlled by third parties, including university admission decisions, bursary decisions or third-\r\n        party system failures.</p>\r\n       <p>Nothing in these Terms is intended to exclude or limit rights or protections that cannot lawfully be excluded or limited under applicable law.</p>\r\n    </div>\r\n\r\n    <div class=\"policy-section\">\r\n      <h3>Suspension and Termination</h3>\r\n      <p>QueryCrest may suspend, restrict or terminate access to an account where a user:</p>\r\n      <ul>\r\n        <li>Violates these Terms.</li>\r\n        <li>Engages in fraudulent activity.</li>\r\n        <li>Misuses the platform.</li>\r\n        <li>Attempts unauthorised access.</li>\r\n        <li>Creates a security risk.</li>\r\n        <li>Uses QueryCrest unlawfully.</li>\r\n      </ul>\r\n      <p>Where appropriate, QueryCrest may also take action to protect other users, its systems and its business.</p>\r\n    </div>\r\n\r\n    <div class=\"policy-section\">\r\n      <h3>Changes to These Terms</h3>\r\n      <p>QueryCrest may update these Terms of Service from time to time. </p>\r\n      <p>Updated Terms will be published through the QueryCrest website.</p>\r\n      <p>The effective version will be the version published on the platform at the relevant time, subject to applicable legal requirements.</p>\r\n    </div>\r\n\r\n    <div class=\"policy-section\">\r\n      <h3>Governing Law</h3>\r\n      <p>These Terms are governed by the laws of the Republic of South Africa, subject to applicable legislation and consumer protections.</p>\r\n    </div>\r\n\r\n    <div class=\"policy-section\">\r\n      <h3>Dispute Resolution</h3>\r\n      <p>Users should first contact QueryCrest to attempt to resolve complaints or disputes relating to the services. </p>\r\n      <p> Where a matter cannot be resolved directly, the parties may use any applicable dispute-resolution or legal mechanisms available under South African law.</p>\r\n    </div>\r\n\r\n    <div class=\"policy-section\">\r\n      <h3>Contact Information</h3>\r\n      <p> <b>QueryCrest (Pty) Ltd</b> <br>Website: <a href=\"https://querycrest.com/\">https://querycrest.com/</a> <br> Email: <a href=\"mailto:info@querycrest.com\">info@querycrest.com</a> </p>\r\n    </div>\r\n\r\n    <div class=\"callout callout-blue\">\r\n      <span class=\"callout-icon\">ð</span>\r\n      <span>For privacy-related queries, read our <a href=\"privacy.html\"><strong>Privacy Policy</strong></a> or contact us at <a href=\"mailto:support@querycrest.com\"><strong>support@querycrest.com</strong></a></span>\r\n    </div>\r\n  ","updated_at":"2026-08-12T21:36:22.464244+00:00"}
+==================================================
+
