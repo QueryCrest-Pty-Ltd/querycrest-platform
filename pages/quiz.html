@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <meta name="robots" content="noindex,nofollow"/>
 <title>QueryCrest — Technical Assessment</title>
+<script src="https://unpkg.com/phosphor-icons"></script>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
 /* ── RESET ───────────────────────────────────────────────── */
@@ -667,6 +668,41 @@ body{
 
 </main>
 
+<!-- Feddback widget-->
+<div class="feedback-widget" id="feedbackWidget">
+<!-- on submit message-->
+ <div class="toast-message" id="toastMsg">
+  <i class="">Thanks for your feedback!</i>
+ </div>
+
+ <!--feedback card-->
+ <div class="feedback-card" id="feedbackCard">
+  <h3>
+    <i class="ph ph-chat-teardrop-dots">Feedback</i>
+
+  </h3>
+  <div class="sub">How was your experience?</div>
+  <!--inputs-->
+
+  <form>
+  <textarea name="feedbackText" id="feedbackText" required  placeholder="Tell us about your experience (required)" ></textarea>
+  <label for="fbName">Full Name:</label>
+  <input type="text" id="fbName" name="fbName">
+  <label for="fbEmail">Email:</label>
+  <input type="fbEmail" id="fbEmail" name="fbEmail">
+
+  </form>
+ <div class="card-actions">
+  <button class="cancel-btn" id="cancelFeedbackBtn"><i class="ph ph-x"></i> Cancel</button>
+  <button class="send-btn" id="sendFeedbackBtn"><i class="ph ph-paper-plane-tilt"></i> Send</button>
+</div>
+
+</div>
+  <button class="widget-toggle" id="widgetToggleBtn">
+    <i class="ph ph-chat-teardrop"></i>
+  </button>
+
+</div>
 <!-- Footer -->
 <footer class="page-footer">
   <span>&copy; 2026 QueryCrest (Pty) Ltd &mdash; Reg No: 2025/766220/07</span>
@@ -976,5 +1012,7 @@ window.submitAssessment       = submitAssessment;
 window.transitionNextQuestion = nextQuestion;
 window.enableNextButton       = enableNext;
 </script>
+<script src="../js/feedback.js"></script>
+
 </body>
 </html>
