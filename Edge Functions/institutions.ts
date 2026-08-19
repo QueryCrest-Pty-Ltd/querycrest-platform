@@ -233,7 +233,7 @@ Deno.serve(async (req) => {
         return _json({ error: "Institution not found" }, 404);
       }
 
-      await logAuditAction("UPDATE_INSTITUTION", { id, name });
+      wait logAuditAction("UPDATE_INSTITUTION", { id, name });
       return _json({ data: data[0], message: "Institution updated" });
     }
 
