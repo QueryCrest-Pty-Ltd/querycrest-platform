@@ -472,6 +472,7 @@ right: 26%;
   background:var(--primary);
   color: var(--approaching);
   border-radius: 7px;
+  font-size: 20px;
 }
 .approach h3{
   color:var(--red)
@@ -495,8 +496,8 @@ left: 73%;
   width: 300px;
   align-items:center;
   gap:8px;
-  margin-left:auto;
-
+/*  margin-left:auto;
+*/
 }
 
 #table-search-input {
@@ -542,10 +543,19 @@ box-shadow: 0 0 0 2px rgba(64 ,156,255,0.3);
 .search-icon-right:hover{
     color:var(--primary);
 }
-
+.aduit-card{
+  margin-left: auto;
+}
+.aduit-card{
+    display: flex;
+}
+.data-header {
+display: flex;
+}
 .search-Card {
   width: 50%;
   display: flex;
+  justify-content: center;
   background: var(--bg);
   backdrop-filter: blur(8px);
   border-radius: 6px 26px 6px 26px ;
@@ -555,8 +565,9 @@ box-shadow: 0 0 0 2px rgba(64 ,156,255,0.3);
   box-shadow: 0 20px 40px -12px rgba(0,20,30,0.25) , 0 8px 24px -6px rgba(0,0,0,0.05);
   padding: 2.5rem 2.8rem;
   transition: all 0.2s ease;
-
+  
   margin-bottom: 7px;
+  margin-right: 8px;
 
 }
 
@@ -593,7 +604,12 @@ box-shadow: 0 0 0 2px rgba(64 ,156,255,0.3);
   flex-direction: column;
 
 }
+.form-private {
+  margin-bottom: 1.6rem;
+  display: flex;
+  flex-direction: column;
 
+}
 .form-group label {
   font-weight: 500;
   font-size: 0.9rem;
@@ -603,7 +619,15 @@ box-shadow: 0 0 0 2px rgba(64 ,156,255,0.3);
   gap: 0.4rem;
 
 }
+.form-private label {
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: #1b4050;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
 
+}
 .form-group input {
   font-family: inherit;
   padding: 0.75rem 1rem;
@@ -615,9 +639,29 @@ box-shadow: 0 0 0 2px rgba(64 ,156,255,0.3);
   width: 100%;
   outline:none;
 }
+
+.form-private input {
+  font-family: inherit;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--bdr2);
+  border-radius: 12px;
+  background: var(--bg);
+  font-size: 16px;
+  box-shadow: 0 2px 6px rgba(0 ,20,30,0.02);
+  width: 100%;
+  outline:none;
+}
+
 .form-group input:focus{
   border-color: var(--primary);
   box-shadow: 0 0 2px 1px rgba(0,255,0,0.65);
+  background: var(--bg);
+  transition: all 0.6s ease;
+}
+
+.form-private input:focus{
+  border-color: var(--primary);
+
   background: var(--bg);
   transition: all 0.6s ease;
 }
@@ -731,14 +775,15 @@ box-shadow: 0 0 0 2px rgba(64 ,156,255,0.3);
   background: var(--primary);
   color: var(--bg);
   box-shadow: 0 8px 18px -6px rgba(31,95,112,0.3);
-
-
+  height: 55px;
 }
 
 .btn-primary i {
   color: var(--bg);
-  display: flex;
-  align-items: center;
+  position: relative;
+  top: 10px;
+  text-align: center;
+  font-size: 20px;
 }
 
 .btn-primary:hover {
@@ -746,3 +791,55 @@ box-shadow: 0 0 0 2px rgba(64 ,156,255,0.3);
   transform: translateY(-2px);
   box-shadow: 0 12px 24px -8px rgba(31,95,112,0.4);
 }
+
+.aduit-Card{
+
+  width: 300px;
+  background: var(--bg);
+  backdrop-filter: blur(8px);
+  border-radius: 16px;
+  box-shadow: 0 20px 40px -12px rgba(0,20,30,0.25) , 0 8px 24px -6px rgba(0,0,0,0.05);
+  padding: 2.5rem 2.8rem;
+  transition: all 0.2s ease;
+  border:1px solid rgba(255,255,255,0.4);
+  margin-bottom: 7px;
+}
+
+.audit-container textarea {
+  width: 100%;
+  border: 1px solid rgba(0,0,0,0.08);
+  background: var(--bg);
+  backdrop-filter: blur(4px);
+  border-radius: 16px;
+  border-left: 2px dashed var(--green);
+  padding: 14px 16px;
+  font-size: 0.95rem;
+  font-weight: 400;
+  transition: 0.15s;
+  box-shadow:0 0 2px 6px rgba(0,0,0,0.02);
+}
+
+.aduit-Card i {
+  position: relative;
+  left: 10px;
+  top:15px;
+  color: var(--green);
+  font-size: 25px;
+}
+.aduit-Card label {
+  position: relative;
+  left:5px ;
+}
+.audit-container textarea:focus {
+  outline: 2px solid var(--primary-dark);
+  outline-offset: 1px;
+  background: var(--bg);
+  border-color: transparent;
+}
+
+.audit-container textarea::placeholder {
+ color: var(--dark);
+ font-weight: 300;
+ font-size: 0.9rem;
+}
+
