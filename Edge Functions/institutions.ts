@@ -102,11 +102,13 @@ Deno.serve(async (req) => {
   const svc = _SVC();
 
   try {
+    // ===== UNIVERSITIES ENDPOINTS =====
+
     // GET /institutions — list all universities
     if (method === "GET" && url.pathname === "/functions/v1/institutions") {
       const { data, error } = await svc
         .from("universities")
-        .select("id, name, type, opening_date, closing_date")
+        .select("id, name, type, opening_date, closing_date, status, is_private")
         .order("name");
 
       if (error) {
@@ -123,7 +125,7 @@ Deno.serve(async (req) => {
       const id = parseInt(url.pathname.split("/").pop()!);
       const { data, error } = await svc
         .from("universities")
-        .select("id, name, type, opening_date, closing_date")
+        .select("id, name, type, opening_date, closing_date, status, is_private")
         .eq("id", id)
         .single();
 
@@ -144,7 +146,7 @@ Deno.serve(async (req) => {
 
       const { data, error } = await svc
         .from("universities")
-        .select("id, name, type, opening_date, closing_date")
+        .select("id, name, type, opening_date, closing_date, status, is_private")
         .ilike("name", `%${query}%`)
         .order("name");
 
@@ -166,7 +168,7 @@ Deno.serve(async (req) => {
         return _json({ error: "Invalid request body" }, 400);
       }
 
-      const { name, type, opening_date, closing_date } = body;
+      const { name, type, opening_date, closing_date, status, is_private } = body;
 
       if (!name || !type) {
         return _json({ error: "Name and type are required" }, 400);
@@ -179,6 +181,8 @@ Deno.serve(async (req) => {
           type: String(type).trim(),
           opening_date: opening_date || null,
           closing_date: closing_date || null,
+          status: status || "active",
+          is_private: is_private || false,
         })
         .select();
 
@@ -201,7 +205,7 @@ Deno.serve(async (req) => {
         return _json({ error: "Invalid request body" }, 400);
       }
 
-      const { name, type, opening_date, closing_date } = body;
+      const { name, type, opening_date, closing_date, status, is_private } = body;
 
       if (!name || !type) {
         return _json({ error: "Name and type are required" }, 400);
@@ -214,6 +218,8 @@ Deno.serve(async (req) => {
           type: String(type).trim(),
           opening_date: opening_date || null,
           closing_date: closing_date || null,
+          status: status || "active",
+          is_private: is_private || false,
         })
         .eq("id", id)
         .select();
@@ -244,6 +250,156 @@ Deno.serve(async (req) => {
 
       await logAuditAction("DELETE_INSTITUTION", { id });
       return _json({ message: "Institution deleted" });
+    }
+
+    // ===== BURSARIES ENDPOINTS =====
+
+    // GET /bursaries — list all bursaries
+    if (method === "GET" && url.pathname === "/functions/v1/bursaries") {
+      const { data, error } = await svc
+        .from("universities_bursaries")
+        .select("id, name, type, opening_date, closing_date, status, is_private")
+        .order("name");
+
+      if (error) {
+        console.error("bursaries: GET all error", error.message);
+        return _json({ error: "Failed to fetch bursaries" }, 500);
+      }
+
+      await logAuditAction("VIEW_BURSARIES", { count: data?.length || 0 });
+      return _json({ data });
+    }
+
+    // GET /bursaries/:id — get single bursary
+    if (method === "GET" && url.pathname.match(/^\/functions\/v1\/bursaries\/\d+$/)) {
+      const id = parseInt(url.pathname.split("/").pop()!);
+      const { data, error } = await svc
+        .from("universities_bursaries")
+        .select("id, name, type, opening_date, closing_date, status, is_private")
+        .eq("id", id)
+        .single();
+
+      if (error || !data) {
+        return _json({ error: "Bursary not found" }, 404);
+      }
+
+      await logAuditAction("VIEW_BURSARY", { id });
+      return _json({ data });
+    }
+
+    // GET /bursaries/search?q=... — search bursaries by name
+    if (method === "GET" && url.pathname === "/functions/v1/bursaries/search") {
+      const query = url.searchParams.get("q") || "";
+      if (!query.trim()) {
+        return _json({ error: "Search query required" }, 400);
+      }
+
+      const { data, error } = await svc
+        .from("universities_bursaries")
+        .select("id, name, type, opening_date, closing_date, status, is_private")
+        .ilike("name", `%${query}%`)
+        .order("name");
+
+      if (error) {
+        console.error("bursaries: search error", error.message);
+        return _json({ error: "Search failed" }, 500);
+      }
+
+      await logAuditAction("SEARCH_BURSARIES", { query });
+      return _json({ data });
+    }
+
+    // POST /bursaries — create new bursary
+    if (method === "POST" && url.pathname === "/functions/v1/bursaries") {
+      let body: Record<string, unknown>;
+      try {
+        body = await req.json();
+      } catch {
+        return _json({ error: "Invalid request body" }, 400);
+      }
+
+      const { name, type, opening_date, closing_date, status, is_private } = body;
+
+      if (!name || !type) {
+        return _json({ error: "Name and type are required" }, 400);
+      }
+
+      const { data, error } = await svc
+        .from("universities_bursaries")
+        .insert({
+          name: String(name).trim(),
+          type: String(type).trim(),
+          opening_date: opening_date || null,
+          closing_date: closing_date || null,
+          status: status || "active",
+          is_private: is_private || false,
+        })
+        .select();
+
+      if (error) {
+        console.error("bursaries: POST error", error.message);
+        return _json({ error: "Failed to create bursary" }, 500);
+      }
+
+      await logAuditAction("CREATE_BURSARY", { id: data?.[0]?.id, name });
+      return _json({ data: data?.[0], message: "Bursary created" }, 201);
+    }
+
+    // PUT /bursaries/:id — update bursary
+    if (method === "PUT" && url.pathname.match(/^\/functions\/v1\/bursaries\/\d+$/)) {
+      const id = parseInt(url.pathname.split("/").pop()!);
+      let body: Record<string, unknown>;
+      try {
+        body = await req.json();
+      } catch {
+        return _json({ error: "Invalid request body" }, 400);
+      }
+
+      const { name, type, opening_date, closing_date, status, is_private } = body;
+
+      if (!name || !type) {
+        return _json({ error: "Name and type are required" }, 400);
+      }
+
+      const { data, error } = await svc
+        .from("universities_bursaries")
+        .update({
+          name: String(name).trim(),
+          type: String(type).trim(),
+          opening_date: opening_date || null,
+          closing_date: closing_date || null,
+          status: status || "active",
+          is_private: is_private || false,
+        })
+        .eq("id", id)
+        .select();
+
+      if (error) {
+        console.error("bursaries: PUT error", error.message);
+        return _json({ error: "Failed to update bursary" }, 500);
+      }
+
+      if (!data || data.length === 0) {
+        return _json({ error: "Bursary not found" }, 404);
+      }
+
+      await logAuditAction("UPDATE_BURSARY", { id, name });
+      return _json({ data: data[0], message: "Bursary updated" });
+    }
+
+    // DELETE /bursaries/:id — delete bursary
+    if (method === "DELETE" && url.pathname.match(/^\/functions\/v1\/bursaries\/\d+$/)) {
+      const id = parseInt(url.pathname.split("/").pop()!);
+
+      const { error } = await svc.from("universities_bursaries").delete().eq("id", id);
+
+      if (error) {
+        console.error("bursaries: DELETE error", error.message);
+        return _json({ error: "Failed to delete bursary" }, 500);
+      }
+
+      await logAuditAction("DELETE_BURSARY", { id });
+      return _json({ message: "Bursary deleted" });
     }
 
     return _json({ error: "Endpoint not found" }, 404);
