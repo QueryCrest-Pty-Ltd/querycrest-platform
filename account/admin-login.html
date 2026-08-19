@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>QueryCrest — Student Login &amp; Sign Up</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body>
+
+<!-- ═══════════════════════════════════
+     TOP NAV
+═══════════════════════════════════ -->
+<nav class="top-nav" id="topNav">
+  <a class="nav-brand" href="./index">
+    <div class="nav-logo">QC</div>
+    <span class="nav-brand-txt">QueryCrest <em>Administrator</em></span>
+  </a>
+
+  <!-- Desktop links -->
+  <div class="nav-links">
+    <a href="../index">Home</a>
+    <a href="../account/plans.html">Pricing</a>
+    <a href="../pages/privacy.html">Privacy</a>
+    <a href="../pages/disclaimer.html">Disclaimer</a>
+    <a href="../pages/about.html">About</a>
+    <a href="../affiliate/affiliate-public.html">Become A Partner</a>
+  </div>
+
+  <!-- Desktop CTA -->
+  <a class="nav-cta" href="#" onclick="showTab('signup');return false">Get Started</a>
+
+  <!-- Hamburger (mobile) -->
+  <button class="nav-hamburger" id="navHamburger" aria-label="Toggle menu" aria-expanded="false">
+    <svg id="hamburgerIcon" viewBox="0 0 24 24">
+      <line x1="3" y1="6"  x2="21" y2="6"/>
+      <line x1="3" y1="12" x2="21" y2="12"/>
+      <line x1="3" y1="18" x2="21" y2="18"/>
+    </svg>
+  </button>
+</nav>
+
+<!-- Mobile nav overlay -->
+<div class="nav-overlay" id="navOverlay" onclick="closeDrawer()"></div>
+
+<!-- Mobile drawer -->
+<div class="nav-drawer" id="navDrawer" role="navigation" aria-label="Mobile menu">
+  <a href="../index">Home</a>
+  <a href="../account/plans.html">Pricing</a>
+  <a href="../pages/privacy.html">Privacy</a>
+  <a href="../pages/disclaimer.html">Disclaimer</a>
+  <a href="../pages/about.html">About</a>
+  <a href="../affiliate/affiliate-public.html">Become A Partner</a>
+  <div class="nav-drawer-divider"></div>
+  <a class="nav-cta" href="#" onclick="showTab('signup');closeDrawer();return false">Get Started Free →</a>
+</div>
+
+
+<!-- ═══════════════════════════════════
+     PAGE LAYOUT
+═══════════════════════════════════ -->
+<div class="page">
+
+  <!-- LEFT: IMAGE SLIDESHOW -->
+  <div class="hero">
+    <!-- Slide 1 -->
+    <div class="slide active" id="slide0">
+      <div class="slide-bg" style="background-image:url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1200&q=80')"></div>
+      <div class="slide-body">
+        <div class="slide-tag">University Applications</div>
+        <h2>Apply to all 26 public<br>universities in one place</h2>
+        <p>Stop juggling multiple portals. QueryCrest lets you manage all your university applications, documents, and status updates from a single dashboard.</p>
+      </div>
+    </div>
+
+    <!-- Slide 2 -->
+    <div class="slide" id="slide1">
+      <div class="slide-bg" style="background-image:url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&q=80')"></div>
+      <div class="slide-body">
+        <div class="slide-tag">Document Management</div>
+        <h2>Upload once. Use<br>everywhere.</h2>
+        <p>Upload your certified ID, matric results, and proof of residence once — we securely store and reuse them across all your applications.</p>
+      </div>
+    </div>
+
+    <!-- Slide 3 -->
+    <div class="slide" id="slide2">
+      <div class="slide-bg" style="background-image:url('https://images.unsplash.com/photo-1606761568499-6d2451b23c66?w=1200&q=80')"></div>
+      <div class="slide-body">
+        <div class="slide-tag">Real-time Tracking</div>
+        <h2>Know exactly where<br>your application stands.</h2>
+        <p>Get real-time status updates on every application you submit. No more waiting in uncertainty — stay informed every step of the way.</p>
+      </div>
+    </div>
+
+    <div class="dots" id="dots">
+      <button class="dot active" onclick="goSlide(0)" aria-label="Slide 1"></button>
+      <button class="dot" onclick="goSlide(1)" aria-label="Slide 2"></button>
+      <button class="dot" onclick="goSlide(2)" aria-label="Slide 3"></button>
+    </div>
+  </div>
+
+  <!-- RIGHT: FORMS -->
+  <div class="form-side">
+    <div class="form-inner">
+
+
+      <!-- SIGN IN -->
+      <div id="panelLogin">
+        <div class="form-hd">
+          <h2>Welcome back</h2>
+          <p>Sign in to your Administrator dashboard.</p>
+        </div>
+        <div class="msg" id="loginMsg" style="display:none;"></div>
+        <div class="field">
+          <label for="lUN">User Name</label>
+          <input class="inp" type="text" id="lUN"  >
+        </div>
+
+        <div class="field">
+          <label for="lVC">Verification Code</label>
+          <div class="inp-wrap">
+            <input class="inp" type="password" id="lVC" placeholder="Verification Code" autocomplete="current-password">
+            <button class="eye-btn" type="button" onclick="toggleEye('lVC',this)" aria-label="Show/hide password">
+              <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="field">
+          <label for="lAP">Administrative Password </label>
+          <div class="inp-wrap">
+            <input class="inp" type="password" id="lPA" placeholder="Administrative Password " autocomplete="current-password">
+            <button class="eye-btn" type="button" onclick="toggleEye('lAP',this)" aria-label="Show/hide password">
+              <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>        
+        
+        <button class="btn-submit" id="loginBtn" onclick="doLogin()">
+          <span id="loginTxt">Sign In</span>
+          <span class="spin" id="loginSpin"></span>
+        </button>
+
+    </div>
+
+    
+
+    </div>
+  </div>
+
+</div><!-- /.page -->
+
+
+
+
+
+<script>
+const API = 'https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1';
+
+/* ── Referral tracking ── */
+(function(){
+  var ref = new URLSearchParams(window.location.search).get('ref');
+  if (ref) localStorage.setItem('referral_code', ref);
+})();
+
+/* ═══════════════════════════════════
+   HAMBURGER / MOBILE NAV
+═══════════════════════════════════ */
+var _drawerOpen = false;
+
+function openDrawer() {
+  _drawerOpen = true;
+  document.getElementById('navDrawer').classList.add('open');
+  document.getElementById('navOverlay').classList.add('open');
+  document.getElementById('navHamburger').setAttribute('aria-expanded','true');
+  // Switch icon to X
+  document.getElementById('hamburgerIcon').innerHTML =
+    '<line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/>';
+}
+
+function closeDrawer() {
+  _drawerOpen = false;
+  document.getElementById('navDrawer').classList.remove('open');
+  document.getElementById('navOverlay').classList.remove('open');
+  document.getElementById('navHamburger').setAttribute('aria-expanded','false');
+  // Switch icon back to hamburger
+  document.getElementById('hamburgerIcon').innerHTML =
+    '<line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>';
+}
+
+document.getElementById('navHamburger').addEventListener('click', function() {
+  _drawerOpen ? closeDrawer() : openDrawer();
+});
+
+/* Close drawer on resize to desktop */
+window.addEventListener('resize', function() {
+  if (window.innerWidth > 900) closeDrawer();
+});
+
+/* ── Slideshow ── */
+var curSlide = 0;
+function goSlide(n) {
+  document.getElementById('slide'+curSlide).classList.remove('active');
+  document.querySelectorAll('.dot')[curSlide].classList.remove('active');
+  curSlide = n;
+  document.getElementById('slide'+curSlide).classList.add('active');
+  document.querySelectorAll('.dot')[curSlide].classList.add('active');
+}
+setInterval(function(){ goSlide((curSlide+1)%3); }, 5500);
+
+/* ── Tabs ── */
+function showTab(t) {
+  var isL = t === 'login';
+  document.getElementById('panelLogin').style.display  = isL ? 'block' : 'none';
+  document.getElementById('panelSignup').style.display = isL ? 'none'  : 'block';
+  document.getElementById('tabLogin').classList.toggle('active', isL);
+  document.getElementById('tabSignup').classList.toggle('active', !isL);
+  setMsg(isL ? 'loginMsg' : 'signupMsg', '', '');
+}
+
+/* ── Eye toggle ── */
+function toggleEye(id, btn) {
+  var inp = document.getElementById(id);
+  var show = inp.type === 'password';
+  inp.type = show ? 'text' : 'password';
+  btn.querySelector('svg').innerHTML = show
+    ? '<line x1="1" y1="1" x2="23" y2="23"/><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 11 8 11 8a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 1 12s4 8 11 8a9.74 9.74 0 0 0 5.39-1.61"/>'
+    : '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+}
+
+/* ── Message helper ── */
+function setMsg(id, text, type) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = text;
+  el.className = 'msg' + (type ? ' ' + type : '');
+  el.style.display = text ? 'block' : 'none';
+}
+
+/* ── Loader helper ── */
+function setLoad(btnId, spinId, txtId, on, label) {
+  var btn = document.getElementById(btnId);
+  var sp  = document.getElementById(spinId);
+  var tx  = document.getElementById(txtId);
+  if (btn) btn.disabled = on;
+  if (tx)  tx.textContent = on ? 'Please wait…' : label;
+  if (sp)  sp.style.display = on ? 'inline-block' : 'none';
+}
+
+/* ── FORGOT OVERLAY ── */
+function openForgot() {
+  setMsg('forgotMsg', '', '');
+  document.getElementById('fEM').value = document.getElementById('lEM').value || '';
+  document.getElementById('forgotOverlay').classList.add('open');
+  setTimeout(function(){ document.getElementById('fEM').focus(); }, 100);
+}
+function closeForgot() {
+  document.getElementById('forgotOverlay').classList.remove('open');
+}
+document.getElementById('forgotOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closeForgot();
+});
+document.getElementById('fEM').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') doForgot();
+});
+
+/* ── SIGN IN ── */
+async function doLogin() {
+  setMsg('loginMsg', '', '');
+  var email = document.getElementById('lEM').value.trim();
+  var pass  = document.getElementById('lPW').value;
+  if (!email) { setMsg('loginMsg', 'Please enter your email address.', 'err'); return; }
+  if (!pass)  { setMsg('loginMsg', 'Please enter your password.', 'err'); return; }
+
+  setLoad('loginBtn', 'loginSpin', 'loginTxt', true, 'Sign In');
+  try {
+    var res  = await fetch(API + '/loginUser', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email, password: pass })
+    });
+    var data = await res.json();
+    if (!res.ok || !data.success) {
+      setMsg('loginMsg', data.error || 'Incorrect email or password. Please try again.', 'err');
+      return;
+    }
+    sessionStorage.setItem('access_token', data.token);
+    setMsg('loginMsg', 'Signing you in…', 'ok');
+    setTimeout(function() { window.location.href = 'user-dashboard'; }, 500);
+  } catch (e) {
+    setMsg('loginMsg', 'Network error — please try again.', 'err');
+  } finally {
+    setLoad('loginBtn', 'loginSpin', 'loginTxt', false, 'Sign In');
+  }
+}
+
+/* ── SIGN UP ── */
+async function doSignup() {
+  setMsg('signupMsg', '', '');
+  var fn  = document.getElementById('sFN').value.trim();
+  var ln  = document.getElementById('sLN').value.trim();
+  var em  = document.getElementById('sEM').value.trim();
+  var ph  = document.getElementById('sPH').value.trim();
+  var pw  = document.getElementById('sPW').value;
+  var pw2 = document.getElementById('sPW2').value;
+  var ref = localStorage.getItem('referral_code') || null;
+
+  if (!fn || !ln || !em || !ph || !pw || !pw2) {
+    setMsg('signupMsg', 'All fields are required.', 'err'); return;
+  }
+  var nameRx = /^[A-Za-z]{2,}$/;
+  if (!nameRx.test(fn)) { setMsg('signupMsg', 'First name must be at least 2 letters with no spaces or numbers.', 'err'); return; }
+  if (!nameRx.test(ln)) { setMsg('signupMsg', 'Last name must be at least 2 letters with no spaces or numbers.', 'err'); return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) { setMsg('signupMsg', 'Please enter a valid email address.', 'err'); return; }
+  var cleanPh = ph.replace(/\s+/g, '');
+  if (!/^0\d{9}$/.test(cleanPh)) { setMsg('signupMsg', 'Phone must be 10 digits starting with 0 (e.g. 0812345678).', 'err'); return; }
+  var pwRx = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/;
+  if (!pwRx.test(pw)) {
+    setMsg('signupMsg', 'Password must be at least 8 characters and include an uppercase letter, lowercase letter, number, and symbol (!@#$%^&*).', 'err'); return;
+  }
+  if (pw !== pw2) { setMsg('signupMsg', 'Passwords do not match.', 'err'); return; }
+
+  setLoad('signupBtn', 'signupSpin', 'signupTxt', true, 'Create Account & Sign In');
+  try {
+    var res  = await fetch(API + '/createUserAccount', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ firstName: fn, lastName: ln, email: em, password: pw, confirmPassword: pw, phone: cleanPh, referral_code: ref })
+    });
+    var data = await res.json();
+
+    if (!res.ok) {
+      var errTxt = data.error || '';
+      if (errTxt.toLowerCase().includes('already registered') || errTxt.toLowerCase().includes('already exists')) {
+        setMsg('signupMsg', 'An account with this email already exists. Signing you in…', 'warn');
+        document.getElementById('lEM').value = em;
+        document.getElementById('lPW').value = pw;
+        setTimeout(function() { showTab('login'); doLogin(); }, 1200);
+        return;
+      }
+      setMsg('signupMsg', errTxt || 'Sign up failed. Please try again.', 'err');
+      return;
+    }
+
+    setMsg('signupMsg', 'Account created! Signing you in…', 'ok');
+    var loginRes  = await fetch(API + '/loginUser', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: em, password: pw })
+    });
+    var loginData = await loginRes.json();
+
+    if (!loginRes.ok || !loginData.success) {
+      setMsg('signupMsg', 'Account created! Please sign in with your new credentials.', 'ok');
+      localStorage.removeItem('referral_code');
+      setTimeout(function() {
+        showTab('login');
+        document.getElementById('lEM').value = em;
+        document.getElementById('lPW').focus();
+      }, 1500);
+      return;
+    }
+
+    sessionStorage.setItem('access_token', loginData.token);
+    localStorage.removeItem('referral_code');
+    setMsg('signupMsg', 'Welcome to QueryCrest! Redirecting to your dashboard…', 'ok');
+    setTimeout(function() { window.location.href = 'user-dashboard'; }, 800);
+
+  } catch (e) {
+    setMsg('signupMsg', 'Network or server error. Please try again.', 'err');
+  } finally {
+    setLoad('signupBtn', 'signupSpin', 'signupTxt', false, 'Create Account & Sign In');
+  }
+}
+
+/* ── FORGOT PASSWORD ── */
+async function doForgot() {
+  setMsg('forgotMsg', '', '');
+  var email = document.getElementById('fEM').value.trim();
+  if (!email) { setMsg('forgotMsg', 'Please enter your email address.', 'err'); return; }
+
+  setLoad('forgotBtn', 'forgotSpin', 'forgotTxt', true, 'Send Reset Link');
+  try {
+    var res  = await fetch(API + '/forgotPassword', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email })
+    });
+    var data = await res.json();
+    if (!res.ok) { setMsg('forgotMsg', data.error || 'Failed. Please try again.', 'err'); return; }
+    setMsg('forgotMsg', '✓ Reset link sent — check your inbox (and spam folder).', 'ok');
+    document.getElementById('fEM').value = '';
+    setTimeout(closeForgot, 2800);
+  } catch (e) {
+    setMsg('forgotMsg', 'Network error. Please try again.', 'err');
+  } finally {
+    setLoad('forgotBtn', 'forgotSpin', 'forgotTxt', false, 'Send Reset Link');
+  }
+}
+
+/* ── Keyboard shortcuts ── */
+document.getElementById('lPW').addEventListener('keydown',  function(e){ if(e.key==='Enter') doLogin(); });
+document.getElementById('lEM').addEventListener('keydown',  function(e){ if(e.key==='Enter') document.getElementById('lPW').focus(); });
+document.getElementById('sPW2').addEventListener('keydown', function(e){ if(e.key==='Enter') doSignup(); });
+</script>
+</body>
+</html>

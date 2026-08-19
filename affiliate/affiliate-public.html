@@ -18,6 +18,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/pages.css">
 <link rel="stylesheet" href="../css/cookie.css">
+  <script src="https://unpkg.com/phosphor-icons"></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-7ZT9W8F7T5"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-7ZT9W8F7T5');</script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2099814834007515" crossorigin="anonymous"></script>
@@ -210,6 +211,7 @@ header h1{font-size:1.1rem;font-weight:700;color:#2563eb;white-space:nowrap;over
     <a href="../pages/StudyAbroad.html">Study Abroad</a>
     <a href="../pages/tipsAndTutorials.html">Study Tips</a>
     <a href="../account/plans.html">Pricing</a>
+    <a href="../pages/termsOfService.html">Terms Of Service</a>    
     <a href="../pages/FAQ.html">FAQ</a>
     <a href="affiliate-login-signup.html" class="login-btn">Get Started</a>
   </nav>
@@ -545,6 +547,41 @@ header h1{font-size:1.1rem;font-weight:700;color:#2563eb;white-space:nowrap;over
 </a>
 
 <a href="#" class="back-to-top" id="backToTop">&#8593;</a>
+<!-- Feddback widget-->
+<div class="feedback-widget" id="feedbackWidget">
+<!-- on submit message-->
+ <div class="toast-message" id="toastMsg">
+  <i class="">Thanks for your feedback!</i>
+ </div>
+
+ <!--feedback card-->
+ <div class="feedback-card" id="feedbackCard">
+  <h3>
+    <i class="ph ph-chat-teardrop-dots">Feedback</i>
+
+  </h3>
+  <div class="sub">How was your experience?</div>
+  <!--inputs-->
+
+  <form>
+  <textarea name="feedbackText" id="feedbackText" required  placeholder="Tell us about your experience (required)" ></textarea>
+  <label for="fbName">Full Name:</label>
+  <input type="text" id="fbName" name="fbName">
+  <label for="fbEmail">Email:</label>
+  <input type="fbEmail" id="fbEmail" name="fbEmail">
+
+  </form>
+ <div class="card-actions">
+  <button class="cancel-btn" id="cancelFeedbackBtn"><i class="ph ph-x"></i> Cancel</button>
+  <button class="send-btn" id="sendFeedbackBtn"><i class="ph ph-paper-plane-tilt"></i> Send</button>
+</div>
+
+</div>
+  <button class="widget-toggle" id="widgetToggleBtn">
+    <i class="ph ph-chat-teardrop"></i>
+  </button>
+
+</div>
 
 <!-- FOOTER -->
 <footer>
@@ -575,6 +612,7 @@ header h1{font-size:1.1rem;font-weight:700;color:#2563eb;white-space:nowrap;over
       <ul>
         <li><a href="privacy.html">Privacy</a></li>
         <li><a href="disclaimer.html">Disclaimer</a></li>
+        <li><a href="termsOfService.html">Terms Of Service</a></li>
       </ul>
     </div>
   </div>
@@ -585,6 +623,7 @@ header h1{font-size:1.1rem;font-weight:700;color:#2563eb;white-space:nowrap;over
 </footer>
 
 <script src="../js/cookie.js"></script>
+<script src="../js/feedback.js"></script>
 
 <script>
 /* NAV */

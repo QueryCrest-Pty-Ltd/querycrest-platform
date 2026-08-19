@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     <script>
+(function () {
+  try {
+    var ref = new URLSearchParams(window.location.search).get('ref');
+    if (ref && ref.trim()) {
+      localStorage.setItem('referral_code', ref.trim().toUpperCase());
+      console.log('[referral] ✓ Captured:', ref.trim().toUpperCase());
+    }
+  } catch (e) {}
+})();
+</script>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>TermsOfService | QueryCrest</title>
+  <meta name="description" content="QueryCrest terms of service — important information about our platform terms of services.">
+  <link rel="icon" href="../favicon.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/pages.css">
+  <link rel="stylesheet" href="../css/cookie.css">
+  <script src="https://unpkg.com/phosphor-icons"></script>  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7ZT9W8F7T5"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-7ZT9W8F7T5');</script>
+
+
+<style>
+/* NAV INLINE — cannot be overridden */
+header{position:fixed!important;top:0;left:0;right:0;height:64px;background:rgba(255,255,255,0.97)!important;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;padding:0 40px;z-index:2000;box-shadow:0 1px 3px rgba(0,0,0,.07);}
+header h1{font-size:1.1rem;font-weight:700;color:#2563eb;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0;}
+.hamburger{display:none;font-size:22px;cursor:pointer;background:none;border:none;color:#0f172a;padding:4px;line-height:1;flex-shrink:0;}
+#nav-links{display:flex!important;gap:4px;align-items:center;flex-shrink:0;position:static!important;background:transparent!important;height:auto!important;padding:0!important;flex-direction:row!important;overflow:visible!important;}
+#nav-links a{color:#334155!important;text-decoration:none;font-size:.88rem;font-weight:500;padding:7px 12px;border-radius:8px;transition:background .18s,color .18s;white-space:nowrap;}
+#nav-links a:hover{background:#eff6ff!important;color:#2563eb!important;}
+#nav-links a.login-btn{background:#2563eb!important;color:#fff!important;font-weight:600;padding:8px 18px;border-radius:8px;}
+#nav-links a.login-btn:hover{background:#1d4ed8!important;}
+.nav-close-btn{display:none!important;}
+@media(max-width:900px){
+  header{padding:0 20px!important;}
+  .hamburger{display:block!important;}
+  #nav-links{
+    display:none!important;
+    position:fixed!important;
+    top:0!important;left:0!important;right:0!important;bottom:0!important;
+    width:100%!important;height:100vh!important;
+    background:#0f172a!important;
+    -webkit-backdrop-filter:none!important;
+    backdrop-filter:none!important;
+    flex-direction:column!important;
+    align-items:flex-start!important;
+    padding:72px 32px 40px!important;
+    z-index:3000!important;
+    gap:0!important;
+    overflow-y:auto!important;
+  }
+  #nav-links.show{display:flex!important;}
+  #nav-links a{
+    color:rgba(255,255,255,.85)!important;
+    font-size:1.05rem!important;
+    font-weight:500!important;
+    padding:14px 0!important;
+    border-bottom:1px solid rgba(255,255,255,.08)!important;
+    width:100%!important;
+    border-radius:0!important;
+    background:transparent!important;
+  }
+  #nav-links a:hover{color:#fff!important;background:transparent!important;}
+  #nav-links a.login-btn{
+    background:#2563eb!important;
+    color:#fff!important;
+    border-radius:8px!important;
+    padding:14px 20px!important;
+    border-bottom:none!important;
+    margin-top:16px!important;
+    display:block!important;
+    width:100%!important;
+    text-align:center!important;
+  }
+  .nav-close-btn{
+    display:block!important;
+    position:absolute!important;
+    top:18px!important;right:22px!important;
+    font-size:1.9rem!important;
+    color:rgba(255,255,255,.6)!important;
+    background:none!important;
+    border:none!important;
+    cursor:pointer!important;
+    line-height:1!important;
+    z-index:3001!important;
+  }
+}
+</style>
+</head>
+<body>
+<div></div><div></div><div></div></div></div></div><header>
+  <h1>QueryCrest Student Portal</h1>
+  <button class="hamburger" id="hamburger">&#9776;</button>
+  <nav id="nav-links">
+    <button class="nav-close-btn" id="nav-close">&times;</button>
+    <a href="../index.html">Home</a>
+    <a href="Prospectus.html">Prospectuses</a>
+    <a href="Bursaries.html">Bursaries</a>
+    <a href="howToApply.html">How to Apply</a>
+    <a href="StudyAbroad.html">Study Abroad</a>
+    <a href="tipsAndTutorials.html">Study Tips</a>
+    <a href="../account/plans.html">Pricing</a>
+    <a href="termsOfService.html">Terms Of Service</a>    
+    <a href="FAQ.html">FAQ</a>
+    <a href="../account/login-signup.html" class="login-btn">My Account</a>
+  </nav>
+</header>
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <span class="page-hero-label">⚠️ Legal</span>
+    <h1><span>Terms Of Service</span></h1>
+    <p>Important information about the use of our platform and services. Please read carefully before using QueryCrest.</p>
+  </div>
+</div>
+
+<div class="page-body narrow">
+
+  <div class="content-card">
+    <div class="policy-section">
+      <h3>Introduction</h3>
+      <p>These Terms of Service govern your use of the QueryCrest website, platform and services.<br>
+       By creating an account or using QueryCrest, you agree to comply with these Terms. If you do not agree with these
+       Terms, you should not use the QueryCrest platform.</p>
+      <p>QueryCrest (Pty) Ltd provides technology and support services designed to assist students with university, college,
+       bursary and related applications.</p>
+    </div>
+
+    <div class="policy-section">
+      <h3>Definitions</h3>
+      <p>For these Terms:</p>
+      <ul>
+        <li><q>QueryCrest</q>, <q>we</q>, <q>us </q> or <q>our</q> refers to QueryCrest (Pty) Ltd.</li>
+        <li><q>Platform</q> refers to the QueryCrest website, account system and related services.</li>
+        <li><q>User</q> or <q>Student</q> refers to a person using QueryCrest.</li>
+        <li><q>Application</q>refers to a university, college, bursary or other application submitted or managed through QueryCrest.</li>
+        <li><q>Application Plan</q> refers to a paid QueryCrest package that provides a specified number of application services.</li>
+        <li><q>Documents</q>refers to information or files provided by a user, including academic results, identification documents and other supporting documentation.</li>                        
+      </ul>
+
+    </div>
+
+    <div class="policy-section">
+      <h3>Eligibility</h3>
+      <p>Users must provide accurate and truthful information when using QueryCrest.
+      <br>Users must have the legal authority to provide infor
+       mation and documents submitted through their account.</p>
+      <p>Where a user is required to obtain consent from a parent, guardian or other authorised person, the user is responsible for obtaining such consent.</p>
+    </div>
+
+    <div class="policy-section">
+      <h3>Account Registration</h3>
+      <p>Users are responsible for ensuring that information provided during registration is accurate. <br>
+       Users are responsible for protecting their login credentials and must not knowingly allow unauthorised persons to
+       access their accounts.</p>
+      <p>QueryCrest may suspend or restrict accounts where there is evidence of fraud, misuse, unauthorised access or violation of these Terms.</p>
+    </div>
+
+    <div class="policy-section">
+      <h3>QueryCrest Services</h3>
+      <p>QueryCrest may provide services including:</p>
+      <ul>
+       <li>University applications</li>
+        <li>College applications</li>
+        <li>Bursary applications</li>
+        <li>Application tracking</li>
+        <li>Eligibility information</li>
+        <li>Course and institution recommendations</li> 
+        <li>Student application support</li>
+        <li>Other education-related services introduced by QueryCrest</li>                      
+      
+      </ul>
+      <p>The services available to a user may depend on the user's selected plan.</p>
+    </div>
+
+    <div class="policy-section">
+      <h3>University and College Applications</h3>
+      <p>QueryCrest assists users with preparing, managing and/or submitting applications to educational institutions. QueryCrest does not control admission decisions.  Admission, rejection, waiting-list decisions and other institutional decisions are made solely by the relevant university, college or institution.</p>
+      <p>QueryCrest does not guarantee admission into any institution or programme. Users remain responsible for ensuring that information supplied to QueryCrest is accurate. Application deadlines and admission requirements may change. Users should review relevant institutional requirements where necessary.</p>
+    </div>
+
+    <div class="policy-section">
+      <h3>Bursary Applications</h3>
+      <p>QueryCrest may assist users with identifying, preparing and submitting bursary applications.
+      QueryCrest does not control bursary selection decisions.
+      Bursary providers independently determine whether an applicant receives funding.
+      QueryCrest therefore does not guarantee that a user will receive a bursary or other financial assistance.
+       Users are responsible for providing accurate information and legitimate supporting documentation.</p>
+
+    </div>
+
+    <div class="policy-section">
+      <h3> Application Plans and Payments</h3>
+      <p>Application Plans provide users with access to the services specified for the relevant plan. <br>Purchasing an Application Plan does not guarantee:</p>
+      <ul>
+       <li>University admission</li>
+        <li>College admission</li>
+        <li>Bursary funding</li>
+        <li>Employment</li>
+        <li>Any other specific outcome </li>
+      
+      </ul>
+      <p>An application may be considered used when QueryCrest has performed the relevant application service in accordance with the applicable plan.</p>
+      <p>Users should review the details and conditions of the plan they purchase.</p>
+    </div>
+        
+    <div class="policy-section">
+      <h3>Refunds and Cancellations</h3>
+      <p>Refunds and cancellations are subject to QueryCrest's applicable Refund and Cancellation Policy and applicable South African consumer law.</p>
+      <p>All service fees are once-off.Due to the manual nature of our application processing, payments are non-refundable once our team has begun processing your files.</p>
+      <p>Users may contact QueryCrest regarding refund requests or disputes relating to purchased services.</p>
+      <p>QueryCrest reserves the right to investigate refund requests before processing them.</p>
+    </div>
+        
+    <div class="policy-section">
+      <h3>User Responsibilities</h3>
+      <p>Users agree to:</p>
+      <ul>
+       <li>Provide truthful and accurate information.</li>
+        <li>Submit legitimate documents.</li>
+        <li>Keep their account information secure.</li>
+        <li>Use QueryCrest lawfully.</li>
+        <li>Follow applicable application requirements.</li>
+        <li>Review information provided to QueryCrest where required.</li>
+        <li>Avoid actions that could compromise QueryCrest systems or other users.</li>
+      
+      </ul>
+    </div>
+
+    <div class="policy-section">
+      <h3>Prohibited Activities</h3>
+      <p>Users may not:</p>
+      <ul>
+       <li>Submit fraudulent information.</li>
+        <li>Upload forged or altered academic documents.</li>
+        <li>Impersonate another person.</li>
+        <li>Access another user's account.</li>
+        <li>Attempt to bypass QueryCrest payment systems.</li>
+        <li>Attempt to gain unauthorised access to QueryCrest systems.</li>
+        <li>Introduce malicious software.</li>
+        <li>Abuse QueryCrest staff or other users.</li>
+        <li>Scrape, copy or reproduce QueryCrest systems or proprietary content without permission.</li>
+        <li>Use QueryCrest for unlawful activities.</li>
+      
+      </ul>
+      <p>QueryCrest may suspend or terminate accounts involved in prohibited activities.</p>
+    </div>
+
+    <div class="policy-section">
+      <h3>Student Documents and Personal Information</h3>
+      <p>QueryCrest may receive personal in formation and documents necessary to provide its services. </p>
+      <p>This may include:</p>
+      <ul>
+       <li>Names</li>
+        <li>Contact details</li>
+        <li>Addresses</li>
+        <li>Identification documents</li>
+        <li>Academic results</li>
+        <li>Proof of residence</li>
+        <li>Application information</li>
+        <li>Other supporting documents</li>
+   
+      </ul>
+      <p>The collection, processing, storage and protection of personal information are governed by the QueryCrest Privacy Policy and applicable law.</p>
+      <p>  Users should review the QueryCrest Privacy Policy for further information about how their personal information is handled.</p>
+    </div>
+
+    <div class="policy-section">
+      <h3>Third-Party Institutions and Services</h3>
+      <p>QueryCrest may interact with universities, colleges, bursary providers and third-party systems.</p>
+      <p>QueryCrest does not control third-party systems and cannot guarantee their:</p>
+      <ul>
+       <li>Availability</li>
+        <li>Accuracy</li>
+        <li>Processing times</li>
+        <li>Admission decisions</li>
+        <li>Bursary decisions</li>
+        <li>Requirements</li>
+        <li>Deadlines</li>
+   
+      </ul>
+      <p>Changes or outages affecting third-party systems may affect the delivery of QueryCrest services.</p>
+    </div>
+
+
+
+    <div class="policy-section">
+      <h3>Recommendations and Eligibility Information</h3>
+      <p>QueryCrest may provide course recommendations, institution recommendations and eligibility information.</p>
+      <p>Such information is provided as guidance and should not be interpreted as a guarantee of admission or eligibility. Institutional admission requirements may change, and the relevant institution retains final authority regarding eligibility and admission.</p>
+    </div>
+
+    <div class="policy-section">
+      <h3>Intellectual Property</h3>
+      <p>The QueryCrest website, software, branding, designs, content and systems are owned by or licensed to QueryCrest(Pty) Ltd unless otherwise stated.</p>
+      <p>Users may use QueryCrest for its intended purpose but do not acquire ownership of QueryCrest intellectual property through use of the platform. </p>
+      <p>Unauthorised copying, reproduction, modification or distribution of QueryCrest intellectual property is prohibited.</p>
+    </div>
+
+    <div class="policy-section">
+      <h3>Platform Availability</h3>
+      <p>QueryCrest aims to maintain reliable access to its platform but does not guarantee uninterrupted availability. </p>
+      <p>The platform may temporarily become unavailable due to:</p>
+      <ul>
+       <li>Maintenance</li>
+        <li>Technical failures</li>
+        <li>Internet failures</li>
+        <li>Hosting problems</li>
+        <li>Third-party system failures</li>
+        <li>Security incidents</li>
+        <li>Other circumstances outside QueryCrest's reasonable control</li>
+   
+      </ul>
+    </div>
+
+    <div class="policy-section">
+      <h3>Limitation of Liability</h3>
+      <p>To the extent permitted by applicable law, QueryCrest will not be responsible for outcomes controlled by third parties, including university admission decisions, bursary decisions or third-
+party system failures.</p>
+       <p>Nothing in these Terms is intended to exclude or limit rights or protections that cannot lawfully be excluded or limited under applicable law.</p>
+    </div>
+
+
+
+    <div class="policy-section">
+      <h3>Suspension and Termination</h3>
+      <p>QueryCrest may suspend, restrict or terminate access to an account where a user:</p>
+      <ul>
+       <li>Violates these Terms.</li>
+        <li>Engages in fraudulent activity.</li>
+        <li>Misuses the platform.</li>
+        <li>Attempts unauthorised access.</li>
+        <li>Creates a security risk.</li>
+        <li>Uses QueryCrest unlawfully.</li>
+   
+      </ul>
+      <p>Where appropriate, QueryCrest may also take action to protect other users, its systems and its business.</p>
+    </div>
+
+
+    <div class="policy-section">
+      <h3>Changes to These Terms</h3>
+      <p>QueryCrest may update these Terms of Service from time to time. </p>
+      <p>Updated Terms will be published through the QueryCrest website.</p> 
+      <p>The effective version will be the version published on the platform at the relevant time, subject to applicable legal requirements.</p>
+
+    </div>
+    
+    <div class="policy-section">
+      <h3>Governing Law</h3>
+      <p>These Terms are governed by the laws of the Republic of South Africa, subject to applicable legislation and consumer protections.</p>
+
+    </div>
+
+    <div class="policy-section">
+      <h3>Dispute Resolution</h3>
+      <p>Users should first contact QueryCrest to attempt to resolve complaints or disputes relating to the services. </p>
+      <p> Where a matter cannot be resolved directly, the parties may use any applicable dispute-resolution or legal mechanisms available under South African law.</p>
+
+    </div>
+
+    <div class="policy-section">
+      <h3>Contact Information</h3>
+      <p> <b>QueryCrest (Pty) Ltd</b> <br>Website: <a href="https://querycrest.com/">https://querycrest.com/</a> <br> Email: <a href="mailto:info@querycrest.com">info@querycrest.com</a> </p>
+
+
+    </div>
+
+
+    <div class="callout callout-blue">
+      <span class="callout-icon">📋</span>
+      <span>For privacy-related queries, read our <a href="privacy.html"><strong>Privacy Policy</strong></a> or contact us at <a href="mailto:support@querycrest.com"><strong>support@querycrest.com</strong></a></span>
+    </div>
+  </div>
+
+</div>
+<a href="https://wa.me/27692483470?text=Hi%20QueryCrest%20👋" target="_blank" style="position:fixed;right:20px;bottom:90px;width:54px;height:54px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,.22);z-index:99;transition:transform .2s" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" style="width:26px;height:26px;" alt="WhatsApp"></a>
+<a href="#" class="back-to-top" id="backToTop">&#8593;</a>
+<!-- Feddback widget-->
+<div class="feedback-widget" id="feedbackWidget">
+<!-- on submit message-->
+ <div class="toast-message" id="toastMsg">
+  <i class="">Thanks for your feedback!</i>
+ </div>
+
+ <!--feedback card-->
+ <div class="feedback-card" id="feedbackCard">
+  <h3>
+    <i class="ph ph-chat-teardrop-dots">Feedback</i>
+
+  </h3>
+  <div class="sub">How was your experience?</div>
+  <!--inputs-->
+
+  <form>
+  <textarea name="feedbackText" id="feedbackText" required  placeholder="Tell us about your experience (required)" ></textarea>
+  <label for="fbName">Full Name:</label>
+  <input type="text" id="fbName" name="fbName">
+  <label for="fbEmail">Email:</label>
+  <input type="fbEmail" id="fbEmail" name="fbEmail">
+
+  </form>
+ <div class="card-actions">
+  <button class="cancel-btn" id="cancelFeedbackBtn"><i class="ph ph-x"></i> Cancel</button>
+  <button class="send-btn" id="sendFeedbackBtn"><i class="ph ph-paper-plane-tilt"></i> Send</button>
+</div>
+
+</div>
+  <button class="widget-toggle" id="widgetToggleBtn">
+    <i class="ph ph-chat-teardrop"></i>
+  </button>
+
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand"><h3>QueryCrest</h3><p>Empowering South African students to reach their dream universities — one application at a time.</p></div>
+    <div class="footer-col"><h4>Platform</h4><ul><li><a href="../account/login-signup.html">My Account</a></li><li><a href="../account/plans.html">Pricing</a></li><li><a href="FAQ.html">FAQ</a></li><li><a href="../affiliate/affiliate-public.html">Become A Partner</a></li></ul></div>
+    <div class="footer-col"><h4>Resources</h4><ul><li><a href="Prospectus.html">Prospectuses</a></li><li><a href="Bursaries.html">Bursaries</a></li><li><a href="StudyAbroad.html">Study Abroad</a></li><li><a href="tipsAndTutorials.html">Study Tips</a></li><li><a href="howToApply.html">How to Apply</a></li></ul></div>
+    <div class="footer-col"><h4>Legal</h4><ul><li><a href="privacy.html">Privacy Policy</a></li><li><a href="disclaimer.html">Disclaimer</a></li><li><a href="about.html">About Us</a></li><li><a href="termsOfService.html">Terms Of Service</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><span>&copy; 2026 QueryCrest. All rights reserved.</span><span><a href="privacy.html">Privacy</a>&nbsp;&nbsp;<a href="disclaimer.html">Disclaimer</a></span></div>
+</footer>
+
+<script src="../js/cookie.js"></script>
+
+<script src="../js/feedback.js"></script>
+
+<script>
+/* NAV JS */
+(function(){
+  var nav=document.getElementById("nav-links");
+  var hb=document.getElementById("hamburger");
+  var nc=document.getElementById("nav-close");
+  if(!nav||!hb)return;
+  function openNav(){nav.classList.add("show");document.body.style.overflow="hidden";}
+  function closeNav(){nav.classList.remove("show");document.body.style.overflow="";}
+  hb.addEventListener("click",function(e){e.stopPropagation();openNav();});
+  if(nc)nc.addEventListener("click",closeNav);
+  document.addEventListener("click",function(e){
+    if(nav.classList.contains("show")&&!nav.contains(e.target)&&!hb.contains(e.target))closeNav();
+  });
+  nav.querySelectorAll("a").forEach(function(a){a.addEventListener("click",closeNav);});
+})();
+</script>
+
+</body>
+</html>

@@ -21,6 +21,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/pages.css">
   <link rel="stylesheet" href="../css/cookie.css">
+    <script src="https://unpkg.com/phosphor-icons"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-7ZT9W8F7T5"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-7ZT9W8F7T5');</script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2099814834007515" crossorigin="anonymous"></script>
@@ -105,6 +106,7 @@ header h1{font-size:1.1rem;font-weight:700;color:#2563eb;white-space:nowrap;over
     <a href="StudyAbroad.html">Study Abroad</a>
     <a href="tipsAndTutorials.html">Study Tips</a>
     <a href="../account/plans.html">Pricing</a>
+    <a href="termsOfService.html">Terms Of Service</a>    
     <a href="FAQ.html">FAQ</a>
     <a href="../account/login-signup.html" class="login-btn">My Account</a>
   </nav>
@@ -247,9 +249,48 @@ header h1{font-size:1.1rem;font-weight:700;color:#2563eb;white-space:nowrap;over
 </div>
 <a href="https://wa.me/27692483470?text=Hi%20QueryCrest%20👋" target="_blank" style="position:fixed;right:20px;bottom:90px;width:54px;height:54px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,.22);z-index:99;transition:transform .2s" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" style="width:26px;height:26px;" alt="WhatsApp"></a>
 <a href="#" class="back-to-top" id="backToTop">&#8593;</a>
-<footer><div class="footer-inner"><div class="footer-brand"><h3>QueryCrest</h3><p>Empowering South African students to reach their dream universities.</p></div><div class="footer-col"><h4>Platform</h4><ul><li><a href="../account/login-signup.html">My Account</a></li><li><a href="../account/plans.html">Pricing</a></li><li><a href="FAQ.html">FAQ</a></li><li><a href="../affiliate/affiliate-public.html">Become A Partner</a></li></ul></div><div class="footer-col"><h4>Resources</h4><ul><li><a href="Prospectus.html">Prospectuses</a></li><li><a href="Bursaries.html">Bursaries</a></li><li><a href="StudyAbroad.html">Study Abroad</a></li><li><a href="tipsAndTutorials.html">Study Tips</a></li></ul></div><div class="footer-col"><h4>Legal</h4><ul><li><a href="privacy.html">Privacy</a></li><li><a href="disclaimer.html">Disclaimer</a></li></ul></div></div><div class="footer-bottom"><span>&copy; 2026 QueryCrest</span><span><a href="privacy.html">Privacy</a>&nbsp;&nbsp;<a href="disclaimer.html">Disclaimer</a></span></div></footer>
+<!-- Feddback widget-->
+<div class="feedback-widget" id="feedbackWidget">
+<!-- on submit message-->
+ <div class="toast-message" id="toastMsg">
+  <i class="">Thanks for your feedback!</i>
+ </div>
+
+ <!--feedback card-->
+ <div class="feedback-card" id="feedbackCard">
+  <h3>
+    <i class="ph ph-chat-teardrop-dots">Feedback</i>
+
+  </h3>
+  <div class="sub">How was your experience?</div>
+  <!--inputs-->
+
+  <form>
+  <textarea name="feedbackText" id="feedbackText" required  placeholder="Tell us about your experience (required)" ></textarea>
+  <label for="fbName">Full Name:</label>
+  <input type="text" id="fbName" name="fbName">
+  <label for="fbEmail">Email:</label>
+  <input type="fbEmail" id="fbEmail" name="fbEmail">
+
+  </form>
+ <div class="card-actions">
+  <button class="cancel-btn" id="cancelFeedbackBtn"><i class="ph ph-x"></i> Cancel</button>
+  <button class="send-btn" id="sendFeedbackBtn"><i class="ph ph-paper-plane-tilt"></i> Send</button>
+</div>
+
+</div>
+  <button class="widget-toggle" id="widgetToggleBtn">
+    <i class="ph ph-chat-teardrop"></i>
+  </button>
+
+</div>
+<footer><div class="footer-inner"><div class="footer-brand"><h3>QueryCrest</h3><p>Empowering South African students to reach their dream universities.</p></div><div class="footer-col"><h4>Platform</h4><ul><li><a href="../account/login-signup.html">My Account</a></li><li><a href="../account/plans.html">Pricing</a></li><li><a href="FAQ.html">FAQ</a></li><li><a href="../affiliate/affiliate-public.html">Become A Partner</a></li></ul></div><div class="footer-col"><h4>Resources</h4><ul><li><a href="Prospectus.html">Prospectuses</a></li><li><a href="Bursaries.html">Bursaries</a></li><li><a href="StudyAbroad.html">Study Abroad</a></li><li><a href="tipsAndTutorials.html">Study Tips</a></li></ul></div>
+    <div class="footer-col"><h4>Legal</h4><ul><li><a href="privacy.html">Privacy Policy</a></li><li><a href="disclaimer.html">Disclaimer</a></li><li><a href="about.html">About Us</a></li><li><a href="termsOfService.html">Terms Of Service</a></li></ul></div>          
+  </div>
+  <div class="footer-bottom"><span>&copy; 2026 QueryCrest</span><span><a href="privacy.html">Privacy</a>&nbsp;&nbsp;<a href="disclaimer.html">Disclaimer</a></span></div></footer>
 
 <script src="../js/cookie.js"></script>
+<script src="../js/feedback.js"></script>
 
 <script>
 /* NAV JS */
