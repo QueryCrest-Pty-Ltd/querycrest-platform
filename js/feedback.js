@@ -78,11 +78,11 @@ async  function sendFeedback(){
     });
     const data = await response.json();
     if(data){
-    if(data.error) alert(data.error);
+    if(data.error) alert(` failed to add report data, error: ${error}`);
     if(data.success)showToast();
     } 
     } catch (error) {
-        alert(error);
+        alert(` failed to add report data,error: ${error}`);
     }
 
 
