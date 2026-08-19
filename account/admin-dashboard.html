@@ -16,13 +16,7 @@
     <button class="hamburger" id="hamburger" aria-label="Menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
     <a class="tb-brand" href="#"><div class="brand-ico">QC</div><span class="brand-txt">QueryCrest</span></a>
 
-    <div class="tb-center">
-        <form id="search-form" action="/search" method="get">
-            <i class="ph ph-magnifying-glass search-icon-left" ></i>            
-            <input id="table-search-input" type="text"  placeholder="Search..." >
-            <button class="search-icon-right"><i class="ph ph-arrow-right"></i></button>            
-        </form>      
-    </div>
+
     <div class="tb-right">
       <span class="tb-greet">Welcome, <strong id="userName">Admin</strong></span>
       <button class="tb-bell" id="topbarBell" title="Notifications">
@@ -34,9 +28,9 @@
   <aside class="sidebar" id="sidebar">
     <div class="sb-nav">
       <div class="ns">Main</div>
-      <button class="ni on" data-p="dashboard"><div class="ni-ico"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>Dashboard</button>
-      <button class="ni" data-p="search"><div class="ni-ico"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>Search</button>
-      <button class="ni" data-p="add-data"><div class="ni-ico"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>Add Data</button>
+      <button class="ni on" data-p="dashboard" onclick="window.dashNavTo('dashboard')"><div class="ni-ico"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>Dashboard</button>
+      <button class="ni" data-p="search" onclick="window.dashNavTo('search')"><div class="ni-ico"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>Search</button>
+      <button class="ni" data-p="add-data" onclick="window.dashNavTo('add-data')"><div class="ni-ico"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>Add Data</button>
     </div>
     <div class="sb-account" id="sbAccount">
       <div class="acc-avatar" id="accAvatar">?</div>
@@ -46,15 +40,28 @@
   </aside>
   <main class="main">
     <div class="mi" id="main">
+
+      <section id="dashboard"   class="section"  >
 <!---dashboard-->        
 <div class="deadlines">
+  <div class="deadline-header">
+    <div class="tb-center">
+        <form id="search-form" action="/search" method="get">
+            <div class="search-container">
+            <i class="ph ph-magnifying-glass search-icon-left" ></i>            
+            <input id="table-search-input" type="text"  placeholder="Search..." >
+            <button class="search-icon-right"><i class="ph ph-arrow-right"></i></button>
+
+            </div>
+
+        </form>      
+    </div>    
 
     <div class="approach">
     <i class="ph ph-bell-ringing approach-icon"></i>
-    <h3>Approaching deadlines</h3>        
-    
-    
+    <h3>Approaching deadlines</h3>            
     </div>
+</div>
     <!--table for approachind deadline data-->
  <div class="table-Card">
 <!--table for all data-->
@@ -117,12 +124,31 @@
 </div>   
 </div>
 
+      </section>
+      <section id="search"     class="section" style="display:none;">
+        <div class="search-Card">
+            <form id="search-form" action="/search" method="get">
+                <div class="search-container">
+                <i class="ph ph-magnifying-glass search-icon-left" ></i>            
+                <input id="internet-search-input" type="text"  placeholder="Search..." >
+                <button class="search-icon-right"><i class="ph ph-arrow-right"></i></button>            
+                </div>
+            </form>      
+        </div>
+        <div class="result-card">
+
+        </div>         
+      </section>
+      <section id="add-data" class="section" style="display:none;">
+
 <!--add-data-->
 <div class="search-Card">
     <form id="search-form" action="/search" method="get">
+         <div class="search-container">
         <i class="ph ph-magnifying-glass search-icon-left" ></i>            
         <input id="table-search-input" type="text"  placeholder="Search..." >
         <button class="search-icon-right"><i class="ph ph-arrow-right"></i></button>            
+        </div>
     </form>      
 </div>
 
@@ -176,7 +202,12 @@
                 </label>                
             </div>            
         </div>
-        </div>        
+        </div>
+        <div class="">
+            <button type="submit" class="btn btn-primary">
+            <i class="ph ph-paper-plane-tilt"></i>Submit
+            </button>
+        </div>                
     </form>      
 </div>
 
@@ -213,16 +244,67 @@
 </div>   
 </div>
 
-      <section id="dashboard"   class="section" style="display:none;"></section>
-      <section id="search"     class="section" style="display:none;"></section>
-      <section id="add-data" class="section" style="display:none;"></section>
-      <section id="notifications" class="section" style="display:none;"></section>
-
+      </section>
     </div>
   </main>
 </div>
 
+<script>
 
+window.dashNavTo = function(page){
+  document.querySelectorAll('section.section').forEach(function(s){ s.style.display='none'; });
+  var target=document.getElementById(page); if(target) target.style.display='block';
+  document.querySelectorAll('.ni[data-p]').forEach(function(b){ b.classList.remove('on'); });
+  document.querySelectorAll('.ni[data-p="'+page+'"]').forEach(function(b){ b.classList.add('on'); });
+  document.getElementById('drawer').classList.remove('show');
+  document.getElementById('drawerBg').classList.remove('show');
+  if(window.location.hash!=='#'+page) history.replaceState(null,'','#'+page);
+
+  if     (page==='dashboard')         { renderDashboardOverview(); }
+  else if(page==='search')     { renderSearchPage(); }
+  else if(page==='add-data')           { renderDataPage(); }
+
+
+};
+
+
+/*DASHBOARD OVERVIEW*/
+async function renderDashboardOverview(){
+  var $sec=document.getElementById('dashboard'); if(!$sec)return;
+  $sec.innerHTML='';
+  try{
+
+  }catch(e){
+    console.error('[dashboard]',e);
+    $sec.innerHTML='<div class="ph"><h1>Dashboard</h1></div><div class="alert danger"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg><div><h4>Could not load dashboard</h4><p>'+esc(e.message)+'</p></div></div>';
+  }
+}
+/*search page*/
+async function renderSearchPage(){
+  var $sec=document.getElementById('search'); if(!$sec)return;
+  $sec.innerHTML='';
+
+  try{
+
+  }catch(e){
+    console.error('[search]',e);
+    $sec.innerHTML='<div class="ph"><h1>Search</h1></div><div class="alert danger"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg><div><h4>Could not load search</h4><p>'+esc(e.message)+'</p></div></div>';
+  }
+}
+
+/*search page*/
+async function renderDataPage(){
+  var $sec=document.getElementById('add-data'); if(!$sec)return;
+  $sec.innerHTML='';
+
+  try{
+
+  }catch(e){
+    console.error('[search]',e);
+    $sec.innerHTML='<div class="ph"><h1>Search</h1></div><div class="alert danger"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg><div><h4>Could not load search</h4><p>'+esc(e.message)+'</p></div></div>';
+  }
+}
+</script>
 
 
 </body>
