@@ -256,6 +256,93 @@ class AdminAPI {
   };
 
   /**
+   * Bursaries object — CRUD operations on bursaries
+   */
+  bursaries = {
+    /**
+     * Get all bursaries
+     * Returns: { data: [...] }
+     */
+    getAll: async () => {
+      return await this._fetch("/bursaries", {
+        method: "GET",
+      });
+    },
+
+    /**
+     * Get a single bursary by ID
+     * Returns: { data: {...} }
+     */
+    getById: async (id) => {
+      return await this._fetch(`/bursaries/${id}`, {
+        method: "GET",
+      });
+    },
+
+    /**
+     * Search bursaries by name
+     * Returns: { data: [...] }
+     */
+    search: async (query) => {
+      if (!query || !query.trim()) {
+        throw {
+          status: 400,
+          message: "Search query is required",
+        };
+      }
+      return await this._fetch(`/bursaries/search?q=${encodeURIComponent(query)}`, {
+        method: "GET",
+      });
+    },
+
+    /**
+     * Create a new bursary
+     * Parameters: { name, type, opening_date?, closing_date?, status?, is_private? }
+     * Returns: { data: {...}, message: "Bursary created" }
+     */
+    create: async (bursary) => {
+      if (!bursary.name || !bursary.type) {
+        throw {
+          status: 400,
+          message: "Name and type are required",
+        };
+      }
+      return await this._fetch("/bursaries", {
+        method: "POST",
+        body: JSON.stringify(bursary),
+      });
+    },
+
+    /**
+     * Update an existing bursary
+     * Parameters: id, { name, type, opening_date?, closing_date?, status?, is_private? }
+     * Returns: { data: {...}, message: "Bursary updated" }
+     */
+    update: async (id, bursary) => {
+      if (!bursary.name || !bursary.type) {
+        throw {
+          status: 400,
+          message: "Name and type are required",
+        };
+      }
+      return await this._fetch(`/bursaries/${id}`, {
+        method: "PUT",
+        body: JSON.stringify(bursary),
+      });
+    },
+
+    /**
+     * Delete a bursary
+     * Returns: { message: "Bursary deleted" }
+     */
+    delete: async (id) => {
+      return await this._fetch(`/bursaries/${id}`, {
+        method: "DELETE",
+      });
+    },
+  };
+
+  /**
    * Lockdown object — emergency system shutdown
    */
   lockdown = {
