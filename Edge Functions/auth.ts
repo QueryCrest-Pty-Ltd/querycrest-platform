@@ -20,8 +20,8 @@ function _json(body: unknown, status = 200): Response {
   });
 }
 
-const ADMIN_VERIFICATION_CODE = Deno.env.get("ADMIN_VERIFICATION_CODE")!;
-const ADMIN_PASSWORD = Deno.env.get("ADMIN_PASSWORD")!;
+const ADMIN_VERIFICATION_CODE = Deno.env.get("Verification_Code")!;
+const ADMIN_PASSWORD = Deno.env.get("Administrative_Password")!;
 const JWT_SECRET = Deno.env.get("SUPABASE_JWT_SECRET") || "your-secret-key";
 
 // Rate limiting: track attempts by IP
