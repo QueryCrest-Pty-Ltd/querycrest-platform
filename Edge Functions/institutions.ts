@@ -52,10 +52,9 @@ async function checkLockdown(): Promise<boolean> {
   const expiresAt = new Date(lockdown.expires_at);
 
   if (lockdown.is_active && now < expiresAt) {
-    return true; // Lockdown is active
+    return true;
   }
 
-  // Lockdown expired — clear it
   if (lockdown.is_active && now >= expiresAt) {
     await svc.from("admin_lockdown").update({ is_active: false }).eq("id", data[0].id);
   }
@@ -74,6 +73,19 @@ async function logAuditAction(action: string, details: Record<string, unknown>) 
   } catch (err) {
     console.error("Failed to log audit action:", err);
   }
+}
+
+// Get table name from request
+function getTableName(body: any): string | null {
+  if (!body || !body.table) return null;
+  const table = body.table.toLowerCase();
+  if (table === "universities" || table === "university") {
+    return "universities";
+  }
+  if (table === "universities_bursaries" || table === "bursaries" || table === "bursary") {
+    return "universities_bursaries";
+  }
+  return null;
 }
 
 Deno.serve(async (req) => {
@@ -102,307 +114,236 @@ Deno.serve(async (req) => {
   const svc = _SVC();
 
   try {
-    // ===== UNIVERSITIES ENDPOINTS =====
+    // ===== GET ALL =====
+    if (method === "GET") {
+      const table = url.searchParams.get("table") || "universities";
+      let tableName: string;
 
-    // GET /institutions — list all universities
-    if (method === "GET" && url.pathname === "/functions/v1/institutions") {
+      if (table.toLowerCase() === "bursaries" || table.toLowerCase() === "universities_bursaries") {
+        tableName = "universities_bursaries";
+      } else {
+        tableName = "universities";
+      }
+
       const { data, error } = await svc
-        .from("universities")
+        .from(tableName)
         .select("id, name, type, opening_date, closing_date, status, is_private")
         .order("name");
 
       if (error) {
-        console.error("institutions: GET all error", error.message);
-        return _json({ error: "Failed to fetch institutions" }, 500);
+        console.error(`GET all error (${tableName}):`, error.message);
+        return _json({ error: `Failed to fetch ${tableName}` }, 500);
       }
 
-      await logAuditAction("VIEW_INSTITUTIONS", { count: data?.length || 0 });
+      await logAuditAction(`VIEW_${tableName.toUpperCase()}`, { count: data?.length || 0 });
       return _json({ data });
     }
 
-    // GET /institutions/:id — get single university
-    if (method === "GET" && url.pathname.match(/^\/functions\/v1\/institutions\/\d+$/)) {
-      const id = parseInt(url.pathname.split("/").pop()!);
+    // ===== GET BY ID =====
+    const idMatch = url.pathname.match(/^\/functions\/v1\/institutions\/(\d+)$/);
+    if (method === "GET" && idMatch) {
+      const id = parseInt(idMatch[1]);
+      const table = url.searchParams.get("table") || "universities";
+      let tableName: string;
+
+      if (table.toLowerCase() === "bursaries" || table.toLowerCase() === "universities_bursaries") {
+        tableName = "universities_bursaries";
+      } else {
+        tableName = "universities";
+      }
+
       const { data, error } = await svc
-        .from("universities")
+        .from(tableName)
         .select("id, name, type, opening_date, closing_date, status, is_private")
         .eq("id", id)
         .single();
 
       if (error || !data) {
-        return _json({ error: "Institution not found" }, 404);
+        return _json({ error: "Record not found" }, 404);
       }
 
-      await logAuditAction("VIEW_INSTITUTION", { id });
+      await logAuditAction(`VIEW_${tableName.toUpperCase()}`, { id });
       return _json({ data });
     }
 
-    // GET /institutions/search?q=... — search universities by name
+    // ===== POST =====
+    if (method === "POST") {
+      let body: Record<string, unknown>;
+      try {
+        body = await req.json();
+      } catch {
+        return _json({ error: "Invalid request body" }, 400);
+      }
+
+      // Determine which table to use
+      const tableName = getTableName(body);
+      if (!tableName) {
+        return _json({ 
+          error: "Missing or invalid 'table' field",
+          valid_tables: ["universities", "universities_bursaries"],
+          example: {
+            table: "universities",
+            name: "University Name",
+            type: "University",
+            opening_date: "2026-01-01",
+            closing_date: "2026-12-31"
+          }
+        }, 400);
+      }
+
+      const { name, type, opening_date, closing_date, status, is_private } = body;
+
+      if (!name || !type) {
+        return _json({ error: "Name and type are required" }, 400);
+      }
+
+      const { data, error } = await svc
+        .from(tableName)
+        .insert({
+          name: String(name).trim(),
+          type: String(type).trim(),
+          opening_date: opening_date || null,
+          closing_date: closing_date || null,
+          status: status || "active",
+          is_private: is_private || false,
+        })
+        .select();
+
+      if (error) {
+        console.error(`POST error (${tableName}):`, error.message);
+        return _json({ error: `Failed to create record in ${tableName}` }, 500);
+      }
+
+      await logAuditAction(`CREATE_${tableName.toUpperCase()}`, { id: data?.[0]?.id, name });
+      return _json({ data: data?.[0], message: `Record created in ${tableName}` }, 201);
+    }
+
+    // ===== PUT (Update) =====
+    if (method === "PUT" && idMatch) {
+      const id = parseInt(idMatch[1]);
+      let body: Record<string, unknown>;
+      try {
+        body = await req.json();
+      } catch {
+        return _json({ error: "Invalid request body" }, 400);
+      }
+
+      const tableName = getTableName(body);
+      if (!tableName) {
+        return _json({ 
+          error: "Missing or invalid 'table' field",
+          valid_tables: ["universities", "universities_bursaries"]
+        }, 400);
+      }
+
+      const { name, type, opening_date, closing_date, status, is_private } = body;
+
+      if (!name || !type) {
+        return _json({ error: "Name and type are required" }, 400);
+      }
+
+      const { data, error } = await svc
+        .from(tableName)
+        .update({
+          name: String(name).trim(),
+          type: String(type).trim(),
+          opening_date: opening_date || null,
+          closing_date: closing_date || null,
+          status: status || "active",
+          is_private: is_private || false,
+        })
+        .eq("id", id)
+        .select();
+
+      if (error) {
+        console.error(`PUT error (${tableName}):`, error.message);
+        return _json({ error: `Failed to update record in ${tableName}` }, 500);
+      }
+
+      if (!data || data.length === 0) {
+        return _json({ error: "Record not found" }, 404);
+      }
+
+      await logAuditAction(`UPDATE_${tableName.toUpperCase()}`, { id, name });
+      return _json({ data: data[0], message: `Record updated in ${tableName}` });
+    }
+
+    // ===== DELETE =====
+    if (method === "DELETE" && idMatch) {
+      const id = parseInt(idMatch[1]);
+      const table = url.searchParams.get("table") || "universities";
+      let tableName: string;
+
+      if (table.toLowerCase() === "bursaries" || table.toLowerCase() === "universities_bursaries") {
+        tableName = "universities_bursaries";
+      } else {
+        tableName = "universities";
+      }
+
+      const { error } = await svc.from(tableName).delete().eq("id", id);
+
+      if (error) {
+        console.error(`DELETE error (${tableName}):`, error.message);
+        return _json({ error: `Failed to delete record from ${tableName}` }, 500);
+      }
+
+      await logAuditAction(`DELETE_${tableName.toUpperCase()}`, { id });
+      return _json({ message: `Record deleted from ${tableName}` });
+    }
+
+    // ===== SEARCH =====
     if (method === "GET" && url.pathname === "/functions/v1/institutions/search") {
       const query = url.searchParams.get("q") || "";
+      const table = url.searchParams.get("table") || "universities";
+      
       if (!query.trim()) {
         return _json({ error: "Search query required" }, 400);
       }
 
+      let tableName: string;
+      if (table.toLowerCase() === "bursaries" || table.toLowerCase() === "universities_bursaries") {
+        tableName = "universities_bursaries";
+      } else {
+        tableName = "universities";
+      }
+
       const { data, error } = await svc
-        .from("universities")
+        .from(tableName)
         .select("id, name, type, opening_date, closing_date, status, is_private")
         .ilike("name", `%${query}%`)
         .order("name");
 
       if (error) {
-        console.error("institutions: search error", error.message);
+        console.error(`Search error (${tableName}):`, error.message);
         return _json({ error: "Search failed" }, 500);
       }
 
-      await logAuditAction("SEARCH_INSTITUTIONS", { query });
+      await logAuditAction(`SEARCH_${tableName.toUpperCase()}`, { query });
       return _json({ data });
     }
 
-    // POST /institutions — create new university
-    if (method === "POST" && url.pathname === "/functions/v1/institutions") {
-      let body: Record<string, unknown>;
-      try {
-        body = await req.json();
-      } catch {
-        return _json({ error: "Invalid request body" }, 400);
+    return _json({ 
+      error: "Endpoint not found",
+      available_endpoints: [
+        "GET /institutions?table=universities - List all universities",
+        "GET /institutions?table=universities_bursaries - List all bursaries",
+        "GET /institutions/{id}?table=universities - Get single university",
+        "GET /institutions/{id}?table=universities_bursaries - Get single bursary",
+        "POST /institutions - Create record (requires 'table' in body)",
+        "PUT /institutions/{id} - Update record (requires 'table' in body)",
+        "DELETE /institutions/{id}?table=universities - Delete university",
+        "DELETE /institutions/{id}?table=universities_bursaries - Delete bursary",
+        "GET /institutions/search?q=query&table=universities - Search universities",
+        "GET /institutions/search?q=query&table=universities_bursaries - Search bursaries"
+      ],
+      example_post: {
+        table: "universities",
+        name: "University Name",
+        type: "University",
+        opening_date: "2026-01-01",
+        closing_date: "2026-12-31"
       }
-
-      const { name, type, opening_date, closing_date, status, is_private } = body;
-
-      if (!name || !type) {
-        return _json({ error: "Name and type are required" }, 400);
-      }
-
-      const { data, error } = await svc
-        .from("universities")
-        .insert({
-          name: String(name).trim(),
-          type: String(type).trim(),
-          opening_date: opening_date || null,
-          closing_date: closing_date || null,
-          status: status || "active",
-          is_private: is_private || false,
-        })
-        .select();
-
-      if (error) {
-        console.error("institutions: POST error", error.message);
-        return _json({ error: "Failed to create institution" }, 500);
-      }
-
-      await logAuditAction("CREATE_INSTITUTION", { id: data?.[0]?.id, name });
-      return _json({ data: data?.[0], message: "Institution created" }, 201);
-    }
-
-    // PUT /institutions/:id — update university
-    if (method === "PUT" && url.pathname.match(/^\/functions\/v1\/institutions\/\d+$/)) {
-      const id = parseInt(url.pathname.split("/").pop()!);
-      let body: Record<string, unknown>;
-      try {
-        body = await req.json();
-      } catch {
-        return _json({ error: "Invalid request body" }, 400);
-      }
-
-      const { name, type, opening_date, closing_date, status, is_private } = body;
-
-      if (!name || !type) {
-        return _json({ error: "Name and type are required" }, 400);
-      }
-
-      const { data, error } = await svc
-        .from("universities")
-        .update({
-          name: String(name).trim(),
-          type: String(type).trim(),
-          opening_date: opening_date || null,
-          closing_date: closing_date || null,
-          status: status || "active",
-          is_private: is_private || false,
-        })
-        .eq("id", id)
-        .select();
-
-      if (error) {
-        console.error("institutions: PUT error", error.message);
-        return _json({ error: "Failed to update institution" }, 500);
-      }
-
-      if (!data || data.length === 0) {
-        return _json({ error: "Institution not found" }, 404);
-      }
-
-      wait logAuditAction("UPDATE_INSTITUTION", { id, name });
-      return _json({ data: data[0], message: "Institution updated" });
-    }
-
-    // DELETE /institutions/:id — delete university
-    if (method === "DELETE" && url.pathname.match(/^\/functions\/v1\/institutions\/\d+$/)) {
-      const id = parseInt(url.pathname.split("/").pop()!);
-
-      const { error } = await svc.from("universities").delete().eq("id", id);
-
-      if (error) {
-        console.error("institutions: DELETE error", error.message);
-        return _json({ error: "Failed to delete institution" }, 500);
-      }
-
-      await logAuditAction("DELETE_INSTITUTION", { id });
-      return _json({ message: "Institution deleted" });
-    }
-
-    // ===== BURSARIES ENDPOINTS =====
-
-    // GET /bursaries — list all bursaries
-    if (method === "GET" && url.pathname === "/functions/v1/bursaries") {
-      const { data, error } = await svc
-        .from("universities_bursaries")
-        .select("id, name, type, opening_date, closing_date, status, is_private")
-        .order("name");
-
-      if (error) {
-        console.error("bursaries: GET all error", error.message);
-        return _json({ error: "Failed to fetch bursaries" }, 500);
-      }
-
-      await logAuditAction("VIEW_BURSARIES", { count: data?.length || 0 });
-      return _json({ data });
-    }
-
-    // GET /bursaries/:id — get single bursary
-    if (method === "GET" && url.pathname.match(/^\/functions\/v1\/bursaries\/\d+$/)) {
-      const id = parseInt(url.pathname.split("/").pop()!);
-      const { data, error } = await svc
-        .from("universities_bursaries")
-        .select("id, name, type, opening_date, closing_date, status, is_private")
-        .eq("id", id)
-        .single();
-
-      if (error || !data) {
-        return _json({ error: "Bursary not found" }, 404);
-      }
-
-      await logAuditAction("VIEW_BURSARY", { id });
-      return _json({ data });
-    }
-
-    // GET /bursaries/search?q=... — search bursaries by name
-    if (method === "GET" && url.pathname === "/functions/v1/bursaries/search") {
-      const query = url.searchParams.get("q") || "";
-      if (!query.trim()) {
-        return _json({ error: "Search query required" }, 400);
-      }
-
-      const { data, error } = await svc
-        .from("universities_bursaries")
-        .select("id, name, type, opening_date, closing_date, status, is_private")
-        .ilike("name", `%${query}%`)
-        .order("name");
-
-      if (error) {
-        console.error("bursaries: search error", error.message);
-        return _json({ error: "Search failed" }, 500);
-      }
-
-      await logAuditAction("SEARCH_BURSARIES", { query });
-      return _json({ data });
-    }
-
-    // POST /bursaries — create new bursary
-    if (method === "POST" && url.pathname === "/functions/v1/bursaries") {
-      let body: Record<string, unknown>;
-      try {
-        body = await req.json();
-      } catch {
-        return _json({ error: "Invalid request body" }, 400);
-      }
-
-      const { name, type, opening_date, closing_date, status, is_private } = body;
-
-      if (!name || !type) {
-        return _json({ error: "Name and type are required" }, 400);
-      }
-
-      const { data, error } = await svc
-        .from("universities_bursaries")
-        .insert({
-          name: String(name).trim(),
-          type: String(type).trim(),
-          opening_date: opening_date || null,
-          closing_date: closing_date || null,
-          status: status || "active",
-          is_private: is_private || false,
-        })
-        .select();
-
-      if (error) {
-        console.error("bursaries: POST error", error.message);
-        return _json({ error: "Failed to create bursary" }, 500);
-      }
-
-      await logAuditAction("CREATE_BURSARY", { id: data?.[0]?.id, name });
-      return _json({ data: data?.[0], message: "Bursary created" }, 201);
-    }
-
-    // PUT /bursaries/:id — update bursary
-    if (method === "PUT" && url.pathname.match(/^\/functions\/v1\/bursaries\/\d+$/)) {
-      const id = parseInt(url.pathname.split("/").pop()!);
-      let body: Record<string, unknown>;
-      try {
-        body = await req.json();
-      } catch {
-        return _json({ error: "Invalid request body" }, 400);
-      }
-
-      const { name, type, opening_date, closing_date, status, is_private } = body;
-
-      if (!name || !type) {
-        return _json({ error: "Name and type are required" }, 400);
-      }
-
-      const { data, error } = await svc
-        .from("universities_bursaries")
-        .update({
-          name: String(name).trim(),
-          type: String(type).trim(),
-          opening_date: opening_date || null,
-          closing_date: closing_date || null,
-          status: status || "active",
-          is_private: is_private || false,
-        })
-        .eq("id", id)
-        .select();
-
-      if (error) {
-        console.error("bursaries: PUT error", error.message);
-        return _json({ error: "Failed to update bursary" }, 500);
-      }
-
-      if (!data || data.length === 0) {
-        return _json({ error: "Bursary not found" }, 404);
-      }
-
-      await logAuditAction("UPDATE_BURSARY", { id, name });
-      return _json({ data: data[0], message: "Bursary updated" });
-    }
-
-    // DELETE /bursaries/:id — delete bursary
-    if (method === "DELETE" && url.pathname.match(/^\/functions\/v1\/bursaries\/\d+$/)) {
-      const id = parseInt(url.pathname.split("/").pop()!);
-
-      const { error } = await svc.from("universities_bursaries").delete().eq("id", id);
-
-      if (error) {
-        console.error("bursaries: DELETE error", error.message);
-        return _json({ error: "Failed to delete bursary" }, 500);
-      }
-
-      await logAuditAction("DELETE_BURSARY", { id });
-      return _json({ message: "Bursary deleted" });
-    }
-
-    return _json({ error: "Endpoint not found" }, 404);
+    }, 404);
   } catch (err) {
     console.error("institutions: unexpected error", err instanceof Error ? err.message : err);
     return _json({ error: "Server error" }, 500);
