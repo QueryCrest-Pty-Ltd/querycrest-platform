@@ -122,28 +122,40 @@
 
       </section>
       <section id="search"     class="section" style="display:none;">
-        <div class="search-Card">
-            <form id="search-form" action="/search" method="get">
-                <div class="search-container">
-                <i class="ph ph-magnifying-glass search-icon-left" ></i>            
+      <!--search card-->
+
+        <div class="s-search-Card">
+
+            <h3>Find availabel universities ,colleges and bursaries</h3>
+             <p>Enter university ,college and bursary of your choice and browes through the availabel information</p>
+
+             <div class="serach-input">
+            <form id="s-search-form" action="/search" method="get">
+                <div class="s-search-container">
+            
                 <input id="internet-search-input" type="text"  placeholder="Search..." >
-                <button class="search-icon-right"><i class="ph ph-arrow-right"></i></button>            
+                <button id="search-submit" type="submit">Search</button>
                 </div>
-            </form>      
+            </form>
+             </div>             
+             <!---->
+
         </div>
         <div class="result-card">
 
         </div>         
-      </section>
+
+    </section>
+
       <section id="add-data" class="section" style="display:none;">
 
 <!--add-data-->
 <div class="data-header">
 <div class="search-Card">
     <form id="search-form" action="/search" method="get">
-         <div class="search-container">
+         <div class="d-search-container">
         <i class="ph ph-magnifying-glass search-icon-left" ></i>            
-        <input id="table-search-input" type="text"  placeholder="Search..." >
+        <input id="d-table-search-input" type="text"  placeholder="Search..." >
         <button class="search-icon-right"><i class="ph ph-arrow-right"></i></button>            
         </div>
     </form>      

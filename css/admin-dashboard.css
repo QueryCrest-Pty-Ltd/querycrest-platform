@@ -374,6 +374,21 @@ body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--t1);min-h
 }
 @media(max-width:440px){.g4{grid-template-columns:1fr;}}
 
+/*dashboard*/
+.table-Card  {
+
+  background: var(--bg);
+  backdrop-filter: blur(8px);
+  border-radius: 6px;
+  box-shadow: 0 20px 40px -12px rgba(0,20,30,0.25) , 0 8px 24px -6px rgba(0,0,0,0.05);
+  padding: 2.5rem 2.8rem;
+  transition: all 0.2s ease;
+  border:1px solid rgba(255,255,255,0.4);
+  margin-bottom: 7px;
+
+}
+
+
 #deadlines {
     margin-top: 1rem;
     padding: 0.5rem;
@@ -491,6 +506,7 @@ position: relative;
 left: 73%;
 
 }
+
 .search-container{
   display: flex;
   width: 300px;
@@ -518,6 +534,7 @@ outline: none;
 box-shadow: 0 0 0 2px rgba(64 ,156,255,0.3);
 }
 
+/*search*/
 .search-icon-left {
 
   position: relative;
@@ -543,19 +560,122 @@ box-shadow: 0 0 0 2px rgba(64 ,156,255,0.3);
 .search-icon-right:hover{
     color:var(--primary);
 }
-.aduit-card{
-  margin-left: auto;
+
+.s-search-Card {
+  width: 100%;
+  height: 250px;
+  background: var(--primary-dark);  
+  padding: 2.5rem 2.8rem;
+  transition: all 0.2s ease;
+  margin-bottom: 7px;
+  text-align: center;
+  align-items: center;
+  border-radius: 16px;
 }
-.aduit-card{
-    display: flex;
+.s-search-Card h3 {
+ color: var(--bg);
+ font-size: 25px;
+ font-weight: 600;  
+ display: block;
+ position: relative;
+ top: 50px;
 }
-.data-header {
-display: flex;
+.s-search-Card p {
+  color: var(--bg);
+  font-size: 12px;
+  display: block;
+ position: relative;
+ top: 60px;  
 }
+.search-input{
+   position: relative;
+   top: 400px;
+
+}
+#search > div.search-Card > #search-form>.search-container{
+  display: flex;
+  width: 300px;
+  align-items:center;
+  gap:8px;
+  margin-left:auto;
+
+}
+
+#internet-search-input {
+  padding: 10px 40px 10px 40px;
+  width:95%;
+  font-size: 16px;  
+  border: 2px solid var(--bdr2);
+  border-left:4px solid var(--primary);
+  border-radius: 25px;
+  background-color: var(--bg);
+  color: var(--dark);
+  display: block;
+  position: relative;
+  top: 80px;
+
+}
+
+
+#internet-search-input:focus{
+  border-color: var(--primary);
+  box-shadow: 0 0 20px 1px rgba(0,255,0,0.65);
+  background: var(--bg);
+  outline: none;
+  transition: all 0.6s ease;
+}
+
+#search-submit{
+  color: var(--bg);
+  padding: 5px 10px 5px 10px;
+  outline: dashed;
+  background: var(--primary-dark);
+  border: ridge ;
+  border-radius: 6px;
+  border-top-right-radius: 76px;
+  border-bottom-right-radius: 76px;
+  position: relative;
+  left: 520px;
+  top:45px
+}
+#search-submit:hover{
+  cursor: pointer;
+}
+.result-card  {
+
+  background: var(--bg);
+  backdrop-filter: blur(8px);
+  border-radius: 6px;
+  box-shadow: 0 20px 40px -12px rgba(0,20,30,0.25) , 0 8px 24px -6px rgba(0,0,0,0.05);
+  padding: 2.5rem 2.8rem;
+  transition: all 0.2s ease;
+  border:1px solid rgba(255,255,255,0.4);
+  margin-bottom: 7px;
+  visibility: hidden;
+}
+
+.result-card .show {
+
+  background: var(--bg);
+  backdrop-filter: blur(8px);
+  border-radius: 6px;
+  box-shadow: 0 20px 40px -12px rgba(0,20,30,0.25) , 0 8px 24px -6px rgba(0,0,0,0.05);
+  padding: 2.5rem 2.8rem;
+  transition: all 0.2s ease;
+  border:1px solid rgba(255,255,255,0.4);
+  margin-bottom: 7px;
+  visibility: visible;
+}
+
+
+
+
+
+
+/*add-data*/
 .search-Card {
   width: 50%;
-  display: flex;
-  justify-content: center;
+  height: 50px;
   background: var(--bg);
   backdrop-filter: blur(8px);
   border-radius: 6px 26px 6px 26px ;
@@ -563,12 +683,100 @@ display: flex;
   border-left: solid var(--primary);
   border-right: solid var(--primary);  
   box-shadow: 0 20px 40px -12px rgba(0,20,30,0.25) , 0 8px 24px -6px rgba(0,0,0,0.05);
-  padding: 2.5rem 2.8rem;
-  transition: all 0.2s ease;
-  
+  transition: all 0.2s ease;  
   margin-bottom: 7px;
   margin-right: 8px;
+ position: relative;
+ top:200px ;
+}
 
+.d-search-container{
+  display: flex;
+  align-items:center;
+/*  margin-left:auto;
+*/
+}
+
+ #d-table-search-input {
+  padding: 10px 40px 10px 40px;
+  width:100%;
+  font-size: 16px;  
+  border: 2px solid var(--bdr2);
+  border-left:4px solid var(--primary);
+  border-radius: 25px;
+  background-color: var(--bg);
+  color: var(--dark);
+}
+
+#d-table-search-input:focus{
+outline: none;
+box-shadow: 0 0 0 2px rgba(64 ,156,255,0.3);
+}
+
+
+
+.aduit-card{
+  margin-left: auto;
+  
+}
+.aduit-card{
+    display: flex;
+}
+.data-header {
+display: flex;
+}
+
+.aduit-Card{
+  min-height: 250px;
+  height: 250px;
+  width: 300px;
+  background: var(--bg);
+  backdrop-filter: blur(8px);
+  border-radius: 16px;
+  box-shadow: 0 20px 40px -12px rgba(0,20,30,0.25) , 0 8px 24px -6px rgba(0,0,0,0.05);
+  padding: 2.5rem 2.8rem;
+  transition: all 0.2s ease;
+  border:1px solid rgba(255,255,255,0.4);
+  margin-bottom: 7px;
+}
+
+.audit-container textarea {
+  width: 100%;
+  height: 150px;
+  border: 1px solid rgba(0,0,0,0.08);
+  background: var(--bg);
+  backdrop-filter: blur(4px);
+  border-radius: 16px;
+  border-left: 2px dashed var(--green);
+  padding: 14px 16px;
+  font-size: 0.95rem;
+  font-weight: 400;
+  transition: 0.15s;
+  box-shadow:0 0 2px 6px rgba(0,0,0,0.02);
+}
+
+.aduit-Card i {
+  position: relative;
+  left: 10px;
+  top:15px;
+  color: var(--green);
+  font-size: 25px;
+}
+.aduit-Card label {
+  position: relative;
+  left:5px ;
+}
+.audit-container textarea:focus {
+  outline: 2px solid var(--primary-dark);
+  outline-offset: 1px;
+  background: var(--bg);
+  border-color: transparent;
+}
+
+.audit-container textarea::placeholder {
+ color: var(--dark);
+ font-weight: 300;
+ font-size: 0.9rem;
 }
 
 
@@ -585,18 +793,6 @@ display: flex;
 
 }
 
-.table-Card  {
-
-  background: var(--bg);
-  backdrop-filter: blur(8px);
-  border-radius: 6px;
-  box-shadow: 0 20px 40px -12px rgba(0,20,30,0.25) , 0 8px 24px -6px rgba(0,0,0,0.05);
-  padding: 2.5rem 2.8rem;
-  transition: all 0.2s ease;
-  border:1px solid rgba(255,255,255,0.4);
-  margin-bottom: 7px;
-
-}
 
 .form-group {
   margin-bottom: 1.6rem;
@@ -705,56 +901,7 @@ display: flex;
   margin-right: 0.2rem;
   cursor: pointer;
 }
-#search > div.search-Card {
-  width: 50%;
-  display: flex;
-  background: var(--bg);
-  backdrop-filter: blur(8px);
-  border-radius: 6px 26px 6px 26px ;
-  border:1px solid rgba(255,255,255,0.4);
-  border-left: solid var(--primary);
-  border-right: solid var(--primary);  
-  box-shadow: 0 20px 40px -12px rgba(0,20,30,0.25) , 0 8px 24px -6px rgba(0,0,0,0.05);
-  padding: 2.5rem 2.8rem;
-  transition: all 0.2s ease;
 
-  margin-bottom: 7px;
-
-}
-#search > div.search-Card > #search-form>.search-container{
-  display: flex;
-  width: 300px;
-  align-items:center;
-  gap:8px;
-  margin-left:auto;
-
-}
-
-#internet-search-input {
-  padding: 10px 40px 10px 40px;
-  width:inherit;
-  font-size: 16px;  
-  border: 2px solid var(--bdr2);
-  border-left:4px solid var(--primary);
-  border-radius: 25px;
-  background-color: var(--bg);
-  color: var(--dark);
-
-
-}
-
-.result-card  {
-
-  background: var(--bg);
-  backdrop-filter: blur(8px);
-  border-radius: 6px;
-  box-shadow: 0 20px 40px -12px rgba(0,20,30,0.25) , 0 8px 24px -6px rgba(0,0,0,0.05);
-  padding: 2.5rem 2.8rem;
-  transition: all 0.2s ease;
-  border:1px solid rgba(255,255,255,0.4);
-  margin-bottom: 7px;
-
-}
 
 .btn {
   border:none;
@@ -790,56 +937,5 @@ display: flex;
   background: var(--green);
   transform: translateY(-2px);
   box-shadow: 0 12px 24px -8px rgba(31,95,112,0.4);
-}
-
-.aduit-Card{
-
-  width: 300px;
-  background: var(--bg);
-  backdrop-filter: blur(8px);
-  border-radius: 16px;
-  box-shadow: 0 20px 40px -12px rgba(0,20,30,0.25) , 0 8px 24px -6px rgba(0,0,0,0.05);
-  padding: 2.5rem 2.8rem;
-  transition: all 0.2s ease;
-  border:1px solid rgba(255,255,255,0.4);
-  margin-bottom: 7px;
-}
-
-.audit-container textarea {
-  width: 100%;
-  border: 1px solid rgba(0,0,0,0.08);
-  background: var(--bg);
-  backdrop-filter: blur(4px);
-  border-radius: 16px;
-  border-left: 2px dashed var(--green);
-  padding: 14px 16px;
-  font-size: 0.95rem;
-  font-weight: 400;
-  transition: 0.15s;
-  box-shadow:0 0 2px 6px rgba(0,0,0,0.02);
-}
-
-.aduit-Card i {
-  position: relative;
-  left: 10px;
-  top:15px;
-  color: var(--green);
-  font-size: 25px;
-}
-.aduit-Card label {
-  position: relative;
-  left:5px ;
-}
-.audit-container textarea:focus {
-  outline: 2px solid var(--primary-dark);
-  outline-offset: 1px;
-  background: var(--bg);
-  border-color: transparent;
-}
-
-.audit-container textarea::placeholder {
- color: var(--dark);
- font-weight: 300;
- font-size: 0.9rem;
 }
 
