@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Student Dashboard — QueryCrest</title>
+<title>Admin Dashboard — QueryCrest</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
 <link rel="stylesheet" href="../css/admin-dashboard.css">
@@ -273,6 +273,9 @@
   </main>
 </div>
 
+<!-- AdminAPI communication layer — must load before the script below -->
+<script src="../js/admin-api.js"></script>
+
 <script>
 
 window.dashNavTo = function(page){
@@ -280,8 +283,6 @@ window.dashNavTo = function(page){
   var target=document.getElementById(page); if(target) target.style.display='block';
   document.querySelectorAll('.ni[data-p]').forEach(function(b){ b.classList.remove('on'); });
   document.querySelectorAll('.ni[data-p="'+page+'"]').forEach(function(b){ b.classList.add('on'); });
-  document.getElementById('drawer').classList.remove('show');
-  document.getElementById('drawerBg').classList.remove('show');
   if(window.location.hash!=='#'+page) history.replaceState(null,'','#'+page);
 
   if     (page==='dashboard')         { renderDashboardOverview(); }
@@ -291,43 +292,218 @@ window.dashNavTo = function(page){
 
 };
 
+/* ── HELPER: escape text for safe HTML insertion ── */
+function esc(str) {
+  var div = document.createElement('div');
+  div.textContent = str == null ? '' : String(str);
+  return div.innerHTML;
+}
+
+/* ── HELPER: compute traffic-light status from dates ── */
+function computeStatus(openingDate, closingDate) {
+  if (!closingDate) return { label: 'Unknown', color: 'gray' };
+  var now = new Date();
+  var close = new Date(closingDate);
+  var open = openingDate ? new Date(openingDate) : null;
+
+  if (close < now) return { label: 'Closed', color: 'red' };
+
+  var daysLeft = (close - now) / (1000 * 60 * 60 * 24);
+  if (daysLeft <= 15) return { label: 'Approaching', color: 'amber' };
+
+  if (open && open > now) return { label: 'Not yet open', color: 'gray' };
+
+  return { label: 'Open', color: 'green' };
+}
+
+/* ── HELPER: render a list of records into a tbody ── */
+function renderRows(tbody, records) {
+  tbody.innerHTML = '';
+  if (!records || records.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#888;">No records found</td></tr>';
+    return;
+  }
+  records.forEach(function (item) {
+    var status = computeStatus(item.opening_date, item.closing_date);
+    var tr = document.createElement('tr');
+    tr.innerHTML =
+      '<td>' + esc(item.type) + '</td>' +
+      '<td>' + esc(item.name) + '</td>' +
+      '<td>' + esc(item.opening_date || '—') + '</td>' +
+      '<td>' + esc(item.closing_date || '—') + '</td>' +
+      '<td><span class="status-dot status-' + status.color + '"></span>' + status.label + '</td>';
+    tbody.appendChild(tr);
+  });
+}
 
 /*DASHBOARD OVERVIEW*/
 async function renderDashboardOverview(){
   var $sec=document.getElementById('dashboard'); if(!$sec)return;
-  $sec.innerHTML='';
+
   try{
+    var results = await Promise.all([
+      adminAPI.institutions.getAll(),
+      adminAPI.bursaries.getAll()
+    ]);
+    var instResp = results[0];
+    var bursResp = results[1];
+
+    var all = (instResp.data || []).concat(bursResp.data || []);
+
+    var approaching = all.filter(function (item) {
+      var status = computeStatus(item.opening_date, item.closing_date);
+      return status.label === 'Approaching';
+    });
+
+    var tables = $sec.querySelectorAll('#deadlinesBody');
+    if (tables[0]) renderRows(tables[0], approaching);   // first table = approaching
+    if (tables[1]) renderRows(tables[1], all);            // second table = all records
 
   }catch(e){
     console.error('[dashboard]',e);
-    $sec.innerHTML='<div class="ph"><h1>Dashboard</h1></div><div class="alert danger"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg><div><h4>Could not load dashboard</h4><p>'+esc(e.message)+'</p></div></div>';
+    if (e.status === 401) {
+      window.location.href = 'admin-login.html';
+      return;
+    }
+    if (e.status === 503) {
+      var msgEl = $sec.querySelector('.deadlines');
+      if (msgEl) msgEl.insertAdjacentHTML('afterbegin', '<div class="alert danger"><h4>System Locked Down</h4><p>'+esc(e.message)+'</p></div>');
+      return;
+    }
+    var msgEl2 = $sec.querySelector('.deadlines');
+    if (msgEl2) msgEl2.insertAdjacentHTML('afterbegin', '<div class="alert danger"><h4>Could not load dashboard</h4><p>'+esc(e.message)+'</p></div>');
   }
 }
+
 /*search page*/
 async function renderSearchPage(){
   var $sec=document.getElementById('search'); if(!$sec)return;
-  $sec.innerHTML='';
 
-  try{
+  var form = document.getElementById('s-search-form');
+  var input = document.getElementById('internet-search-input');
+  var resultCard = $sec.querySelector('.result-card');
 
-  }catch(e){
-    console.error('[search]',e);
-    $sec.innerHTML='<div class="ph"><h1>Search</h1></div><div class="alert danger"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg><div><h4>Could not load search</h4><p>'+esc(e.message)+'</p></div></div>';
+  if (!form._wired) {
+    form._wired = true;
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      var query = input.value.trim();
+      if (!query) return;
+
+      resultCard.innerHTML = '<p>Searching…</p>';
+
+      try {
+        var results = await Promise.all([
+          adminAPI.institutions.search(query),
+          adminAPI.bursaries.search(query)
+        ]);
+        var instResp = results[0];
+        var bursResp = results[1];
+        var all = (instResp.data || []).concat(bursResp.data || []);
+
+        if (all.length === 0) {
+          resultCard.innerHTML = '<p>No results found for "'+esc(query)+'"</p>';
+          return;
+        }
+
+        resultCard.innerHTML = all.map(function (item) {
+          var status = computeStatus(item.opening_date, item.closing_date);
+          return '<div class="result-row">'+
+            '<strong>'+esc(item.name)+'</strong> ('+esc(item.type)+')<br>'+
+            'Opens: '+esc(item.opening_date || '—')+' | Closes: '+esc(item.closing_date || '—')+
+            ' | Status: '+status.label+
+            '</div>';
+        }).join('');
+
+      } catch(e){
+        console.error('[search]',e);
+        resultCard.innerHTML='<div class="alert danger"><p>'+esc(e.message)+'</p></div>';
+      }
+    });
   }
 }
 
-/*search page*/
+/*add-data page*/
 async function renderDataPage(){
   var $sec=document.getElementById('add-data'); if(!$sec)return;
-  $sec.innerHTML='';
 
   try{
-
+    var results = await Promise.all([
+      adminAPI.institutions.getAll(),
+      adminAPI.bursaries.getAll()
+    ]);
+    var instResp = results[0];
+    var bursResp = results[1];
+    var all = (instResp.data || []).concat(bursResp.data || []);
+    var tbody = $sec.querySelector('#deadlinesBody');
+    if (tbody) renderRows(tbody, all);
   }catch(e){
-    console.error('[search]',e);
-    $sec.innerHTML='<div class="ph"><h1>Search</h1></div><div class="alert danger"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg><div><h4>Could not load search</h4><p>'+esc(e.message)+'</p></div></div>';
+    console.error('[add-data load]',e);
   }
+
+  var form = document.getElementById('university-Form');
+  if (form._wired) return;
+  form._wired = true;
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    var actionType = document.querySelector('input[name="action-type"]:checked').value;
+    var title = document.getElementById('fTitle').value.trim();
+    var name  = document.getElementById('fName').value.trim();
+    var opening = document.getElementById('fOpeningDate').value.trim();
+    var closing = document.getElementById('fClosingDate').value.trim();
+    var isPrivate = document.getElementById('fPrivate').checked;
+
+    if (!title || !name) {
+      alert('Title and Name are required.');
+      return;
+    }
+
+    // Route to bursaries table if the Title mentions "Bursary", otherwise institutions
+    var isBursary = /bursary/i.test(title);
+    var api = isBursary ? adminAPI.bursaries : adminAPI.institutions;
+
+    var payload = {
+      name: name,
+      type: title,
+      opening_date: opening || null,
+      closing_date: closing || null,
+      is_private: isPrivate
+    };
+
+    try {
+      if (actionType === 'adding') {
+        await api.create(payload);
+        alert('Record added successfully.');
+      } else if (actionType === 'updating') {
+        var id = prompt('Enter the ID of the record to update:');
+        if (!id) return;
+        await api.update(id, payload);
+        alert('Record updated successfully.');
+      } else if (actionType === 'deleting') {
+        var delId = prompt('Enter the ID of the record to delete:');
+        if (!delId) return;
+        await api.delete(delId);
+        alert('Record deleted successfully.');
+      }
+      form.reset();
+      renderDataPage();
+    } catch (err) {
+      console.error('[add-data submit]', err);
+      alert('Error: ' + err.message);
+    }
+  });
 }
+
+/* ── AUTH GUARD + INITIAL LOAD ── */
+window.addEventListener('load', function () {
+  if (typeof adminAPI === 'undefined' || !adminAPI.login.isAuthenticated()) {
+    window.location.href = 'admin-login.html';
+    return;
+  }
+  window.dashNavTo('dashboard');
+});
 </script>
 
 

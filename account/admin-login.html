@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>QueryCrest — Student Login &amp; Sign Up</title>
+<title>QueryCrest — Administrator Login</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="../css/admin.css">
 </head>
@@ -128,10 +128,10 @@
           </div>
         </div>
         <div class="field">
-          <label for="lAP">Administrative Password </label>
+          <label for="lPA">Administrative Password </label>
           <div class="inp-wrap">
             <input class="inp" type="password" id="lPA" placeholder="Administrative Password " autocomplete="current-password">
-            <button class="eye-btn" type="button" onclick="toggleEye('lAP',this)" aria-label="Show/hide password">
+            <button class="eye-btn" type="button" onclick="toggleEye('lPA',this)" aria-label="Show/hide password">
               <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
             </button>
           </div>
@@ -151,18 +151,10 @@
 
 </div><!-- /.page -->
 
-
-
-
+<!-- AdminAPI communication layer — must load before the script below -->
+<script src="../js/admin-api.js"></script>
 
 <script>
-const API = 'https://icvegtgayxjqtwpyhqpm.supabase.co/functions/v1';
-
-/* ── Referral tracking ── */
-(function(){
-  var ref = new URLSearchParams(window.location.search).get('ref');
-  if (ref) localStorage.setItem('referral_code', ref);
-})();
 
 /* ═══════════════════════════════════
    HAMBURGER / MOBILE NAV
@@ -174,7 +166,6 @@ function openDrawer() {
   document.getElementById('navDrawer').classList.add('open');
   document.getElementById('navOverlay').classList.add('open');
   document.getElementById('navHamburger').setAttribute('aria-expanded','true');
-  // Switch icon to X
   document.getElementById('hamburgerIcon').innerHTML =
     '<line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/>';
 }
@@ -184,7 +175,6 @@ function closeDrawer() {
   document.getElementById('navDrawer').classList.remove('open');
   document.getElementById('navOverlay').classList.remove('open');
   document.getElementById('navHamburger').setAttribute('aria-expanded','false');
-  // Switch icon back to hamburger
   document.getElementById('hamburgerIcon').innerHTML =
     '<line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>';
 }
@@ -193,7 +183,6 @@ document.getElementById('navHamburger').addEventListener('click', function() {
   _drawerOpen ? closeDrawer() : openDrawer();
 });
 
-/* Close drawer on resize to desktop */
 window.addEventListener('resize', function() {
   if (window.innerWidth > 900) closeDrawer();
 });
@@ -208,16 +197,6 @@ function goSlide(n) {
   document.querySelectorAll('.dot')[curSlide].classList.add('active');
 }
 setInterval(function(){ goSlide((curSlide+1)%3); }, 5500);
-
-/* ── Tabs ── */
-function showTab(t) {
-  var isL = t === 'login';
-  document.getElementById('panelLogin').style.display  = isL ? 'block' : 'none';
-  document.getElementById('panelSignup').style.display = isL ? 'none'  : 'block';
-  document.getElementById('tabLogin').classList.toggle('active', isL);
-  document.getElementById('tabSignup').classList.toggle('active', !isL);
-  setMsg(isL ? 'loginMsg' : 'signupMsg', '', '');
-}
 
 /* ── Eye toggle ── */
 function toggleEye(id, btn) {
@@ -248,161 +227,59 @@ function setLoad(btnId, spinId, txtId, on, label) {
   if (sp)  sp.style.display = on ? 'inline-block' : 'none';
 }
 
-/* ── FORGOT OVERLAY ── */
-function openForgot() {
-  setMsg('forgotMsg', '', '');
-  document.getElementById('fEM').value = document.getElementById('lEM').value || '';
-  document.getElementById('forgotOverlay').classList.add('open');
-  setTimeout(function(){ document.getElementById('fEM').focus(); }, 100);
-}
-function closeForgot() {
-  document.getElementById('forgotOverlay').classList.remove('open');
-}
-document.getElementById('forgotOverlay').addEventListener('click', function(e) {
-  if (e.target === this) closeForgot();
-});
-document.getElementById('fEM').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') doForgot();
-});
-
-/* ── SIGN IN ── */
+/* ── ADMIN SIGN IN (two-step: verification code, then admin password) ── */
 async function doLogin() {
   setMsg('loginMsg', '', '');
-  var email = document.getElementById('lEM').value.trim();
-  var pass  = document.getElementById('lPW').value;
-  if (!email) { setMsg('loginMsg', 'Please enter your email address.', 'err'); return; }
-  if (!pass)  { setMsg('loginMsg', 'Please enter your password.', 'err'); return; }
+
+  var verificationCode = document.getElementById('lVC').value.trim();
+  var adminPassword    = document.getElementById('lPA').value;
+
+  if (!verificationCode) {
+    setMsg('loginMsg', 'Please enter the verification code.', 'err');
+    return;
+  }
+  if (!adminPassword) {
+    setMsg('loginMsg', 'Please enter the administrative password.', 'err');
+    return;
+  }
 
   setLoad('loginBtn', 'loginSpin', 'loginTxt', true, 'Sign In');
+
   try {
-    var res  = await fetch(API + '/loginUser', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: email, password: pass })
-    });
-    var data = await res.json();
-    if (!res.ok || !data.success) {
-      setMsg('loginMsg', data.error || 'Incorrect email or password. Please try again.', 'err');
-      return;
-    }
-    sessionStorage.setItem('access_token', data.token);
+    // Step 1: verification code
+    await adminAPI.login.step1(verificationCode);
+
+    // Step 2: admin password (token stored automatically on success)
+    await adminAPI.login.step2(adminPassword);
+
     setMsg('loginMsg', 'Signing you in…', 'ok');
-    setTimeout(function() { window.location.href = 'user-dashboard'; }, 500);
-  } catch (e) {
-    setMsg('loginMsg', 'Network error — please try again.', 'err');
+    setTimeout(function () {
+      window.location.href = 'admin-dashboard.html';
+    }, 500);
+
+  } catch (err) {
+    if (err.status === 429) {
+      setMsg('loginMsg', 'Too many attempts. Please wait and try again later.', 'err');
+    } else if (err.status === 401) {
+      setMsg('loginMsg', 'Invalid verification code or password.', 'err');
+    } else {
+      setMsg('loginMsg', err.message || 'Network error — please try again.', 'err');
+    }
   } finally {
     setLoad('loginBtn', 'loginSpin', 'loginTxt', false, 'Sign In');
   }
 }
 
-/* ── SIGN UP ── */
-async function doSignup() {
-  setMsg('signupMsg', '', '');
-  var fn  = document.getElementById('sFN').value.trim();
-  var ln  = document.getElementById('sLN').value.trim();
-  var em  = document.getElementById('sEM').value.trim();
-  var ph  = document.getElementById('sPH').value.trim();
-  var pw  = document.getElementById('sPW').value;
-  var pw2 = document.getElementById('sPW2').value;
-  var ref = localStorage.getItem('referral_code') || null;
-
-  if (!fn || !ln || !em || !ph || !pw || !pw2) {
-    setMsg('signupMsg', 'All fields are required.', 'err'); return;
+/* If already authenticated, skip straight to dashboard */
+window.addEventListener('load', function () {
+  if (typeof adminAPI !== 'undefined' && adminAPI.login.isAuthenticated()) {
+    window.location.href = 'admin-dashboard.html';
   }
-  var nameRx = /^[A-Za-z]{2,}$/;
-  if (!nameRx.test(fn)) { setMsg('signupMsg', 'First name must be at least 2 letters with no spaces or numbers.', 'err'); return; }
-  if (!nameRx.test(ln)) { setMsg('signupMsg', 'Last name must be at least 2 letters with no spaces or numbers.', 'err'); return; }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) { setMsg('signupMsg', 'Please enter a valid email address.', 'err'); return; }
-  var cleanPh = ph.replace(/\s+/g, '');
-  if (!/^0\d{9}$/.test(cleanPh)) { setMsg('signupMsg', 'Phone must be 10 digits starting with 0 (e.g. 0812345678).', 'err'); return; }
-  var pwRx = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/;
-  if (!pwRx.test(pw)) {
-    setMsg('signupMsg', 'Password must be at least 8 characters and include an uppercase letter, lowercase letter, number, and symbol (!@#$%^&*).', 'err'); return;
-  }
-  if (pw !== pw2) { setMsg('signupMsg', 'Passwords do not match.', 'err'); return; }
-
-  setLoad('signupBtn', 'signupSpin', 'signupTxt', true, 'Create Account & Sign In');
-  try {
-    var res  = await fetch(API + '/createUserAccount', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ firstName: fn, lastName: ln, email: em, password: pw, confirmPassword: pw, phone: cleanPh, referral_code: ref })
-    });
-    var data = await res.json();
-
-    if (!res.ok) {
-      var errTxt = data.error || '';
-      if (errTxt.toLowerCase().includes('already registered') || errTxt.toLowerCase().includes('already exists')) {
-        setMsg('signupMsg', 'An account with this email already exists. Signing you in…', 'warn');
-        document.getElementById('lEM').value = em;
-        document.getElementById('lPW').value = pw;
-        setTimeout(function() { showTab('login'); doLogin(); }, 1200);
-        return;
-      }
-      setMsg('signupMsg', errTxt || 'Sign up failed. Please try again.', 'err');
-      return;
-    }
-
-    setMsg('signupMsg', 'Account created! Signing you in…', 'ok');
-    var loginRes  = await fetch(API + '/loginUser', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: em, password: pw })
-    });
-    var loginData = await loginRes.json();
-
-    if (!loginRes.ok || !loginData.success) {
-      setMsg('signupMsg', 'Account created! Please sign in with your new credentials.', 'ok');
-      localStorage.removeItem('referral_code');
-      setTimeout(function() {
-        showTab('login');
-        document.getElementById('lEM').value = em;
-        document.getElementById('lPW').focus();
-      }, 1500);
-      return;
-    }
-
-    sessionStorage.setItem('access_token', loginData.token);
-    localStorage.removeItem('referral_code');
-    setMsg('signupMsg', 'Welcome to QueryCrest! Redirecting to your dashboard…', 'ok');
-    setTimeout(function() { window.location.href = 'user-dashboard'; }, 800);
-
-  } catch (e) {
-    setMsg('signupMsg', 'Network or server error. Please try again.', 'err');
-  } finally {
-    setLoad('signupBtn', 'signupSpin', 'signupTxt', false, 'Create Account & Sign In');
-  }
-}
-
-/* ── FORGOT PASSWORD ── */
-async function doForgot() {
-  setMsg('forgotMsg', '', '');
-  var email = document.getElementById('fEM').value.trim();
-  if (!email) { setMsg('forgotMsg', 'Please enter your email address.', 'err'); return; }
-
-  setLoad('forgotBtn', 'forgotSpin', 'forgotTxt', true, 'Send Reset Link');
-  try {
-    var res  = await fetch(API + '/forgotPassword', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: email })
-    });
-    var data = await res.json();
-    if (!res.ok) { setMsg('forgotMsg', data.error || 'Failed. Please try again.', 'err'); return; }
-    setMsg('forgotMsg', '✓ Reset link sent — check your inbox (and spam folder).', 'ok');
-    document.getElementById('fEM').value = '';
-    setTimeout(closeForgot, 2800);
-  } catch (e) {
-    setMsg('forgotMsg', 'Network error. Please try again.', 'err');
-  } finally {
-    setLoad('forgotBtn', 'forgotSpin', 'forgotTxt', false, 'Send Reset Link');
-  }
-}
+});
 
 /* ── Keyboard shortcuts ── */
-document.getElementById('lPW').addEventListener('keydown',  function(e){ if(e.key==='Enter') doLogin(); });
-document.getElementById('lEM').addEventListener('keydown',  function(e){ if(e.key==='Enter') document.getElementById('lPW').focus(); });
-document.getElementById('sPW2').addEventListener('keydown', function(e){ if(e.key==='Enter') doSignup(); });
+document.getElementById('lPA').addEventListener('keydown', function(e){ if(e.key==='Enter') doLogin(); });
+document.getElementById('lVC').addEventListener('keydown', function(e){ if(e.key==='Enter') document.getElementById('lPA').focus(); });
 </script>
 </body>
 </html>
