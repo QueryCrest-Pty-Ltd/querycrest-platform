@@ -3,20 +3,681 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Admin Dashboard — QueryCrest</title>
+<title>Student Dashboard — QueryCrest</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
-<link rel="stylesheet" href="../css/admin-dashboard.css">
-<link rel="stylesheet" href="../css/dashboard-application-modal.css"/>
-  <script src="https://unpkg.com/phosphor-icons"></script>  
+<script src="https://unpkg.com/phosphor-icons"></script>
+<style>
+/* ===== RESET & BASE ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #f0f4f8;
+  color: #1a202c;
+}
+
+.app {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  grid-template-rows: 64px 1fr;
+  min-height: 100vh;
+}
+
+/* ===== TOPBAR ===== */
+.topbar {
+  grid-column: 1 / -1;
+  grid-row: 1 / 2;
+  background: white;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  gap: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+}
+
+.hamburger svg {
+  width: 24px;
+  height: 24px;
+  stroke: #1a202c;
+}
+
+.tb-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #1a202c;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.brand-ico {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 14px;
+}
+
+.tb-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.tb-greet {
+  font-size: 14px;
+  color: #4a5568;
+}
+
+.tb-greet strong {
+  color: #1a202c;
+}
+
+.tb-bell {
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+}
+
+.tb-bell svg {
+  width: 22px;
+  height: 22px;
+  stroke: #4a5568;
+}
+
+.badge-count {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: #e53e3e;
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+  grid-column: 1 / 2;
+  grid-row: 2 / -1;
+  background: white;
+  border-right: 1px solid #e2e8f0;
+  padding: 20px 0;
+  overflow-y: auto;
+}
+
+.sb-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0 12px;
+}
+
+.ns {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #a0aec0;
+  padding: 8px 12px;
+  margin-top: 8px;
+}
+
+.ni {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: none;
+  background: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #4a5568;
+  transition: all 0.2s;
+  width: 100%;
+  text-align: left;
+}
+
+.ni:hover {
+  background: #f7fafc;
+}
+
+.ni.on {
+  background: #ebf4ff;
+  color: #667eea;
+}
+
+.ni-ico svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+}
+
+/* ===== MAIN CONTENT ===== */
+.main {
+  grid-column: 2 / -1;
+  grid-row: 2 / -1;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.section {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== DASHBOARD ===== */
+.deadlines {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+
+.deadline-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  background: #f7fafc;
+  border-radius: 8px;
+  padding: 0 12px;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s;
+}
+
+.search-container:focus-within {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.search-container input {
+  border: none;
+  background: none;
+  padding: 10px 8px;
+  font-size: 14px;
+  outline: none;
+  width: 220px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.search-container .search-icon-left {
+  color: #a0aec0;
+  font-size: 18px;
+}
+
+.search-container .search-icon-right {
+  background: none;
+  border: none;
+  color: #667eea;
+  cursor: pointer;
+  padding: 8px;
+  font-size: 18px;
+}
+
+.approach {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.approach-icon {
+  font-size: 24px;
+  color: #667eea;
+}
+
+.approach h3 {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* ===== TABLES ===== */
+.table-Card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  margin-bottom: 24px;
+}
+
+.table-divider {
+  border: none;
+  border-top: 2px solid #e2e8f0;
+  margin: 24px 0;
+}
+
+.deadline-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.deadline-table thead {
+  background: #f7fafc;
+}
+
+.deadline-table th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  color: #4a5568;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.deadline-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f7fafc;
+}
+
+.deadline-table tbody tr:hover {
+  background: #f7fafc;
+}
+
+.deadline-table .status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-active {
+  background: #c6f6d5;
+  color: #22543d;
+}
+
+.status-inactive {
+  background: #fed7d7;
+  color: #742a2a;
+}
+
+.status-pending {
+  background: #fefcbf;
+  color: #744210;
+}
+
+.status-archived {
+  background: #e2e8f0;
+  color: #4a5568;
+}
+
+/* ===== SEARCH PAGE ===== */
+.s-search-Card {
+  background: white;
+  border-radius: 12px;
+  padding: 32px;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  margin-bottom: 24px;
+}
+
+.s-search-Card h3 {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.s-search-Card p {
+  color: #718096;
+  margin-bottom: 20px;
+}
+
+.s-search-container {
+  display: flex;
+  max-width: 500px;
+  margin: 0 auto;
+  gap: 12px;
+}
+
+.s-search-container input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  font-family: 'Poppins', sans-serif;
+}
+
+.s-search-container input:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.s-search-container button {
+  padding: 12px 32px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.s-search-container button:hover {
+  transform: translateY(-2px);
+}
+
+/* ===== ADD DATA PAGE ===== */
+.data-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.d-search-container {
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 8px;
+  padding: 0 12px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+
+.d-search-container input {
+  border: none;
+  background: none;
+  padding: 12px 8px;
+  font-size: 14px;
+  outline: none;
+  flex: 1;
+  font-family: 'Poppins', sans-serif;
+}
+
+.audit-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: white;
+  border-radius: 8px;
+  padding: 4px 12px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+
+.audit-container label {
+  font-weight: 500;
+  color: #4a5568;
+}
+
+.audit-container textarea {
+  border: none;
+  background: none;
+  padding: 8px;
+  font-size: 12px;
+  outline: none;
+  resize: none;
+  height: 36px;
+  flex: 1;
+  font-family: 'Poppins', sans-serif;
+}
+
+.university-Card {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  margin-bottom: 24px;
+}
+
+.inline-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.form-group label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #4a5568;
+}
+
+.form-group input {
+  padding: 10px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  font-family: 'Poppins', sans-serif;
+}
+
+.form-group input:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.form-private {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.form-private label {
+  font-weight: 500;
+  color: #4a5568;
+}
+
+.form-private input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #667eea;
+}
+
+.radio-group {
+  display: flex;
+  gap: 16px;
+  padding-top: 4px;
+}
+
+.radio-group label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 400;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.radio-group input[type="radio"] {
+  accent-color: #667eea;
+}
+
+.btn-primary {
+  padding: 12px 32px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.2s;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+}
+
+/* ===== LOADING ===== */
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: #718096;
+}
+
+.loading .spinner {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e2e8f0;
+  border-top-color: #667eea;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .app {
+    grid-template-columns: 1fr;
+  }
+
+  .hamburger {
+    display: block;
+  }
+
+  .sidebar {
+    display: none;
+    position: fixed;
+    top: 64px;
+    left: 0;
+    bottom: 0;
+    width: 280px;
+    z-index: 90;
+    box-shadow: 2px 0 12px rgba(0,0,0,0.1);
+  }
+
+  .sidebar.open {
+    display: block;
+  }
+
+  .main {
+    grid-column: 1 / -1;
+  }
+
+  .data-header {
+    grid-template-columns: 1fr;
+  }
+
+  .inline-group {
+    grid-template-columns: 1fr;
+  }
+
+  .deadline-table {
+    font-size: 12px;
+  }
+
+  .deadline-table th,
+  .deadline-table td {
+    padding: 8px 10px;
+  }
+
+  .search-container input {
+    width: 140px;
+  }
+
+  .tb-greet {
+    display: none;
+  }
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f7fafc;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e0;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a0aec0;
+}
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #718096;
+}
+
+.empty-state i {
+  font-size: 48px;
+  color: #cbd5e0;
+  margin-bottom: 16px;
+  display: block;
+}
+</style>
 </head>
 <body>
 <div class="app" id="app">
+  <!-- TOPBAR -->
   <div class="topbar">
-    <button class="hamburger" id="hamburger" aria-label="Menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
     <a class="tb-brand" href="#"><div class="brand-ico">QC</div><span class="brand-txt">QueryCrest</span></a>
-
-
     <div class="tb-right">
       <span class="tb-greet">Welcome, <strong id="userName">Admin</strong></span>
       <button class="tb-bell" id="topbarBell" title="Notifications">
@@ -25,487 +686,648 @@
       </button>
     </div>
   </div>
+
+  <!-- SIDEBAR -->
   <aside class="sidebar" id="sidebar">
     <div class="sb-nav">
       <div class="ns">Main</div>
-      <button class="ni on" data-p="dashboard" onclick="window.dashNavTo('dashboard')"><div class="ni-ico"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>Dashboard</button>
-      <button class="ni" data-p="search" onclick="window.dashNavTo('search')"><div class="ni-ico"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>Search</button>
-      <button class="ni" data-p="add-data" onclick="window.dashNavTo('add-data')"><div class="ni-ico"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>Add Data</button>
+      <button class="ni on" data-p="dashboard" onclick="window.dashNavTo('dashboard')">
+        <div class="ni-ico"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
+        Dashboard
+      </button>
+      <button class="ni" data-p="search" onclick="window.dashNavTo('search')">
+        <div class="ni-ico"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+        Search
+      </button>
+      <button class="ni" data-p="add-data" onclick="window.dashNavTo('add-data')">
+        <div class="ni-ico"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+        Add Data
+      </button>
     </div>
-
   </aside>
+
+  <!-- MAIN CONTENT -->
   <main class="main">
     <div class="mi" id="main">
-
-      <section id="dashboard"   class="section"  >
-<!---dashboard-->        
-<div class="deadlines">
-  <div class="deadline-header">
-    <div class="tb-center">
-        <form id="search-form" action="/search" method="get">
-            <div class="search-container">
-            <i class="ph ph-magnifying-glass search-icon-left" ></i>            
-            <input id="table-search-input" type="text"  placeholder="Search..." >
-            <button class="search-icon-right"><i class="ph ph-arrow-right"></i></button>
-
-            </div>
-
-        </form>      
-    </div>    
-
-    <div class="approach">
-    <i class="ph ph-bell-ringing approach-icon"></i>
-    <h3>Approaching deadlines</h3>            
-    </div>
-</div>
-    <!--table for approachind deadline data-->
- <div class="table-Card">
-<!--table for all data-->
-    <table class="deadline-table" id="daedlineTable">
-        <head>
-            <tr>
-                <th>
-                    Title
-                </th>
-                <th>
-                    Name
-                </th>
-                <th>
-                    Opening date
-                </th>
-                <th>
-                    Closing date
-                </th>
-                <th>
-                    current status
-                </th>
-            </tr>
-        </head>
-        <tbody id="deadlinesBody">
-
-        </tbody>
-    </table>    
-
-</div>
-    <hr class="table-divider">
-
-
- <div class="table-Card">
-<!--table for all data-->
-    <table class="deadline-table" id="daedlineTable">
-        <head>
-            <tr>
-                <th>
-                    Title
-                </th>
-                <th>
-                    Name
-                </th>
-                <th>
-                    Opening date
-                </th>
-                <th>
-                    Closing date
-                </th>
-                <th>
-                    current status
-                </th>
-            </tr>
-        </head>
-        <tbody id="deadlinesBody">
-
-        </tbody>
-    </table>    
-
-</div>   
-</div>
-
-      </section>
-      <section id="search"     class="section" style="display:none;">
-      <!--search card-->
-
-        <div class="s-search-Card">
-
-            <h3>Find availabel universities ,colleges and bursaries</h3>
-             <p>Enter university ,college and bursary of your choice and browes through the availabel information</p>
-
-             <div class="serach-input">
-            <form id="s-search-form" action="/search" method="get">
-                <div class="s-search-container">
-            
-                <input id="internet-search-input" type="text"  placeholder="Search..." >
-                <button id="search-submit" type="submit">Search</button>
+      <!-- DASHBOARD -->
+      <section id="dashboard" class="section">
+        <div class="deadlines">
+          <div class="deadline-header">
+            <div class="tb-center">
+              <form id="search-form" onsubmit="return false;">
+                <div class="search-container">
+                  <i class="ph ph-magnifying-glass search-icon-left"></i>
+                  <input id="table-search-input" type="text" placeholder="Search institutions..." oninput="filterDashboardTable(this.value)">
+                  <button class="search-icon-right" type="button"><i class="ph ph-arrow-right"></i></button>
                 </div>
+              </form>
+            </div>
+            <div class="approach">
+              <i class="ph ph-bell-ringing approach-icon"></i>
+              <h3>Approaching deadlines</h3>
+            </div>
+          </div>
+
+          <!-- Universities Table -->
+          <div class="table-Card">
+            <div style="padding: 16px 16px 0; font-weight: 600; color: #2d3748;">
+              <i class="ph ph-buildings"></i> Universities
+            </div>
+            <table class="deadline-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Type</th>
+                  <th>Opening Date</th>
+                  <th>Closing Date</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="universitiesBody">
+                <tr><td colspan="6" class="loading"><div class="spinner"></div>Loading universities...</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <hr class="table-divider">
+
+          <!-- Bursaries Table -->
+          <div class="table-Card">
+            <div style="padding: 16px 16px 0; font-weight: 600; color: #2d3748;">
+              <i class="ph ph-hand-coins"></i> Bursaries
+            </div>
+            <table class="deadline-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Type</th>
+                  <th>Opening Date</th>
+                  <th>Closing Date</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="bursariesBody">
+                <tr><td colspan="6" class="loading"><div class="spinner"></div>Loading bursaries...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- SEARCH -->
+      <section id="search" class="section" style="display:none;">
+        <div class="s-search-Card">
+          <h3>Find available universities, colleges and bursaries</h3>
+          <p>Enter university, college or bursary name and browse through the available information</p>
+          <div class="serach-input">
+            <form id="s-search-form" onsubmit="return false;">
+              <div class="s-search-container">
+                <input id="internet-search-input" type="text" placeholder="Search..." onkeyup="if(event.key==='Enter') performSearch()">
+                <button id="search-submit" type="button" onclick="performSearch()">Search</button>
+              </div>
             </form>
-             </div>             
-             <!---->
-
+          </div>
         </div>
-        <div class="result-card">
+        <div class="result-card" id="searchResults"></div>
+      </section>
 
-        </div>         
-
-    </section>
-
+      <!-- ADD DATA -->
       <section id="add-data" class="section" style="display:none;">
-
-<!--add-data-->
-<div class="data-header">
-<div class="search-Card">
-    <form id="search-form" action="/search" method="get">
-         <div class="d-search-container">
-        <i class="ph ph-magnifying-glass search-icon-left" ></i>            
-        <input id="d-table-search-input" type="text"  placeholder="Search..." >
-        <button class="search-icon-right"><i class="ph ph-arrow-right"></i></button>            
-        </div>
-    </form>      
-</div>
-
-<div class="aduit-card">
-<div class="aduit-Card">
-    <form id="audit-form" action="/search" method="get">
-         <div class="audit-container">
-        <i class="ph ph-notepad search-icon-left" ></i>
-        <label for="audit">Logs</label>            
-        <textarea name="audit" id="audit-log" placeholder="Audit Logs"></textarea>           
-        </div>
-    </form>
-
-</div>
-</div>
-
-</div>
-
-<div class="university-Card">
-    <form id="university-Form">
-        <div class="inline-group">
-        <div class="form-group">
-            <label for="fTitle">Title</label>            
-            <input id="fTitle" type="text"  placeholder="" >
-
-        </div>
-        <div class="form-group">
-            <label for="fName">Name</label>            
-            <input id="fName" type="text"  placeholder="" >
-
+        <div class="data-header">
+          <div class="search-Card">
+            <form id="search-form" onsubmit="return false;">
+              <div class="d-search-container">
+                <i class="ph ph-magnifying-glass search-icon-left"></i>
+                <input id="d-table-search-input" type="text" placeholder="Search in data table..." oninput="filterDataTable(this.value)">
+                <button class="search-icon-right" type="button"><i class="ph ph-arrow-right"></i></button>
+              </div>
+            </form>
+          </div>
+          <div class="aduit-card">
+            <div class="audit-container">
+              <i class="ph ph-notepad search-icon-left"></i>
+              <label for="audit-log">Logs</label>
+              <textarea id="audit-log" placeholder="Audit logs will appear here..." readonly></textarea>
+            </div>
+          </div>
         </div>
 
+        <div class="university-Card">
+          <h4 style="margin-bottom: 16px; color: #2d3748;">
+            <i class="ph ph-plus-circle"></i> Manage Institution Data
+          </h4>
+          <form id="university-Form" onsubmit="return handleFormSubmit(event)">
+            <div class="inline-group">
+              <div class="form-group">
+                <label for="fTitle">Title</label>
+                <input id="fTitle" type="text" placeholder="e.g., University of Cape Town">
+              </div>
+              <div class="form-group">
+                <label for="fName">Name</label>
+                <input id="fName" type="text" placeholder="e.g., UCT">
+              </div>
+            </div>
+            <div class="inline-group">
+              <div class="form-group">
+                <label for="fOpeningDate">Opening Date</label>
+                <input id="fOpeningDate" type="date" placeholder="YYYY-MM-DD">
+              </div>
+              <div class="form-group">
+                <label for="fClosingDate">Closing Date</label>
+                <input id="fClosingDate" type="date" placeholder="YYYY-MM-DD">
+              </div>
+            </div>
+            <div class="inline-group">
+              <div class="form-private">
+                <label for="fPrivate">Private</label>
+                <input id="fPrivate" type="checkbox">
+              </div>
+              <div class="form-group">
+                <label>Action</label>
+                <div class="radio-group">
+                  <label><input type="radio" name="action-type" value="adding" checked> Adding</label>
+                  <label><input type="radio" name="action-type" value="updating"> Updating</label>
+                  <label><input type="radio" name="action-type" value="deleting"> Deleting</label>
+                </div>
+              </div>
+            </div>
+            <div>
+              <button type="submit" class="btn btn-primary">
+                <i class="ph ph-paper-plane-tilt"></i> Submit
+              </button>
+            </div>
+          </form>
         </div>
-        <div class="inline-group">
-        <div class="form-group">
-            <label for="fOpeningDate">Opening date</label>            
-            <input id="fOpeningDate" type="text"  placeholder="" >
 
+        <div class="table-Card">
+          <div style="padding: 16px 16px 0; font-weight: 600; color: #2d3748;">
+            <i class="ph ph-database"></i> All Records
+          </div>
+          <table class="deadline-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Opening Date</th>
+                <th>Closing Date</th>
+                <th>Status</th>
+                <th>Private</th>
+              </tr>
+            </thead>
+            <tbody id="dataTableBody">
+              <tr><td colspan="7" class="loading"><div class="spinner"></div>Loading records...</td></tr>
+            </tbody>
+          </table>
         </div>
-        <div class="form-group">
-            <label for="fClosingDate">Closing date</label>            
-            <input id="fClosingDate" type="text"  placeholder="" >
-
-        </div>
-
-        </div>
-        <div class="inline-group">
-        <div class="form-private">
-            <label for="fPrivate">Private</label>            
-            <input id="fPrivate" type="checkbox">
-        </div>
-        <div class="form-group">
-            <label for="action-type">Action</label>
-            <div class="radio-group">
-                <label for="adding">
-                    <input type="radio" name="action-type" value="adding" checked>
-                    Adding
-                </label>
-                <label for="updating">
-                    <input type="radio" name="action-type" value="updating">
-                    Updating
-                </label>
-                <label for="deleting">
-                    <input type="radio" name="action-type" value="deleting">
-                     Deleting
-                </label>                
-            </div>            
-        </div>
-        </div>
-        <div class="">
-            <button type="submit" class="btn btn-primary">
-            <i class="ph ph-paper-plane-tilt"></i>Submit
-            </button>
-        </div>                
-    </form>      
-</div>
-
-
-
-    
- <div class="table-Card">
-<!--table for all data-->
-    <table class="deadline-table" id="daedlineTable">
-        <head>
-            <tr>
-                <th>
-                    Title
-                </th>
-                <th>
-                    Name
-                </th>
-                <th>
-                    Opening date
-                </th>
-                <th>
-                    Closing date
-                </th>
-                <th>
-                    current status
-                </th>
-            </tr>
-        </head>
-        <tbody id="deadlinesBody">
-
-        </tbody>
-    </table>    
-
-</div>   
-</div>
-
       </section>
     </div>
   </main>
 </div>
 
-<!-- AdminAPI communication layer — must load before the script below -->
-<script src="../js/admin-api.js"></script>
-
 <script>
+// ===== CONFIGURATION =====
+const API_BASE = 'http://localhost:54321/functions/v1/institutions';
+// For production, use: https://your-project-ref.functions.supabase.co/institutions
 
-window.dashNavTo = function(page){
-  document.querySelectorAll('section.section').forEach(function(s){ s.style.display='none'; });
-  var target=document.getElementById(page); if(target) target.style.display='block';
-  document.querySelectorAll('.ni[data-p]').forEach(function(b){ b.classList.remove('on'); });
-  document.querySelectorAll('.ni[data-p="'+page+'"]').forEach(function(b){ b.classList.add('on'); });
-  if(window.location.hash!=='#'+page) history.replaceState(null,'','#'+page);
+// JWT Token - Get from your auth system
+const JWT_TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiAidGVzdC11c2VyIiwgInJvbGUiOiAiYWRtaW4iLCAiZXhwIjogOTk5OTk5OTk5OX0.test-signature';
 
-  if     (page==='dashboard')         { renderDashboardOverview(); }
-  else if(page==='search')     { renderSearchPage(); }
-  else if(page==='add-data')           { renderDataPage(); }
+// ===== HELPER FUNCTIONS =====
+function getStatusBadge(status) {
+  const classes = {
+    'active': 'status-active',
+    'inactive': 'status-inactive',
+    'pending': 'status-pending',
+    'archived': 'status-archived'
+  };
+  return `<span class="status-badge ${classes[status] || 'status-inactive'}">${status || 'Unknown'}</span>`;
+}
 
+function formatDate(dateStr) {
+  if (!dateStr) return '—';
+  const d = new Date(dateStr);
+  return d.toLocaleDateString('en-ZA', { year: 'numeric', month: 'short', day: 'numeric' });
+}
 
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/[&<>"]/g, function(m) {
+    if (m === '&') return '&amp;';
+    if (m === '<') return '&lt;';
+    if (m === '>') return '&gt;';
+    if (m === '"') return '&quot;';
+    return m;
+  });
+}
+
+function logAudit(message) {
+  const logEl = document.getElementById('audit-log');
+  if (logEl) {
+    const timestamp = new Date().toLocaleTimeString();
+    logEl.value = `[${timestamp}] ${message}\n` + logEl.value;
+  }
+}
+
+// ===== API CALLS =====
+async function apiRequest(endpoint, options = {}) {
+  const url = `${API_BASE}${endpoint}`;
+  const headers = {
+    'Content-Type': 'application/json',
+    ...options.headers
+  };
+  
+  // Add JWT token if available
+  if (JWT_TOKEN && JWT_TOKEN !== 'YOUR_JWT_TOKEN_HERE') {
+    headers['Authorization'] = `Bearer ${JWT_TOKEN}`;
+  }
+
+  try {
+    const response = await fetch(url, {
+      ...options,
+      headers
+    });
+
+    const data = await response.json();
+    
+    if (!response.ok) {
+      throw new Error(data.error || `HTTP ${response.status}`);
+    }
+    
+    return data;
+  } catch (error) {
+    console.error('API Error:', error);
+    throw error;
+  }
+}
+
+// ===== LOAD DATA =====
+async function loadUniversities() {
+  try {
+    const data = await apiRequest('?table=universities');
+    const tbody = document.getElementById('universitiesBody');
+    
+    if (!data.data || data.data.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="6" class="empty-state"><i class="ph ph-buildings"></i>No universities found</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = data.data.map(row => `
+      <tr>
+        <td>${row.id}</td>
+        <td><strong>${escapeHtml(row.name)}</strong></td>
+        <td>${escapeHtml(row.type)}</td>
+        <td>${formatDate(row.opening_date)}</td>
+        <td>${formatDate(row.closing_date)}</td>
+        <td>${getStatusBadge(row.status)}</td>
+      </tr>
+    `).join('');
+
+    logAudit(`Loaded ${data.data.length} universities`);
+  } catch (error) {
+    document.getElementById('universitiesBody').innerHTML = `
+      <tr><td colspan="6" style="color: #e53e3e; text-align: center; padding: 20px;">
+        <i class="ph ph-warning"></i> Failed to load universities: ${escapeHtml(error.message)}
+      </td></tr>
+    `;
+    logAudit(`Error loading universities: ${error.message}`);
+  }
+}
+
+async function loadBursaries() {
+  try {
+    const data = await apiRequest('?table=universities_bursaries');
+    const tbody = document.getElementById('bursariesBody');
+    
+    if (!data.data || data.data.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="6" class="empty-state"><i class="ph ph-hand-coins"></i>No bursaries found</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = data.data.map(row => `
+      <tr>
+        <td>${row.id}</td>
+        <td><strong>${escapeHtml(row.name)}</strong></td>
+        <td>${escapeHtml(row.type)}</td>
+        <td>${formatDate(row.opening_date)}</td>
+        <td>${formatDate(row.closing_date)}</td>
+        <td>${getStatusBadge(row.status)}</td>
+      </tr>
+    `).join('');
+
+    logAudit(`Loaded ${data.data.length} bursaries`);
+  } catch (error) {
+    document.getElementById('bursariesBody').innerHTML = `
+      <tr><td colspan="6" style="color: #e53e3e; text-align: center; padding: 20px;">
+        <i class="ph ph-warning"></i> Failed to load bursaries: ${escapeHtml(error.message)}
+      </td></tr>
+    `;
+    logAudit(`Error loading bursaries: ${error.message}`);
+  }
+}
+
+async function loadAllRecords() {
+  try {
+    // Load both universities and bursaries
+    const [unis, burs] = await Promise.all([
+      apiRequest('?table=universities'),
+      apiRequest('?table=universities_bursaries')
+    ]);
+
+    const tbody = document.getElementById('dataTableBody');
+    const allData = [...(unis.data || []), ...(burs.data || [])];
+    
+    if (allData.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="7" class="empty-state"><i class="ph ph-database"></i>No records found</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = allData.map(row => `
+      <tr>
+        <td>${row.id}</td>
+        <td><strong>${escapeHtml(row.name)}</strong></td>
+        <td>${escapeHtml(row.type)}</td>
+        <td>${formatDate(row.opening_date)}</td>
+        <td>${formatDate(row.closing_date)}</td>
+        <td>${getStatusBadge(row.status)}</td>
+        <td>${row.is_private ? '🔒 Private' : '🌐 Public'}</td>
+      </tr>
+    `).join('');
+
+    logAudit(`Loaded ${allData.length} total records`);
+  } catch (error) {
+    document.getElementById('dataTableBody').innerHTML = `
+      <tr><td colspan="7" style="color: #e53e3e; text-align: center; padding: 20px;">
+        <i class="ph ph-warning"></i> Failed to load records: ${escapeHtml(error.message)}
+      </td></tr>
+    `;
+    logAudit(`Error loading records: ${error.message}`);
+  }
+}
+
+// ===== SEARCH =====
+async function performSearch() {
+  const query = document.getElementById('internet-search-input').value.trim();
+  if (!query) {
+    document.getElementById('searchResults').innerHTML = '<div class="empty-state"><i class="ph ph-magnifying-glass"></i>Enter a search term</div>';
+    return;
+  }
+
+  const resultsDiv = document.getElementById('searchResults');
+  resultsDiv.innerHTML = '<div class="loading"><div class="spinner"></div>Searching...</div>';
+
+  try {
+    const [unis, burs] = await Promise.all([
+      apiRequest(`/search?q=${encodeURIComponent(query)}&table=universities`),
+      apiRequest(`/search?q=${encodeURIComponent(query)}&table=universities_bursaries`)
+    ]);
+
+    const allResults = [...(unis.data || []), ...(burs.data || [])];
+    
+    if (allResults.length === 0) {
+      resultsDiv.innerHTML = `
+        <div class="empty-state" style="padding: 40px; background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.06);">
+          <i class="ph ph-magnifying-glass" style="font-size: 48px; color: #cbd5e0;"></i>
+          <p style="margin-top: 12px;">No results found for "<strong>${escapeHtml(query)}</strong>"</p>
+        </div>
+      `;
+      return;
+    }
+
+    resultsDiv.innerHTML = `
+      <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.06);">
+        <h4 style="margin-bottom: 16px; color: #2d3748;">
+          <i class="ph ph-magnifying-glass"></i> Results for "${escapeHtml(query)}" (${allResults.length})
+        </h4>
+        <div style="overflow-x: auto;">
+          <table class="deadline-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Opening Date</th>
+                <th>Closing Date</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${allResults.map(row => `
+                <tr>
+                  <td>${row.id}</td>
+                  <td><strong>${escapeHtml(row.name)}</strong></td>
+                  <td>${escapeHtml(row.type)}</td>
+                  <td>${formatDate(row.opening_date)}</td>
+                  <td>${formatDate(row.closing_date)}</td>
+                  <td>${getStatusBadge(row.status)}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+
+    logAudit(`Searched for "${query}", found ${allResults.length} results`);
+  } catch (error) {
+    resultsDiv.innerHTML = `
+      <div style="background: white; border-radius: 12px; padding: 20px; color: #e53e3e; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.06);">
+        <i class="ph ph-warning"></i> Search failed: ${escapeHtml(error.message)}
+      </div>
+    `;
+    logAudit(`Search error: ${error.message}`);
+  }
+}
+
+// ===== FILTER FUNCTIONS =====
+function filterDashboardTable(query) {
+  const rows = document.querySelectorAll('#universitiesBody tr, #bursariesBody tr');
+  const search = query.toLowerCase().trim();
+  
+  rows.forEach(row => {
+    if (row.querySelector('.empty-state, .loading')) return;
+    const text = row.textContent.toLowerCase();
+    row.style.display = text.includes(search) ? '' : 'none';
+  });
+}
+
+function filterDataTable(query) {
+  const rows = document.querySelectorAll('#dataTableBody tr');
+  const search = query.toLowerCase().trim();
+  
+  rows.forEach(row => {
+    if (row.querySelector('.empty-state, .loading')) return;
+    const text = row.textContent.toLowerCase();
+    row.style.display = text.includes(search) ? '' : 'none';
+  });
+}
+
+// ===== FORM HANDLING =====
+async function handleFormSubmit(event) {
+  event.preventDefault();
+  
+  const title = document.getElementById('fTitle').value.trim();
+  const name = document.getElementById('fName').value.trim();
+  const openingDate = document.getElementById('fOpeningDate').value;
+  const closingDate = document.getElementById('fClosingDate').value;
+  const isPrivate = document.getElementById('fPrivate').checked;
+  const action = document.querySelector('input[name="action-type"]:checked').value;
+
+  if (!title || !name) {
+    alert('Please fill in Title and Name fields');
+    return;
+  }
+
+  if (action === 'adding') {
+    // Create new record
+    try {
+      const data = await apiRequest('', {
+        method: 'POST',
+        body: JSON.stringify({
+          table: 'universities',
+          name: title,
+          type: 'University',
+          opening_date: openingDate || null,
+          closing_date: closingDate || null,
+          status: 'active',
+          is_private: isPrivate
+        })
+      });
+
+      alert(`✅ Record created successfully!\nID: ${data.data?.id || 'N/A'}`);
+      logAudit(`Created record: ${title}`);
+      
+      // Reload tables
+      await loadUniversities();
+      await loadAllRecords();
+      
+      // Clear form
+      document.getElementById('fTitle').value = '';
+      document.getElementById('fName').value = '';
+      document.getElementById('fOpeningDate').value = '';
+      document.getElementById('fClosingDate').value = '';
+      document.getElementById('fPrivate').checked = false;
+      
+    } catch (error) {
+      alert(`❌ Failed to create: ${error.message}`);
+      logAudit(`Create failed: ${error.message}`);
+    }
+  } else if (action === 'updating') {
+    // Update existing record (need ID from somewhere - could add an ID field)
+    const id = prompt('Enter the ID of the record to update:');
+    if (!id) return;
+    
+    try {
+      const data = await apiRequest(`/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify({
+          table: 'universities',
+          name: title,
+          type: 'University',
+          opening_date: openingDate || null,
+          closing_date: closingDate || null,
+          status: 'active',
+          is_private: isPrivate
+        })
+      });
+
+      alert(`✅ Record updated successfully!`);
+      logAudit(`Updated record ID ${id}: ${title}`);
+      
+      await loadUniversities();
+      await loadAllRecords();
+      
+    } catch (error) {
+      alert(`❌ Failed to update: ${error.message}`);
+      logAudit(`Update failed: ${error.message}`);
+    }
+  } else if (action === 'deleting') {
+    const id = prompt('Enter the ID of the record to delete:');
+    if (!id) return;
+    
+    if (!confirm(`Are you sure you want to delete record ${id}?`)) return;
+    
+    try {
+      await apiRequest(`/${id}?table=universities`, {
+        method: 'DELETE'
+      });
+
+      alert(`✅ Record deleted successfully!`);
+      logAudit(`Deleted record ID ${id}`);
+      
+      await loadUniversities();
+      await loadAllRecords();
+      
+    } catch (error) {
+      alert(`❌ Failed to delete: ${error.message}`);
+      logAudit(`Delete failed: ${error.message}`);
+    }
+  }
+}
+
+// ===== NAVIGATION =====
+window.dashNavTo = function(page) {
+  document.querySelectorAll('section.section').forEach(function(s) { 
+    s.style.display = 'none'; 
+  });
+  var target = document.getElementById(page);
+  if (target) target.style.display = 'block';
+  
+  document.querySelectorAll('.ni[data-p]').forEach(function(b) { 
+    b.classList.remove('on'); 
+  });
+  document.querySelectorAll('.ni[data-p="' + page + '"]').forEach(function(b) { 
+    b.classList.add('on'); 
+  });
+  
+  // Close sidebar on mobile
+  document.getElementById('sidebar').classList.remove('open');
+  
+  if (page === 'dashboard') {
+    loadUniversities();
+    loadBursaries();
+  } else if (page === 'add-data') {
+    loadAllRecords();
+  }
 };
 
-/* ── HELPER: escape text for safe HTML insertion ── */
-function esc(str) {
-  var div = document.createElement('div');
-  div.textContent = str == null ? '' : String(str);
-  return div.innerHTML;
-}
+// ===== SIDEBAR TOGGLE =====
+document.getElementById('hamburger').addEventListener('click', function() {
+  document.getElementById('sidebar').classList.toggle('open');
+});
 
-/* ── HELPER: compute traffic-light status from dates ── */
-function computeStatus(openingDate, closingDate) {
-  if (!closingDate) return { label: 'Unknown', color: 'gray' };
-  var now = new Date();
-  var close = new Date(closingDate);
-  var open = openingDate ? new Date(openingDate) : null;
-
-  if (close < now) return { label: 'Closed', color: 'red' };
-
-  var daysLeft = (close - now) / (1000 * 60 * 60 * 24);
-  if (daysLeft <= 15) return { label: 'Approaching', color: 'amber' };
-
-  if (open && open > now) return { label: 'Not yet open', color: 'gray' };
-
-  return { label: 'Open', color: 'green' };
-}
-
-/* ── HELPER: render a list of records into a tbody ── */
-function renderRows(tbody, records) {
-  tbody.innerHTML = '';
-  if (!records || records.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#888;">No records found</td></tr>';
-    return;
-  }
-  records.forEach(function (item) {
-    var status = computeStatus(item.opening_date, item.closing_date);
-    var tr = document.createElement('tr');
-    tr.innerHTML =
-      '<td>' + esc(item.type) + '</td>' +
-      '<td>' + esc(item.name) + '</td>' +
-      '<td>' + esc(item.opening_date || '—') + '</td>' +
-      '<td>' + esc(item.closing_date || '—') + '</td>' +
-      '<td><span class="status-dot status-' + status.color + '"></span>' + status.label + '</td>';
-    tbody.appendChild(tr);
-  });
-}
-
-/*DASHBOARD OVERVIEW*/
-async function renderDashboardOverview(){
-  var $sec=document.getElementById('dashboard'); if(!$sec)return;
-
-  try{
-    var results = await Promise.all([
-      adminAPI.institutions.getAll(),
-      adminAPI.bursaries.getAll()
-    ]);
-    var instResp = results[0];
-    var bursResp = results[1];
-
-    var all = (instResp.data || []).concat(bursResp.data || []);
-
-    var approaching = all.filter(function (item) {
-      var status = computeStatus(item.opening_date, item.closing_date);
-      return status.label === 'Approaching';
-    });
-
-    var tables = $sec.querySelectorAll('#deadlinesBody');
-    if (tables[0]) renderRows(tables[0], approaching);   // first table = approaching
-    if (tables[1]) renderRows(tables[1], all);            // second table = all records
-
-  }catch(e){
-    console.error('[dashboard]',e);
-    if (e.status === 401) {
-      window.location.href = 'admin-login.html';
-      return;
+// Close sidebar on outside click (mobile)
+document.addEventListener('click', function(e) {
+  const sidebar = document.getElementById('sidebar');
+  const hamburger = document.getElementById('hamburger');
+  if (window.innerWidth <= 768) {
+    if (!sidebar.contains(e.target) && !hamburger.contains(e.target)) {
+      sidebar.classList.remove('open');
     }
-    if (e.status === 503) {
-      var msgEl = $sec.querySelector('.deadlines');
-      if (msgEl) msgEl.insertAdjacentHTML('afterbegin', '<div class="alert danger"><h4>System Locked Down</h4><p>'+esc(e.message)+'</p></div>');
-      return;
-    }
-    var msgEl2 = $sec.querySelector('.deadlines');
-    if (msgEl2) msgEl2.insertAdjacentHTML('afterbegin', '<div class="alert danger"><h4>Could not load dashboard</h4><p>'+esc(e.message)+'</p></div>');
   }
-}
+});
 
-/*search page*/
-async function renderSearchPage(){
-  var $sec=document.getElementById('search'); if(!$sec)return;
-
-  var form = document.getElementById('s-search-form');
-  var input = document.getElementById('internet-search-input');
-  var resultCard = $sec.querySelector('.result-card');
-
-  if (!form._wired) {
-    form._wired = true;
-    form.addEventListener('submit', async function (e) {
-      e.preventDefault();
-      var query = input.value.trim();
-      if (!query) return;
-
-      resultCard.innerHTML = '<p>Searching…</p>';
-
-      try {
-        var results = await Promise.all([
-          adminAPI.institutions.search(query),
-          adminAPI.bursaries.search(query)
-        ]);
-        var instResp = results[0];
-        var bursResp = results[1];
-        var all = (instResp.data || []).concat(bursResp.data || []);
-
-        if (all.length === 0) {
-          resultCard.innerHTML = '<p>No results found for "'+esc(query)+'"</p>';
-          return;
-        }
-
-        resultCard.innerHTML = all.map(function (item) {
-          var status = computeStatus(item.opening_date, item.closing_date);
-          return '<div class="result-row">'+
-            '<strong>'+esc(item.name)+'</strong> ('+esc(item.type)+')<br>'+
-            'Opens: '+esc(item.opening_date || '—')+' | Closes: '+esc(item.closing_date || '—')+
-            ' | Status: '+status.label+
-            '</div>';
-        }).join('');
-
-      } catch(e){
-        console.error('[search]',e);
-        resultCard.innerHTML='<div class="alert danger"><p>'+esc(e.message)+'</p></div>';
-      }
-    });
-  }
-}
-
-/*add-data page*/
-async function renderDataPage(){
-  var $sec=document.getElementById('add-data'); if(!$sec)return;
-
-  try{
-    var results = await Promise.all([
-      adminAPI.institutions.getAll(),
-      adminAPI.bursaries.getAll()
-    ]);
-    var instResp = results[0];
-    var bursResp = results[1];
-    var all = (instResp.data || []).concat(bursResp.data || []);
-    var tbody = $sec.querySelector('#deadlinesBody');
-    if (tbody) renderRows(tbody, all);
-  }catch(e){
-    console.error('[add-data load]',e);
-  }
-
-  var form = document.getElementById('university-Form');
-  if (form._wired) return;
-  form._wired = true;
-
-  form.addEventListener('submit', async function (e) {
-    e.preventDefault();
-
-    var actionType = document.querySelector('input[name="action-type"]:checked').value;
-    var title = document.getElementById('fTitle').value.trim();
-    var name  = document.getElementById('fName').value.trim();
-    var opening = document.getElementById('fOpeningDate').value.trim();
-    var closing = document.getElementById('fClosingDate').value.trim();
-    var isPrivate = document.getElementById('fPrivate').checked;
-
-    if (!title || !name) {
-      alert('Title and Name are required.');
-      return;
-    }
-
-    // Route to bursaries table if the Title mentions "Bursary", otherwise institutions
-    var isBursary = /bursary/i.test(title);
-    var api = isBursary ? adminAPI.bursaries : adminAPI.institutions;
-
-    var payload = {
-      name: name,
-      type: title,
-      opening_date: opening || null,
-      closing_date: closing || null,
-      is_private: isPrivate
-    };
-
-    try {
-      if (actionType === 'adding') {
-        await api.create(payload);
-        alert('Record added successfully.');
-      } else if (actionType === 'updating') {
-        var id = prompt('Enter the ID of the record to update:');
-        if (!id) return;
-        await api.update(id, payload);
-        alert('Record updated successfully.');
-      } else if (actionType === 'deleting') {
-        var delId = prompt('Enter the ID of the record to delete:');
-        if (!delId) return;
-        await api.delete(delId);
-        alert('Record deleted successfully.');
-      }
-      form.reset();
-      renderDataPage();
-    } catch (err) {
-      console.error('[add-data submit]', err);
-      alert('Error: ' + err.message);
-    }
-  });
-}
-
-/* ── AUTH GUARD + INITIAL LOAD ── */
-window.addEventListener('load', function () {
-  if (typeof adminAPI === 'undefined' || !adminAPI.login.isAuthenticated()) {
-    window.location.href = 'admin-login.html';
-    return;
-  }
-  window.dashNavTo('dashboard');
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded', function() {
+  // Load initial data
+  loadUniversities();
+  loadBursaries();
+  
+  // Load data table for Add Data page (hidden initially but preload)
+  setTimeout(loadAllRecords, 500);
+  
+  // Set user name
+  document.getElementById('userName').textContent = 'Admin';
+  
+  // Notification badge
+  document.getElementById('notificationBadge').textContent = '3';
+  
+  console.log('✅ QueryCrest Dashboard initialized');
+  console.log('📍 API Base:', API_BASE);
+  console.log('🔐 JWT Token:', JWT_TOKEN === 'YOUR_JWT_TOKEN_HERE' ? '⚠️ Using default token' : '✅ Token configured');
 });
 </script>
-
-
 </body>
 </html>
