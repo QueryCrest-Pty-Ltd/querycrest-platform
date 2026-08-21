@@ -362,8 +362,8 @@ body { font-family: 'Poppins', sans-serif; background: #f0f4f8; color: #1a202c; 
           <form id="university-Form" onsubmit="return handleFormSubmit(event)">
             <div class="inline-group">
               <div class="form-group">
-                <label for="fTitle">Title</label>
-                <input id="fTitle" type="text" placeholder="e.g., University of Cape Town">
+                <label for="fTitle">Type</label>
+                <input id="fTitle" type="text" placeholder="e.g., University or College">
               </div>
               <div class="form-group">
                 <label for="fName">Name</label>
@@ -792,7 +792,7 @@ async function handleFormSubmit(event) {
           type: title,
           opening_date: openingDate || null,
           closing_date: closingDate || null,
-          status: 'active',
+          status: 'open',
           is_private: isPrivate
         })
       });
