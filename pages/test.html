@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Connection Test — QueryCrest</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #0a0e1a;
+            color: #e8edf5;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: #141b2d;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .subtitle {
+            color: #94a3b8;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+        .test-group {
+            background: #1a2338;
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: border-color 0.3s;
+        }
+        .test-group.passed {
+            border-color: rgba(74, 222, 128, 0.3);
+        }
+        .test-group.failed {
+            border-color: rgba(248, 113, 113, 0.3);
+        }
+        .test-group.running {
+            border-color: rgba(96, 165, 250, 0.3);
+        }
+        .test-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+        }
+        .test-title {
+            font-weight: 600;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .test-status {
+            font-size: 20px;
+            line-height: 1;
+        }
+        .test-status.pass { color: #4ade80; }
+        .test-status.fail { color: #f87171; }
+        .test-status.running { color: #60a5fa; animation: spin 1s linear infinite; }
+        .test-status.waiting { color: #64748b; }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .test-details {
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            font-size: 13px;
+            color: #94a3b8;
+            display: none;
+        }
+        .test-details.open {
+            display: block;
+        }
+        .log-line {
+            padding: 4px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+        }
+        .log-line.success { color: #4ade80; }
+        .log-line.error { color: #f87171; }
+        .log-line.info { color: #60a5fa; }
+        .log-line.warn { color: #fbbf24; }
+        .log-line.data { color: #a78bfa; }
+        .badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .badge.pass { background: rgba(74, 222, 128, 0.15); color: #4ade80; }
+        .badge.fail { background: rgba(248, 113, 113, 0.15); color: #f87171; }
+        .badge.running { background: rgba(96, 165, 250, 0.15); color: #60a5fa; }
+        .badge.waiting { background: rgba(100, 116, 139, 0.15); color: #64748b; }
+        .btn {
+            padding: 10px 28px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #60a5fa, #a78bfa);
+            color: #fff;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(96, 165, 250, 0.3);
+        }
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        .btn-secondary {
+            background: #1a2338;
+            color: #94a3b8;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .btn-secondary:hover {
+            background: #2a3650;
+            color: #e8edf5;
+        }
+        .actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+            flex-wrap: wrap;
+        }
+        .summary {
+            margin-top: 24px;
+            padding: 16px 20px;
+            background: #1a2338;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .summary-stats {
+            display: flex;
+            gap: 24px;
+            font-size: 14px;
+        }
+        .summary-stats span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .summary .count-pass { color: #4ade80; }
+        .summary .count-fail { color: #f87171; }
+        .summary .count-total { color: #94a3b8; }
+        .input-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+        .input-group input {
+            flex: 1;
+            min-width: 200px;
+            padding: 10px 16px;
+            background: #0a0e1a;
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 8px;
+            color: #e8edf5;
+            font-family: 'Poppins', sans-serif;
+            font-size: 13px;
+        }
+        .input-group input:focus {
+            outline: none;
+            border-color: #60a5fa;
+        }
+        .input-group input::placeholder {
+            color: #475569;
+        }
+        .test-results {
+            margin-top: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-size: 12px;
+            font-family: 'Courier New', monospace;
+            background: #0a0e1a;
+            border-radius: 8px;
+            padding: 12px;
+        }
+        .test-results::-webkit-scrollbar {
+            width: 4px;
+        }
+        .test-results::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .test-results::-webkit-scrollbar-thumb {
+            background: #2a3650;
+            border-radius: 4px;
+        }
+        .expand-toggle {
+            background: none;
+            border: none;
+            color: #64748b;
+            cursor: pointer;
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+        .expand-toggle:hover {
+            background: rgba(255,255,255,0.05);
+        }
+        @media (max-width: 600px) {
+            .container { padding: 20px; }
+            .summary-stats { gap: 12px; font-size: 12px; }
+            .test-title { font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="app">
+        <h1>🔌 API Connection Test</h1>
+        <p class="subtitle">Testing connectivity between QueryCrest admin pages and Supabase backend</p>
+
+        <div id="testContainer"></div>
+
+        <div class="actions">
+            <button class="btn btn-primary" id="runAllBtn" onclick="runAllTests()">▶ Run All Tests</button>
+            <button class="btn btn-secondary" onclick="resetAll()">↺ Reset</button>
+        </div>
+
+        <div class="summary" id="summary">
+            <span style="font-weight:500;">Summary</span>
+            <div class="summary-stats">
+                <span>✅ <span class="count-pass" id="passCount">0</span> passed</span>
+                <span>❌ <span class="count-fail" id="failCount">0</span> failed</span>
+                <span>📊 <span class="count-total" id="totalCount">0</span> total</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load the AdminAPI first -->
+    <script src="../js/admin-api.js"></script>
+
+    <script>
+        // ============================================================
+        // TEST CONFIGURATION
+        // ============================================================
+        const TEST_DATA = {
+            institution: {
+                name: "Test University " + Date.now().toString().slice(-4),
+                type: "Test Institution",
+                opening_date: "2026-01-15",
+                closing_date: "2026-12-31"
+            },
+            bursary: {
+                name: "Test Bursary " + Date.now().toString().slice(-4),
+                type: "Test Bursary Fund",
+                opening_date: "2026-01-01",
+                closing_date: "2026-11-30",
+                is_private: false
+            }
+        };
+
+        let testResults = [];
+        let isRunning = false;
+        let createdIds = { institution: null, bursary: null };
+
+        // ============================================================
+        // TEST DEFINITIONS
+        // ============================================================
+        const tests = [
+            {
+                id: 'auth-status',
+                title: 'Authentication Status',
+                description: 'Check if the user is authenticated with a valid token',
+                run: async () => {
+                    const authenticated = adminAPI.login.isAuthenticated();
+                    return {
+                        passed: authenticated,
+                        message: authenticated ? 'Authenticated ✓' : 'Not authenticated (login required for some tests)',
+                        details: authenticated ? 'Session token is valid' : 'Please log in via admin-login.html first'
+                    };
+                }
+            },
+            {
+                id: 'institutions-getall',
+                title: 'Institutions — GET All',
+                description: 'Fetch all institutions from the database',
+                run: async () => {
+                    const result = await adminAPI.institutions.getAll();
+                    return {
+                        passed: result && Array.isArray(result.data),
+                        message: `Retrieved ${result.data?.length || 0} institutions`,
+                        details: result.data?.slice(0, 3).map(i => `${i.name} (${i.type})`).join(', ') || 'No institutions found'
+                    };
+                }
+            },
+            {
+                id: 'institutions-create',
+                title: 'Institutions — CREATE',
+                description: 'Create a new test institution',
+                run: async () => {
+                    const result = await adminAPI.institutions.create(TEST_DATA.institution);
+                    if (result && result.data && result.data.id) {
+                        createdIds.institution = result.data.id;
+                        return {
+                            passed: true,
+                            message: `Created: ${result.data.name} (ID: ${result.data.id})`,
+                            details: `Type: ${result.data.type} | Opens: ${result.data.opening_date} | Closes: ${result.data.closing_date}`
+                        };
+                    }
+                    return { passed: false, message: 'Failed to create institution', details: JSON.stringify(result) };
+                }
+            },
+            {
+                id: 'institutions-search',
+                title: 'Institutions — SEARCH',
+                description: 'Search for institutions by name',
+                run: async () => {
+                    const query = 'Test';
+                    const result = await adminAPI.institutions.search(query);
+                    const found = result.data?.filter(i => i.name.includes('Test')) || [];
+                    return {
+                        passed: found.length > 0,
+                        message: `Found ${found.length} institutions matching "${query}"`,
+                        details: found.slice(0, 3).map(i => `${i.name}`).join(', ') || 'No matches found'
+                    };
+                }
+            },
+            {
+                id: 'institutions-update',
+                title: 'Institutions — UPDATE',
+                description: 'Update the created test institution',
+                run: async () => {
+                    if (!createdIds.institution) {
+                        return { passed: false, message: 'No institution to update — run CREATE first' };
+                    }
+                    const updates = { ...TEST_DATA.institution, name: TEST_DATA.institution.name + '-UPDATED' };
+                    const result = await adminAPI.institutions.update(createdIds.institution, updates);
+                    return {
+                        passed: result && result.data && result.data.name.includes('UPDATED'),
+                        message: `Updated institution to: ${result.data?.name}`,
+                        details: `ID: ${result.data?.id}`
+                    };
+                }
+            },
+            {
+                id: 'bursaries-getall',
+                title: 'Bursaries — GET All',
+                description: 'Fetch all bursaries from the database',
+                run: async () => {
+                    const result = await adminAPI.bursaries.getAll();
+                    return {
+                        passed: result && Array.isArray(result.data),
+                        message: `Retrieved ${result.data?.length || 0} bursaries`,
+                        details: result.data?.slice(0, 3).map(i => `${i.name} (${i.type})`).join(', ') || 'No bursaries found'
+                    };
+                }
+            },
+            {
+                id: 'bursaries-create',
+                title: 'Bursaries — CREATE',
+                description: 'Create a new test bursary',
+                run: async () => {
+                    const result = await adminAPI.bursaries.create(TEST_DATA.bursary);
+                    if (result && result.data && result.data.id) {
+                        createdIds.bursary = result.data.id;
+                        return {
+                            passed: true,
+                            message: `Created: ${result.data.name} (ID: ${result.data.id})`,
+                            details: `Type: ${result.data.type} | Private: ${result.data.is_private}`
+                        };
+                    }
+                    return { passed: false, message: 'Failed to create bursary', details: JSON.stringify(result) };
+                }
+            },
+            {
+                id: 'bursaries-search',
+                title: 'Bursaries — SEARCH',
+                description: 'Search for bursaries by name',
+                run: async () => {
+                    const query = 'Test';
+                    const result = await adminAPI.bursaries.search(query);
+                    const found = result.data?.filter(i => i.name.includes('Test')) || [];
+                    return {
+                        passed: found.length > 0,
+                        message: `Found ${found.length} bursaries matching "${query}"`,
+                        details: found.slice(0, 3).map(i => `${i.name}`).join(', ') || 'No matches found'
+                    };
+                }
+            },
+            {
+                id: 'bursaries-update',
+                title: 'Bursaries — UPDATE',
+                description: 'Update the created test bursary',
+                run: async () => {
+                    if (!createdIds.bursary) {
+                        return { passed: false, message: 'No bursary to update — run CREATE first' };
+                    }
+                    const updates = { ...TEST_DATA.bursary, name: TEST_DATA.bursary.name + '-UPDATED' };
+                    const result = await adminAPI.bursaries.update(createdIds.bursary, updates);
+                    return {
+                        passed: result && result.data && result.data.name.includes('UPDATED'),
+                        message: `Updated bursary to: ${result.data?.name}`,
+                        details: `ID: ${result.data?.id}`
+                    };
+                }
+            },
+            {
+                id: 'lockdown-status',
+                title: 'Lockdown Status',
+                description: 'Check the current system lockdown status',
+                run: async () => {
+                    const result = await adminAPI.lockdown.getStatus();
+                    return {
+                        passed: result && typeof result.is_active === 'boolean',
+                        message: `Lockdown is ${result.is_active ? 'ACTIVE' : 'INACTIVE'}`,
+                        details: result.expires_at ? `Expires: ${result.expires_at}` : 'No expiry set'
+                    };
+                }
+            }
+        ];
+
+        // ============================================================
+        // CLEANUP — Delete test data
+        // ============================================================
+        async function cleanupTestData() {
+            const results = [];
+            if (createdIds.institution) {
+                try {
+                    await adminAPI.institutions.delete(createdIds.institution);
+                    results.push('Deleted test institution');
+                    createdIds.institution = null;
+                } catch (e) {
+                    results.push('Failed to delete institution: ' + e.message);
+                }
+            }
+            if (createdIds.bursary) {
+                try {
+                    await adminAPI.bursaries.delete(createdIds.bursary);
+                    results.push('Deleted test bursary');
+                    createdIds.bursary = null;
+                } catch (e) {
+                    results.push('Failed to delete bursary: ' + e.message);
+                }
+            }
+            return results;
+        }
+
+        // ============================================================
+        // TEST RUNNER
+        // ============================================================
+        async function runAllTests() {
+            if (isRunning) return;
+            isRunning = true;
+            document.getElementById('runAllBtn').disabled = true;
+            testResults = [];
+
+            // First, cleanup any leftover test data
+            await cleanupTestData();
+
+            const container = document.getElementById('testContainer');
+            container.innerHTML = '';
+
+            // Render all test groups in waiting state
+            tests.forEach((test, index) => {
+                const group = createTestGroup(test, index);
+                container.appendChild(group);
+            });
+
+            // Run tests sequentially
+            for (let i = 0; i < tests.length; i++) {
+                const test = tests[i];
+                const group = container.children[i];
+                const statusEl = group.querySelector('.test-status');
+                const badgeEl = group.querySelector('.badge');
+                const detailsEl = group.querySelector('.test-details');
+
+                // Update status to running
+                statusEl.textContent = '⟳';
+                statusEl.className = 'test-status running';
+                badgeEl.textContent = 'Running';
+                badgeEl.className = 'badge running';
+                group.className = 'test-group running';
+
+                try {
+                    const result = await test.run();
+                    const passed = result.passed;
+                    testResults.push({ ...result, id: test.id });
+
+                    statusEl.textContent = passed ? '✓' : '✗';
+                    statusEl.className = `test-status ${passed ? 'pass' : 'fail'}`;
+                    badgeEl.textContent = passed ? 'Passed' : 'Failed';
+                    badgeEl.className = `badge ${passed ? 'pass' : 'fail'}`;
+                    group.className = `test-group ${passed ? 'passed' : 'failed'}`;
+
+                    // Add log lines
+                    const logContainer = detailsEl.querySelector('.test-results');
+                    if (logContainer) {
+                        logContainer.innerHTML = '';
+                        addLogLine(logContainer, result.message, passed ? 'success' : 'error');
+                        if (result.details) {
+                            addLogLine(logContainer, '📎 ' + result.details, 'info');
+                        }
+                    }
+
+                } catch (error) {
+                    testResults.push({ id: test.id, passed: false, message: error.message || 'Test threw an error' });
+                    statusEl.textContent = '✗';
+                    statusEl.className = 'test-status fail';
+                    badgeEl.textContent = 'Failed';
+                    badgeEl.className = 'badge fail';
+                    group.className = 'test-group failed';
+
+                    const logContainer = detailsEl.querySelector('.test-results');
+                    if (logContainer) {
+                        logContainer.innerHTML = '';
+                        addLogLine(logContainer, '❌ ' + (error.message || 'Unknown error'), 'error');
+                        if (error.status) {
+                            addLogLine(logContainer, `HTTP ${error.status}`, 'warn');
+                        }
+                    }
+                }
+
+                // Open details after test completes
+                detailsEl.classList.add('open');
+
+                // Update summary
+                updateSummary();
+            }
+
+            // Run cleanup after all tests
+            const cleanupResults = await cleanupTestData();
+            if (cleanupResults.length > 0) {
+                const lastGroup = container.lastElementChild;
+                const logContainer = lastGroup?.querySelector('.test-results');
+                if (logContainer) {
+                    cleanupResults.forEach(msg => addLogLine(logContainer, '🧹 ' + msg, 'info'));
+                }
+            }
+
+            isRunning = false;
+            document.getElementById('runAllBtn').disabled = false;
+        }
+
+        // ============================================================
+        // UI HELPERS
+        // ============================================================
+        function createTestGroup(test, index) {
+            const div = document.createElement('div');
+            div.className = 'test-group waiting';
+            div.innerHTML = `
+                <div class="test-header" onclick="toggleDetails(this)">
+                    <div class="test-title">
+                        <span class="test-status waiting">○</span>
+                        <span>${index + 1}. ${test.title}</span>
+                        <span class="badge waiting">Waiting</span>
+                    </div>
+                    <button class="expand-toggle" onclick="event.stopPropagation(); toggleDetails(this.closest('.test-group'))">
+                        ▼
+                    </button>
+                </div>
+                <div class="test-details">
+                    <div style="margin-bottom:8px;color:#64748b;">${test.description}</div>
+                    <div class="test-results"></div>
+                </div>
+            `;
+            return div;
+        }
+
+        function addLogLine(container, text, type = 'info') {
+            const line = document.createElement('div');
+            line.className = `log-line ${type}`;
+            line.textContent = text;
+            container.appendChild(line);
+        }
+
+        function toggleDetails(element) {
+            const details = element.querySelector('.test-details') || element.parentElement.querySelector('.test-details');
+            if (details) {
+                details.classList.toggle('open');
+                const toggle = element.querySelector('.expand-toggle') || element.parentElement.querySelector('.expand-toggle');
+                if (toggle) toggle.textContent = details.classList.contains('open') ? '▼' : '▶';
+            }
+        }
+
+        function updateSummary() {
+            const passed = testResults.filter(r => r.passed).length;
+            const failed = testResults.filter(r => !r.passed).length;
+            document.getElementById('passCount').textContent = passed;
+            document.getElementById('failCount').textContent = failed;
+            document.getElementById('totalCount').textContent = testResults.length;
+        }
+
+        function resetAll() {
+            if (isRunning) return;
+            document.getElementById('testContainer').innerHTML = '';
+            testResults = [];
+            updateSummary();
+            document.getElementById('runAllBtn').disabled = false;
+            // Also cleanup
+            cleanupTestData();
+        }
+
+        // ============================================================
+        // AUTO-RUN on load if authenticated
+        // ============================================================
+        window.addEventListener('load', function() {
+            // Check if adminAPI loaded
+            if (typeof adminAPI === 'undefined') {
+                document.getElementById('testContainer').innerHTML = `
+                    <div style="background:#1a2338;border-radius:12px;padding:20px;border:1px solid rgba(248,113,113,0.2);">
+                        <div style="color:#f87171;font-weight:600;margin-bottom:8px;">⚠️ admin-api.js not found</div>
+                        <div style="color:#94a3b8;font-size:14px;">
+                            Make sure the file is at <code>../js/admin-api.js</code> relative to this page.
+                            The API layer must be loaded before the test script.
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            // Auto-run tests if authenticated, otherwise show login hint
+            if (adminAPI.login.isAuthenticated()) {
+                setTimeout(runAllTests, 500);
+            } else {
+                document.getElementById('testContainer').innerHTML = `
+                    <div style="background:#1a2338;border-radius:12px;padding:20px;border:1px solid rgba(251,191,36,0.2);">
+                        <div style="color:#fbbf24;font-weight:600;margin-bottom:8px;">🔐 Login Required</div>
+                        <div style="color:#94a3b8;font-size:14px;">
+                            Please log in via <a href="admin-login.html" style="color:#60a5fa;text-decoration:none;">admin-login.html</a> first,
+                            then return to this page and click <strong>"Run All Tests"</strong>.
+                        </div>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

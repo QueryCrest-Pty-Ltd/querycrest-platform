@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>QueryCrest — Administrator Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+/* ===== RESET & BASE ===== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { 
+  font-family: 'Poppins', sans-serif; 
+  background: #f0f4f8; 
+  color: #1a202c; 
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== TOP NAV ===== */
+.top-nav {
+  background: white;
+  padding: 0 32px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #e2e8f0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #1a202c;
+  font-weight: 700;
+  font-size: 18px;
+}
+.nav-logo {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 14px;
+}
+.nav-brand-txt em {
+  font-style: normal;
+  color: #667eea;
+}
+.nav-links {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+.nav-links a {
+  text-decoration: none;
+  color: #4a5568;
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: #667eea; }
+.nav-cta {
+  padding: 10px 24px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white !important;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 14px;
+  transition: transform 0.2s;
+}
+.nav-cta:hover { transform: translateY(-2px); }
+.nav-hamburger {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+}
+.nav-hamburger svg {
+  width: 28px;
+  height: 28px;
+  stroke: #1a202c;
+  stroke-width: 2;
+  fill: none;
+}
+.nav-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.3);
+  z-index: 98;
+}
+.nav-overlay.open { display: block; }
+.nav-drawer {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: -320px;
+  width: 300px;
+  height: 100%;
+  background: white;
+  padding: 80px 24px 24px;
+  z-index: 99;
+  transition: right 0.3s ease;
+  box-shadow: -4px 0 24px rgba(0,0,0,0.1);
+}
+.nav-drawer.open { right: 0; display: block; }
+.nav-drawer a {
+  display: block;
+  padding: 12px 0;
+  text-decoration: none;
+  color: #4a5568;
+  font-weight: 500;
+  border-bottom: 1px solid #f7fafc;
+}
+.nav-drawer .nav-cta {
+  display: inline-block;
+  margin-top: 16px;
+  text-align: center;
+}
+.nav-drawer-divider { border-top: 2px solid #e2e8f0; margin: 16px 0; }
+
+/* ===== PAGE LAYOUT ===== */
+.page {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: calc(100vh - 70px);
+  flex: 1;
+}
+
+/* ===== LEFT: HERO / SLIDESHOW ===== */
+.hero {
+  position: relative;
+  background: #1a202c;
+  overflow: hidden;
+  min-height: 500px;
+}
+.slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+  display: flex;
+  align-items: center;
+  padding: 60px;
+}
+.slide.active { opacity: 1; }
+.slide-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.4;
+}
+.slide-body {
+  position: relative;
+  z-index: 2;
+  color: white;
+  max-width: 500px;
+}
+.slide-tag {
+  display: inline-block;
+  background: rgba(102, 126, 234, 0.3);
+  padding: 4px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 16px;
+}
+.slide-body h2 {
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 16px;
+}
+.slide-body p {
+  font-size: 16px;
+  opacity: 0.8;
+  line-height: 1.6;
+}
+.dots {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+  z-index: 3;
+}
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.dot.active {
+  background: white;
+  width: 32px;
+  border-radius: 6px;
+}
+
+/* ===== RIGHT: FORM ===== */
+.form-side {
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+.form-inner {
+  max-width: 400px;
+  width: 100%;
+}
+.form-hd {
+  margin-bottom: 32px;
+}
+.form-hd h2 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a202c;
+  margin-bottom: 8px;
+}
+.form-hd p {
+  color: #718096;
+  font-size: 15px;
+}
+.field {
+  margin-bottom: 20px;
+}
+.field label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #4a5568;
+  margin-bottom: 6px;
+}
+.inp {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: 'Poppins', sans-serif;
+  transition: all 0.2s;
+  background: white;
+}
+.inp:focus {
+  border-color: #667eea;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+.inp-wrap {
+  position: relative;
+}
+.inp-wrap .inp {
+  padding-right: 48px;
+}
+.eye-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  color: #a0aec0;
+}
+.eye-btn svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+}
+.btn-submit {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s;
+  font-family: 'Poppins', sans-serif;
+  position: relative;
+}
+.btn-submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+.btn-submit:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+.spin {
+  display: none;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255,255,255,0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-left: 12px;
+  vertical-align: middle;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.msg {
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  display: none;
+}
+.msg.err {
+  display: block;
+  background: #fed7d7;
+  color: #742a2a;
+}
+.msg.ok {
+  display: block;
+  background: #c6f6d5;
+  color: #22543d;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+  .page { grid-template-columns: 1fr; }
+  .hero { min-height: 300px; }
+  .slide { padding: 30px; }
+  .slide-body h2 { font-size: 24px; }
+  .nav-links { display: none; }
+  .nav-hamburger { display: block; }
+  .top-nav { padding: 0 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="top-nav" id="topNav">
+  <a class="nav-brand" href="#">
+    <div class="nav-logo">QC</div>
+    <span class="nav-brand-txt">QueryCrest <em>Administrator</em></span>
+  </a>
+  <div class="nav-links">
+    <a href="#">Home</a>
+    <a href="#">Pricing</a>
+    <a href="#">Privacy</a>
+    <a href="#">Disclaimer</a>
+    <a href="#">About</a>
+  </div>
+  <button class="nav-hamburger" id="navHamburger" aria-label="Toggle menu">
+    <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<!-- Mobile overlay -->
+<div class="nav-overlay" id="navOverlay"></div>
+
+<!-- Mobile drawer -->
+<div class="nav-drawer" id="navDrawer">
+  <a href="#">Home</a>
+  <a href="#">Pricing</a>
+  <a href="#">Privacy</a>
+  <a href="#">Disclaimer</a>
+  <a href="#">About</a>
+  <div class="nav-drawer-divider"></div>
+  <a class="nav-cta" href="#">Get Started →</a>
+</div>
+
+<!-- PAGE -->
+<div class="page">
+
+  <!-- LEFT: HERO -->
+  <div class="hero">
+    <div class="slide active" id="slide0">
+      <div class="slide-bg" style="background-image:url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1200&q=80')"></div>
+      <div class="slide-body">
+        <div class="slide-tag">University Applications</div>
+        <h2>Apply to all 26 public universities in one place</h2>
+        <p>Stop juggling multiple portals. QueryCrest lets you manage all your university applications, documents, and status updates from a single dashboard.</p>
+      </div>
+    </div>
+    <div class="slide" id="slide1">
+      <div class="slide-bg" style="background-image:url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&q=80')"></div>
+      <div class="slide-body">
+        <div class="slide-tag">Document Management</div>
+        <h2>Upload once. Use everywhere.</h2>
+        <p>Upload your certified ID, matric results, and proof of residence once — we securely store and reuse them across all your applications.</p>
+      </div>
+    </div>
+    <div class="slide" id="slide2">
+      <div class="slide-bg" style="background-image:url('https://images.unsplash.com/photo-1606761568499-6d2451b23c66?w=1200&q=80')"></div>
+      <div class="slide-body">
+        <div class="slide-tag">Real-time Tracking</div>
+        <h2>Know exactly where your application stands.</h2>
+        <p>Get real-time status updates on every application you submit. No more waiting in uncertainty — stay informed every step of the way.</p>
+      </div>
+    </div>
+    <div class="dots">
+      <button class="dot active" onclick="goSlide(0)"></button>
+      <button class="dot" onclick="goSlide(1)"></button>
+      <button class="dot" onclick="goSlide(2)"></button>
+    </div>
+  </div>
+
+  <!-- RIGHT: LOGIN FORM -->
+  <div class="form-side">
+    <div class="form-inner">
+      <div class="form-hd">
+        <h2>Welcome back</h2>
+        <p>Sign in to your Administrator dashboard.</p>
+      </div>
+
+      <div class="msg" id="loginMsg" style="display:none;"></div>
+
+      <div class="field">
+        <label for="lUN">User Name</label>
+        <input class="inp" type="text" id="lUN" placeholder="Enter your username">
+      </div>
+
+      <div class="field">
+        <label for="lVC">Verification Code</label>
+        <div class="inp-wrap">
+          <input class="inp" type="password" id="lVC" placeholder="Enter verification code">
+          <button class="eye-btn" type="button" onclick="toggleEye('lVC',this)">
+            <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="lPA">Administrative Password</label>
+        <div class="inp-wrap">
+          <input class="inp" type="password" id="lPA" placeholder="Enter admin password">
+          <button class="eye-btn" type="button" onclick="toggleEye('lPA',this)">
+            <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <button class="btn-submit" id="loginBtn" onclick="doLogin()">
+        <span id="loginTxt">Sign In</span>
+        <span class="spin" id="loginSpin"></span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// AdminAPI (Directly in the page for testing)
+// ============================================================
+
+class AdminAPI {
+  constructor() {
+    this.baseUrl = "https://xkjsydeavdcarwkthppz.supabase.co/functions/v1";
+    this.tokenKey = "admin_token";
+    this.tokenExpiryKey = "admin_token_expiry";
+    
+    const isLocal = window.location.hostname === '127.0.0.1' || 
+                    window.location.hostname === 'localhost';
+    
+    this.origin = isLocal ? window.location.origin : "https://www.querycrest.com";
+    
+    console.log('📍 AdminAPI using baseUrl:', this.baseUrl);
+    console.log('📍 Using Origin header:', this.origin);
+  }
+
+  _setToken(token) {
+    console.log('💾 Storing token:', token ? token.substring(0, 20) + '...' : 'null');
+    const expiryTime = Date.now() + 60 * 60 * 1000;
+    sessionStorage.setItem(this.tokenKey, token);
+    sessionStorage.setItem(this.tokenExpiryKey, expiryTime.toString());
+    console.log('✅ Token stored');
+    console.log('✅ Verification - Token in sessionStorage:', sessionStorage.getItem(this.tokenKey) ? 'Yes' : 'No');
+  }
+
+  async _fetch(endpoint, options = {}) {
+    const url = `${this.baseUrl}${endpoint}`;
+    const token = sessionStorage.getItem(this.tokenKey);
+
+    const headers = {
+      "Content-Type": "application/json",
+      "Origin": this.origin,
+      ...options.headers,
+    };
+
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`;
+      console.log('🔐 Sending token');
+    }
+
+    console.log('📡 Fetching:', endpoint);
+    
+    try {
+      const response = await fetch(url, { ...options, headers });
+      const data = await response.json();
+      console.log('📊 Response status:', response.status);
+      console.log('📦 Response:', data);
+      
+      if (!response.ok) {
+        throw { status: response.status, message: data.error || 'Request failed' };
+      }
+      
+      return data;
+    } catch (err) {
+      console.error('❌ Fetch error:', err);
+      throw err;
+    }
+  }
+
+  login = {
+    step1: async (verificationCode) => {
+      return await this._fetch("/auth", {
+        method: "POST",
+        body: JSON.stringify({ step: "1", verification_code: verificationCode }),
+      });
+    },
+    step2: async (adminPassword) => {
+      const response = await this._fetch("/auth", {
+        method: "POST",
+        body: JSON.stringify({ step: "2", admin_password: adminPassword }),
+      });
+      
+      console.log('🔍 Step2 response:', response);
+      
+      if (response.token) {
+        console.log('✅ Token found in response, storing...');
+        this._setToken(response.token);
+        return { ...response, tokenStored: true };
+      } else {
+        console.warn('⚠️ No token in response');
+        return { ...response, tokenStored: false };
+      }
+    },
+    isAuthenticated: () => {
+      return sessionStorage.getItem('admin_token') !== null;
+    }
+  };
+}
+
+const adminAPI = new AdminAPI();
+
+// ============================================================
+// LOGIN FUNCTION
+// ============================================================
+
+async function doLogin() {
+  const msgEl = document.getElementById('loginMsg');
+  msgEl.style.display = 'none';
+  
+  const verificationCode = document.getElementById('lVC').value.trim();
+  const adminPassword = document.getElementById('lPA').value;
+  const username = document.getElementById('lUN').value.trim();
+
+  if (!username) {
+    msgEl.textContent = 'Please enter your username';
+    msgEl.className = 'msg err';
+    msgEl.style.display = 'block';
+    return;
+  }
+
+  if (!verificationCode) {
+    msgEl.textContent = 'Please enter the verification code';
+    msgEl.className = 'msg err';
+    msgEl.style.display = 'block';
+    return;
+  }
+
+  if (!adminPassword) {
+    msgEl.textContent = 'Please enter the administrative password';
+    msgEl.className = 'msg err';
+    msgEl.style.display = 'block';
+    return;
+  }
+
+  const btn = document.getElementById('loginBtn');
+  const spin = document.getElementById('loginSpin');
+  const txt = document.getElementById('loginTxt');
+  
+  btn.disabled = true;
+  spin.style.display = 'inline-block';
+  txt.textContent = 'Please wait…';
+
+  try {
+    console.log('🔐 Step 1: Verifying code...');
+    const step1 = await adminAPI.login.step1(verificationCode);
+    console.log('✅ Step 1 success:', step1);
+
+    console.log('🔐 Step 2: Verifying password...');
+    const step2 = await adminAPI.login.step2(adminPassword);
+    console.log('✅ Step 2 response:', step2);
+
+    if (step2.tokenStored) {
+      msgEl.textContent = '✅ Login successful! Redirecting...';
+      msgEl.className = 'msg ok';
+      msgEl.style.display = 'block';
+      
+      // Verify token was stored
+      const stored = sessionStorage.getItem('admin_token');
+      console.log('🔍 Final verification - Token in sessionStorage:', stored ? 'Yes' : 'No');
+      
+      setTimeout(() => {
+        window.location.href = 'admin-dashboard.html';
+      }, 1000);
+    } else {
+      msgEl.textContent = '❌ Login failed: No token received from server';
+      msgEl.className = 'msg err';
+      msgEl.style.display = 'block';
+    }
+  } catch (err) {
+    console.error('❌ Login error:', err);
+    msgEl.textContent = `❌ ${err.message || 'Login failed. Please try again.'}`;
+    msgEl.className = 'msg err';
+    msgEl.style.display = 'block';
+  } finally {
+    btn.disabled = false;
+    spin.style.display = 'none';
+    txt.textContent = 'Sign In';
+  }
+}
+
+// ============================================================
+// HELPER FUNCTIONS
+// ============================================================
+
+function toggleEye(id, btn) {
+  const inp = document.getElementById(id);
+  const isPassword = inp.type === 'password';
+  inp.type = isPassword ? 'text' : 'password';
+  
+  btn.querySelector('svg').innerHTML = isPassword
+    ? '<line x1="1" y1="1" x2="23" y2="23"/><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 11 8 11 8a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 1 12s4 8 11 8a9.74 9.74 0 0 0 5.39-1.61"/>'
+    : '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+}
+
+function goSlide(n) {
+  document.querySelectorAll('.slide').forEach((s, i) => {
+    s.classList.toggle('active', i === n);
+  });
+  document.querySelectorAll('.dot').forEach((d, i) => {
+    d.classList.toggle('active', i === n);
+  });
+}
+
+// Auto-rotate slides
+let slideIndex = 0;
+setInterval(() => {
+  slideIndex = (slideIndex + 1) % 3;
+  goSlide(slideIndex);
+}, 5000);
+
+// Mobile nav
+document.getElementById('navHamburger').addEventListener('click', function() {
+  document.getElementById('navDrawer').classList.toggle('open');
+  document.getElementById('navOverlay').classList.toggle('open');
+});
+document.getElementById('navOverlay').addEventListener('click', function() {
+  document.getElementById('navDrawer').classList.remove('open');
+  document.getElementById('navOverlay').classList.remove('open');
+});
+
+// Enter key support
+document.getElementById('lPA').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') doLogin();
+});
+document.getElementById('lVC').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') document.getElementById('lPA').focus();
+});
+document.getElementById('lUN').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') document.getElementById('lVC').focus();
+});
+
+// Check if already logged in
+if (adminAPI.login.isAuthenticated()) {
+  console.log('✅ Already authenticated, redirecting to dashboard...');
+  window.location.href = 'admin-dashboard.html';
+}
+</script>
+</body>
+</html>

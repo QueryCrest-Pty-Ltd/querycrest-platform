@@ -1,0 +1,358 @@
+﻿import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { jwtVerify } from "https://esm.sh/jose@5";
+
+const _SVC = () => createClient(
+  Deno.env.get("SUPABASE_URL")!,
+  Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+);
+
+const CORS = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+};
+
+function _json(body: unknown, status = 200): Response {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { ...CORS, "Content-Type": "application/json" },
+  });
+}
+
+const JWT_SECRET = Deno.env.get("SUPABASE_JWT_SECRET") || "your-secret-key";
+
+async function verifyToken(authHeader: string): Promise<boolean> {
+  if (!authHeader || !authHeader.startsWith("Bearer ")) return false;
+  const token = authHeader.slice(7);
+  try {
+    const secret = new TextEncoder().encode(JWT_SECRET);
+    await jwtVerify(token, secret);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function logAuditAction(action: string, details: Record<string, unknown>) {
+  const svc = _SVC();
+  try {
+    await svc.from("audit_log").insert({
+      action,
+      details: JSON.stringify(details),
+      timestamp: new Date().toISOString(),
+    });
+  } catch (err) {
+    console.error("Failed to log audit action:", err);
+  }
+}
+
+// Simple route extraction - handles both /institutions and /institutions/bursaries
+function extractRoute(url: URL): string {
+  const path = url.pathname;
+  
+  // Remove the base path
+  let route = path.replace("/functions/v1/institutions", "");
+  
+  // Remove leading slash
+  if (route.startsWith("/")) {
+    route = route.substring(1);
+  }
+  
+  return route;
+}
+
+Deno.serve(async (req) => {
+  if (req.method === "OPTIONS") {
+    return new Response("ok", { headers: CORS });
+  }
+
+  const origin = req.headers.get("origin");
+  if (origin && origin !== "https://www.querycrest.com") {
+    return _json({ error: "Origin not allowed" }, 403);
+  }
+
+  const authHeader = req.headers.get("authorization") || "";
+  const isAuthenticated = await verifyToken(authHeader);
+  if (!isAuthenticated) {
+    return _json({ error: "Unauthorized" }, 401);
+  }
+
+  const url = new URL(req.url);
+  const method = req.method;
+  const route = extractRoute(url);
+  const svc = _SVC();
+
+  console.log(`[DEBUG] Method: ${method}, Route: "${route}"`);
+
+  try {
+    // ============================================================
+    // ROUTE: "" - INSTITUTIONS (root)
+    // ============================================================
+    if (route === "") {
+      if (method === "GET") {
+        const { data, error } = await svc
+          .from("universities")
+          .select("id, name, type, opening_date, closing_date, status, is_private")
+          .order("name");
+
+        if (error) {
+          console.error("Error fetching institutions:", error);
+          return _json({ error: "Failed to fetch institutions" }, 500);
+        }
+
+        await logAuditAction("VIEW_INSTITUTIONS", { count: data?.length || 0 });
+        return _json({ data });
+      }
+
+      if (method === "POST") {
+        let body;
+        try {
+          body = await req.json();
+        } catch {
+          return _json({ error: "Invalid request body" }, 400);
+        }
+
+        const { name, type, opening_date, closing_date, status, is_private } = body;
+
+        if (!name || !type) {
+          return _json({ error: "Name and type are required" }, 400);
+        }
+
+        const { data, error } = await svc
+          .from("universities")
+          .insert({
+            name: String(name).trim(),
+            type: String(type).trim(),
+            opening_date: opening_date || null,
+            closing_date: closing_date || null,
+            status: status || "active",
+            is_private: is_private || false,
+          })
+          .select();
+
+        if (error) {
+          console.error("Error creating institution:", error);
+          return _json({ error: "Failed to create institution" }, 500);
+        }
+
+        await logAuditAction("CREATE_INSTITUTION", { id: data?.[0]?.id, name });
+        return _json({ data: data?.[0], message: "Institution created" }, 201);
+      }
+    }
+
+    // ============================================================
+    // ROUTE: "bursaries" - BURSARIES
+    // ============================================================
+    if (route === "bursaries") {
+      if (method === "GET") {
+        const { data, error } = await svc
+          .from("universities_bursaries")
+          .select("id, name, type, opening_date, closing_date, status, is_private")
+          .order("name");
+
+        if (error) {
+          console.error("Error fetching bursaries:", error);
+          return _json({ error: "Failed to fetch bursaries" }, 500);
+        }
+
+        await logAuditAction("VIEW_BURSARIES", { count: data?.length || 0 });
+        return _json({ data });
+      }
+
+      if (method === "POST") {
+        let body;
+        try {
+          body = await req.json();
+        } catch {
+          return _json({ error: "Invalid request body" }, 400);
+        }
+
+        const { name, type, opening_date, closing_date, status, is_private } = body;
+
+        if (!name || !type) {
+          return _json({ error: "Name and type are required" }, 400);
+        }
+
+        const { data, error } = await svc
+          .from("universities_bursaries")
+          .insert({
+            name: String(name).trim(),
+            type: String(type).trim(),
+            opening_date: opening_date || null,
+            closing_date: closing_date || null,
+            status: status || "active",
+            is_private: is_private || false,
+          })
+          .select();
+
+        if (error) {
+          console.error("Error creating bursary:", error);
+          return _json({ error: "Failed to create bursary" }, 500);
+        }
+
+        await logAuditAction("CREATE_BURSARY", { id: data?.[0]?.id, name });
+        return _json({ data: data?.[0], message: "Bursary created" }, 201);
+      }
+    }
+
+    // ============================================================
+    // ROUTE: "institutions/:id" - Single institution
+    // ============================================================
+    const idMatch = route.match(/^institutions\/(\d+)$/);
+    if (idMatch) {
+      const id = parseInt(idMatch[1]);
+
+      if (method === "GET") {
+        const { data, error } = await svc
+          .from("universities")
+          .select("id, name, type, opening_date, closing_date, status, is_private")
+          .eq("id", id)
+          .single();
+
+        if (error || !data) {
+          return _json({ error: "Institution not found" }, 404);
+        }
+
+        await logAuditAction("VIEW_INSTITUTION", { id });
+        return _json({ data });
+      }
+
+      if (method === "PUT") {
+        let body;
+        try {
+          body = await req.json();
+        } catch {
+          return _json({ error: "Invalid request body" }, 400);
+        }
+
+        const { name, type, opening_date, closing_date, status, is_private } = body;
+
+        if (!name || !type) {
+          return _json({ error: "Name and type are required" }, 400);
+        }
+
+        const { data, error } = await svc
+          .from("universities")
+          .update({
+            name: String(name).trim(),
+            type: String(type).trim(),
+            opening_date: opening_date || null,
+            closing_date: closing_date || null,
+            status: status || "active",
+            is_private: is_private || false,
+          })
+          .eq("id", id)
+          .select();
+
+        if (error) {
+          return _json({ error: "Failed to update institution" }, 500);
+        }
+
+        if (!data || data.length === 0) {
+          return _json({ error: "Institution not found" }, 404);
+        }
+
+        await logAuditAction("UPDATE_INSTITUTION", { id, name });
+        return _json({ data: data[0], message: "Institution updated" });
+      }
+
+      if (method === "DELETE") {
+        const { error } = await svc.from("universities").delete().eq("id", id);
+
+        if (error) {
+          return _json({ error: "Failed to delete institution" }, 500);
+        }
+
+        await logAuditAction("DELETE_INSTITUTION", { id });
+        return _json({ message: "Institution deleted" });
+      }
+    }
+
+    // ============================================================
+    // ROUTE: "bursaries/:id" - Single bursary
+    // ============================================================
+    const bursIdMatch = route.match(/^bursaries\/(\d+)$/);
+    if (bursIdMatch) {
+      const id = parseInt(bursIdMatch[1]);
+
+      if (method === "GET") {
+        const { data, error } = await svc
+          .from("universities_bursaries")
+          .select("id, name, type, opening_date, closing_date, status, is_private")
+          .eq("id", id)
+          .single();
+
+        if (error || !data) {
+          return _json({ error: "Bursary not found" }, 404);
+        }
+
+        await logAuditAction("VIEW_BURSARY", { id });
+        return _json({ data });
+      }
+
+      if (method === "PUT") {
+        let body;
+        try {
+          body = await req.json();
+        } catch {
+          return _json({ error: "Invalid request body" }, 400);
+        }
+
+        const { name, type, opening_date, closing_date, status, is_private } = body;
+
+        if (!name || !type) {
+          return _json({ error: "Name and type are required" }, 400);
+        }
+
+        const { data, error } = await svc
+          .from("universities_bursaries")
+          .update({
+            name: String(name).trim(),
+            type: String(type).trim(),
+            opening_date: opening_date || null,
+            closing_date: closing_date || null,
+            status: status || "active",
+            is_private: is_private || false,
+          })
+          .eq("id", id)
+          .select();
+
+        if (error) {
+          return _json({ error: "Failed to update bursary" }, 500);
+        }
+
+        if (!data || data.length === 0) {
+          return _json({ error: "Bursary not found" }, 404);
+        }
+
+        await logAuditAction("UPDATE_BURSARY", { id, name });
+        return _json({ data: data[0], message: "Bursary updated" });
+      }
+
+      if (method === "DELETE") {
+        const { error } = await svc.from("universities_bursaries").delete().eq("id", id);
+
+        if (error) {
+          return _json({ error: "Failed to delete bursary" }, 500);
+        }
+
+        await logAuditAction("DELETE_BURSARY", { id });
+        return _json({ message: "Bursary deleted" });
+      }
+    }
+
+    return _json({ 
+      error: `Route not found: "${route}"`,
+      available_routes: [
+        "GET /institutions - List all institutions",
+        "POST /institutions - Create institution",
+        "GET /institutions/bursaries - List all bursaries",
+        "POST /institutions/bursaries - Create bursary"
+      ]
+    }, 404);
+
+  } catch (err) {
+    console.error("Error:", err instanceof Error ? err.message : err);
+    return _json({ error: "Server error: " + (err instanceof Error ? err.message : String(err)) }, 500);
+  }
+});
