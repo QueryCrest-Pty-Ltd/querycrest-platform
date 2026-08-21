@@ -114,23 +114,23 @@
         </div>
         <div class="msg" id="loginMsg" style="display:none;"></div>
         <div class="field">
-          <label for="lUN">User Name</label>
-          <input class="inp" type="text" id="lUN"  >
+          <label for="lUN" name="username">User Name</label>
+          <input class="inp" type="text" id="lUN" name="username"  autocomplete="username" >
         </div>
 
         <div class="field">
-          <label for="lVC">Verification Code</label>
+          <label for="lVC" name="vCode">Verification Code</label>
           <div class="inp-wrap">
-            <input class="inp" type="password" id="lVC" placeholder="Verification Code" autocomplete="current-password">
+            <input class="inp" name="vCode" type="password" id="lVC" placeholder="Verification Code" autocomplete="current-password">
             <button class="eye-btn" type="button" onclick="toggleEye('lVC',this)" aria-label="Show/hide password">
               <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
             </button>
           </div>
         </div>
         <div class="field">
-          <label for="lPA">Administrative Password </label>
+          <label for="lPA" name="adminPassword">Administrative Password </label>
           <div class="inp-wrap">
-            <input class="inp" type="password" id="lPA" placeholder="Administrative Password " autocomplete="current-password">
+            <input class="inp" name="adminPassword" type="password" id="lPA" placeholder="Administrative Password " autocomplete="current-password">
             <button class="eye-btn" type="button" onclick="toggleEye('lPA',this)" aria-label="Show/hide password">
               <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
             </button>

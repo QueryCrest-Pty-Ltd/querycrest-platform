@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accommodation</title>
+    <link rel="stylesheet" href="/css/accommodation.css">
+  <script src="https://unpkg.com/phosphor-icons"></script>  
+
+</head>
+<body>
+    
+<div class="accommnodation">
+    <div class="accommnodation-header">
+        <div class="header-intro">
+        <H1>Accommodation Finder</H1>
+        <p>Student residence near South African universities </p>
+        </div>
+        <button class="refresh"><i class="ph ph-arrow-clockwise"></i></button>
+    </div>
+    <div class="notice">
+        <i class="ph ph-warning-circle"></i>
+        <h3>Free for all students</h3>
+        <p>Browse verified student residence near your universities and apply directly. QueryCrest doesnt not charge for this serivce.</p>
+    </div>
+
+    <div class="search-sec">
+        <form id="search-form" onsubmit="return false;">
+            <div class="search-container">
+            <input id="search-input" type="text" placeholder="Filter by university or residance name..." onkeyup="if(event.key==='Enter') performSearch()">
+            <button id="search-submit" type="button" onclick="performSearch()">Search</button>
+            <p> Listings</p>
+            </div>
+        </form>        
+    </div>
+
+    <div class="accommnodation-grid">
+       <!---card 1-->
+        <div class="accommnodation-card">
+        <div class="card-img">
+        <div class="slider-container">
+        <div class="slides-track" id="slideTrack">
+           <!--slide 1-->
+           <div class="slide-item" data-index="0">
+            <img src="" alt="accommnodation image" loading="lazy">
+           </div> 
+           <!--slide 2-->
+           <div class="slide-item" data-index="1">
+            <img src="" alt="accommnodation image" loading="lazy">
+           </div> 
+           <!--slide 3-->
+           <div class="slide-item" data-index="2">
+            <img src="" alt="accommnodation image" loading="lazy">
+           </div>            
+        </div>
+        </div>         
+        </div>
+
+
+
+        <!--dots indicator-->
+        <div class="dots" id="dotsContainer">
+            <span class="dot activated"></span>
+            <span class="dot "></span>            
+            <span class="dot "></span>            
+        </div>
+        <!--fullview-->        
+        <div class="full-overlay" id="full-Overlay">
+        <div class="full-card" id="full-Card">
+         <img id="fullImage" alt="full view">
+         <div class="full-details">
+
+         </div>
+        </div>
+        </div>
+        <!--card infor-->
+        <div class="card-info">
+            <h3 id="name">
+            Name   
+            </h3>
+            <h4 id="location">
+            Location   
+            </h4>
+            <p id="description">
+                Description
+            </p>
+
+            <span id="type">Type</span>
+            <p id="accredited">
+            Accredited   
+            </p>
+
+            <div class="row-info">
+                <p id="price">Price</p>
+                <p id="closes">Closes date;</p>
+
+            </div>        
+
+            <p id="s-description">
+                Description
+            </p>
+
+            <div class="row-info">
+                <p id="opens">opens Date:</p>
+
+                <button id="apply-submit" type="button" onclick="performSearch()"> Apply Now
+                <i class="ph ph-arrow-right"></i>   
+                </button>
+            </div>
+
+        </div>
+        </div>
+
+       <!---card 1-->
+        <div class="accommnodation-card">
+        <div class="card-img">
+        <div class="slider-container">
+        <div class="slides-track" id="slideTrack">
+           <!--slide 1-->
+           <div class="slide-item" data-index="0">
+            <img src="" alt="accommnodation image" loading="lazy">
+           </div> 
+           <!--slide 2-->
+           <div class="slide-item" data-index="1">
+            <img src="" alt="accommnodation image" loading="lazy">
+           </div> 
+           <!--slide 3-->
+           <div class="slide-item" data-index="2">
+            <img src="" alt="accommnodation image" loading="lazy">
+           </div>            
+        </div>
+        </div>         
+        </div>
+
+
+
+        <!--dots indicator-->
+        <div class="dots" id="dotsContainer">
+            <span class="dot activated"></span>
+            <span class="dot "></span>            
+            <span class="dot "></span>            
+        </div>
+        <!--fullview-->        
+        <div class="full-overlay" id="full-Overlay">
+        <div class="full-card" id="full-Card">
+         <img id="fullImage" alt="full view">
+         <div class="full-details">
+
+         </div>
+        </div>
+        </div>
+        <!--card infor-->
+        <div class="card-info">
+            <h3 id="name">
+            Name   
+            </h3>
+            <h4 id="location">
+            Location   
+            </h4>
+            <p id="description">
+                Description
+            </p>
+
+            <span id="type">Type</span>
+            <p id="accredited">
+            Accredited   
+            </p>
+
+            <div class="row-info">
+                <p id="price">Price</p>
+                <p id="closes">Closes date;</p>
+
+            </div>        
+
+            <p id="s-description">
+                Description
+            </p>
+
+            <div class="row-info">
+                <p id="opens">opens Date:</p>
+
+                <button id="apply-submit" type="button" onclick="performSearch()"> Apply Now
+                <i class="ph ph-arrow-right"></i>   
+                </button>
+            </div>
+
+        </div>
+        </div>
+        
+        
+       <!---card 1-->
+        <div class="accommnodation-card">
+        <div class="card-img">
+        <div class="slider-container">
+        <div class="slides-track" id="slideTrack">
+           <!--slide 1-->
+           <div class="slide-item" data-index="0">
+            <img src="" alt="accommnodation image" loading="lazy">
+           </div> 
+           <!--slide 2-->
+           <div class="slide-item" data-index="1">
+            <img src="" alt="accommnodation image" loading="lazy">
+           </div> 
+           <!--slide 3-->
+           <div class="slide-item" data-index="2">
+            <img src="" alt="accommnodation image" loading="lazy">
+           </div>            
+        </div>
+        </div>         
+        </div>
+
+
+
+        <!--dots indicator-->
+        <div class="dots" id="dotsContainer">
+            <span class="dot activated"></span>
+            <span class="dot "></span>            
+            <span class="dot "></span>            
+        </div>
+        <!--fullview-->        
+        <div class="full-overlay" id="full-Overlay">
+        <div class="full-card" id="full-Card">
+         <img id="fullImage" alt="full view">
+         <div class="full-details">
+
+         </div>
+        </div>
+        </div>
+        <!--card infor-->
+        <div class="card-info">
+            <h3 id="name">
+            Name   
+            </h3>
+            <h4 id="location">
+            Location   
+            </h4>
+            <p id="description">
+                Description
+            </p>
+
+            <span id="type">Type</span>
+            <p id="accredited">
+            Accredited   
+            </p>
+
+            <div class="row-info">
+                <p id="price">Price</p>
+                <p id="closes">Closes date;</p>
+
+            </div>        
+
+            <p id="s-description">
+                Description
+            </p>
+
+            <div class="row-info">
+                <p id="opens">opens Date:</p>
+
+                <button id="apply-submit" type="button" onclick="performSearch()"> Apply Now
+                <i class="ph ph-arrow-right"></i>   
+                </button>
+            </div>
+
+        </div>
+        </div>
+        
+        
+       <!---card 1-->
+        <div class="accommnodation-card">
+        <div class="card-img">
+        <div class="slider-container">
+        <div class="slides-track" id="slideTrack">
+           <!--slide 1-->
+           <div class="slide-item" data-index="0">
+            <img src="" alt="accommnodation image" loading="lazy">
+           </div> 
+           <!--slide 2-->
+           <div class="slide-item" data-index="1">
+            <img src="" alt="accommnodation image" loading="lazy">
+           </div> 
+           <!--slide 3-->
+           <div class="slide-item" data-index="2">
+            <img src="" alt="accommnodation image" loading="lazy">
+           </div>            
+        </div>
+        </div>         
+        </div>
+
+
+
+        <!--dots indicator-->
+        <div class="dots" id="dotsContainer">
+            <span class="dot activated"></span>
+            <span class="dot "></span>            
+            <span class="dot "></span>            
+        </div>
+        <!--fullview-->        
+        <div class="full-overlay" id="full-Overlay">
+        <div class="full-card" id="full-Card">
+         <img id="fullImage" alt="full view">
+         <div class="full-details">
+
+         </div>
+        </div>
+        </div>
+        <!--card infor-->
+        <div class="card-info">
+            <h3 id="name">
+            Name   
+            </h3>
+            <h4 id="location">
+            Location   
+            </h4>
+            <p id="description">
+                Description
+            </p>
+
+            <span id="type">Type</span>
+            <p id="accredited">
+            Accredited   
+            </p>
+
+            <div class="row-info">
+                <p id="price">Price</p>
+                <p id="closes">Closes date;</p>
+
+            </div>        
+
+            <p id="s-description">
+                Description
+            </p>
+
+            <div class="row-info">
+                <p id="opens">opens Date:</p>
+
+                <button id="apply-submit" type="button" onclick="performSearch()"> Apply Now
+                <i class="ph ph-arrow-right"></i>   
+                </button>
+            </div>
+
+        </div>
+        </div>
+        
+        
+       <!---card 1-->
+        <div class="accommnodation-card">
+        <div class="card-img">
+        <div class="slider-container">
+        <div class="slides-track" id="slideTrack">
+           <!--slide 1-->
+           <div class="slide-item" data-index="0">
+            <img src="" alt="accommnodation image" loading="lazy">
+           </div> 
+           <!--slide 2-->
+           <div class="slide-item" data-index="1">
+            <img src="" alt="accommnodation image" loading="lazy">
+           </div> 
+           <!--slide 3-->
+           <div class="slide-item" data-index="2">
+            <img src="" alt="accommnodation image" loading="lazy">
+           </div>            
+        </div>
+        </div>         
+        </div>
+
+
+
+        <!--dots indicator-->
+        <div class="dots" id="dotsContainer">
+            <span class="dot activated"></span>
+            <span class="dot "></span>            
+            <span class="dot "></span>            
+        </div>
+        <!--fullview-->        
+        <div class="full-overlay" id="full-Overlay">
+        <div class="full-card" id="full-Card">
+         <img id="fullImage" alt="full view">
+         <div class="full-details">
+
+         </div>
+        </div>
+        </div>
+        <!--card infor-->
+        <div class="card-info">
+            <h3 id="name">
+            Name   
+            </h3>
+            <h4 id="location">
+            Location   
+            </h4>
+            <p id="description">
+                Description
+            </p>
+
+            <span id="type">Type</span>
+            <p id="accredited">
+            Accredited   
+            </p>
+
+            <div class="row-info">
+                <p id="price">Price</p>
+                <p id="closes">Closes date;</p>
+
+            </div>        
+
+            <p id="s-description">
+                Description
+            </p>
+
+            <div class="row-info">
+                <p id="opens">opens Date:</p>
+
+                <button id="apply-submit" type="button" onclick="performSearch()"> Apply Now
+                <i class="ph ph-arrow-right"></i>   
+                </button>
+            </div>
+
+        </div>
+        </div>
+
+
+
+
+    </div>
+</div>
+
+<script>
+    (function() {
+        "use strict";
+
+        //DOM refs
+        const track = document.getElementById('slidesTrack');
+        const slide = document.querySelectorAll('.slide-item');
+        const dots = document.querySelectorAll('.dot');
+        const overlay = document.getElementById('fullOverlay');
+        const fullImg = document.getElementById('fullImage');
+         
+        //state
+        let currentIndex = 0;
+        let slideInterval = null;
+        const INTERVAL_MS = 3000; //3s
+
+        //helper update slide position and dots
+        function goToslide(index){
+            if(index<0) index =0;
+            if(index>=slides.length)index =slide.length-1;
+            currentIndex=index;
+
+            //move track
+            track.style.transform = `translateX(-${currentIndex*100}%)`;
+
+            //update dots
+            dots.forEach((dot,i)=>{
+                dot.classList.toggle('active',i === currentIndex);
+            });
+        }
+
+        //auto slide
+        function startAutoSlide() {
+            if(slideInterval)clearInterval(slideInterval);
+            slideInterval = setInterval(()=>{
+                const next = (currentIndex+1)% slide.length;
+                goToslide(next);
+            },INTERVAL_MS);
+        }
+        
+        function stopAutoSlide() {
+            if(slideInterval){
+                clearInterval(slideInterval);
+                slideInterval = null;
+            }
+        }
+
+        //open full view
+        function openFullView(index){
+            const data = slideData[index];
+            if(!data)return;
+
+            overlay.classList.add('open')
+            document.body.style.overflow ='hidden';
+            stopAutoSlide();
+        }
+
+        //close full view
+        function closeFullView(){
+            overlay.classList.remove('open');
+            document.body.style.overflow ='';
+            //restart auto slide after closing
+            startAutoSlide();
+        }
+
+        // click listners to each slide
+        slide.forEach((slide,idx)=>{
+           slide.addEventListener('click',(e)=>{
+            e.stopPropagation();
+            openFullView(idx);
+           });
+        });
+
+        overlay.addEventListener('click',(e)=>{
+            if(e.target === overlay){
+                closeFullView();
+            }
+        });
+
+        //ESC to close
+        document.addEventListener('keydown',(e)=>{
+        if(e,key ==='Escape' && overlay.classList.contains('open')){
+            closeFullView();
+        }
+        });
+
+        //initial state
+        goToslide(0);
+        startAutoSlide();
+
+        //pause auto-silde on hover
+        const slidercontainer = document.querySelector('.slider-container');
+        sliderContainer.addEventListener('mouseenter',()=>{
+            if(!overlay.classList.contains('open')){
+                stopAutoSlide();
+            }
+        });
+        
+        //resume on mouse leave
+        sliderContainer.addEventListener('mouseleave',()=>{
+            if(!overlay.classList.contains('open')){
+                sartAutoSlide();
+            }
+        });
+
+                //pause auto-silde on touch start
+        sliderContainer.addEventListener('touchstart',()=>{
+            if(!overlay.classList.contains('open')){
+                stopAutoSlide();
+            }
+        });
+        
+        //resume on touch end
+        sliderContainer.addEventListener('touchend',()=>{
+            if(!overlay.classList.contains('open')){
+                sartAutoSlide();
+            }
+        });
+
+
+    })();
+</script>
+</body>
+</html>

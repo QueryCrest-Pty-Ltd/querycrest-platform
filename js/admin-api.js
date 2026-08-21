@@ -109,7 +109,7 @@ class AdminAPI {
           details: err,
         };
       }
-      throw err;
+      throw `error {err}`;
     }
   }
 
@@ -148,7 +148,7 @@ class AdminAPI {
       if (response.token) {
         this._setToken(response.token);
       }
-
+      alert(response);
       return response;
     },
 

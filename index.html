@@ -437,7 +437,7 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
   </h3>
   <div class="sub">How was your experience?</div>
   <!--inputs-->
-
+  <div class="msg" id="loginMsg" style="display:none;"></div>
   <form>
   <textarea name="feedbackText" id="feedbackText" required  placeholder="Tell us about your experience (required)" ></textarea>
   <label for="fbName">Full Name:</label>
@@ -453,9 +453,12 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
 
 </div>
   <button class="widget-toggle" id="widgetToggleBtn">
-    <i class="ph ph-chat-teardrop"></i>
+    <i class="ph ph-chat-teardrop" id="widget-toggle-icon"></i>
   </button>
-
+  <div class="widget-popUp hide" id="widgetPopUp">
+   <h3>How is your experience so far , are you experience any issues ? if so click on chat icon</h3>
+   <i class="ph ph-arrow-right"></i>
+  </div>
 </div>
 <div id="subscribe-modal"><div id="subscribe-modal-content" style="position:relative;"></div></div>
 

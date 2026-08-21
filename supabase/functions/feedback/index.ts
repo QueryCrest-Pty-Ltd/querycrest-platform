@@ -102,18 +102,16 @@ Deno.serve(async (req) => {
     return _json({ error: "Too many attempts. Try again later." }, 429);
   }
 
-    const svc = _SVC();
+
+    auth = await _auth(req);
+    if (auth instanceof Response) return auth;
+    const { userId:_userId, email:_email, svc } = auth;
+
 
     const body = await req.json().catch(() => ({}));
-    const { log_in,feedback_report, feedback_email, feedback_name } = body;
+    const {feedback_report, feedback_email, feedback_name } = body;
     if (!feedback_report || typeof feedback_report !== "string")
       return _json({ error: "feedback_report is required" }, 400);
-    if(log_in === true){
-          auth = await _auth(req);
-          if (auth instanceof Response) return auth;
-          const { userId, email, svc } = auth;
-
-    }
 
     // add feedback data from form
     await addFormData(svc,feedback_report,feedback_email,feedback_name);

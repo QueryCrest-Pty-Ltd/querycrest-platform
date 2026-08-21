@@ -361,8 +361,11 @@ body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--t1);min-h
 .error-box{background:white;padding:20px;border-radius:10px;width:90%;max-width:400px;text-align:center;}
 #error_close_btn{margin-top:15px;background:#ff4d4d;color:white;border:none;padding:10px 15px;border-radius:6px;cursor:pointer;}
 .hidden{display:none!important;}
+
 /* RESPONSIVE */
-@media(max-width:1100px){.g4{grid-template-columns:1fr 1fr;}}
+@media(max-width:1100px){
+  .g4{grid-template-columns:1fr 1fr;}
+}
 @media(max-width:768px){
   .app{grid-template-columns:1fr;}.sidebar{display:none;}.hamburger{display:flex;}
   .tb-brand{width:auto;border-right:none;padding:0 12px;}.tb-greet{display:none;}
@@ -371,8 +374,35 @@ body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--t1);min-h
   .ucm_row{flex-direction:column;}.doc-quality-grid{grid-template-columns:1fr;}
   .plan-status-card{flex-direction:column;gap:14px;}
   .acc-popover{display:none !important;}
+  
+  .approach h3{
+  font-size: 13px;
+  }
 }
-@media(max-width:440px){.g4{grid-template-columns:1fr;}}
+@media(max-width:440px){
+  .g4{grid-template-columns:1fr;}
+  .approach h3{
+  font-size: 8px;
+  }
+.search-container{
+  display: flex;
+  width: 10px;
+  align-items:center;
+  gap:8px;
+  background: #0b1a2b;
+/*  margin-left:auto;
+*/
+}
+
+#table-search-input {
+  padding: 10px 40px 10px 40px;
+  width:10px;
+  font-size: 16px;
+  background: #007bff;
+
+}
+
+}
 
 /*dashboard*/
 .table-Card  {
@@ -472,12 +502,22 @@ body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--t1);min-h
     color:var(--approaching);
 
 }
-
-.approach {
-display: inline-flex;
-position: relative;
-right: 26%;
+.deadline-header {
+display:flex;
+justify-content: space-between;
 }
+.approach {
+display: flex;
+margin-left: auto;
+
+}
+
+.tb-center{
+
+margin-right: auto;
+
+}
+
 .approach-icon {
   width: 25px;
   height: 25px;
@@ -497,15 +537,6 @@ right: 26%;
   margin-bottom: 5px;
 }
 
-.deadline-header {
-display: flex;
-}
-.tb-center{
-
-position: relative;
-left: 73%;
-
-}
 
 .search-container{
   display: flex;
