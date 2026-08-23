@@ -18,7 +18,7 @@ async  function auth(endpoint){
     const data = await response.json();
     return data; 
     } catch (error) {
-        alert(` failed to get accommodation`);
+        //alert(` failed to get accommodation`);
         return [];
     }
   }
@@ -35,25 +35,11 @@ async  function getAccommodations(endpoint){
     const data = await response.json();
     return data; 
     } catch (error) {
-        alert(` failed to get accommodation`);
+       // alert(` failed to get accommodation`);
         return [];
     }
   }
-  /*
-  const data = await getAccommodations('/accommodation/list?page=1');
 
-   data2.array.forEach(accommodation => {
-    const name = accommodation.name;
-    const price = accommodation.price;
-    const location =accommodation.location;
-    const type = accommodation.type;
-    const accredited = accommodation.accredited;
-    const link = accommodation.link;
-    const opens = accommodation.opens;
-    const closes = accommodation.closes;
-    const urls =accommodation.urls;    
-   });
- */
  async  function search(endpoint){
     try {
     const response =  await fetch(`${API_BASE}${endpoint}`,{
@@ -66,28 +52,16 @@ async  function getAccommodations(endpoint){
     const data = await response.json();
     return data; 
     } catch (error) {
-        alert(` failed to get search results`);
+        //alert(` failed to get search results`);
         return [];
     }
   }
-//''
-   const data2 = await search('/accommodation/search?q=name1');
-   data2.array.forEach(accommodation => {
-    const name = accommodation.name;
-    const price = accommodation.price;
-    const location =accommodation.location;
-    const type = accommodation.type;
-    const accredited = accommodation.accredited;
-    const link = accommodation.link;
-    const opens = accommodation.opens;
-    const closes = accommodation.closes;
-    const urls =accommodation.urls;    
-   });
-alert(data2.data);
 
 
 
-(function () {
+
+
+(async function () {
   function escH(s) {
     return s == null ? '' : String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
@@ -100,10 +74,8 @@ alert(data2.data);
     return (new Date(d) - Date.now()) / 86400000;
   }
 
-  // ----- STATIC ACCOMMODATIONS (Your 5) -----
-  const accommodation_data = (async () =>{ return  await apiFetch("/accmmodation/list")});
-  console.log(accommodation_data);
-  var _accAll = [
+    var _accAll = [
+    /*
     {
       id: 1,
       name: 'Urban Hatch',
@@ -188,13 +160,140 @@ alert(data2.data);
       cover_image: '../images/Elimu1.jpg',
       images: ['../images/Elimu1.jpg', '../images/Elimu2.jpg', '../images/Elimu3.jpg', '../images/Elimu5.jpg'],
       features: ['Study Areas', 'Meal Options', 'Garden Setting', 'Outdoor Study', 'WiFi']
-    }
+    } */
   ];
+  async function getSearch(_accAll,_visibleCount,query){
+  try {
+    const page_idx = Number(_visibleCount/15);
+    //alert(query)
+     const search_data =  await search(`/accommodation/search?q=${query}?page=${page_idx}`);
+   _accAll.length = 0;
+   //alert(search_data)
+  for(let i =0;i<search_data.data.length;i++){
+    const accommodation = search_data.data[i];
+    const id = accommodation.id;
+    const _name = accommodation.name;
+    const university_name = accommodation.university_name;    
+    const price = accommodation.price;
+    const location =accommodation.location;
+    const type = accommodation.type;
+    const accredited = accommodation.accredited;
+    const description = accommodation.description;
+    const link = accommodation.link;
+    const opens = accommodation.opens;
+    const closes = accommodation.closes;
+    const urls =accommodation.imageUrls;
+    var accreditation ='';   
+    if(accredited)accreditation='nsfas' ;
+    else accreditation ='private'  
+    const prices = price;
+    //alert(urls);
+    const arr_prices = prices.split(',').map(s=> s.trim()).filter(Boolean);
+
+    const types = type;
+    const arr_type = types.split(',').map(s=> s.trim()).filter(Boolean);
+
+    _accAll.push(
+    {
+      id: id,
+      name: _name,
+      university_name: university_name||'',
+      address: location,
+      price_min: Number(arr_prices[0])||0,
+      price_max: Number(arr_prices[1])||0,
+      room_types: [arr_type[0], arr_type[1]],
+      closing_date: closes,
+      opening_date: opens,
+      description: description,
+      apply_url: '#',
+      accreditation: accreditation ,
+      cover_image: urls[0],
+      images: urls,
+      features: []
+    }
+    );
+    //alert(_accAll);
+   };
+
+
+    
+    
+  } catch (error) {
+   //  
+   //alert(error);  
+  }    
+  }
+  async function getAccommodationsData(_visibleCount) {
+try {
+  const page_idx  = Number(_visibleCount/15);
+  const accommodation_data = await getAccommodations(`/accommodation/list?page=${page_idx}`);
+ _accAll.length = 0;
+ 
+  for(let i =0;i<accommodation_data.data.length;i++){
+    const accommodation = accommodation_data.data[i];
+    const id = accommodation.id;
+    const _name = accommodation.name;
+    const university_name = accommodation.university_name;
+    const price = accommodation.price;
+    const location =accommodation.location;
+    const type = accommodation.type;
+    const accredited = accommodation.accredited;
+    const description = accommodation.description;
+    const link = accommodation.link;
+    const opens = accommodation.opens;
+    const closes = accommodation.closes;
+    const urls =accommodation.imageUrls;
+    var accreditation ='';   
+    if(accredited)accreditation='nsfas' ;
+    else accreditation ='private'  
+    const prices = price;
+
+    const arr_prices = prices.split(',').map(s=> s.trim()).filter(Boolean);
+
+    const types = type;
+    const arr_type = types.split(',').map(s=> s.trim()).filter(Boolean);
+
+    _accAll.push(
+    {
+      id: id,
+      name: _name,
+      university_name: university_name||'',
+      address: location,
+      price_min: Number(arr_prices[0])||null,
+      price_max: Number(arr_prices[1])||null,
+      room_types: [arr_type[0], arr_type[1]],
+      closing_date: closes,
+      opening_date: opens,
+      description: description,
+      apply_url: '#',
+      accreditation: accreditation ,
+      cover_image: urls[0],
+      images: urls,
+      features: []
+    }
+    );
+   };
+    //alert(_accAll)
+
+  
+} catch (error) {
+//  
+}
+    //alert(_accAll)
+  }
+  // ----- STATIC ACCOMMODATIONS (Your 15) -----
+
+
+
 
   var _visibleCount = 15;
   var _currentSlideIndex = 0;
   var _currentSlideImages = [];
   var _slideInterval = null;
+
+
+
+
 
   function buildAccCard(a) {
     var days = daysUntil(a.closing_date);
@@ -438,8 +537,10 @@ alert(data2.data);
     if (!grid) return;
 
     var filtered = getFilteredAccommodations();
+    //alert(`filtered ${filtered}`);
+    if(filtered){
     var visible = filtered.slice(0, _visibleCount);
-
+    
     grid.innerHTML = '';
     visible.forEach(function(a) { grid.appendChild(buildAccCard(a)); });
 
@@ -459,15 +560,31 @@ alert(data2.data);
     var empty = document.getElementById('acc-empty');
     if (empty) empty.style.display = filtered.length ? 'none' : 'block';
     grid.style.display = filtered.length ? 'grid' : 'none';
+    }
   }
 
   function getFilteredAccommodations() {
     var q = ((document.getElementById('acc-search') || {}).value || '').toLowerCase().trim();
-    return q ? _accAll.filter(function(a) { return (a.university_name + ' ' + a.name).toLowerCase().indexOf(q) !== -1; }) : _accAll.slice();
+    //perform seach if q is not empty
+
+    if(q){
+    //alert(`q ${q}`);     
+      (async()=>{await getSearch(_accAll,_visibleCount,q)})();
+     return q ? _accAll.filter(function(a) { return (a.university_name + ' ' + a.name).toLowerCase().indexOf(q) !== -1; }) : _accAll.slice();      
+    }else if(!q||q==='') {
+      (async()=>{await getAccommodationsData(_visibleCount)})();
+               //alert(`search items ${_accAll.slice()}`);
+      setTimeout(()=>{
+          //alert(`items ${_accAll.slice()}`);
+    return _accAll;
+},3000);               
+    }
+
   }
 
   window.accFilter = function () {
     _visibleCount = 15;
+    const acc_search  = document.getElementById('acc-search').value;
     var viewMoreBtn = document.getElementById('viewMoreBtn');
     if (viewMoreBtn) viewMoreBtn.style.display = 'inline-flex';
     renderVisibleAccommodations();

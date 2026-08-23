@@ -77,18 +77,18 @@ async function getAccommodation(svc: ReturnType<typeof _SVC>,page_idx:number) {
  try {
   const pageSize = 15;
   const start_idx = (page_idx-1)*pageSize;
-  const end_idx = start_idx+pageSize-1
+  const end_idx = start_idx+pageSize-1;
 
   const {data,error} = await svc
  .from('accommodation')
- .select('name,price,location,description,type,accredited,link',{count:'exact'})   
+ .select('id,name,price,location,description,type,accredited,link',{count:'exact'})   
  .order('id',{ascending:true})
  .range(start_idx,end_idx);
 
  if(error){
       //
       console.error({error:`failed to retrieve accommodation data, error:${error.message}`,code:400});
-      //return _json({error:`failed to retrieve accommodation data,`},400);        
+      return _json({error:`failed to retrieve accommodation data,`,data:[]},400);        
    }
  if(data) {
       return data//_json({success:`feedback data retrieved successfuly`,data:data},200);
@@ -96,7 +96,7 @@ async function getAccommodation(svc: ReturnType<typeof _SVC>,page_idx:number) {
     }
  } catch (_error) {
       console.error({error:`internal error at accomodation data retrieval, error:${_error}`,code:500});  
-      //return _json({error:`internal error at accomodation data retrieval, `}),500;
+      return _json({error:`internal error at accomodation data retrieval, `,data:[]}),500;
  }
 }
 
@@ -110,7 +110,7 @@ async function getAccommodationImages(svc: ReturnType<typeof _SVC>,accommodation
 
  if(error){
       console.error({error:`failed to retrieve accommodation data, error:${error}`,code:400});
-      //return _json({error:`failed to retrieve accommodation data, `},400);
+      return _json({error:`failed to retrieve accommodation data, `,data:[]},400);
  }
 
  if(files) {
@@ -157,10 +157,40 @@ async function getAccommodationImages(svc: ReturnType<typeof _SVC>,accommodation
     }
  } catch (_error) {
       //console.error({error:`internal error at accomodation data retrieval, error:${_error}`,code:500});  
-      //return _json({error:`internal error at accomodation data retrieval, `},500);  
+      return _json({error:`internal error at accomodation data retrieval, `,data:[]},500);  
  }
 }
 
+
+async function getSearch(svc: ReturnType<typeof _SVC>,query:string,page_idx:number) {
+
+try {
+  const pageSize = 15;
+  const start_idx = (page_idx-1)*pageSize;
+  const end_idx = start_idx+pageSize-1; 
+
+  const column = ['name','price','location','description','type','accredited'];
+      for(let i =0;i<column.length;i++){
+      const { data, error } = await svc
+        .from('accommodation')
+        .select('*')
+         .ilike(column[i],`%${query}%`)
+        .order('name')
+        .range(start_idx,end_idx);
+
+      if (error) {
+        return _json({ error: "Search failed" ,data:[]}, 400);
+      }
+      if(!data)break;
+
+      return  data ;
+      }  
+} catch (error) {
+        return _json({ error: "Search failed" ,data:[]}, 500);  
+}      
+
+
+     }
 
 
 
@@ -218,32 +248,23 @@ Deno.serve(async (req) => {
       if (!query.trim()) {
         return _json({ error: "Search query required" }, 400);
       }
-     const column = ['name','price','location','description','type','accredited'];
-      for(let i =0;i<column.length;i++){
-      const { data, error } = await svc
-        .from('accommodation')
-        .select('*')
-         .ilike(column[i],`%${query}%`)
-        .order('name');
+      const page = url.searchParams.get("page") || "1";
+      const page_idx:number = Number(page);
 
-      if (error) {
-        return _json({ error: "Search failed" }, 400);
-      }
-      if(!data)break;
-
-      return _json({ data });
-      }
-         
+      const results = await getSearch(svc,query,page_idx);      
+      const data = await getAccommodationImages(svc,results,'accommodation_images',3600);
+      return _json({data:data},200);
+             
       } catch  {
-          return _json({ error: "server error Search failed" }, 500);        
+          return _json({ error: "server error Search failed",data:[] }, 500);        
       }
    }
    else {
-        return _json({ error: "function call failed" }, 400);    
+        return _json({ error: "function call failed",data:[] }, 400);    
    }
 
   } catch {
-    return _json({ error: "Server error" }, 500);
+    return _json({ error: "Server error",data:[] }, 500);
   }
 });
 
