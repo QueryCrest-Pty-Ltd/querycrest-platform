@@ -73,7 +73,7 @@ async  function getAccommodations(endpoint){
     if (!d) return null;
     return (new Date(d) - Date.now()) / 86400000;
   }
-
+    var _accAll2=[];
     var _accAll = [
     /*
     {
@@ -164,7 +164,7 @@ async  function getAccommodations(endpoint){
   ];
   async function getSearch(_accAll,_visibleCount,query){
   try {
-    const page_idx = Number(_visibleCount/15);
+    const page_idx = parseInt(_visibleCount/15);
     //alert(query)
      const search_data =  await search(`/accommodation/search?q=${query}?page=${page_idx}`);
    _accAll.length = 0;
@@ -184,7 +184,7 @@ async  function getAccommodations(endpoint){
     const closes = accommodation.closes;
     const urls =accommodation.imageUrls;
     var accreditation ='';   
-    if(accredited)accreditation='nsfas' ;
+    if(Boolean(accredited))accreditation='nsfas' ;
     else accreditation ='private'  
     const prices = price;
     //alert(urls);
@@ -214,20 +214,21 @@ async  function getAccommodations(endpoint){
     );
     //alert(_accAll);
    };
-
+   return _accAll;
 
     
     
   } catch (error) {
    //  
-   //alert(error);  
+   //alert(error);
+   return [];  
   }    
   }
-  async function getAccommodationsData(_visibleCount) {
+  async function getAccommodationsData(_accAll,_visibleCount) {
 try {
-  const page_idx  = Number(_visibleCount/15);
+  const page_idx  = parseInt(_visibleCount/15);
   const accommodation_data = await getAccommodations(`/accommodation/list?page=${page_idx}`);
- _accAll.length = 0;
+  _accAll.length = 0;
  
   for(let i =0;i<accommodation_data.data.length;i++){
     const accommodation = accommodation_data.data[i];
@@ -244,7 +245,7 @@ try {
     const closes = accommodation.closes;
     const urls =accommodation.imageUrls;
     var accreditation ='';   
-    if(accredited)accreditation='nsfas' ;
+    if(Boolean(accredited))accreditation='nsfas' ;
     else accreditation ='private'  
     const prices = price;
 
@@ -274,10 +275,11 @@ try {
     );
    };
     //alert(_accAll)
-
+    return _accAll;
   
 } catch (error) {
 //  
+return [];
 }
     //alert(_accAll)
   }
@@ -292,9 +294,11 @@ try {
   var _slideInterval = null;
 
 
+//alert(_accAll);
 
 
 
+//alert(_accAll);
   function buildAccCard(a) {
     var days = daysUntil(a.closing_date);
     var closed = days !== null && days < 0;
@@ -523,20 +527,20 @@ try {
   });
 
   // ----- VIEW MORE -----
-  window.loadMoreAccommodations = function() {
+  window.loadMoreAccommodations = async function() {
     _visibleCount += 15;
     if (_visibleCount >= _accAll.length) {
       _visibleCount = _accAll.length;
       document.getElementById('viewMoreBtn').style.display = 'none';
     }
-    renderVisibleAccommodations();
+    await renderVisibleAccommodations();
   };
 
-  function renderVisibleAccommodations() {
+  async function renderVisibleAccommodations() {
     var grid = document.getElementById('acc-grid');
     if (!grid) return;
 
-    var filtered = getFilteredAccommodations();
+    var filtered = await  getFilteredAccommodations();
     //alert(`filtered ${filtered}`);
     if(filtered){
     var visible = filtered.slice(0, _visibleCount);
@@ -563,31 +567,29 @@ try {
     }
   }
 
-  function getFilteredAccommodations() {
+  async function getFilteredAccommodations() {
     var q = ((document.getElementById('acc-search') || {}).value || '').toLowerCase().trim();
     //perform seach if q is not empty
 
     if(q){
     //alert(`q ${q}`);     
-      (async()=>{await getSearch(_accAll,_visibleCount,q)})();
-     return q ? _accAll.filter(function(a) { return (a.university_name + ' ' + a.name).toLowerCase().indexOf(q) !== -1; }) : _accAll.slice();      
-    }else if(!q||q==='') {
-      (async()=>{await getAccommodationsData(_visibleCount)})();
-               //alert(`search items ${_accAll.slice()}`);
-      setTimeout(()=>{
-          //alert(`items ${_accAll.slice()}`);
-    return _accAll;
-},3000);               
+       (async()=>{_accAll=await getSearch(_accAll,_visibleCount,q)})()
+       //_accAll=await getSearch(_accAll,_visibleCount,q);
+       return q ? _accAll.filter(function(a) { return (a.university_name + ' ' + a.name).toLowerCase().indexOf(q) !== -1; }) : _accAll.slice();
+    } if(!q||q==='') {
+    //(async()=>{_accAll=await getAccommodationsData(_accAll,_visibleCount);})().then(()=>{return _accAll});
+     return await getAccommodationsData(_accAll,_visibleCount);         
+     
     }
 
   }
 
-  window.accFilter = function () {
+  window.accFilter = async function () {
     _visibleCount = 15;
-    const acc_search  = document.getElementById('acc-search').value;
+
     var viewMoreBtn = document.getElementById('viewMoreBtn');
     if (viewMoreBtn) viewMoreBtn.style.display = 'inline-flex';
-    renderVisibleAccommodations();
+    await renderVisibleAccommodations();
   };
 
   window.showDetailView = function(id) {
@@ -601,12 +603,12 @@ try {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  window.showListView = function() {
+  window.showListView = async function() {
     document.getElementById('accommodation-list').style.display = 'block';
     var detailSection = document.getElementById('accommodation-detail');
     detailSection.classList.remove('show');
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    renderVisibleAccommodations();
+    await renderVisibleAccommodations();
   };
 
   window.qcRefresh = function(btn, callback) {
@@ -615,12 +617,12 @@ try {
     setTimeout(function() { if (btn) btn.classList.remove('spinning'); }, 800);
   };
 
-  window.qcLoadAccommodations = function () {
+  window.qcLoadAccommodations =async function () {
     _visibleCount = 15;
     var viewMoreBtn = document.getElementById('viewMoreBtn');
     if (viewMoreBtn) viewMoreBtn.style.display = 'inline-flex';
-    renderVisibleAccommodations();
+    await renderVisibleAccommodations();
   };
 
-  window.qcLoadAccommodations();
+  await window.qcLoadAccommodations();
 })();

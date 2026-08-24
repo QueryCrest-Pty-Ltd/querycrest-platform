@@ -81,7 +81,7 @@ async function getAccommodation(svc: ReturnType<typeof _SVC>,page_idx:number) {
 
   const {data,error} = await svc
  .from('accommodation')
- .select('id,name,price,location,description,type,accredited,link',{count:'exact'})   
+ .select('id,name,price,location,description,type,accredited,link,opens,closes',{count:'exact'})   
  .order('id',{ascending:true})
  .range(start_idx,end_idx);
 
@@ -173,7 +173,7 @@ try {
       for(let i =0;i<column.length;i++){
       const { data, error } = await svc
         .from('accommodation')
-        .select('*')
+        .select('id,name,price,location,description,type,accredited,link,opens,closes')
          .ilike(column[i],`%${query}%`)
         .order('name')
         .range(start_idx,end_idx);
