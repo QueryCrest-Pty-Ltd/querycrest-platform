@@ -19,7 +19,8 @@ async  function auth(endpoint){
     return data; 
     } catch (error) {
         //alert(` failed to get accommodation`);
-        return [];
+        throw error;
+        //return [];
     }
   }
 
@@ -73,102 +74,20 @@ async  function getAccommodations(endpoint){
     if (!d) return null;
     return (new Date(d) - Date.now()) / 86400000;
   }
-    var _accAll2=[];
+
+    const _auth  =  await auth(`/accommodation`);
     var _accAll = [
-    /*
-    {
-      id: 1,
-      name: 'Urban Hatch',
-      university_name: 'University Of Johannesburg',
-      address: 'Easy Campus Access - Close to taxi routes & public transport',
-      price_min: 3000,
-      price_max: null,
-      room_types: ['Single Room', 'Bachelor Unit'],
-      closing_date: '2026-11-30',
-      opening_date: '2026-02-01',
-      description: 'Affordable accommodation with study areas and free WiFi. Located close to campus with easy access to public transport. Secure parking and 24/7 security provided.',
-      apply_url: '#',
-      accreditation: 'nsfas',
-      cover_image: '../images/urban1.jpg',
-      images: ['../images/urban1.jpg', '../images/urban2.jpg', '../images/urban3.jpg', '../images/urban4.jpg'],
-      features: ['Free WiFi', 'Study Areas', '24/7 Security', 'Secure Parking', 'Common Room']
-    },
-    {
-      id: 2,
-      name: 'MAKHOSANA RES',
-      university_name: 'University of Pretoria',
-      address: 'Hatfield, Pretoria',
-      price_min: 3950,
-      price_max: 4500,
-      room_types: ['Single Room', 'Sharing Room'],
-      closing_date: '2026-12-31',
-      opening_date: '2026-01-20',
-      description: 'Modern student accommodation near UP campus. Fully furnished rooms with study desks. On-site laundry facilities and recreational areas.',
-      apply_url: '#',
-      accreditation: 'private',
-      cover_image: '../images/Makhosana1.jpg',
-      images: ['../images/Makhosana1.jpg', '../images/Makhosana5.jpg', '../images/Makhosana6.jpg', '../images/Makhosana2.jpg'],
-      features: ['Fully Furnished', 'Study Desks', 'Laundry', 'Recreation Area', 'WiFi']
-    },
-    {
-      id: 3,
-      name: 'Bohlale Student Accommodation',
-      university_name: 'University of Cape Town',
-      address: 'Rondebosch, Cape Town',
-      price_min: 4200,
-      price_max: null,
-      room_types: ['Single Room', 'Shared Unit'],
-      closing_date: '2027-01-15',
-      opening_date: '2026-03-01',
-      description: 'Comfortable student living with study lounges and secure parking. Mountain views and close proximity to UCT campus. Includes weekly cleaning service.',
-      apply_url: '#',
-      accreditation: 'nsfas',
-      cover_image: '../images/Bohlale1.webp',
-      images: ['../images/Bohlale1.webp', '../images/Bohlale2.webp', '../images/Bohlale3.webp', '../images/Bohlale4.webp'],
-      features: ['Study Lounges', 'Secure Parking', 'Mountain Views', 'Weekly Cleaning', 'Security']
-    },
-    {
-      id: 4,
-      name: 'Selcon Student Village',
-      university_name: 'Tshwane University of Technology',
-      address: 'Arcadia, Pretoria',
-      price_min: 3800,
-      price_max: 4900,
-      room_types: ['Studio', 'Shared Apartment'],
-      closing_date: '2026-12-10',
-      opening_date: '2026-02-15',
-      description: 'Trendy urban accommodation with co-working spaces and fast internet. Modern design with communal kitchen and lounge areas. Walking distance to Wits campus.',
-      apply_url: '#',
-      accreditation: 'private',
-      cover_image: '../images/selcon1.jpg',
-      images: ['../images/selcon1.jpg', '../images/selcon2.jpg', '../images/selcon3.jpg', '../images/selcon4.jpg'],
-      features: ['Co-working Spaces', 'Fast Internet', 'Communal Kitchen', 'Lounge', 'Modern Design']
-    },
-    {
-      id: 5,
-      name: 'Elimu Westdene',
-      university_name: 'Stellenbosch University',
-      address: 'Stellenbosch, Western Cape',
-      price_min: 3500,
-      price_max: 4600,
-      room_types: ['Single Room', 'Double Room'],
-      closing_date: '2027-02-28',
-      opening_date: '2026-04-01',
-      description: 'Peaceful campus-adjacent living with study areas and meal options. Beautiful garden setting with outdoor study spaces. Meal plans available.',
-      apply_url: '#',
-      accreditation: 'nsfas',
-      cover_image: '../images/Elimu1.jpg',
-      images: ['../images/Elimu1.jpg', '../images/Elimu2.jpg', '../images/Elimu3.jpg', '../images/Elimu5.jpg'],
-      features: ['Study Areas', 'Meal Options', 'Garden Setting', 'Outdoor Study', 'WiFi']
-    } */
+
   ];
   async function getSearch(_accAll,_visibleCount,query){
   try {
     const page_idx = parseInt(_visibleCount/15);
-    //alert(query)
+     if(!_auth.error){ alert(`please log in first`);
+      return}
      const search_data =  await search(`/accommodation/search?q=${query}?page=${page_idx}`);
    _accAll.length = 0;
-   //alert(search_data)
+   let urls =[];
+   if(search_data.urls) urls =search_data.urls;
   for(let i =0;i<search_data.data.length;i++){
     const accommodation = search_data.data[i];
     const id = accommodation.id;
@@ -182,37 +101,39 @@ async  function getAccommodations(endpoint){
     const link = accommodation.link;
     const opens = accommodation.opens;
     const closes = accommodation.closes;
-    const urls =accommodation.imageUrls;
+
     var accreditation ='';   
     if(Boolean(accredited))accreditation='nsfas' ;
     else accreditation ='private'  
-    const prices = price;
-    //alert(urls);
-    const arr_prices = prices.split(',').map(s=> s.trim()).filter(Boolean);
 
-    const types = type;
-    const arr_type = types.split(',').map(s=> s.trim()).filter(Boolean);
+
+   let cover_image =[];
+   if(urls[i].links)cover_image =urls[i].links[0];
+
+   let images =[];
+   if(urls[i].links)images =urls[i].links;
+   
 
     _accAll.push(
     {
-      id: id,
-      name: _name,
+      id: id||0,
+      name: _name||'',
       university_name: university_name||'',
-      address: location,
-      price_min: Number(arr_prices[0])||0,
-      price_max: Number(arr_prices[1])||0,
-      room_types: [arr_type[0], arr_type[1]],
-      closing_date: closes,
-      opening_date: opens,
-      description: description,
+      address: location||'',
+      price_min: Number(price.min)||0,
+      price_max: Number(price.max)||0,
+      room_types: [type.first, type.second],
+      closing_date: closes||'',
+      opening_date: opens||'',
+      description: description||'',
       apply_url: '#',
-      accreditation: accreditation ,
-      cover_image: urls[0],
-      images: urls,
+      accreditation: accreditation||true ,
+      cover_image:cover_image ,
+      images: images,
       features: []
     }
     );
-    //alert(_accAll);
+    
    };
    return _accAll;
 
@@ -220,20 +141,24 @@ async  function getAccommodations(endpoint){
     
   } catch (error) {
    //  
-   //alert(error);
    return [];  
   }    
   }
   async function getAccommodationsData(_accAll,_visibleCount) {
 try {
   const page_idx  = parseInt(_visibleCount/15);
+  if(!_auth.error){ alert(`please log in first`);
+  return}  
   const accommodation_data = await getAccommodations(`/accommodation/list?page=${page_idx}`);
   _accAll.length = 0;
- 
-  for(let i =0;i<accommodation_data.data.length;i++){
+
+   let urls =[];
+   if(accommodation_data.urls) urls =accommodation_data.urls;
+  for(let i = 0; i < accommodation_data.data.length;i++){
     const accommodation = accommodation_data.data[i];
-    const id = accommodation.id;
+   const id = accommodation.id;
     const _name = accommodation.name;
+     
     const university_name = accommodation.university_name;
     const price = accommodation.price;
     const location =accommodation.location;
@@ -243,45 +168,45 @@ try {
     const link = accommodation.link;
     const opens = accommodation.opens;
     const closes = accommodation.closes;
-    const urls =accommodation.imageUrls;
     var accreditation ='';   
     if(Boolean(accredited))accreditation='nsfas' ;
     else accreditation ='private'  
-    const prices = price;
+   let cover_image =[];
+   if(urls[i].links)cover_image =urls[i].links[0];
 
-    const arr_prices = prices.split(',').map(s=> s.trim()).filter(Boolean);
-
-    const types = type;
-    const arr_type = types.split(',').map(s=> s.trim()).filter(Boolean);
-
+   let images =[];
+   if(urls[i].links)images =urls[i].links;
+      
+   
     _accAll.push(
     {
-      id: id,
-      name: _name,
+      id: id||0,
+      name: _name||'',
       university_name: university_name||'',
-      address: location,
-      price_min: Number(arr_prices[0])||null,
-      price_max: Number(arr_prices[1])||null,
-      room_types: [arr_type[0], arr_type[1]],
-      closing_date: closes,
-      opening_date: opens,
-      description: description,
+      address: location||'',
+      price_min: Number(price.min)||0,
+      price_max: Number(price.max)||0,
+      room_types: [type.first, type.second],
+      closing_date: closes||'',
+      opening_date: opens||'',
+      description: description||'',
       apply_url: '#',
-      accreditation: accreditation ,
-      cover_image: urls[0],
-      images: urls,
+      accreditation: accreditation||true ,
+      cover_image: cover_image,
+      images: images,
       features: []
     }
     );
-   };
-    //alert(_accAll)
+
+  };
+
     return _accAll;
   
 } catch (error) {
 //  
 return [];
 }
-    //alert(_accAll)
+
   }
   // ----- STATIC ACCOMMODATIONS (Your 15) -----
 
@@ -293,12 +218,6 @@ return [];
   var _currentSlideImages = [];
   var _slideInterval = null;
 
-
-//alert(_accAll);
-
-
-
-//alert(_accAll);
   function buildAccCard(a) {
     var days = daysUntil(a.closing_date);
     var closed = days !== null && days < 0;
@@ -572,13 +491,14 @@ return [];
     //perform seach if q is not empty
 
     if(q){
-    //alert(`q ${q}`);     
-       (async()=>{_accAll=await getSearch(_accAll,_visibleCount,q)})()
-       //_accAll=await getSearch(_accAll,_visibleCount,q);
-       return q ? _accAll.filter(function(a) { return (a.university_name + ' ' + a.name).toLowerCase().indexOf(q) !== -1; }) : _accAll.slice();
+    
+       //(async()=>{_accAll=await getSearch(_accAll,_visibleCount,q)})()
+       return _accAll = await getSearch(_accAll,_visibleCount,q);
+       //return _accAll;
+       //return q ? _accAll.filter(function(a) { return (a.university_name + ' ' + a.name).toLowerCase().indexOf(q) !== -1; }) : _accAll.slice();
     } if(!q||q==='') {
     //(async()=>{_accAll=await getAccommodationsData(_accAll,_visibleCount);})().then(()=>{return _accAll});
-     return await getAccommodationsData(_accAll,_visibleCount);         
+     return _accAll =await getAccommodationsData(_accAll,_visibleCount);         
      
     }
 

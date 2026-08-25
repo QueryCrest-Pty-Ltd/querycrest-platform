@@ -5,21 +5,12 @@ const _SVC = () => createClient(
   Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
 );
 
-// ===== CONFIGURATION =====
-const ALLOWED_ORIGINS = [
-  "https://www.querycrest.com",
-  "http://127.0.0.1:5500",
-  "http://localhost:5500",
-  "http://localhost:3000",
-  "http://127.0.0.1:3000",
-  "https://querycrest.com",
-];
+
 
 // ===== CORS HELPERS =====
 function getCorsHeaders(origin: string | null) {
-  const allowed = origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
   return {
-    "Access-Control-Allow-Origin": "http://127.0.0.1:5500",
+    "Access-Control-Allow-Origin": "https://www.querycrest.com",
     "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, origin",
     "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
     "Access-Control-Max-Age": "86400",
@@ -81,7 +72,7 @@ async function getAccommodation(svc: ReturnType<typeof _SVC>,page_idx:number) {
 
   const {data,error} = await svc
  .from('accommodation')
- .select('id,name,price,location,description,type,accredited,link,opens,closes',{count:'exact'})   
+ .select('id,name,university_name,price,location,description,type,accredited,link,opens,closes',{count:'exact'})   
  .order('id',{ascending:true})
  .range(start_idx,end_idx);
 
@@ -103,61 +94,60 @@ async function getAccommodation(svc: ReturnType<typeof _SVC>,page_idx:number) {
 
 async function getAccommodationImages(svc: ReturnType<typeof _SVC>,accommodations,bucketName:string,expiration:number = 60) {
  try {
-  const {data:files,error} = await svc
-  .storage.
-  from(bucketName)
-  .list();
+  let offset =0;
+  const limit =3;
+  const allPaths = [];
+  const link_data =[];
+  const links =[];
+  // cycle thorugh the accommodations getting names as folder path
+  for(let i = 0;i < accommodations.length;i++){
+    //check if link doesn't exist ,if yes skip and get links from storage
+    if(!accommodations[i].link.urls){
+    while(true){
+    const folder = accommodations[i].name;
+    const {data:files,error} = await svc
+    .storage
+    .from(bucketName)
+    .list(folder,{limit,offset});
 
- if(error){
-      console.error({error:`failed to retrieve accommodation data, error:${error}`,code:400});
-      return _json({error:`failed to retrieve accommodation data, `,data:[]},400);
- }
-
- if(files) {
-      const urls = await Promise.all(
-        files.map(async (file)=>{const{data,error} = await svc
+    if(error){
+        console.error({error:`failed to retrieve accommodation data, error:${error}`,code:400});
+        //return _json({error:`failed to retrieve accommodation data, `,data:[]},400);
+        return []
+     }
+    if(!files || files.length ===0)break;
+    allPaths.push(...files.map(item=> `&{folder}/${item.name}`));
+    offset += files.length    
+    }
+    const{data,error:_error} = await svc
       .storage
       .from(bucketName)
-    .createSignedUrl(file.name,expiration);
-     return {name:file.name,url:data?.signedUrl||null,error:error?.message||null}
-    
-    })
-      );
-      
-  
-
-      const accommodation_data =accommodations.map(item=>{
-        let imageUrls = [];
-        //check if links exist in accommodation link column
-        if(item.link && item.link.trim() !==''){
-          // split by comma
-          const links = item.link.split(',').map(l=>l.trim());
-          imageUrls = links.filter(link => link !=='');
-        }else {
-         // find images with same name
-         const matchingFiles = urls.filter(file =>{
-          const fileName = file.name.toLowerCase();
-          const searchName = item.name.toLowerCase();
-
-          // check if the fileNamae constains the search name
-          return fileName.includes(searchName)||
-                 // check without file extension
-                 fileName.replace(/\.[^/.]+$/,'').includes(searchName)||
-                 //check if search name is part of the file name
-                 searchName.includes(fileName.replace(/\.[^/.]+$/,''));
-         });
-
-        // extract urls from matching files
-        imageUrls = matchingFiles.map(file => file.url).filter(url => url !==null);
-        }
-      return{...item,imageUrls:imageUrls};
-      });
-      //return _json({success:`feedback data retrieved successfuly`,data:urls},200);
-      return accommodation_data;
+    .createSignedUrls(allPaths,expiration);
+    if(data){
+    for(let k=0 ; k<data?.length; k++){
+    links.push(data?.[k]?.signedUrl||[]);
     }
+
+    }
+    //add link to link_data
+    link_data.push({folder:accommodations[i].name,links:links});
+    //reset allPaths
+    allPaths.length=0;
+    links.length=0;
+    }else{
+        //add the existing
+        link_data.push({folder:accommodations[i].name,links:accommodations[i].link.urls});
+    }
+   
+
+
+  }
+
+    return link_data;
  } catch (_error) {
       //console.error({error:`internal error at accomodation data retrieval, error:${_error}`,code:500});  
-      return _json({error:`internal error at accomodation data retrieval, `,data:[]},500);  
+      //return _json({error:`internal error at accomodation data retrieval, `,data:[]},500);  
+        return [];
  }
 }
 
@@ -169,19 +159,21 @@ try {
   const start_idx = (page_idx-1)*pageSize;
   const end_idx = start_idx+pageSize-1; 
 
-  const column = ['name','price','location','description','type','accredited'];
-      for(let i =0;i<column.length;i++){
+  const column = ['name','university_name','location','description'];
+  //const column = ['name','university_name','price','location','description','type','accredited','opens','closes'];
+
+  for(let i =0;i<column.length;i++){
       const { data, error } = await svc
         .from('accommodation')
-        .select('id,name,price,location,description,type,accredited,link,opens,closes')
-         .ilike(column[i],`%${query}%`)
+        .select('id,name,university_name,price,location,description,type,accredited,link,opens,closes')
+        .or(column.map(c=> `${c}.${query}`)
+        .join(','))
         .order('name')
         .range(start_idx,end_idx);
 
       if (error) {
-        return _json({ error: "Search failed" ,data:[]}, 400);
+        return [];
       }
-      if(!data)break;
 
       return  data ;
       }  
@@ -197,14 +189,13 @@ try {
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return _json("ok");//new Response("ok", { headers: CORS });
-  //if (req.method !== "GET") return _json({ error: "Method not allowed" }, 405);
   try {
-/*  
+
     const origin = req.headers.get("origin");
   if (origin && origin !== "https://www.querycrest.com") {
     return _json({ error: "Origin not allowed" }, 403);
   }
-*/
+
 
   const clientIP = req.headers.get("x-forwarded-for") || "unknown";
   if (!checkRateLimit(clientIP)) {
@@ -227,13 +218,13 @@ Deno.serve(async (req) => {
     //path = path.replace(/^\/accommosation\//,'').toLowerCase();
     // get accomodation data
     const svc = _SVC();
-    
+
     if (method === "GET" && path.includes("list")  ) {     
     const page = url.searchParams.get("page") || "1";
     const page_idx:number = Number(page);
     const accommodations  = await getAccommodation(svc,page_idx);
     const data = await getAccommodationImages(svc,accommodations,'accommodation_images',3600);
-    return _json({data:data},200);
+    return _json({data:accommodations,urls:data},200);
     }
   
 
@@ -253,7 +244,7 @@ Deno.serve(async (req) => {
 
       const results = await getSearch(svc,query,page_idx);      
       const data = await getAccommodationImages(svc,results,'accommodation_images',3600);
-      return _json({data:data},200);
+      return _json({data:results,urls:data},200);
              
       } catch  {
           return _json({ error: "server error Search failed",data:[] }, 500);        
