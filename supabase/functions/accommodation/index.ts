@@ -10,7 +10,7 @@ const _SVC = () => createClient(
 // ===== CORS HELPERS =====
 function getCorsHeaders(origin: string | null) {
   return {
-    "Access-Control-Allow-Origin": "http://127.0.0.1:5500",
+    "Access-Control-Allow-Origin": "https://www.querycrest.com",
     "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, origin",
     "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
     "Access-Control-Max-Age": "86400",
@@ -22,20 +22,7 @@ function _json(body: unknown, status = 200,origin: string | null = null): Respon
     status, headers: { ...corsHeaders, "Content-Type": "application/json" },
   });
 }
-async function _auth(req: Request): Promise<{ userId: string; email: string; svc: ReturnType<typeof _SVC> } | Response> {
-  let token = req.headers.get("Authorization")?.replace("Bearer ", "").trim();
-  if (!token) {
-    const cookies = req.headers.get("cookie") ?? "";
-    const match   = cookies.match(/(?:^|;\s*)access_token=([^;]+)/);
-    token         = match?.[1]?.trim();
-  }
-  if (!token) return _json({ error: "Unauthorized" }, 401);
 
-  const svc = _SVC();
-  const { data: { user }, error } = await svc.auth.getUser(token);
-  if (error || !user) return _json({ error: "Unauthorized — invalid token" }, 401);
-  return { userId: user.id, email: user.email ?? "", svc };
-}
 
 
 
@@ -76,18 +63,18 @@ async function getAccommodation(svc: ReturnType<typeof _SVC>,page_idx:number) {
  .order('id',{ascending:true})
  .range(start_idx,end_idx);
 
- if(error){
+ if(error||!data){
       //
       console.error({error:`failed to retrieve accommodation data, error:${error.message}`,code:400});
-      return _json({error:`failed to retrieve accommodation data,`,data:[]},400);        
+      return _json({error:`failed to retrieve accommodation data,`,data:[],urls:[]},400);        
    }
  if(data) {
-      return data//_json({success:`feedback data retrieved successfuly`,data:data},200);
+      return data
 
     }
  } catch (_error) {
       console.error({error:`internal error at accomodation data retrieval, error:${_error}`,code:500});  
-      return _json({error:`internal error at accomodation data retrieval, `,data:[]}),500;
+      return _json({error:`internal error at accomodation data retrieval, `,data:[],urls:[]}),500;
  }
 }
 
@@ -112,8 +99,7 @@ async function getAccommodationImages(svc: ReturnType<typeof _SVC>,accommodation
 
    if(error){
         console.error({error:`failed to retrieve accommodation data, error:${error}`,code:400});
-        //return _json({error:`failed to retrieve accommodation data, `,data:[]},400);
-        return []
+        return _json({error:`failed to retrieve accommodation data, `,data:[],urls:[]},400);
      }
     if(!files || files.length ===0)break;
     allPaths.push(...files.map(item=> `${folder}/${item.name}`));
@@ -126,20 +112,13 @@ async function getAccommodationImages(svc: ReturnType<typeof _SVC>,accommodation
     .getPublicUrl(path))
     );
 
-    /*const{data} = await svc
-      .storage
-      .from(bucketName)
-    .getPublicUrl(allPaths);
-    if(data){
-    for(let k=0 ; k<data?.length; k++){
-    links.push(data?.[k]?.signedUrl||[]);
-    }*/
+
     const publicUrls = urls.map((r)=> r.data.publicUrl);
     links.push(...publicUrls);
-    //}
+
     //add link to link_data
     link_data.push({folder:accommodations[i].name,links:publicUrls});
-    //reset allPaths
+    //reset 
     allPaths.length=0;
     links.length=0;
     offset=0;
@@ -154,9 +133,8 @@ async function getAccommodationImages(svc: ReturnType<typeof _SVC>,accommodation
 
     return link_data;
  } catch (_error) {
-      //console.error({error:`internal error at accomodation data retrieval, error:${_error}`,code:500});  
-      //return _json({error:`internal error at accomodation data retrieval, `,data:[]},500);  
-        return [];
+      console.error({error:`internal error at accomodation data retrieval, error:${_error}`,code:500});  
+      return _json({error:`internal error at accomodation data retrieval, `,data:[],urls:[]},500);  
  }
 }
 
@@ -170,9 +148,7 @@ try {
 
   const column = ['name','university_name','location','description'];
   //const column = ['name','university_name','price','location','description','type','accredited','opens','closes'];
-  const search =[];
   const filter = column.map(c=> `${c}.ilike.*${query}*`).join(',')
-  //for(let i =0;i<column.length;i++){
       const { data, error } = await svc
         .from('accommodation')
         .select('id,name,university_name,price,location,description,type,accredited,link,opens,closes')
@@ -180,16 +156,14 @@ try {
         .order('name')
         .range(start_idx,end_idx);
 
-      if (error) {
-        return [{ error: `Search failed error ${error.message}`}];;
+      if (error||!data) {
+        return  _json({ error: `Search failed error `,data:[],urls:[]},400);
       }
       return data;
-      //search.push(...data);
-      //}
-    //return search;  
-} catch (error) {
-        //return _json({ error: "Search failed" ,data:[]}, 500);
-        return [{ error: "Search failed"}];  
+ 
+} catch  {
+        return _json({ error: "Search failed",data:[],urls:[] }, 500);
+          
 }      
 
 
@@ -201,12 +175,12 @@ try {
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return _json("ok");//new Response("ok", { headers: CORS });
   try {
-/*
+
     const origin = req.headers.get("origin");
   if (origin && origin !== "https://www.querycrest.com") {
     return _json({ error: "Origin not allowed" }, 403);
   }
-*/
+
 
   const clientIP = req.headers.get("x-forwarded-for") || "unknown";
   if (!checkRateLimit(clientIP)) {
@@ -220,8 +194,11 @@ Deno.serve(async (req) => {
     const path = url.pathname;
   
 
-    //path = path.replace(/^\/accommosation\//,'').toLowerCase();
-    // get accomodation data
+
+  // ============================================================
+    // GET - accmmodation
+    // ============================================================
+    //     
     const svc = _SVC();
 
     if (method === "GET" && path.includes("list")  ) {     
@@ -252,15 +229,15 @@ Deno.serve(async (req) => {
       return _json({data:results,urls:data},200);
              
       } catch  {
-          return _json({ error: "server error Search failed",data:[] }, 500);        
+          return _json({ error: "server error Search failed",data:[],urls:[] }, 500);        
       }
    }
    else {
-        return _json({ error: "function call failed",data:[] }, 400);    
+        return _json({ error: "function call failed",data:[],urls:[] }, 400);    
    }
 
   } catch {
-    return _json({ error: "Server error",data:[] }, 500);
+    return _json({ error: "Server error",data:[],urls:[] }, 500);
   }
 });
 

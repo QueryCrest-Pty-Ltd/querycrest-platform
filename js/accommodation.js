@@ -1,28 +1,6 @@
 const API_BASE = "https://xkjsydeavdcarwkthppz.supabase.co/functions/v1";
 const ORIGIN = window.location.origin;
 
-function getToken() {
-  return sessionStorage.getItem('access_token');
-}
-
-async  function auth(endpoint){
-    try {
-    const response =  await fetch(`${API_BASE}${endpoint}`,{
-        method:"POST",
-        headers:{
-            "Content-Type":"application/json",
-            "Authorization":getToken(),
-        }
-
-    });
-    const data = await response.json();
-    return data; 
-    } catch (error) {
-        //alert(` failed to get accommodation`);
-        throw error;
-        //return [];
-    }
-  }
 
 async  function getAccommodations(endpoint){
     try {
@@ -75,7 +53,7 @@ async  function getAccommodations(endpoint){
     return (new Date(d) - Date.now()) / 86400000;
   }
 
-
+    let isErrorDisplayed = false;
     var _accAll = [
 
   ];
@@ -84,10 +62,12 @@ async  function getAccommodations(endpoint){
     const page_idx = parseInt(_visibleCount/15);
 
      const search_data =  await search(`/accommodation/search?q=${encodeURIComponent(query)}&page=${encodeURIComponent(page_idx)}`);
-   _accAll.length = 0;
+ 
+     _accAll.length = 0;
    let urls =[];
    if(search_data.urls) urls =search_data.urls;
-  for(let i =0;i<search_data.data.length;i++){
+   if(search_data.data){
+   for(let i =0;i<search_data.data.length;i++){
     const accommodation = search_data.data[i];
     const id = accommodation.id;
     const _name = accommodation.name;
@@ -127,13 +107,23 @@ async  function getAccommodations(endpoint){
       description: description||'',
       apply_url: '#',
       accreditation: accreditation||true ,
-      cover_image:cover_image ,
-      images: images,
+      cover_image:cover_image ||'',
+      images: images||[],
       features: []
     }
     );
-    
+    isErrorDisplayed =false;
    };
+   }else if(search_data.error) {
+    // display error
+    var empty = document.getElementById('acc-empty');
+    var empty_p1 = document.getElementById('acc-empty-p1');
+    var empty_p2 = document.getElementById('acc-empty-p2');        
+    if (empty) empty.style.display =  'block';
+    empty_p1.textContent = 'Error while fetching search data';
+    empty_p2.textContent = search_data.error;
+    isErrorDisplayed =true;
+   }
    return _accAll;
 
     
@@ -148,11 +138,13 @@ try {
   const page_idx  = parseInt(_visibleCount/15);
 
   const accommodation_data = await getAccommodations(`/accommodation/list?page=${page_idx}`);
+
   _accAll.length = 0;
 
    let urls =[];
    if(accommodation_data.urls) urls =accommodation_data.urls;
-  for(let i = 0; i < accommodation_data.data.length;i++){
+  if(accommodation_data.data){
+   for(let i = 0; i < accommodation_data.data.length;i++){
     const accommodation = accommodation_data.data[i];
    const id = accommodation.id;
     const _name = accommodation.name;
@@ -190,14 +182,24 @@ try {
       description: description||'',
       apply_url: '#',
       accreditation: accreditation||true ,
-      cover_image: cover_image,
-      images: images,
+      cover_image: cover_image||'',
+      images: images||[],
       features: []
     }
     );
+    isErrorDisplayed =false;
 
   };
-
+   }else if(accommodation_data.error){
+    //display error
+    var empty = document.getElementById('acc-empty');
+    var empty_p1 = document.getElementById('acc-empty-p1');
+    var empty_p2 = document.getElementById('acc-empty-p2');        
+    if (empty) empty.style.display =  'block';
+    empty_p1.textContent = 'Error while fetching accomodation data';
+    empty_p2.textContent = accommodation_data.error;
+    isErrorDisplayed =true;
+   }
     return _accAll;
   
 } catch (error) {
@@ -458,7 +460,7 @@ return [];
     if (!grid) return;
 
     var filtered = await  getFilteredAccommodations();
-    //alert(`filtered ${filtered}`);
+
     if(filtered){
     var visible = filtered.slice(0, _visibleCount);
     
@@ -479,8 +481,10 @@ return [];
     }
 
     var empty = document.getElementById('acc-empty');
+    if(!isErrorDisplayed){
     if (empty) empty.style.display = filtered.length ? 'none' : 'block';
     grid.style.display = filtered.length ? 'grid' : 'none';
+  }
     }
   }
 
@@ -490,13 +494,11 @@ return [];
 
     if(q){
     
-       //(async()=>{_accAll=await getSearch(_accAll,_visibleCount,q)})()
+
        return _accAll = await getSearch(_accAll,_visibleCount,q);
-       //return _accAll;
-       //return q ? _accAll.filter(function(a) { return (a.university_name + ' ' + a.name).toLowerCase().indexOf(q) !== -1; }) : _accAll.slice();
+     //if q is empty get all accommodations
     } if(!q||q==='') {
-    //(async()=>{_accAll=await getAccommodationsData(_accAll,_visibleCount);})().then(()=>{return _accAll});
-     return _accAll =await getAccommodationsData(_accAll,_visibleCount);         
+     return _accAll = await getAccommodationsData(_accAll,_visibleCount);         
      
     }
 
