@@ -10,7 +10,7 @@ const _SVC = () => createClient(
 // ===== CORS HELPERS =====
 function getCorsHeaders(origin: string | null) {
   return {
-    "Access-Control-Allow-Origin": "https://www.querycrest.com",
+    "Access-Control-Allow-Origin": "http://127.0.0.1:5500",
     "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, origin",
     "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
     "Access-Control-Max-Age": "86400",
@@ -95,14 +95,14 @@ async function getAccommodation(svc: ReturnType<typeof _SVC>,page_idx:number) {
 async function getAccommodationImages(svc: ReturnType<typeof _SVC>,accommodations,bucketName:string,expiration:number = 60) {
  try {
   let offset =0;
-  const limit =3;
+  const limit =300;
   const allPaths = [];
   const link_data =[];
   const links =[];
   // cycle thorugh the accommodations getting names as folder path
   for(let i = 0;i < accommodations.length;i++){
     //check if link doesn't exist ,if yes skip and get links from storage
-    if(!accommodations[i].link.urls){
+    if(!accommodations[i].link.urls || accommodations[i].link.urls === "[]" ||accommodations[i].link.urls === null ){
     while(true){
     const folder = accommodations[i].name;
     const {data:files,error} = await svc
@@ -110,30 +110,39 @@ async function getAccommodationImages(svc: ReturnType<typeof _SVC>,accommodation
     .from(bucketName)
     .list(folder,{limit,offset});
 
-    if(error){
+   if(error){
         console.error({error:`failed to retrieve accommodation data, error:${error}`,code:400});
         //return _json({error:`failed to retrieve accommodation data, `,data:[]},400);
         return []
      }
     if(!files || files.length ===0)break;
-    allPaths.push(...files.map(item=> `&{folder}/${item.name}`));
+    allPaths.push(...files.map(item=> `${folder}/${item.name}`));
     offset += files.length    
     }
-    const{data,error:_error} = await svc
+    const urls = await Promise.all(
+      allPaths.map((path)=> svc
       .storage
       .from(bucketName)
-    .createSignedUrls(allPaths,expiration);
+    .getPublicUrl(path))
+    );
+
+    /*const{data} = await svc
+      .storage
+      .from(bucketName)
+    .getPublicUrl(allPaths);
     if(data){
     for(let k=0 ; k<data?.length; k++){
     links.push(data?.[k]?.signedUrl||[]);
-    }
-
-    }
+    }*/
+    const publicUrls = urls.map((r)=> r.data.publicUrl);
+    links.push(...publicUrls);
+    //}
     //add link to link_data
-    link_data.push({folder:accommodations[i].name,links:links});
+    link_data.push({folder:accommodations[i].name,links:publicUrls});
     //reset allPaths
     allPaths.length=0;
     links.length=0;
+    offset=0;
     }else{
         //add the existing
         link_data.push({folder:accommodations[i].name,links:accommodations[i].link.urls});
@@ -161,24 +170,26 @@ try {
 
   const column = ['name','university_name','location','description'];
   //const column = ['name','university_name','price','location','description','type','accredited','opens','closes'];
-
-  for(let i =0;i<column.length;i++){
+  const search =[];
+  const filter = column.map(c=> `${c}.ilike.*${query}*`).join(',')
+  //for(let i =0;i<column.length;i++){
       const { data, error } = await svc
         .from('accommodation')
         .select('id,name,university_name,price,location,description,type,accredited,link,opens,closes')
-        .or(column.map(c=> `${c}.${query}`)
-        .join(','))
+        .or(filter)
         .order('name')
         .range(start_idx,end_idx);
 
       if (error) {
-        return [];
+        return [{ error: `Search failed error ${error.message}`}];;
       }
-
-      return  data ;
-      }  
+      return data;
+      //search.push(...data);
+      //}
+    //return search;  
 } catch (error) {
-        return _json({ error: "Search failed" ,data:[]}, 500);  
+        //return _json({ error: "Search failed" ,data:[]}, 500);
+        return [{ error: "Search failed"}];  
 }      
 
 
@@ -190,12 +201,12 @@ try {
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return _json("ok");//new Response("ok", { headers: CORS });
   try {
-
+/*
     const origin = req.headers.get("origin");
   if (origin && origin !== "https://www.querycrest.com") {
     return _json({ error: "Origin not allowed" }, 403);
   }
-
+*/
 
   const clientIP = req.headers.get("x-forwarded-for") || "unknown";
   if (!checkRateLimit(clientIP)) {
@@ -207,12 +218,6 @@ Deno.serve(async (req) => {
     const method = req.method;
     // Proper path extraction
     const path = url.pathname;
-    if (method === "POST"){ 
-    const auth = await _auth(req);
-    if (auth instanceof Response) return auth;
-    const { userId:_user_id, email:_email, svc:_svc } = auth;
-
-    }
   
 
     //path = path.replace(/^\/accommosation\//,'').toLowerCase();

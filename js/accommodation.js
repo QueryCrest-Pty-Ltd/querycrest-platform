@@ -75,16 +75,15 @@ async  function getAccommodations(endpoint){
     return (new Date(d) - Date.now()) / 86400000;
   }
 
-    const _auth  =  await auth(`/accommodation`);
+
     var _accAll = [
 
   ];
   async function getSearch(_accAll,_visibleCount,query){
   try {
     const page_idx = parseInt(_visibleCount/15);
-     if(!_auth.error){ alert(`please log in first`);
-      return}
-     const search_data =  await search(`/accommodation/search?q=${query}?page=${page_idx}`);
+
+     const search_data =  await search(`/accommodation/search?q=${encodeURIComponent(query)}&page=${encodeURIComponent(page_idx)}`);
    _accAll.length = 0;
    let urls =[];
    if(search_data.urls) urls =search_data.urls;
@@ -147,8 +146,7 @@ async  function getAccommodations(endpoint){
   async function getAccommodationsData(_accAll,_visibleCount) {
 try {
   const page_idx  = parseInt(_visibleCount/15);
-  if(!_auth.error){ alert(`please log in first`);
-  return}  
+
   const accommodation_data = await getAccommodations(`/accommodation/list?page=${page_idx}`);
   _accAll.length = 0;
 
