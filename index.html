@@ -978,6 +978,63 @@ body.pa-modal-open {
 }
 .pa-alert a:hover { text-decoration: underline; }
 
+/* Promo code link */
+.pa-promo-link {
+  display: inline-block;
+  margin-top: 10px;
+  color: #2563eb;
+  font-size: .82rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  font-family: 'Poppins', sans-serif;
+  background: none;
+  border: none;
+  padding: 0;
+}
+.pa-promo-link:hover { color: #1d4ed8; }
+
+/* Promo code input */
+.pa-promo-input-wrap {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+.pa-promo-input {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: .85rem;
+  font-family: 'Poppins', sans-serif;
+  color: #0f172a;
+  outline: none;
+  transition: border-color .18s;
+}
+.pa-promo-input:focus { border-color: #2563eb; }
+.pa-promo-apply-btn {
+  padding: 10px 16px;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: .85rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  transition: background .15s;
+}
+.pa-promo-apply-btn:hover { background: #1d4ed8; }
+
+/* Application fee */
+.pa-fee {
+  margin-top: 10px;
+  font-size: .82rem;
+  color: #64748b;
+  font-family: 'Poppins', sans-serif;
+}
+.pa-fee strong { color: #0f172a; }
+
 /* Redirect message step */
 .pa-redirect-msg {
   display: flex;
@@ -1285,6 +1342,21 @@ body.pa-modal-open {
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
           <div><h4>We'll take it from here</h4><p>A QueryCrest adviser will contact you to collect your previous application details so that we can submit your bursary application on your behalf.</p></div>
         </div>
+
+        <!-- Application fee -->
+        <div class="pa-fee" id="paFee">Application fee: <strong>unavailable</strong></div>
+
+        <!-- Promo code link -->
+        <button type="button" class="pa-promo-link" id="paPromoLink" onclick="paTogglePromo()">+ Have a promo code?</button>
+
+        <!-- Promo code input (hidden by default) -->
+        <div id="paPromoWrap" style="display:none;">
+          <div class="pa-promo-input-wrap">
+            <input class="pa-promo-input" id="paPromoCode" type="text" placeholder="Enter code">
+            <button type="button" class="pa-promo-apply-btn" onclick="paApplyPromo()">Apply</button>
+          </div>
+          <button type="button" class="pa-promo-link" onclick="paTogglePromo()" style="margin-top:8px;">− Hide promo code</button>
+        </div>
       </div>
 
       <!-- Step: Redirect message -->
@@ -1308,7 +1380,7 @@ body.pa-modal-open {
     <!-- Footer -->
     <div class="pa-ftr" id="paFtr">
       <button class="pa-btn secondary" id="paBK" onclick="paBkBtn()">Cancel</button>
-      <button class="pa-btn primary"   id="paNX" onclick="paNtBtn()">Next</button>
+      <button class="pa-btn primary"   id="paNX" onclick="paNtBtn()">Submit</button>
     </div>
 
   </div>
@@ -1351,6 +1423,7 @@ body.pa-modal-open {
   var paUni  = { v: '', l: '', type: '' };
   var paIsReturning     = false;
   var paChosenBursary = null;
+  var paPromoApplied = false;
 
   /* Bursaries */
   var BURSARIES = [
@@ -1596,16 +1669,20 @@ body.pa-modal-open {
     paUni  = { v: '', l: '', type: '' };
     paIsReturning = false;
     paChosenBursary = null;
+    paPromoApplied = false;
     ['paP1','paC1','paP2','paC2','paP3','paC3'].forEach(function (id) {
       var el = g(id); if (el) el.value = '';
     });
-    /* Reset credentials fields */
     ['studentNumber','itsPin','amPW'].forEach(function (id) {
       var el = g(id); if (el) el.value = '';
     });
     document.querySelectorAll('input[name="paApp"]').forEach(function (r) { r.checked = false; });
     document.querySelectorAll('input[name="bsPrevApplied"]').forEach(function (r) { r.checked = false; });
     var consent = g('consentReturning'); if (consent) consent.checked = false;
+    var promoCode = g('paPromoCode'); if (promoCode) promoCode.value = '';
+    var promoWrap = g('paPromoWrap'); if (promoWrap) promoWrap.style.display = 'none';
+    var promoLink = g('paPromoLink'); if (promoLink) promoLink.textContent = '+ Have a promo code?';
+    var fee = g('paFee'); if (fee) fee.innerHTML = 'Application fee: <strong>unavailable</strong>';
     var trig = g('paUniTrigger'), trigTxt = g('paUniTriggerTxt');
     if (trig) trig.classList.remove('has-val', 'bad');
     if (trigTxt) trigTxt.textContent = 'Select university or college…';
@@ -1644,11 +1721,36 @@ body.pa-modal-open {
     }
   });
 
+  /* Promo code toggle */
+  window.paTogglePromo = function () {
+    var promoWrap = document.getElementById('paPromoWrap');
+    var promoLink = document.getElementById('paPromoLink');
+    if (promoWrap.style.display === 'none') {
+      promoWrap.style.display = 'block';
+      promoLink.textContent = '';
+    } else {
+      promoWrap.style.display = 'none';
+      promoLink.textContent = '+ Have a promo code?';
+    }
+  };
+
+  /* Apply promo code */
+  window.paApplyPromo = function () {
+    var code = document.getElementById('paPromoCode').value.trim();
+    if (code) {
+      paPromoApplied = true;
+      var fee = document.getElementById('paFee');
+      if (fee) fee.innerHTML = 'Application fee: <strong style="color:#16a34a;">R0.00 (Promo applied)</strong>';
+      document.getElementById('paPromoCode').value = '';
+      document.getElementById('paPromoWrap').style.display = 'none';
+      document.getElementById('paPromoLink').textContent = '+ Have a promo code?';
+    }
+  };
+
   /* Step management */
   var paType = null;
   var paKey  = 'type';
 
-  /* flow to include credentials step */
   var FLOWS = {
     uni:     ['type', 'inst', 'returning', 'programs', 'credentials', 'redirect'],
     bursary: ['type', 'bursary', 'redirect'],
@@ -1694,9 +1796,9 @@ body.pa-modal-open {
       if (progTrack) progTrack.style.display = 'block';
     }
 
-    /* Step calculation - 4 steps for university flow */
-    var total = 4; // Institution, Experience, Programs, Credentials
-    var stepNum = idx; // idx 1 = Step 1, idx 2 = Step 2, etc.
+    /* Step calculation */
+    var total = 4;
+    var stepNum = idx;
     var pct = Math.round((stepNum / total) * 100);
 
     var label = STEP_META[key].label;
@@ -1993,13 +2095,15 @@ body.pa-modal-open {
         payload.bursary_choice = paChosenBursary.name;
         payload.bursary_choice_url = paChosenBursary.url;
       }
+      if (paPromoApplied) {
+        payload.promo_applied = true;
+      }
     } else {
       payload.university_name = paUni.l;
       payload.university_id   = paUni.v;
       payload.institution_kind = paUni.type || 'university';
       payload.programs      = [g('paP1').value.trim(), g('paP2').value.trim(), g('paP3').value.trim()].filter(Boolean);
       payload.course_codes  = [g('paC1').value.trim(), g('paC2').value.trim(), g('paC3').value.trim()].filter(Boolean);
-      /* Save credentials */
       payload.student_number = g('studentNumber').value.trim();
       payload.its_pin = g('itsPin').value.trim();
       payload.portal_password = g('amPW').value.trim();
