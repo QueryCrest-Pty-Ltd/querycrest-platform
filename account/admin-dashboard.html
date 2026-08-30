@@ -1161,9 +1161,9 @@ async  function getGuide(endpoint){
         return [];
     }
   }
-  const identifier = sessionStorage.get('username');
+  const identifier = sessionStorage.getItem('username');
   const identifier_type = "username";
-  const username = sessionStorage.get('username');
+  const username = sessionStorage.getItem('username');
   let guideUser = {};
   let guide ={};
   const guideData =[];
@@ -1175,7 +1175,7 @@ function get_page(step_number,limit)
 }
   async function getUsers() {
     
-    guideUser.length =0;
+    Object.keys(guideUser).length=0;
     const data = await getGuideUsers(`/guide/users?identifier=${encodeURIComponent(identifier)}&identifier_type=${encodeURIComponent(identifier_type)}` );
 
     if(!data.data || data.error)return;
@@ -1192,7 +1192,7 @@ function get_page(step_number,limit)
     //const limit = parseInt( 5/guideUser.step_current)
     //,z_index:data.data.z_index
     guideData.length =0;
-    guide.length=0;
+  Object.keys(guide).length=0;
     const data = await getGuide(`/guide/list?page=${encodeURIComponent(page)}&limit=${encodeURIComponent(limit)}` );
     if(!data.data || data.error)return;
     else{
