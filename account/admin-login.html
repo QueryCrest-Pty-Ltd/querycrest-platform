@@ -622,6 +622,7 @@ async function doLogin() {
       console.log('🔍 Final verification - Token in sessionStorage:', stored ? 'Yes' : 'No');
       
       setTimeout(() => {
+        sessionStorage.setItem('username',document.getElementById('lUN').value.trim());        
         window.location.href = 'admin-dashboard.html';
       }, 1000);
     } else {
@@ -695,6 +696,7 @@ document.getElementById('lUN').addEventListener('keydown', function(e) {
 // Check if already logged in
 if (adminAPI.login.isAuthenticated()) {
   console.log('✅ Already authenticated, redirecting to dashboard...');
+  sessionStorage.setItem('username',document.getElementById('lUN').value.trim());
   window.location.href = 'admin-dashboard.html';
 }
 </script>

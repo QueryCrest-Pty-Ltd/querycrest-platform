@@ -1161,9 +1161,9 @@ async  function getGuide(endpoint){
         return [];
     }
   }
-  const identifier = "phala sk";
+  const identifier = sessionStorage.get('username');
   const identifier_type = "username";
-  const username = "phala sk";
+  const username = sessionStorage.get('username');
   let guideUser = {};
   let guide ={};
   const guideData =[];
@@ -1308,8 +1308,8 @@ async function loadGuide() {
   if(start_idx===-1){
 
    const data ={
-              first_time:false,
-              complete:false,
+              first_time:'false',
+              complete:'false',
               step_current:guideUser.step_current-1,
               email:null,
               username:username,
