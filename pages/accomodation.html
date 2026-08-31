@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Accommodation Finder — QueryCrest</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+<style>
+:root{
+  --bg:#f8fafc;--surface:#f1f5f9;--surface2:#e2e8f0;
+  --primary:#3498db;--primary-dark:#2980b9;--primary-d:rgba(52,152,219,.1);
+  --dark:#34495e;--dark2:#2c3e50;
+  --green:#27ae60;--green-d:rgba(39,174,96,.1);
+  --red:#e74c3c;--red-d:rgba(231,76,60,.1);
+  --orange:#e67e22;--orange-d:rgba(230,126,34,.1);
+  --yellow:#f39c12;--yellow-d:rgba(243,156,18,.1);
+  --purple:#8b5cf6;--purple-d:rgba(139,92,246,.15);
+  --teal:#14b8a6;--teal-d:rgba(20,184,166,.15);
+  --t1:#2c3e50;--t2:#5d6d7e;--t3:#95a5a6;
+  --bdr:#e8eef3;--bdr2:#cbd5e0;
+  --r:8px;--r2:12px;
+  --shadow:0 1px 3px rgba(44,62,80,.06),0 4px 14px rgba(44,62,80,.04);
+  --shadow2:0 12px 40px rgba(52,152,219,.15);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:14.5px;}
+body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--t1);min-height:100vh;line-height:1.55;}
+.app,.main,.mi,.pn,.pn-b,.sc{min-width:0;}
+.main{min-width:0;overflow-x:clip;}
+.pn-b{overflow-wrap:anywhere;word-break:break-word;}
+.app{display:grid;grid-template-columns:1fr;min-height:100vh;}
+.main{overflow-y:auto;background:var(--bg);}
+.mi{padding:24px 28px 60px;}
+.ph{margin-bottom:22px;display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap;}
+.ph h1{font-size:1.5rem;font-weight:700;letter-spacing:-.02em;color:var(--dark2);}
+.ph p{color:var(--t2);font-size:.85rem;margin-top:3px;}
+.ph-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.pn{background:#fff;border:1px solid var(--bdr);border-radius:var(--r2);overflow:hidden;margin-bottom:16px;box-shadow:var(--shadow);}
+.pn-h{display:flex;align-items:center;justify-content:space-between;padding:15px 20px;border-bottom:1px solid var(--bdr);flex-wrap:wrap;gap:8px;}
+.pn-h h3{font-size:.92rem;font-weight:600;color:var(--dark2);letter-spacing:-.01em;}
+.pn-b{padding:18px;}
+.bd{display:inline-flex;align-items:center;padding:3px 10px;border-radius:99px;font-size:.68rem;font-weight:600;white-space:nowrap;}
+.bd-pending{background:var(--yellow-d);color:#b8730e;}
+.bd-approved{background:var(--green-d);color:var(--green);}
+.bd-rejected{background:var(--red-d);color:var(--red);}
+.bd-info{background:var(--primary-d);color:var(--primary-dark);}
+.bd-warn{background:var(--orange-d);color:#b8590f;}
+.bd-success{background:var(--green-d);color:var(--green);}
+.bd-danger{background:var(--red-d);color:var(--red);}
+.bd-nsfas{background:var(--teal-d);color:var(--teal);}
+.bd-private{background:var(--purple-d);color:var(--purple);}
+.btn{position:relative;overflow:hidden;padding:10px 18px;border-radius:var(--r);font-size:.85rem;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif;transition:all .18s;display:inline-flex;align-items:center;gap:7px;border:none;-webkit-tap-highlight-color:transparent;}
+.btn:active:not(:disabled){transform:scale(.97);}
+.btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;flex-shrink:0;}
+.btn-primary{background:var(--primary);color:#fff;}
+.btn-primary:hover:not(:disabled){background:var(--primary-dark);box-shadow:0 4px 14px rgba(52,152,219,.35);}
+.btn-outline{background:#fff;border:1.5px solid var(--bdr2);color:var(--dark);}
+.btn-outline:hover:not(:disabled){border-color:var(--primary);color:var(--primary);}
+.btn-secondary{background:var(--surface);border:1.5px solid var(--bdr2);color:var(--dark);}
+.btn-danger{background:var(--red);color:#fff;}
+.btn-danger:hover:not(:disabled){background:#c0392b;}
+.btn-success{background:var(--green);color:#fff;}
+.btn-sm{padding:6px 13px;font-size:.78rem;}
+.btn-back{background:var(--surface);border:1px solid var(--bdr);color:var(--t2);}
+.btn-back:hover{background:var(--surface2);color:var(--dark);}
+.btn-view-more{background:var(--surface);border:1px solid var(--bdr);color:var(--dark2);padding:12px 32px;font-size:.9rem;width:100%;justify-content:center;}
+.btn-view-more:hover{background:var(--primary);color:#fff;border-color:var(--primary);}
+.alert{display:flex;align-items:flex-start;gap:13px;padding:14px 16px;border-radius:var(--r2);margin-bottom:12px;border:1px solid;}
+.alert.info{background:var(--primary-d);border-color:rgba(52,152,219,.2);}
+.alert svg{width:20px;height:20px;flex-shrink:0;margin-top:1px;stroke-width:2;stroke-linecap:round;fill:none;}
+.alert.info svg{stroke:var(--primary);}
+.alert h4{font-size:.88rem;font-weight:600;color:var(--dark2);margin-bottom:3px;}
+.alert p{font-size:.82rem;color:var(--t2);line-height:1.55;}
+.inp{padding:11px 14px;background:#fff;border:1.5px solid var(--bdr);border-radius:var(--r);color:var(--t1);font-size:.9rem;font-family:'Poppins',sans-serif;outline:none;transition:all .2s;width:100%;}
+.inp:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-d);}
+.inp::placeholder{color:var(--t3);}
+.btn-refresh{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;padding:0;border-radius:var(--r);background:var(--surface);border:1px solid var(--bdr);color:var(--t2);cursor:pointer;transition:background .15s;flex-shrink:0;}
+.btn-refresh:hover{background:var(--surface2);color:var(--primary);}
+.btn-refresh svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;}
+.btn-refresh.spinning svg{animation:btn-spin .7s linear infinite;}
+@keyframes btn-spin{to{transform:rotate(360deg)}}
+.section{width:100%;min-height:10px;}
+.sk{background:linear-gradient(90deg,var(--surface) 25%,var(--surface2) 50%,var(--surface) 75%);background-size:800px 100%;animation:shimmer 1.4s infinite linear;border-radius:4px;}
+.sk-line{height:13px;border-radius:4px;margin-bottom:8px;}
+.sk-line.lg{height:18px;}
+.sk-line.sm{height:10px;}
+.sk-line.xs{height:8px;}
+.sk-line.w30{width:30%;}
+.sk-line.w70{width:70%;}
+.sk-line.w50{width:50%;}
+.sk-line.w85{width:85%;}
+.sk-box{border-radius:var(--r);}
+.sk-wrap{padding:18px;display:flex;flex-direction:column;gap:8px;}
+@keyframes shimmer{0%{background-position:-400px 0}100%{background-position:400px 0}}
+.toasts{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:8px;max-width:340px;}
+.toast{background:var(--dark2);border-radius:var(--r);padding:11px 15px;font-size:.82rem;display:flex;align-items:center;gap:10px;box-shadow:var(--shadow2);animation:tin .2s ease;color:#fff;}
+.toast.ok{border-left:3px solid var(--green);}
+.toast.err{border-left:3px solid var(--red);}
+.toast.warn{border-left:3px solid var(--orange);}
+@keyframes tin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* Detail view */
+.detail-view{display:none;}
+.detail-view.show{display:block;}
+.gallery-grid{display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:200px 200px;gap:8px;border-radius:var(--r2);overflow:hidden;margin-bottom:24px;}
+.gallery-grid .main-img{grid-row:1/3;grid-column:1/2;}
+.gallery-grid img{width:100%;height:100%;object-fit:cover;cursor:pointer;}
+.gallery-grid .sub-img{width:100%;height:100%;object-fit:cover;cursor:pointer;}
+.detail-title{font-size:1.4rem;font-weight:700;color:var(--dark2);margin-bottom:4px;}
+.detail-university{font-size:.9rem;color:var(--primary);font-weight:600;margin-bottom:12px;}
+.detail-section{margin-bottom:20px;}
+.detail-section h3{font-size:1rem;font-weight:600;color:var(--dark2);margin-bottom:8px;padding-bottom:4px;border-bottom:2px solid var(--bdr);}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.detail-item{background:var(--surface);padding:12px 16px;border-radius:var(--r);}
+.detail-item label{font-size:.7rem;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:2px;}
+.detail-item span{font-size:.9rem;font-weight:500;color:var(--dark2);}
+.detail-desc{font-size:.88rem;color:var(--t2);line-height:1.7;}
+.detail-rooms{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
+.detail-rooms .room-tag{background:var(--primary-d);color:var(--primary-dark);padding:4px 12px;border-radius:99px;font-size:.78rem;font-weight:500;}
+.detail-badges{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+.back-row{display:flex;gap:8px;margin-bottom:16px;align-items:center;}
+.view-more-wrapper{text-align:center;padding:20px 0 10px;}
+.hidden-acc{display:none;}
+
+/* Fullscreen Slideshow */
+.slideshow-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);z-index:10000;display:none;align-items:center;justify-content:center;flex-direction:column;}
+.slideshow-overlay.show{display:flex;}
+.slideshow-overlay .close-slideshow{position:absolute;top:20px;right:30px;color:#fff;font-size:2.5rem;cursor:pointer;z-index:10001;background:none;border:none;font-family:'Poppins',sans-serif;transition:transform .2s;}
+.slideshow-overlay .close-slideshow:hover{transform:scale(1.2);}
+.slideshow-overlay .slideshow-img{max-width:90%;max-height:80vh;object-fit:contain;border-radius:4px;box-shadow:0 0 40px rgba(0,0,0,0.5);}
+.slideshow-overlay .slideshow-counter{color:rgba(255,255,255,0.6);font-size:.9rem;margin-top:20px;font-weight:300;}
+.slideshow-overlay .slideshow-nav{position:absolute;top:50%;transform:translateY(-50%);color:#fff;font-size:2.5rem;cursor:pointer;background:rgba(0,0,0,0.3);padding:12px 18px;border-radius:50%;border:none;transition:background .2s;z-index:10001;font-family:'Poppins',sans-serif;}
+.slideshow-overlay .slideshow-nav:hover{background:rgba(255,255,255,0.15);}
+.slideshow-overlay .slideshow-nav.prev{left:20px;}
+.slideshow-overlay .slideshow-nav.next{right:20px;}
+.slideshow-overlay .slideshow-dots{display:flex;gap:10px;margin-top:16px;}
+.slideshow-overlay .slideshow-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.3);cursor:pointer;border:none;transition:all .2s;}
+.slideshow-overlay .slideshow-dot.active{background:#fff;transform:scale(1.2);}
+
+/* ===== HEADER ===== */
+.header{background:#fff;border-bottom:1px solid var(--bdr);padding:14px 28px;position:sticky;top:0;z-index:200;}
+.header-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+.header-brand{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.header-brand .brand-ico{width:36px;height:36px;border-radius:8px;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:800;color:#fff;flex-shrink:0;}
+.header-brand .brand-txt{font-size:1.1rem;font-weight:700;color:var(--dark2);letter-spacing:-.01em;}
+.header-nav{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.header-nav a{color:var(--t2);text-decoration:none;font-size:.8rem;font-weight:500;padding:6px 12px;border-radius:var(--r);transition:all .15s;}
+.header-nav a:hover{color:var(--primary);background:var(--primary-d);}
+.header-nav a.active{color:var(--primary);background:var(--primary-d);font-weight:600;}
+.header-actions{display:flex;align-items:center;gap:8px;}
+.header-actions .btn{font-size:.78rem;padding:7px 16px;}
+.header-mobile-toggle{display:none;background:none;border:none;color:var(--t2);font-size:1.4rem;cursor:pointer;padding:4px 8px;}
+.header-mobile-toggle:hover{color:var(--primary);}
+
+/* ===== HERO ===== */
+.hero{background:linear-gradient(135deg,var(--dark2) 0%,var(--primary-dark) 100%);padding:40px 28px 36px;border-radius:var(--r2);margin-bottom:24px;color:#fff;}
+.hero h2{font-size:1.6rem;font-weight:700;margin-bottom:8px;letter-spacing:-.02em;}
+.hero p{font-size:.95rem;opacity:.9;margin-bottom:18px;max-width:600px;line-height:1.6;}
+.hero .hero-btns{display:flex;gap:10px;flex-wrap:wrap;}
+.hero .hero-btns .btn-primary{background:#fff;color:var(--primary-dark);}
+.hero .hero-btns .btn-primary:hover{background:var(--primary-d);color:var(--primary-dark);}
+.hero .hero-btns .btn-outline{border-color:rgba(255,255,255,.3);color:#fff;}
+.hero .hero-btns .btn-outline:hover{background:rgba(255,255,255,.1);border-color:#fff;}
+
+/* ===== FOOTER ===== */
+.footer{background:var(--dark2);color:rgba(255,255,255,.8);padding:40px 28px 24px;margin-top:40px;border-radius:var(--r2);}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1.5fr;gap:30px;margin-bottom:30px;}
+.footer-brand .brand-ico{width:36px;height:36px;border-radius:8px;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:800;color:#fff;flex-shrink:0;margin-bottom:10px;}
+.footer-brand p{font-size:.8rem;line-height:1.6;max-width:280px;}
+.footer-col h4{color:#fff;font-size:.85rem;font-weight:600;margin-bottom:12px;}
+.footer-col a{color:rgba(255,255,255,.7);text-decoration:none;font-size:.78rem;display:block;padding:4px 0;transition:color .15s;}
+.footer-col a:hover{color:#fff;}
+.footer-newsletter{display:flex;gap:8px;margin-top:8px;}
+.footer-newsletter input{padding:9px 14px;border-radius:var(--r);border:none;font-family:'Poppins',sans-serif;font-size:.8rem;flex:1;min-width:140px;background:rgba(255,255,255,.1);color:#fff;}
+.footer-newsletter input::placeholder{color:rgba(255,255,255,.5);}
+.footer-newsletter input:focus{outline:2px solid var(--primary);}
+.footer-newsletter .btn{font-size:.78rem;padding:8px 16px;}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:20px;border-top:1px solid rgba(255,255,255,.08);font-size:.72rem;flex-wrap:wrap;gap:8px;}
+.footer-bottom a{color:rgba(255,255,255,.6);text-decoration:none;margin-left:16px;transition:color .15s;}
+.footer-bottom a:hover{color:#fff;}
+
+@media(max-width:768px){
+  .mi{padding:18px 16px 60px;}.ph{flex-direction:column;}
+  .gallery-grid{grid-template-columns:1fr 1fr;grid-template-rows:160px 160px;}
+  .gallery-grid .main-img{grid-row:1/2;grid-column:1/3;}
+  .detail-grid{grid-template-columns:1fr;}
+  .slideshow-overlay .slideshow-nav{font-size:1.8rem;padding:8px 12px;}
+  .slideshow-overlay .close-slideshow{font-size:1.8rem;top:12px;right:16px;}
+  .header{padding:12px 16px;}
+  .header-nav{display:none;width:100%;flex-direction:column;align-items:stretch;padding-top:12px;}
+  .header-nav.open{display:flex;}
+  .header-nav a{padding:10px 12px;border-bottom:1px solid var(--bdr);}
+  .header-mobile-toggle{display:block;}
+  .header-actions .btn{font-size:.72rem;padding:6px 12px;}
+  .hero{padding:28px 18px 24px;}
+  .hero h2{font-size:1.2rem;}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:20px;}
+  .footer{padding:28px 16px 20px;}
+  .footer-bottom{flex-direction:column;text-align:center;}
+  .footer-bottom a{margin:0 8px;}
+}
+@media(max-width:480px){
+  .footer-grid{grid-template-columns:1fr;}
+  .header-actions .btn{font-size:.68rem;padding:5px 10px;}
+}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <!-- ===== HEADER ===== -->
+  <header class="header">
+    <div class="header-inner">
+      <a class="header-brand" href="#">
+        <div class="brand-ico">QC</div>
+        <span class="brand-txt">QueryCrest</span>
+      </a>
+      <button class="header-mobile-toggle" onclick="this.nextElementSibling.classList.toggle('open')">☰</button>
+      <nav class="header-nav">
+        <a href="https://www.querycrest.com/" class="active">Home</a>
+        <a href="https://www.querycrest.com/pages/Prospectus">Prospectuses</a>
+        <a href="https://www.querycrest.com/pages/about">About Us</a>
+        <a href="https://www.querycrest.com/pages/howToApply">How to Apply</a>
+        <a href="https://www.querycrest.com/pages/StudyAbroad">Study Abroad</a>
+        <a href="https://www.querycrest.com/affiliate/affiliate-public">Become A Partner</a>
+        <a href="https://www.querycrest.com/account/plans">Pricing</a>
+        <a href="https://www.querycrest.com/pages/FAQ">FAQ</a>
+      </nav>
+      <div class="header-actions">
+        <a href="https://www.querycrest.com/account/login-signup" class="btn btn-outline btn-sm">My Account</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="mi" id="main">
+      <!-- ===== HERO ===== -->
+      
+
+      <!-- LIST VIEW -->
+      <section class="section" id="accommodation-list" style="display:block;">
+        <div class="ph">
+          <div>
+            <h1>Accommodation Finder</h1>
+            <p>Student residences near South African universities</p>
+          </div>
+          <div class="ph-actions">
+            <button class="btn-refresh" title="Refresh" onclick="window.qcRefresh(this,function(){if(window.qcLoadAccommodations)window.qcLoadAccommodations();})">
+              <svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="alert info" style="margin-bottom:16px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12.01" y2="8"/><line x1="12" y1="12" x2="12" y2="16"/></svg>
+          <div><h4>Free for all students</h4><p>Browse verified student residences near your university and apply directly. Click any residence to view full details.</p></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;">
+          <input class="inp" id="acc-search" placeholder="Filter by university or residence name..." style="max-width:340px;" oninput="window.accFilter&&window.accFilter()">
+          <span id="acc-count" style="align-self:center;font-size:.78rem;color:var(--t3);"></span>
+        </div>
+        <div id="acc-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px;"></div>
+        <div id="view-more-wrapper" class="view-more-wrapper">
+          <button class="btn btn-view-more" id="viewMoreBtn" onclick="window.loadMoreAccommodations()">View More</button>
+        </div>
+        <div id="acc-empty" style="display:none;text-align:center;padding:56px 24px;">
+          <div style="width:52px;height:52px;background:var(--surface);border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--t3)" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
+          <p id="acc-empty-p1"  style="font-size:.95rem;font-weight:600;color:var(--dark2);margin:0 0 6px;">No listings yet</p>
+          <p id="acc-empty-p2" style="font-size:.85rem;color:var(--t3);margin:0;">Student residences will appear here as we add them.</p>
+        </div>
+        <div id="acc-error" style="display:none;text-align:center;padding:32px;">
+          <p style="color:var(--red);font-size:.86rem;">Could not load listings. <button class="btn btn-outline btn-sm" onclick="window.qcLoadAccommodations&&window.qcLoadAccommodations()" style="margin-left:8px;">Retry</button></p>
+        </div>
+      </section>
+
+      <!-- DETAIL VIEW -->
+      <section class="section detail-view" id="accommodation-detail">
+        <div class="back-row">
+          <button class="btn btn-back btn-sm" onclick="window.showListView()">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+            Back to listings
+          </button>
+        </div>
+        <div id="detail-content"></div>
+      </section>
+
+      <!-- ===== FOOTER ===== -->
+      <footer class="footer">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <div class="brand-ico">QC</div>
+            <p>Empowering South African students to reach their dream universities — one application at a time.</p>
+          </div>
+          <div class="footer-col">
+            <h4>PLATFORM</h4>
+            <a href="https://www.querycrest.com/account/login-signup">My Account</a>
+            <a href="https://www.querycrest.com/account/plans">Pricing</a>
+            <a href="https://www.querycrest.com/pages/FAQ">FAQ</a>
+            <a href="https://www.querycrest.com/affiliate/affiliate-public">Become A Partner</a>
+          </div>
+          <div class="footer-col">
+            <h4>RESOURCES</h4>
+            <a href="https://www.querycrest.com/pages/Prospectus">Prospectuses</a>
+            <a href="https://www.querycrest.com/pages/Bursaries">Bursaries</a>
+            <a href="https://www.querycrest.com/pages/StudyAbroad">Study Abroad</a>
+            <a href="https://www.querycrest.com/pages/tipsAndTutorials">Study Tips</a>
+            <a href="https://www.querycrest.com/pages/howToApply">How to Apply</a>
+          </div>
+          <div class="footer-col">
+            <h4>STAY UPDATED</h4>
+            <p style="font-size:.78rem;line-height:1.5;margin-bottom:6px;">Get deadlines and bursary alerts to your inbox.</p>
+            <div class="footer-newsletter">
+              <input type="email" placeholder="your@email.com">
+              <button class="btn btn-primary btn-sm">Join</button>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span>© 2026 QueryCrest. All rights reserved.</span>
+          <div>
+            <a href="#">Privacy Disclaimer</a>
+            <a href="#">Terms Of Service</a>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </main>
+</div>
+
+<!-- Fullscreen Slideshow -->
+<div class="slideshow-overlay" id="slideshowOverlay" onclick="if(event.target===this)closeSlideshow()">
+  <button class="close-slideshow" onclick="closeSlideshow()">&times;</button>
+  <button class="slideshow-nav prev" onclick="changeSlide(-1)">&#10094;</button>
+  <button class="slideshow-nav next" onclick="changeSlide(1)">&#10095;</button>
+  <img class="slideshow-img" id="slideshowImg" src="" alt="Slideshow Image">
+  <div class="slideshow-counter" id="slideshowCounter">1 / 1</div>
+  <div class="slideshow-dots" id="slideshowDots"></div>
+</div>
+
+<div class="toasts" id="toasts"></div>
+
+<script src="../js/accommodation.js"></script>
+
+</body>
+</html>
