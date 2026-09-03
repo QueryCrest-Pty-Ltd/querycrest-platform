@@ -299,6 +299,17 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
     </div>
   </div>
 </section>
+<!---->
+<!-- University Checker-->
+<section class="cta-section">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div class="cta-inner">
+      <h2>Check Your University Eligibility</h2>
+      <p>Find out if your marks meet the admission requirements for your chosen university and qualification.</p>
+      <a href="#" class="btn-cta" onclick="openUniversityChecker();return false;">Check Your Eligibility</a>
+    </div>
+  </div>
+</section>
 
 <!-- NEWS & ANNOUNCEMENTS -->
 <section class="news-section">
@@ -1152,11 +1163,11 @@ body.pa-modal-open {
 
       <!-- Progress bar -->
       <div class="pa-prog-labels" id="paProgLabels" style="display:none;">
-        <span id="paPT">Step 1 of 4 — INSTITUTION</span>
-        <span class="pct" id="paPP">25%</span>
+        <span id="paPT">Step 1 of 3 — INSTITUTION</span>
+        <span class="pct" id="paPP">33%</span>
       </div>
       <div class="pa-prog-track" id="paProgTrack" style="display:none;">
-        <div class="pa-prog-fill" id="paPF" style="width:25%"></div>
+        <div class="pa-prog-fill" id="paPF" style="width:33%"></div>
       </div>
     </div>
 
@@ -1261,7 +1272,7 @@ body.pa-modal-open {
         </div>
       </div>
 
-      <!-- Step 4: Credentials -->
+      <!-- Step 4: Credentials (ONLY for returning students) -->
       <div class="pa-step" id="paS5">
         <p class="pa-sh">Your student credentials</p>
         <p class="pa-ss">Enter your existing student details.</p>
@@ -1380,7 +1391,7 @@ body.pa-modal-open {
     <!-- Footer -->
     <div class="pa-ftr" id="paFtr">
       <button class="pa-btn secondary" id="paBK" onclick="paBkBtn()">Cancel</button>
-      <button class="pa-btn primary"   id="paNX" onclick="paNtBtn()">Submit</button>
+      <button class="pa-btn primary"   id="paNX" onclick="paNtBtn()">Next</button>
     </div>
 
   </div>
@@ -1766,7 +1777,16 @@ body.pa-modal-open {
     redirect:    { el: 'paS4',  label: 'Done' },
   };
 
-  function currentFlow() { return FLOWS[paType] || FLOWS.uni; }
+  function currentFlow() { 
+    var flow = FLOWS[paType] || FLOWS.uni;
+    
+    /* If first-time university applicant, remove credentials from flow */
+    if (paType === 'uni' && !paIsReturning) {
+      return flow.filter(function(step) { return step !== 'credentials'; });
+    }
+    
+    return flow;
+  }
 
   function showStep(key) {
     paKey = key;
@@ -1796,8 +1816,8 @@ body.pa-modal-open {
       if (progTrack) progTrack.style.display = 'block';
     }
 
-    /* Step calculation */
-    var total = 4;
+    /* Dynamic total based on returning status */
+    var total = paIsReturning ? 4 : 3;
     var stepNum = idx;
     var pct = Math.round((stepNum / total) * 100);
 
@@ -1814,7 +1834,7 @@ body.pa-modal-open {
       document.getElementById('paNX').textContent = 'Submit';
       document.getElementById('paBK').textContent = 'Cancel';
     } else {
-      var isFinalStep = key === 'credentials';
+      var isFinalStep = (paIsReturning && key === 'credentials') || (!paIsReturning && key === 'programs');
       document.getElementById('paNX').textContent = isFinalStep ? 'Submit' : 'Next';
       if (idx === 1) {
         document.getElementById('paBK').textContent = 'Cancel';
@@ -2065,7 +2085,13 @@ body.pa-modal-open {
     if (!p1) { g('paP1').classList.add('bad'); g('paEP1').classList.add('on'); ok = false; }
     if (!c1) { g('paC1').classList.add('bad'); g('paEC1').classList.add('on'); ok = false; }
     if (!ok) return;
-    paGoNext();
+    
+    /* If returning student, go to credentials. If first-time, submit directly */
+    if (paIsReturning) {
+      showStep('credentials');
+    } else {
+      finishApplication();
+    }
   }
 
   function sCredentials() {
@@ -2104,9 +2130,12 @@ body.pa-modal-open {
       payload.institution_kind = paUni.type || 'university';
       payload.programs      = [g('paP1').value.trim(), g('paP2').value.trim(), g('paP3').value.trim()].filter(Boolean);
       payload.course_codes  = [g('paC1').value.trim(), g('paC2').value.trim(), g('paC3').value.trim()].filter(Boolean);
-      payload.student_number = g('studentNumber').value.trim();
-      payload.its_pin = g('itsPin').value.trim();
-      payload.portal_password = g('amPW').value.trim();
+      /* Only save credentials for returning students */
+      if (paIsReturning) {
+        payload.student_number = g('studentNumber').value.trim();
+        payload.its_pin = g('itsPin').value.trim();
+        payload.portal_password = g('amPW').value.trim();
+      }
     }
     try { sessionStorage.setItem(PA_KEY, JSON.stringify(payload)); } catch (e) {}
     sessionStorage.setItem('qc_next_after_login', paType === 'bursary' ? 'bursary' : 'apply');
