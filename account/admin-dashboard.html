@@ -151,6 +151,7 @@ body { font-family: 'Poppins', sans-serif; background: var(--bg); color: var(--t
   border-right: 1px solid var(--bdr);
   padding: 20px 0;
   overflow-y: auto;
+  height: 210px;
 }
 
 .sb-nav { display: flex; flex-direction: column; gap: 4px; padding: 0 12px; }
@@ -424,6 +425,35 @@ body { font-family: 'Poppins', sans-serif; background: var(--bg); color: var(--t
 </head>
 <body>
 <div class="app" id="app">
+  <!---guide overlay-->
+  <div class="guide-overlay" id="guide-Overlay">
+   <!--pointer-->
+    <div class="pointer">
+    <i class="ph ph-arrow-left" id="pointer"  ></i>
+   </div>
+   <!--<div id="guide-container"> --->
+
+   <div class="contents" id="contents-container">
+   <!--prev button-->
+    <i class="ph ph-arrow-left" id="prevButton"  onclick="prevGuide()"></i>
+    <div id="container">
+    <p id="step">0/0</p>
+    <p id="title">Guide</p>    
+    <p id="content">
+      No data for tutorial yet
+    </p>
+    <button id="complete" onclick="completeGuide()">complete</button>
+    </div>
+   <!--next button-->
+
+    <i class="ph ph-arrow-right" id="nextButton" onclick="nextGuide()" ></i>
+   </div>
+
+ 
+
+  <!-- </div>   -->
+  </div>
+  
   <!-- TOPBAR -->
   <div class="topbar">
     <button class="hamburger" id="hamburger" aria-label="Menu">
@@ -462,15 +492,15 @@ body { font-family: 'Poppins', sans-serif; background: var(--bg); color: var(--t
   <aside class="sidebar" id="sidebar">
     <div class="sb-nav">
       <div class="ns">Main</div>
-      <button class="ni on" data-p="dashboard" onclick="window.dashNavTo('dashboard')">
+      <button class="ni on" data-p="dashboard" id="dashboard_nav" onclick="window.dashNavTo('dashboard')">
         <div class="ni-ico"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
         Dashboard
       </button>
-      <button class="ni" data-p="search" onclick="window.dashNavTo('search')">
+      <button class="ni" data-p="search" id="search_nav" onclick="window.dashNavTo('search')">
         <div class="ni-ico"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
         Search
       </button>
-      <button class="ni" data-p="add-data" onclick="window.dashNavTo('add-data')">
+      <button class="ni" data-p="add-data" id="addData_nav" onclick="window.dashNavTo('add-data')">
         <div class="ni-ico"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
         Add Data
       </button>
@@ -1167,10 +1197,13 @@ window.dashNavTo = function(page) {
   }
 };
 
-// ===== SIDEBAR TOGGLE =====
-document.getElementById('hamburger').addEventListener('click', function() {
+window.openHumburger =  function() {
   document.getElementById('sidebar').classList.toggle('open');
-});
+}
+// ===== SIDEBAR TOGGLE =====
+document.getElementById('hamburger').addEventListener('click',openHumburger());
+
+
 
 document.addEventListener('click', function(e) {
   const sidebar = document.getElementById('sidebar');
@@ -1183,7 +1216,7 @@ document.addEventListener('click', function(e) {
 });
 
 // ===== INIT =====
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded',async function() {
   console.log('📊 QueryCrest Dashboard initialized');
   console.log('📍 API URL:', API_BASE);
   console.log('📍 Origin:', ORIGIN);
@@ -1195,7 +1228,475 @@ document.addEventListener('DOMContentLoaded', function() {
 
   document.getElementById('userName').textContent = 'Admin';
   document.getElementById('notificationBadge').textContent = '3';
+  await loadGuide();  
 });
+
+//guide functions
+
+async  function getGuide(endpoint){
+    try {
+    const response =  await fetch(`${API_BASE}${endpoint}`,{
+        method:"GET",
+        headers:{
+            "Content-Type":"application/json",
+        }
+
+    });
+    const data = await response.json();
+    return data; 
+    } catch (error) {
+       // alert(` failed to get accommodation`);
+        return [];
+    }
+  }
+
+ async  function getGuideUsers(endpoint){
+    try {
+    const response =  await fetch(`${API_BASE}${endpoint}`,{
+        method:"GET",
+        headers:{
+            "Content-Type":"application/json",
+        }
+
+    });
+    const data = await response.json();
+    return data; 
+    } catch (error) {
+        //alert(` failed to get search results`);
+        return [];
+    }
+  }
+
+ async  function setGuideUsers(endpoint,data){
+    try {
+
+    const response =  await fetch(`${API_BASE}${endpoint}`,{
+        method:"PUT",
+        headers:{
+            "Content-Type":"application/json",
+        },
+        body:JSON.stringify(
+            {
+              first_time:data.first_time,
+              complete:data.complete,
+              step_current:data.step_current,
+              email:data.email,
+              username:data.username,
+              page:data.page
+            }
+
+        )
+
+    });
+    const data_ = await response.json();
+    return data_; 
+    } catch (error) {
+        //alert(` failed to get guide user results error ${error}`);
+        return [];
+    }
+  }
+  const identifier = sessionStorage.getItem('username');
+  const identifier_type = "username";
+  const username = sessionStorage.getItem('username');
+  let guideUser = {};
+  let guide ={};
+  const guideData =[];
+    let start_idx =0;
+  let page_limit = 0;
+function get_page(step_number,limit)
+{
+  return Math.floor((step_number-1)/limit) +1;
+}
+  async function getUsers() {
+    
+    Object.keys(guideUser).length=0;
+    const data = await getGuideUsers(`/guide/users?identifier=${encodeURIComponent(identifier)}&identifier_type=${encodeURIComponent(identifier_type)}` );
+
+    if(!data.data || data.error)return;
+    else{    
+    guideUser = {...guideUser,first_time:data.data.first_time,complete:data.data.complete,step_current:data.data.step_current,role:data.data.role} 
+
+    }
+
+  }
+
+  async function getGuideData(page,limit) {
+    
+
+    //const limit = parseInt( 5/guideUser.step_current)
+    //,z_index:data.data.z_index
+    guideData.length =0;
+  Object.keys(guide).length=0;
+    const data = await getGuide(`/guide/list?page=${encodeURIComponent(page)}&limit=${encodeURIComponent(limit)}` );
+    if(!data.data || data.error)return;
+    else{
+    for(let i =0;i<data.data.length;i++){
+    guide = {...guide,step:data.data[i].step,target:data.data[i].target,direction:data.data[i].direction,page:data.data[i].page,title:data.data[i].title,content:data.data[i].content,function_:data.data[i].function_,top_position_mb:data.data[i].top_position_mb,left_position_mb:data.data[i].left_position_mb,top_position_p_mb:data.data[i].top_position_p_mb,left_position_p_mb:data.data[i].left_position_p_mb,top_position_tb:data.data[i].top_position_tb,left_position_tb:data.data[i].left_position_tb,top_position_p_tb:data.data[i].top_position_p_tb,left_position_p_tb:data.data[i].left_position_p_tb,top_position_pc_pc:data.data[i].top_position_pc_pc,left_position_pc:data.data[i].left_position_pc,top_position_p_pc:data.data[i].top_position_p_pc,left_position_p_pc:data.data[i].left_position_p_pc,last_item:data.data[i].last_item } ;
+
+    guideData.push(guide);
+    }
+
+    }
+  }
+
+  let resizeTimer;
+
+window.addEventListener('resize',function (){
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(()=>{
+  responsive();
+  },250);
+
+});
+
+
+function responsive(){
+  const width = window.innerWidth;
+  // reposiveness based on device,
+  if(guideData.length>0 ){
+  //phone
+  const pointer = document.getElementById('pointer');
+  const contents_container =  document.getElementById('contents-container');  
+
+  if(width <768){
+
+  contents_container.style.top = `${guideData[start_idx].top_position_mb}px`;
+  contents_container.style.left = `${guideData[start_idx].left_position_mb}px`;
+
+  pointer.style.top = `${guideData[start_idx].top_position_p_mb}px`;
+  pointer.style.left = `${guideData[start_idx].left_position_p_mb}px`;
+  }// tablet
+   else   if(width <1024){
+
+  contents_container.style.top = `${guideData[start_idx].top_position_tb}px`;
+  contents_container.style.left = `${guideData[start_idx].left_position_tb}px`;
+
+  pointer.style.top = `${guideData[start_idx].top_position_p_tb}px`;
+  pointer.style.left = `${guideData[start_idx].left_position_p_tb}px`;    
+  }//pc
+  else {
+
+  contents_container.style.top = `${guideData[start_idx].top_position_pc}px`;
+  contents_container.style.left = `${guideData[start_idx].left_position_pc}px`;
+
+  pointer.style.top = `${guideData[start_idx].top_position_p_pc}px`;
+  pointer.style.left = `${guideData[start_idx].left_position_p_pc}px`;
+  }
+  }
+
+}
+  //initiate
+async function loadGuide() {
+  await getUsers();
+
+  if( Object.keys(guideUser).length===0){
+  document.getElementById('guide-Overlay').style.backdropFilter = 'none';  
+  document.getElementById('guide-Overlay').style.display = 'none';    
+    return;
+  }
+  //return if completed
+  if(guideUser.complete){
+    document.getElementById('guide-Overlay').style.display="none";
+    return;
+  }
+  else document.getElementById('guide-Overlay').style.display="unset";
+
+
+
+  let current_step = guideUser.step_current;
+  if(current_step <=0)current_step =1;
+  const limit = get_page(current_step+1,5);
+  page_limit = limit;
+
+  let page = "";
+  if(guideUser.role==="admin")page="admin-dashboard";
+  //else other pages
+  await getGuideData(page,limit);
+  if(guideData.length===0 ){
+    document.getElementById('guide-Overlay').style.backdropFilter = 'none';  
+  document.getElementById('guide-Overlay').style.display = 'none';
+    return;
+  
+  }    
+  else{
+  document.getElementById('complete').textContent ="Complete";
+  document.getElementById('complete').style.cursor ="pointer";
+  document.getElementById('complete').onclick=completeGuide;
+  }  
+  start_idx  =  guideData.findIndex(step => step.step === guideUser.step_current); 
+
+  //hide the prev button if its at 0 else show
+  if(guideData[start_idx].step ===0){
+    document.getElementById("prevButton").style.display='none';
+  }else     document.getElementById("prevButton").style.display='unset';  
+
+  //hide the next button if is the last data else show
+  if(guideData[guideData.length-1].last_item){
+    document.getElementById("nextButton").style.display='none'; 
+  }else     document.getElementById("nextButton").style.display='unset';
+  
+
+
+
+  // fix out of bound 
+  if(start_idx===-1){
+
+   const data ={
+              first_time:'false',
+              complete:'false',
+              step_current:guideUser.step_current-1,
+              email:null,
+              username:username,
+              page:null
+            }
+  await setGuideUsers("/guide",data);
+   start_idx = guideData.findIndex(step => step.step === guideUser.step_current-1);
+   }
+  let idx_step = (guideData[start_idx].step) ;
+  //if(guideData[start_idx].step >0)idx_step =(guideData[start_idx].step)-1;   
+
+  const pointer = document.getElementById('pointer');
+  const contents_container =  document.getElementById('contents-container');
+  let target ='';
+  if(`${guideData[start_idx].target}`.trim().startsWith('.'))target = document.getElementsByClassName(`${guideData[start_idx].target.substring(1)}`)[0];    
+  else if(`${guideData[start_idx].target}`.trim().startsWith('#'))target = document.getElementById(`${guideData[start_idx].target.substring(1)}`);
+  document.getElementById('step').textContent = `${idx_step}/${(5*limit)-1}`;
+  document.getElementById('title').textContent = `${guideData[start_idx].title}`;
+  document.getElementById('content').textContent = `${guideData[start_idx].content}`;  
+  
+
+
+  pointer.classList.replace(pointer.classList.value.split(" ")[1],`${guideData[start_idx].direction}`);
+  target.style.zIndex = 2;
+
+  // respopnvie
+  responsive();
+  // function call if not none
+
+  if(guideData[start_idx].function_)    eval(`${guideData[start_idx].function_}`);
+
+}
+
+//previous data
+async function prevGuide() {
+  if(guideData.length===0 || Object.keys(guideUser).length===0)return;
+  //hide the prev button if its at 0 else show
+  if(guideData[start_idx].step ===0){
+    document.getElementById("prevButton").style.display='none';
+    return 
+  }else     document.getElementById("prevButton").style.display='unset';  
+
+  //hide the next button if is the last data else show
+  if(guideData[guideData.length-1].last_item){
+    document.getElementById("nextButton").style.display='none'; 
+  }else     document.getElementById("nextButton").style.display='unset';
+  
+  let last_target = null;
+  //move back if the current data is not the first data in the database and if the previous step is greater or equal that 0 and index is not 0   
+  if ( guideData[start_idx].step !==0  && (guideData[start_idx].step-1) >=0 && (start_idx  )>0   )start_idx = start_idx -1;
+  // reload previous data if the current data is not the first data in the database and if the previous step is greater or equal that 0 and index is 0   
+  else   if ( guideData[start_idx].step !==0  && (guideData[start_idx].step-1) >=0 && (start_idx  )===0   ){
+  const limit = get_page(guideData[start_idx].step+1,5)
+  page_limit =limit-1;
+  let page = "";
+  if(guideUser.role==="admin")page="admin-dashboard";
+  //else other pages
+  if(`${guideData[start_idx].target}`.trim().startsWith('.'))last_target = document.getElementsByClassName(`${guideData[start_idx].target.substring(1)}`)[0];    
+  else if(`${guideData[start_idx].target}`.trim().startsWith('#'))last_target = document.getElementById(`${guideData[start_idx].target.substring(1)}`);
+  last_target.style.zIndex=0;
+
+  if(limit-1>=1)await getGuideData(page,limit-1);
+
+  if(guideData.length===0){
+  document.getElementById('step').textContent = `0/0`;
+  document.getElementById('title').textContent = `Guide`;
+  document.getElementById('content').textContent = `No data yet`;
+  document.getElementById('complete').textContent ="Reload";
+    document.getElementById('complete').onclick =loadGuide;
+  return;    
+  }  
+  // index is the index of the last data in the array
+  start_idx = guideData.findIndex(step => step.step === guideData[guideData.length-1].step);
+
+  }
+
+  //if (((start_idx -1 ) >= (guideData[0].step-1) ) &&(guideData[i].step-1) >0 && (start_idx -1 )> 0 && guideData[i].step !==0) start_idx = start_idx -1; 
+  else return;
+
+  // might not work
+  // get new data if current index pass the first index in guideData
+  if(start_idx<guideData.findIndex(step => step.step === guideData[0].step) && guideData[0].step >0){
+  const limit = get_page(guideData[0].step+1,5)
+  page_limit =limit;
+  let page = "";
+  if(guideUser.role==="admin")page="admin-dashboard";
+  //else other pages
+  await getGuideData(page,limit);  
+  }
+ //reset the page_limit from 0
+  if(page_limit ===0){
+  const limit = get_page(guideData[start_idx].step+1,5)
+  page_limit =limit-1;}
+
+  let idx_step = (guideData[start_idx].step) ;
+  //if(guideData[start_idx].step >0)idx_step =(guideData[start_idx].step)-1;
+  
+  const pointer = document.getElementById('pointer');
+  const contents_container =  document.getElementById('contents-container');
+  let target ='';
+  if(`${guideData[start_idx].target}`.trim().startsWith('.'))target = document.getElementsByClassName(`${guideData[start_idx].target.substring(1)}`)[0];    
+  else if(`${guideData[start_idx].target}`.trim().startsWith('#'))target = document.getElementById(`${guideData[start_idx].target.substring(1)}`);
+  document.getElementById('step').textContent = `${idx_step}/${(5*page_limit)-1}`;
+  document.getElementById('title').textContent = `${guideData[start_idx].title}`;
+  document.getElementById('content').textContent = `${guideData[start_idx].content}`;    
+  contents_container.style.top = `${guideData[start_idx].top_position}px`;
+  contents_container.style.left = `${guideData[start_idx].left_position}px`;
+
+  pointer.style.top = `${guideData[start_idx].top_position_p}px`;
+  pointer.style.left = `${guideData[start_idx].left_position_p}px`;
+  pointer.classList.replace(pointer.classList.value.split(" ")[1],`${guideData[start_idx].direction}`);
+  if((start_idx>=0) && guideData.length-1 >= (start_idx+1)){
+
+  let target_pre ='';
+  if(`${guideData[start_idx+1].target}`.trim().startsWith('.'))target_pre = document.getElementsByClassName(`${guideData[start_idx+1].target.substring(1)}`)[0];    
+  else if(`${guideData[start_idx+1].target}`.trim().startsWith('#'))target_pre = document.getElementById(`${guideData[start_idx+1].target.substring(1)}`);      
+    target_pre.style.zIndex=0;
+
+  }
+
+  target.style.zIndex = 3;
+
+    // respopnvie
+  responsive();
+  // function call if not none
+
+  if(guideData[start_idx].function_)    eval(`${guideData[start_idx].function_}`);
+
+//reset index if greater than the length of the data and its job should be done by loading new data
+if (start_idx <0)start_idx=0;
+}
+
+//next data
+async function nextGuide() {
+  if(guideData.length===0 || Object.keys(guideUser).length===0)return;
+  //alert(`idx ${start_idx} and length ${guideData.length-1} step ${(guideData[guideData.length-1].step)}`)
+  //hide the prev button if its at 0 else show
+  if(guideData[start_idx].step ===0){
+    document.getElementById("prevButton").style.display='none'; 
+  }else     document.getElementById("prevButton").style.display='unset';  
+
+  //hide the next button if is the last data else show
+  if(guideData[guideData.length-1].last_item){
+    document.getElementById("nextButton").style.display='none';
+    return 
+  }else     document.getElementById("nextButton").style.display='unset';
+
+
+  // if index plus 1 is less than last data plus 1 and the data isn't the last one then incress the index
+  if ( ((start_idx +1 ) <=(guideData[guideData.length-1].step) ) &&(start_idx   <guideData.length-1) && !guideData[guideData.length-1].last_item ) start_idx = start_idx +1; 
+
+  else   // get new data if current index pass the last index in guideData
+  if(start_idx+1>guideData.length-1 && !guideData[guideData.length-1].last_item){
+  const limit =get_page(guideData[guideData.length-1].step+1,5);
+  page_limit=limit+1;
+  let page = "";
+  if(guideUser.role==="admin")page="admin-dashboard";
+  //else other pages
+
+  await getGuideData(page,limit+1);  
+
+  if(guideData.length===0){
+  document.getElementById('step').textContent = `0/0`;
+  document.getElementById('title').textContent = `Guide`;
+  document.getElementById('content').textContent = `No data yet`;
+  document.getElementById('complete').textContent ="Reload";
+  document.getElementById('complete').onclick =loadGuide;
+  return;    
+  }
+  
+
+  start_idx = guideData.findIndex(step => step.step === guideData[0].step); 
+   
+  }
+  else return;
+  
+
+  
+  //update user progress if index is greater than current step of the user
+  if(guideData[start_idx].step>guideUser.step_current){ 
+  const data ={
+              first_time:'false',
+              complete:`${guideData[guideData.length-1].last_item}`,
+              step_current:guideData[start_idx].step,
+              email:null,
+              username:username,
+              page:null
+            }
+ const response= await setGuideUsers("/guide",data);
+
+  }
+  //let page_limit = 0;
+
+  let idx_step = (guideData[start_idx].step) ;
+  //(guideData[start_idx].step >0)idx_step =(guideData[start_idx].step)-1;
+
+  const pointer = document.getElementById('pointer');
+  const contents_container =  document.getElementById('contents-container');
+  let target ='';
+  if(`${guideData[start_idx].target}`.trim().startsWith('.'))target = document.getElementsByClassName(`${guideData[start_idx].target.substring(1)}`)[0];    
+  else if(`${guideData[start_idx].target}`.trim().startsWith('#'))target = document.getElementById(`${guideData[start_idx].target.substring(1)}`);
+  document.getElementById('step').textContent = `${idx_step}/${(5*page_limit)-1}`;
+  document.getElementById('title').textContent = `${guideData[start_idx].title}`;
+  document.getElementById('content').textContent = `${guideData[start_idx].content}`;  
+  
+  contents_container.style.top = `${guideData[start_idx].top_position}px`;
+  contents_container.style.left = `${guideData[start_idx].left_position}px`;
+
+  pointer.style.top = `${guideData[start_idx].top_position_p}px`;
+  pointer.style.left = `${guideData[start_idx].left_position_p}px`;
+  pointer.classList.replace(pointer.classList.value.split(" ")[1],`${guideData[start_idx].direction}`);  
+  target.style.zIndex = 3;
+  if((start_idx>=1) && guideData.length-1 >= (start_idx-1)){
+
+  let target_pre ='';
+  if(`${guideData[start_idx-1].target}`.trim().startsWith('.'))target_pre = document.getElementsByClassName(`${guideData[start_idx-1].target.substring(1)}`)[0];    
+  else if(`${guideData[start_idx-1].target}`.trim().startsWith('#'))target_pre = document.getElementById(`${guideData[start_idx-1].target.substring(1)}`);           
+    target_pre.style.zIndex=0;
+
+  }
+
+  // respopnvie
+  responsive();
+  // function call if not none
+  if(guideData[start_idx].function_){
+
+   eval(`${guideData[start_idx].function_}`);
+  }
+//reset index if greater than the length of the data and its job should be done by loading new data
+if (start_idx >guideData.length-1 )start_idx=guideData.length-1;
+}
+
+//next data
+async function completeGuide() {
+  if(guideData.length===0 || Object.keys(guideUser).length===0)return; 
+  document.getElementById('guide-Overlay').style.backdropFilter = 'none';  
+  document.getElementById('guide-Overlay').style.display = 'none';
+  
+  //update user progress if index is greater than current step of the user
+  //if(start_idx>guideData[guideData.length-1].step){ 
+  const data ={
+              first_time:'false',
+              complete:'true',
+              step_current:guideData[guideData.length-1].step,
+              email:null,
+              username:username,
+              page:null
+            }
+  await setGuideUsers("/guide",data);
+  //}
+
+}
+
 </script>
 
 <!-- ============================================================
