@@ -466,28 +466,35 @@
 
 <script>
   (function() {
+
+    const API_BASE = "https://xkjsydeavdcarwkthppz.supabase.co/functions/v1";
+    const ORIGIN = window.location.origin;
+
     // ---- constants ----
     const SUBJECTS = [
-      'Mathematical Literacy', 'Geography', 'Tourism', 'Mathematics', 'isiXhosa',
+/*      'Mathematical Literacy', 'Geography', 'Tourism', 'Mathematics', 'isiXhosa',
       'Life Orientation', 'Engineering Graphics and Design', 'isiZulu', 'Music',
       'siSwati', 'Computer Applications Technology', 'Visual Arts', 'Setswana',
       'Life Sciences', 'French', 'History', 'Physical Sciences', 'Accounting',
       'Agricultural Sciences', 'Sepedi', 'Portuguese', 'Business Studies',
       'Dramatic Arts', 'German', 'Information Technology', 'Hospitality Studies',
       'Economics', 'Tshivenda', 'Xitsonga', 'Consumer Studies', 'English',
-      'Sesotho', 'Afrikaans'
+      'Sesotho', 'Afrikaans'*/
     ];
     const UNIVERSITIES = [
+      /*
       'University of Cape Town (UCT)',
       'University of the Witwatersrand',
       'Stellenbosch University',
-      'University of Pretoria'
+      'University of Pretoria'*/
     ];
     const QUALIFICATIONS = [
+      /*
       'BCom (General)',
       'BSc (Computer Science)',
       'BA (Humanities)',
       'BEng (Mechanical)'
+      */
     ];
 
     // ---- state ----
@@ -496,6 +503,139 @@
     let ucmUni = '';
     let ucmQual = '';
     let ucmSubjects = [];
+    let institutionId ;
+    let qualifictionId  ;    
+
+
+//guide functions
+
+async  function getInstitutions(endpoint){
+    try {
+    const response =  await fetch(`${API_BASE}${endpoint}`,{
+        method:"GET",
+        headers:{
+            "Content-Type":"application/json",
+        }
+
+    });
+    const data = await response.json();
+    return data; 
+    } catch (error) {
+       // alert(` failed to get accommodation`);
+        return [];
+    }
+  }
+
+async  function getSubjects(endpoint){
+    try {
+    const response =  await fetch(`${API_BASE}${endpoint}`,{
+        method:"GET",
+        headers:{
+            "Content-Type":"application/json",
+        }
+
+    });
+    const data = await response.json();
+    return data; 
+    } catch (error) {
+       // alert(` failed to get accommodation`);
+        return [];
+    }
+  }
+
+
+ async  function getQualifications(endpoint){
+    try {
+    const response =  await fetch(`${API_BASE}${endpoint}`,{
+        method:"GET",
+        headers:{
+            "Content-Type":"application/json",
+        }
+
+    });
+    const data = await response.json();
+    return data; 
+    } catch (error) {
+        //alert(` failed to get search results`);
+        return [];
+    }
+  }
+
+ async  function calculateAps(endpoint,data){
+    try {
+
+    const response =  await fetch(`${API_BASE}${endpoint}`,{
+        method:"PUT",
+        headers:{
+            "Content-Type":"application/json",
+        },
+        body:JSON.stringify(
+            {
+           front_data:data
+            }
+
+        )
+
+    });
+    const data_ = await response.json();
+    return data_; 
+    } catch (error) {
+        //alert(` failed to get guide user results error ${error}`);
+        return [];
+    }
+  }
+
+  async function getInstitutionData() {
+    
+    UNIVERSITIES.length=0;
+    const data = await getInstitutions(`/eligibility/list` );
+    //const data = await getGuideUsers(`/eligibility/users?identifier=${encodeURIComponent(identifier)}&identifier_type=${encodeURIComponent(identifier_type)}` );
+
+    if(!data.data || data.error)return data?.error;
+    else{    
+      for(let i = 0 ;i< data.data.length;i++)
+    {
+          UNIVERSITIES.push(data.data[i]);
+    }
+  return "";
+  }
+
+  }
+
+  async function getQualificationData(identifier) {
+    QUALIFICATIONS.length =0;
+
+    const data = await getQualifications(`/eligibility/qualifications?identifier=${encodeURIComponent(identifier)}` );
+    if(!data.data || data.error)return data?.error;
+    else{
+
+
+      for(let i = 0 ;i< data.data.length;i++)
+    {
+    QUALIFICATIONS.push(data.data[i]);
+    }
+
+    return "";
+    }
+  }
+
+    async function getSubjectData() {
+    SUBJECTS.length =0;
+
+    const data = await getSubjects(`/eligibility/subjects` );
+    if(!data.data || data.error)return data?.error;
+    else{
+
+
+      for(let i = 0 ;i< data.data.length;i++)
+    {
+
+    SUBJECTS.push(data.data[i]);
+  }
+
+    return "";
+    }
+  }
 
     const stepPanel = document.getElementById('ucmStepPanel');
     const prevBtn = document.getElementById('ucmPrevBtn');
@@ -507,14 +647,16 @@
     const resultPanel = document.getElementById('ucmResultPanel');
 
     // ---- render step ----
-    function renderUCMStep() {
+    async function renderUCMStep() {
       const stepNames = ['Institution', 'Qualification', 'Subjects', 'Review & Check'];
       stepDisplay.textContent = `Step ${ucmStep+1} / ${totalSteps}`;
       stepNameDisplay.textContent = stepNames[ucmStep];
-
+      //get InstitutionData
+     const Indata = await getInstitutionData();
       let html = '';
-
+      
       if (ucmStep === 0) {
+
         html = `
           <div class="step-title"><span class="badge-step">1</span> Select your University</div>
           <div class="field-group">
@@ -522,13 +664,17 @@
               <label for="ucmUniSelect">University</label>
               <select id="ucmUniSelect" required>
                 <option value="">-- please choose --</option>
-                ${UNIVERSITIES.map(u => `<option value="${u}" ${ucmUni === u ? 'selected' : ''}>${u}</option>`).join('')}
+                
+                ${UNIVERSITIES.map(u => `<option value="${u?.name}" ${ucmUni === u?.name ? 'selected' : ''}>${u?.name}</option>`).join('')}
               </select>
             </div>
             <div id="ucmUniError" class="error-msg"></div>
           </div>
         `;
+       if(Indata.length>0)document.getElementById('ucmUniError').textContent = Indata;
       } else if (ucmStep === 1) {
+        institutionId = UNIVERSITIES[UNIVERSITIES.findIndex(uni => uni?.name === document.getElementById('ucmUniSelect').value) ].id  ;
+        const Qudata = await getQualificationData( institutionId );
         html = `
           <div class="step-title"><span class="badge-step">2</span> Choose your Qualification</div>
           <div class="field-group">
@@ -536,13 +682,16 @@
               <label for="ucmQualSelect">Qualification</label>
               <select id="ucmQualSelect" required>
                 <option value="">-- please choose --</option>
-                ${QUALIFICATIONS.map(q => `<option value="${q}" ${ucmQual === q ? 'selected' : ''}>${q}</option>`).join('')}
+                ${QUALIFICATIONS.map(q => `<option value="${q?.name}" ${ucmQual === q?.name ? 'selected' : ''}>${q?.name}</option>`).join('')}
               </select>
             </div>
             <div id="ucmQualError" class="error-msg"></div>
           </div>
         `;
+       if(Qudata.length>0)document.getElementById('ucmQualError').textContent = Qudata;        
       } else if (ucmStep === 2) {
+        qualifictionId = QUALIFICATIONS[QUALIFICATIONS.findIndex(uni => uni.name === ucmQual) ].id  ;        
+        const Subdata = await getSubjectData();
         if (ucmSubjects.length === 0) {
           ucmSubjects = Array(5).fill().map(() => ({ subject: '', mark: '' }));
         }
@@ -555,9 +704,9 @@
           const currentVal = entry.subject || '';
           const markVal = entry.mark !== undefined && entry.mark !== '' ? entry.mark : '';
           const opts = SUBJECTS.map(s => {
-            const disabled = (usedSubjects.includes(s) && s !== currentVal) ? 'disabled' : '';
-            const selected = s === currentVal ? 'selected' : '';
-            return `<option value="${s}" ${selected} ${disabled}>${s}</option>`;
+            const disabled = (usedSubjects.includes(s?.name) && s?.name !== currentVal) ? 'disabled' : '';
+            const selected = s?.name === currentVal ? 'selected' : '';
+            return `<option value="${s?.name}" ${selected} ${disabled}>${s?.name}</option>`;
           }).join('');
 
           subjHtml += `
@@ -584,7 +733,9 @@
           <div id="ucmSubjectError" class="error-msg"></div>
         `;
         html = subjHtml;
+       if(Subdata.length>0)document.getElementById('ucmSubjectError').textContent = Subdata;         
       } else if (ucmStep === 3) {
+
         const subjList = ucmSubjects.filter(e => e.subject && e.mark !== '' && !isNaN(e.mark));
         html = `
           <div class="step-title"><span class="badge-step">4</span> Review & check eligibility</div>
@@ -753,7 +904,7 @@
       if (ucmStep > 0) { ucmStep--; renderUCMStep(); }
     }
 
-    function performCheck() {
+async    function performCheck() {
       const uni = ucmUni;
       const qual = ucmQual;
       const subjects = ucmSubjects.filter(e => e.subject && !isNaN(e.mark) && e.mark >= 0 && e.mark <= 100);
@@ -770,7 +921,7 @@
         resultDetail.textContent = `You need at least 5 valid subjects (you have ${subjects.length}).`;
         return;
       }
-
+      /*
       const reqMap = {
         'BCom (General)': { aps: 36, avg: 68 },
         'BSc (Computer Science)': { aps: 42, avg: 74 },
@@ -778,7 +929,7 @@
         'BEng (Mechanical)': { aps: 44, avg: 80 }
       };
       const req = reqMap[qual] || { aps: 35, avg: 65 };
-
+      
       function calcAPS(mark) {
         if (mark >= 80) return 7;
         if (mark >= 70) return 6;
@@ -790,17 +941,34 @@
       }
 
       let totalAPS = 0, totalMarks = 0;
-      subjects.forEach(s => { totalAPS += calcAPS(s.mark); totalMarks += s.mark; });
-      const avg = totalMarks / subjects.length;
-      const meetsAPS = totalAPS >= req.aps;
-      const meetsAvg = avg >= req.avg;
-      const eligible = meetsAPS && meetsAvg;
+      */
+      //alert(`subjects ${JSON.stringify(subjects)}`);
+      const front_data = {
+        institutionId:institutionId,
+        qualifictionId:qualifictionId,
+        subjects:subjects
+      }
+      const aps_data = await calculateAps('/eligibility',front_data);
+      //subjects.forEach(s => { totalAPS += calcAPS(s.mark); totalMarks += s.mark; });
+      if(aps_data.error){
+        if(aps_data.error.length>0){
+        resultPanel.className = 'result-box red';
+        resultTitle.innerHTML = `<span class="red">Error</span>`;
+        resultDetail.textContent = `${aps_data.error}`;
+          
+        }
+      }
+      const avg = aps_data.data.average//totalMarks / subjects.length;
+      const meetsAPS = aps_data.data.eligibility;
+      const meetsAvg = aps_data.data.eligibility;
+      const eligible = aps_data.data.eligibility; //meetsAPS && meetsAvg;
 
       resultPanel.className = eligible ? 'result-box green' : 'result-box red';
       const emoji = eligible ? '✅' : '❌';
       const titleText = eligible ? 'You qualify!' : 'You do not currently meet the requirements.';
       resultTitle.innerHTML = `<span class="${eligible ? 'green' : 'red'}">${emoji} ${titleText}</span>`;
-      let details = `APS: ${totalAPS} (required ${req.aps}) · Average: ${avg.toFixed(1)}% (required ${req.avg}%)`;
+      let details = aps_data.data.requirements;
+      details += `${aps_data.data.reasons}`;
       details += ` · Institution: ${uni} · Qualification: ${qual}`;
       details += ` · ${eligible ? 'All requirements met.' : 'Please review the requirements above.'}`;
       resultDetail.textContent = details;
