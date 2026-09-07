@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>University Checker · QueryCrest</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -12,10 +13,107 @@
       background: #f8fafc;
       min-height: 100vh;
       display: flex;
+      flex-direction: column;
+      margin: 0;
+    }
+
+    /* ===== HEADER ===== */
+    .qc-header {
+      background: #ffffff;
+      border-bottom: 1px solid #eef2f6;
+      padding: 14px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.02);
+    }
+    .qc-header .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .qc-header .logo-icon {
+      width: 38px;
+      height: 38px;
+      background: #2563eb;
+      border-radius: 10px;
+      display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px;
-      margin: 0;
+      font-weight: 800;
+      font-size: 0.9rem;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .qc-header .logo-text {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #0b1e3a;
+      letter-spacing: -0.3px;
+    }
+    .qc-header .logo-text span {
+      color: #2563eb;
+    }
+    .qc-header .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .qc-header .nav-links a {
+      text-decoration: none;
+      color: #4b5a74;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: color 0.15s;
+    }
+    .qc-header .nav-links a:hover {
+      color: #2563eb;
+    }
+    .qc-header .nav-links .btn-outline-sm {
+      padding: 6px 18px;
+      border-radius: 40px;
+      border: 1.5px solid #dce2ec;
+      background: transparent;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      font-size: 0.8rem;
+      color: #1f2a44;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+    .qc-header .nav-links .btn-outline-sm:hover {
+      border-color: #2563eb;
+      color: #2563eb;
+    }
+    .qc-header .nav-links .btn-primary-sm {
+      padding: 6px 20px;
+      border-radius: 40px;
+      border: none;
+      background: #2563eb;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      font-size: 0.8rem;
+      color: #fff;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+    .qc-header .nav-links .btn-primary-sm:hover {
+      background: #1d4ed8;
+    }
+
+    /* ===== MAIN CONTENT ===== */
+    .main-content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 20px;
     }
 
     .card {
@@ -88,7 +186,56 @@
       stroke-linecap: round;
     }
 
-    /* UCM MODAL — clean, standalone */
+    .desc-text {
+      font-size: 0.85rem;
+      color: #64748b;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    /* ===== FOOTER ===== */
+    .qc-footer {
+      background: #ffffff;
+      border-top: 1px solid #eef2f6;
+      padding: 18px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: auto;
+    }
+    .qc-footer .copy {
+      font-size: 0.78rem;
+      color: #94a3b8;
+    }
+    .qc-footer .footer-links {
+      display: flex;
+      gap: 18px;
+    }
+    .qc-footer .footer-links a {
+      text-decoration: none;
+      color: #94a3b8;
+      font-size: 0.78rem;
+      transition: color 0.15s;
+    }
+    .qc-footer .footer-links a:hover {
+      color: #2563eb;
+    }
+    .qc-footer .social {
+      display: flex;
+      gap: 12px;
+    }
+    .qc-footer .social a {
+      color: #94a3b8;
+      font-size: 1rem;
+      transition: color 0.15s;
+    }
+    .qc-footer .social a:hover {
+      color: #2563eb;
+    }
+
+    /* ===== UCM MODAL ===== */
     #ucm_modal {
       position: fixed;
       inset: 0;
@@ -411,610 +558,553 @@
       border-top: 1px solid #eef2f6;
       padding-top: 18px;
     }
+
+    @media (max-width: 600px) {
+      .qc-header { padding: 12px 16px; flex-direction: column; align-items: stretch; }
+      .qc-header .nav-links { justify-content: center; flex-wrap: wrap; gap: 10px; }
+      .qc-footer { flex-direction: column; text-align: center; padding: 14px 16px; }
+      .qc-footer .footer-links { justify-content: center; flex-wrap: wrap; }
+      .card { padding: 24px 16px; }
+    }
   </style>
 </head>
 <body>
 
-<div class="card">
-  <div class="brand">
-    <div class="brand-icon">QC</div>
-    <span class="brand-name">QueryCrest · Checker</span>
-  </div>
+  <!-- ===== HEADER ===== -->
+   <header class="qc-header">
+    <a href="index.html" class="logo">
+      <div class="logo-icon">QC</div>
+      <div class="logo-text">Query<span>Crest</span></div>
+    </a>
+    <div class="nav-links">
+      <a href="../index.html">Home</a>
+      <a href="../pages/about.html">About</a>
+      <a href="../pages/howToApply.html">How to Apply</a>
+      <a href="../account/login-signup.html" class="btn-outline-sm">Log In</a>
+      <a href="../account/login-signup.html" class="btn-primary-sm">Get Started</a>
+    </div>
+  </header>
 
-  <!-- The only button: University Checker -->
-  <button class="ucm-trigger" id="ucm_open_btn">
-    <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-    University Checker
-  </button>
-
-  <div style="font-size:0.85rem; color:#64748b; text-align:center; line-height:1.5;">
-    Check your eligibility for South African universities.<br />
-    Select institution, qualification, add subjects, and see if you qualify.
-  </div>
-  <div class="footer-note">QueryCrest · eligibility assistant</div>
-</div>
-
-<!-- ===== UCM MODAL ===== -->
-<div id="ucm_modal">
-  <div class="ucm_content">
-    <div class="ucm_header">
-      <div>
-        <h2>University Eligibility Checker</h2>
-        <p>Step-by-step: institution, qualification, subjects, check</p>
+  <!-- ===== MAIN CONTENT ===== -->
+  <div class="main-content">
+    <div class="card">
+      <div class="brand">
+        <div class="brand-icon">QC</div>
+        <span class="brand-name">QueryCrest · Checker</span>
       </div>
-      <button class="ucm_close" id="ucm_close_btn">Close</button>
-    </div>
 
-    <div class="step-indicator">
-      <span id="ucmStepDisplay">Step 1 / 4</span>
-      <span id="ucmStepNameDisplay">Institution</span>
-    </div>
+      <button class="ucm-trigger" id="ucm_open_btn">
+        <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        University Checker
+      </button>
 
-    <div id="ucmStepPanel" class="checker-panel"></div>
-
-    <div class="btn-group">
-      <button class="btn btn-outline" id="ucmPrevBtn" disabled>← Back</button>
-      <button class="btn btn-primary" id="ucmNextBtn">Next →</button>
-    </div>
-
-    <div id="ucmResultPanel" class="result-box">
-      <div class="result-title" id="ucmResultTitle">📋 Eligibility</div>
-      <div class="result-detail" id="ucmResultDetail">Complete all steps, then click "Check Eligibility" on the final step.</div>
+      <div class="desc-text">
+        Check your eligibility for South African universities.<br />
+        Select institution, qualification, add subjects, and see if you qualify.
+      </div>
+      <div class="footer-note">QueryCrest · eligibility assistant</div>
     </div>
   </div>
-</div>
 
-<script>
-  (function() {
+  <!-- ===== FOOTER ===== -->
+  <footer class="qc-footer">
+    <div class="copy">&copy; 2026 QueryCrest. All rights reserved.</div>
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Support</a>
+      <a href="#">Contact</a>
+    </div>
+    <div class="social">
+      <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+      <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+      <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+      <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+    </div>
+  </footer>
 
-    const API_BASE = "https://xkjsydeavdcarwkthppz.supabase.co/functions/v1";
-    const ORIGIN = window.location.origin;
+  <!-- ===== UCM MODAL ===== -->
+  <div id="ucm_modal">
+    <div class="ucm_content">
+      <div class="ucm_header">
+        <div>
+          <h2>University Eligibility Checker</h2>
+          <p>Step-by-step: institution, qualification, subjects, check</p>
+        </div>
+        <button class="ucm_close" id="ucm_close_btn">Close</button>
+      </div>
 
-    // ---- constants ----
-    const SUBJECTS = [
-/*      'Mathematical Literacy', 'Geography', 'Tourism', 'Mathematics', 'isiXhosa',
-      'Life Orientation', 'Engineering Graphics and Design', 'isiZulu', 'Music',
-      'siSwati', 'Computer Applications Technology', 'Visual Arts', 'Setswana',
-      'Life Sciences', 'French', 'History', 'Physical Sciences', 'Accounting',
-      'Agricultural Sciences', 'Sepedi', 'Portuguese', 'Business Studies',
-      'Dramatic Arts', 'German', 'Information Technology', 'Hospitality Studies',
-      'Economics', 'Tshivenda', 'Xitsonga', 'Consumer Studies', 'English',
-      'Sesotho', 'Afrikaans'*/
-    ];
-    const UNIVERSITIES = [
-      /*
-      'University of Cape Town (UCT)',
-      'University of the Witwatersrand',
-      'Stellenbosch University',
-      'University of Pretoria'*/
-    ];
-    const QUALIFICATIONS = [
-      /*
-      'BCom (General)',
-      'BSc (Computer Science)',
-      'BA (Humanities)',
-      'BEng (Mechanical)'
-      */
-    ];
+      <div class="step-indicator">
+        <span id="ucmStepDisplay">Step 1 / 4</span>
+        <span id="ucmStepNameDisplay">Institution</span>
+      </div>
 
-    // ---- state ----
-    let ucmStep = 0;
-    const totalSteps = 4;
-    let ucmUni = '';
-    let ucmQual = '';
-    let ucmSubjects = [];
-    let institutionId ;
-    let qualifictionId  ;    
+      <div id="ucmStepPanel" class="checker-panel"></div>
 
+      <div class="btn-group">
+        <button class="btn btn-outline" id="ucmPrevBtn" disabled>← Back</button>
+        <button class="btn btn-primary" id="ucmNextBtn">Next →</button>
+      </div>
 
-//guide functions
+      <div id="ucmResultPanel" class="result-box">
+        <div class="result-title" id="ucmResultTitle">📋 Eligibility</div>
+        <div class="result-detail" id="ucmResultDetail">Complete all steps, then click "Check Eligibility" on the final step.</div>
+      </div>
+    </div>
+  </div>
 
-async  function getInstitutions(endpoint){
-    try {
-    const response =  await fetch(`${API_BASE}${endpoint}`,{
-        method:"GET",
-        headers:{
-            "Content-Type":"application/json",
+  <script>
+    (function() {
+
+      const API_BASE = "https://xkjsydeavdcarwkthppz.supabase.co/functions/v1";
+      const ORIGIN = window.location.origin;
+
+      // ---- constants ----
+      const SUBJECTS = [];
+      const UNIVERSITIES = [];
+      const QUALIFICATIONS = [];
+
+      // ---- state ----
+      let ucmStep = 0;
+      const totalSteps = 4;
+      let ucmUni = '';
+      let ucmQual = '';
+      let ucmSubjects = [];
+      let institutionId;
+      let qualifictionId;
+
+      // guide functions
+      async function getInstitutions(endpoint) {
+        try {
+          const response = await fetch(`${API_BASE}${endpoint}`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" }
+          });
+          const data = await response.json();
+          return data;
+        } catch (error) {
+          return [];
         }
+      }
 
-    });
-    const data = await response.json();
-    return data; 
-    } catch (error) {
-       // alert(` failed to get accommodation`);
-        return [];
-    }
-  }
-
-async  function getSubjects(endpoint){
-    try {
-    const response =  await fetch(`${API_BASE}${endpoint}`,{
-        method:"GET",
-        headers:{
-            "Content-Type":"application/json",
+      async function getSubjects(endpoint) {
+        try {
+          const response = await fetch(`${API_BASE}${endpoint}`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" }
+          });
+          const data = await response.json();
+          return data;
+        } catch (error) {
+          return [];
         }
+      }
 
-    });
-    const data = await response.json();
-    return data; 
-    } catch (error) {
-       // alert(` failed to get accommodation`);
-        return [];
-    }
-  }
-
-
- async  function getQualifications(endpoint){
-    try {
-    const response =  await fetch(`${API_BASE}${endpoint}`,{
-        method:"GET",
-        headers:{
-            "Content-Type":"application/json",
+      async function getQualifications(endpoint) {
+        try {
+          const response = await fetch(`${API_BASE}${endpoint}`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" }
+          });
+          const data = await response.json();
+          return data;
+        } catch (error) {
+          return [];
         }
+      }
 
-    });
-    const data = await response.json();
-    return data; 
-    } catch (error) {
-        //alert(` failed to get search results`);
-        return [];
-    }
-  }
-
- async  function calculateAps(endpoint,data){
-    try {
-
-    const response =  await fetch(`${API_BASE}${endpoint}`,{
-        method:"PUT",
-        headers:{
-            "Content-Type":"application/json",
-        },
-        body:JSON.stringify(
-            {
-           front_data:data
-            }
-
-        )
-
-    });
-    const data_ = await response.json();
-    return data_; 
-    } catch (error) {
-        //alert(` failed to get guide user results error ${error}`);
-        return [];
-    }
-  }
-
-  async function getInstitutionData() {
-    
-    UNIVERSITIES.length=0;
-    const data = await getInstitutions(`/eligibility/list` );
-    //const data = await getGuideUsers(`/eligibility/users?identifier=${encodeURIComponent(identifier)}&identifier_type=${encodeURIComponent(identifier_type)}` );
-
-    if(!data.data || data.error)return data?.error;
-    else{    
-      for(let i = 0 ;i< data.data.length;i++)
-    {
-          UNIVERSITIES.push(data.data[i]);
-    }
-  return "";
-  }
-
-  }
-
-  async function getQualificationData(identifier) {
-    QUALIFICATIONS.length =0;
-
-    const data = await getQualifications(`/eligibility/qualifications?identifier=${encodeURIComponent(identifier)}` );
-    if(!data.data || data.error)return data?.error;
-    else{
-
-
-      for(let i = 0 ;i< data.data.length;i++)
-    {
-    QUALIFICATIONS.push(data.data[i]);
-    }
-
-    return "";
-    }
-  }
-
-    async function getSubjectData() {
-    SUBJECTS.length =0;
-
-    const data = await getSubjects(`/eligibility/subjects` );
-    if(!data.data || data.error)return data?.error;
-    else{
-
-
-      for(let i = 0 ;i< data.data.length;i++)
-    {
-
-    SUBJECTS.push(data.data[i]);
-  }
-
-    return "";
-    }
-  }
-
-    const stepPanel = document.getElementById('ucmStepPanel');
-    const prevBtn = document.getElementById('ucmPrevBtn');
-    const nextBtn = document.getElementById('ucmNextBtn');
-    const stepDisplay = document.getElementById('ucmStepDisplay');
-    const stepNameDisplay = document.getElementById('ucmStepNameDisplay');
-    const resultTitle = document.getElementById('ucmResultTitle');
-    const resultDetail = document.getElementById('ucmResultDetail');
-    const resultPanel = document.getElementById('ucmResultPanel');
-
-    // ---- render step ----
-    async function renderUCMStep() {
-      const stepNames = ['Institution', 'Qualification', 'Subjects', 'Review & Check'];
-      stepDisplay.textContent = `Step ${ucmStep+1} / ${totalSteps}`;
-      stepNameDisplay.textContent = stepNames[ucmStep];
-      //get InstitutionData
-     const Indata = await getInstitutionData();
-      let html = '';
-      
-      if (ucmStep === 0) {
-
-        html = `
-          <div class="step-title"><span class="badge-step">1</span> Select your University</div>
-          <div class="field-group">
-            <div class="field-row">
-              <label for="ucmUniSelect">University</label>
-              <select id="ucmUniSelect" required>
-                <option value="">-- please choose --</option>
-                
-                ${UNIVERSITIES.map(u => `<option value="${u?.name}" ${ucmUni === u?.name ? 'selected' : ''}>${u?.name}</option>`).join('')}
-              </select>
-            </div>
-            <div id="ucmUniError" class="error-msg"></div>
-          </div>
-        `;
-       if(Indata.length>0)document.getElementById('ucmUniError').textContent = Indata;
-      } else if (ucmStep === 1) {
-        institutionId = UNIVERSITIES[UNIVERSITIES.findIndex(uni => uni?.name === document.getElementById('ucmUniSelect').value) ].id  ;
-        const Qudata = await getQualificationData( institutionId );
-        html = `
-          <div class="step-title"><span class="badge-step">2</span> Choose your Qualification</div>
-          <div class="field-group">
-            <div class="field-row">
-              <label for="ucmQualSelect">Qualification</label>
-              <select id="ucmQualSelect" required>
-                <option value="">-- please choose --</option>
-                ${QUALIFICATIONS.map(q => `<option value="${q?.name}" ${ucmQual === q?.name ? 'selected' : ''}>${q?.name}</option>`).join('')}
-              </select>
-            </div>
-            <div id="ucmQualError" class="error-msg"></div>
-          </div>
-        `;
-       if(Qudata.length>0)document.getElementById('ucmQualError').textContent = Qudata;        
-      } else if (ucmStep === 2) {
-        qualifictionId = QUALIFICATIONS[QUALIFICATIONS.findIndex(uni => uni.name === ucmQual) ].id  ;        
-        const Subdata = await getSubjectData();
-        if (ucmSubjects.length === 0) {
-          ucmSubjects = Array(5).fill().map(() => ({ subject: '', mark: '' }));
+      async function calculateAps(endpoint, data) {
+        try {
+          const response = await fetch(`${API_BASE}${endpoint}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ front_data: data })
+          });
+          const data_ = await response.json();
+          return data_;
+        } catch (error) {
+          return [];
         }
-        let subjHtml = `
-          <div class="step-title"><span class="badge-step">3</span> Enter 5–10 unique subjects</div>
-          <div class="field-group" id="ucmSubjectContainer">
-        `;
-        const usedSubjects = ucmSubjects.map(e => e.subject).filter(Boolean);
-        ucmSubjects.forEach((entry, idx) => {
-          const currentVal = entry.subject || '';
-          const markVal = entry.mark !== undefined && entry.mark !== '' ? entry.mark : '';
-          const opts = SUBJECTS.map(s => {
-            const disabled = (usedSubjects.includes(s?.name) && s?.name !== currentVal) ? 'disabled' : '';
-            const selected = s?.name === currentVal ? 'selected' : '';
-            return `<option value="${s?.name}" ${selected} ${disabled}>${s?.name}</option>`;
-          }).join('');
+      }
 
-          subjHtml += `
-            <div class="subject-entry" data-index="${idx}">
-              <span class="idx">#${idx+1}</span>
-              <select class="ucm-subject-select" data-idx="${idx}" required>
-                <option value="">-- select --</option>
-                ${opts}
-              </select>
-              <input type="number" class="ucm-subject-mark" data-idx="${idx}"
-                     placeholder="0-100" min="0" max="100"
-                     value="${markVal}" required>
+      async function getInstitutionData() {
+        UNIVERSITIES.length = 0;
+        const data = await getInstitutions(`/eligibility/list`);
+        if (!data.data || data.error) return data?.error;
+        else {
+          for (let i = 0; i < data.data.length; i++) {
+            UNIVERSITIES.push(data.data[i]);
+          }
+          return "";
+        }
+      }
+
+      async function getQualificationData(identifier) {
+        QUALIFICATIONS.length = 0;
+        const data = await getQualifications(`/eligibility/qualifications?identifier=${encodeURIComponent(identifier)}`);
+        if (!data.data || data.error) return data?.error;
+        else {
+          for (let i = 0; i < data.data.length; i++) {
+            QUALIFICATIONS.push(data.data[i]);
+          }
+          return "";
+        }
+      }
+
+      async function getSubjectData() {
+        SUBJECTS.length = 0;
+        const data = await getSubjects(`/eligibility/subjects`);
+        if (!data.data || data.error) return data?.error;
+        else {
+          for (let i = 0; i < data.data.length; i++) {
+            SUBJECTS.push(data.data[i]);
+          }
+          return "";
+        }
+      }
+
+      const stepPanel = document.getElementById('ucmStepPanel');
+      const prevBtn = document.getElementById('ucmPrevBtn');
+      const nextBtn = document.getElementById('ucmNextBtn');
+      const stepDisplay = document.getElementById('ucmStepDisplay');
+      const stepNameDisplay = document.getElementById('ucmStepNameDisplay');
+      const resultTitle = document.getElementById('ucmResultTitle');
+      const resultDetail = document.getElementById('ucmResultDetail');
+      const resultPanel = document.getElementById('ucmResultPanel');
+
+      // ---- render step ----
+      async function renderUCMStep() {
+        const stepNames = ['Institution', 'Qualification', 'Subjects', 'Review & Check'];
+        stepDisplay.textContent = `Step ${ucmStep+1} / ${totalSteps}`;
+        stepNameDisplay.textContent = stepNames[ucmStep];
+        const Indata = await getInstitutionData();
+        let html = '';
+
+        if (ucmStep === 0) {
+          html = `
+            <div class="step-title"><span class="badge-step">1</span> Select your University</div>
+            <div class="field-group">
+              <div class="field-row">
+                <label for="ucmUniSelect">University</label>
+                <select id="ucmUniSelect" required>
+                  <option value="">-- please choose --</option>
+                  ${UNIVERSITIES.map(u => `<option value="${u?.name}" ${ucmUni === u?.name ? 'selected' : ''}>${u?.name}</option>`).join('')}
+                </select>
+              </div>
+              <div id="ucmUniError" class="error-msg"></div>
             </div>
           `;
-        });
+          if (Indata.length > 0) document.getElementById('ucmUniError').textContent = Indata;
+        } else if (ucmStep === 1) {
+          institutionId = UNIVERSITIES[UNIVERSITIES.findIndex(uni => uni?.name === document.getElementById('ucmUniSelect').value)].id;
+          const Qudata = await getQualificationData(institutionId);
+          html = `
+            <div class="step-title"><span class="badge-step">2</span> Choose your Qualification</div>
+            <div class="field-group">
+              <div class="field-row">
+                <label for="ucmQualSelect">Qualification</label>
+                <select id="ucmQualSelect" required>
+                  <option value="">-- please choose --</option>
+                  ${QUALIFICATIONS.map(q => `<option value="${q?.name}" ${ucmQual === q?.name ? 'selected' : ''}>${q?.name}</option>`).join('')}
+                </select>
+              </div>
+              <div id="ucmQualError" class="error-msg"></div>
+            </div>
+          `;
+          if (Qudata.length > 0) document.getElementById('ucmQualError').textContent = Qudata;
+        } else if (ucmStep === 2) {
+          qualifictionId = QUALIFICATIONS[QUALIFICATIONS.findIndex(uni => uni.name === ucmQual)].id;
+          const Subdata = await getSubjectData();
+          if (ucmSubjects.length === 0) {
+            ucmSubjects = Array(5).fill().map(() => ({ subject: '', mark: '' }));
+          }
+          let subjHtml = `
+            <div class="step-title"><span class="badge-step">3</span> Enter 5–10 unique subjects</div>
+            <div class="field-group" id="ucmSubjectContainer">
+          `;
+          const usedSubjects = ucmSubjects.map(e => e.subject).filter(Boolean);
+          ucmSubjects.forEach((entry, idx) => {
+            const currentVal = entry.subject || '';
+            const markVal = entry.mark !== undefined && entry.mark !== '' ? entry.mark : '';
+            const opts = SUBJECTS.map(s => {
+              const disabled = (usedSubjects.includes(s?.name) && s?.name !== currentVal) ? 'disabled' : '';
+              const selected = s?.name === currentVal ? 'selected' : '';
+              return `<option value="${s?.name}" ${selected} ${disabled}>${s?.name}</option>`;
+            }).join('');
 
-        subjHtml += `
-          </div>
-          <div class="subject-actions">
-            <button id="ucmAddSubjectBtn">+ Add subject</button>
-            <button id="ucmRemoveSubjectBtn">− Remove last</button>
-            <span class="text-muted" id="ucmSubjectCounter">${ucmSubjects.length} / 10</span>
-          </div>
-          <div id="ucmSubjectError" class="error-msg"></div>
-        `;
-        html = subjHtml;
-       if(Subdata.length>0)document.getElementById('ucmSubjectError').textContent = Subdata;         
-      } else if (ucmStep === 3) {
+            subjHtml += `
+              <div class="subject-entry" data-index="${idx}">
+                <span class="idx">#${idx+1}</span>
+                <select class="ucm-subject-select" data-idx="${idx}" required>
+                  <option value="">-- select --</option>
+                  ${opts}
+                </select>
+                <input type="number" class="ucm-subject-mark" data-idx="${idx}"
+                       placeholder="0-100" min="0" max="100"
+                       value="${markVal}" required>
+              </div>
+            `;
+          });
 
-        const subjList = ucmSubjects.filter(e => e.subject && e.mark !== '' && !isNaN(e.mark));
-        html = `
-          <div class="step-title"><span class="badge-step">4</span> Review & check eligibility</div>
-          <div class="review-card">
-            <p><strong>University:</strong> ${esc(ucmUni || 'Not set')}</p>
-            <p><strong>Qualification:</strong> ${esc(ucmQual || 'Not set')}</p>
-            <p><strong>Subjects (${subjList.length}):</strong> ${subjList.length ? subjList.map(e => esc(e.subject) + ' ('+e.mark+'%)').join(' · ') : 'None entered'}</p>
-            <p style="margin-top:0.6rem;font-size:0.85rem;color:#4b5a74;">Click <strong>"Check Eligibility"</strong> below to get your result.</p>
-          </div>
-          <div style="margin-top:1.2rem;">
-            <button class="btn btn-primary" id="ucmCheckEligibilityBtn" style="width:100%;justify-content:center;">🔍 Check Eligibility</button>
-          </div>
-        `;
+          subjHtml += `
+            </div>
+            <div class="subject-actions">
+              <button id="ucmAddSubjectBtn">+ Add subject</button>
+              <button id="ucmRemoveSubjectBtn">− Remove last</button>
+              <span class="text-muted" id="ucmSubjectCounter">${ucmSubjects.length} / 10</span>
+            </div>
+            <div id="ucmSubjectError" class="error-msg"></div>
+          `;
+          html = subjHtml;
+          if (Subdata.length > 0) document.getElementById('ucmSubjectError').textContent = Subdata;
+        } else if (ucmStep === 3) {
+          const subjList = ucmSubjects.filter(e => e.subject && e.mark !== '' && !isNaN(e.mark));
+          html = `
+            <div class="step-title"><span class="badge-step">4</span> Review & check eligibility</div>
+            <div class="review-card">
+              <p><strong>University:</strong> ${esc(ucmUni || 'Not set')}</p>
+              <p><strong>Qualification:</strong> ${esc(ucmQual || 'Not set')}</p>
+              <p><strong>Subjects (${subjList.length}):</strong> ${subjList.length ? subjList.map(e => esc(e.subject) + ' ('+e.mark+'%)').join(' · ') : 'None entered'}</p>
+              <p style="margin-top:0.6rem;font-size:0.85rem;color:#4b5a74;">Click <strong>"Check Eligibility"</strong> below to get your result.</p>
+            </div>
+            <div style="margin-top:1.2rem;">
+              <button class="btn btn-primary" id="ucmCheckEligibilityBtn" style="width:100%;justify-content:center;">🔍 Check Eligibility</button>
+            </div>
+          `;
+        }
+
+        stepPanel.innerHTML = html;
+        attachStepEvents();
+        updateNavButtons();
       }
 
-      stepPanel.innerHTML = html;
-      attachStepEvents();
-      updateNavButtons();
-    }
+      function attachStepEvents() {
+        if (ucmStep === 0) {
+          const sel = document.getElementById('ucmUniSelect');
+          if (sel) {
+            if (ucmUni) sel.value = ucmUni;
+            sel.addEventListener('change', function() {
+              ucmUni = this.value;
+              document.getElementById('ucmUniError').textContent = '';
+            });
+          }
+        } else if (ucmStep === 1) {
+          const sel = document.getElementById('ucmQualSelect');
+          if (sel) {
+            if (ucmQual) sel.value = ucmQual;
+            sel.addEventListener('change', function() {
+              ucmQual = this.value;
+              document.getElementById('ucmQualError').textContent = '';
+            });
+          }
+        } else if (ucmStep === 2) {
+          const addBtn = document.getElementById('ucmAddSubjectBtn');
+          if (addBtn) {
+            addBtn.addEventListener('click', function() {
+              if (ucmSubjects.length < 10) {
+                ucmSubjects.push({ subject: '', mark: '' });
+                renderUCMStep();
+              }
+            });
+          }
+          const removeBtn = document.getElementById('ucmRemoveSubjectBtn');
+          if (removeBtn) {
+            removeBtn.addEventListener('click', function() {
+              if (ucmSubjects.length > 1) {
+                ucmSubjects.pop();
+                renderUCMStep();
+              }
+            });
+          }
+          const selects = document.querySelectorAll('.ucm-subject-select');
+          const marks = document.querySelectorAll('.ucm-subject-mark');
 
-    function attachStepEvents() {
-      if (ucmStep === 0) {
-        const sel = document.getElementById('ucmUniSelect');
-        if (sel) {
-          if (ucmUni) sel.value = ucmUni;
-          sel.addEventListener('change', function() {
-            ucmUni = this.value;
-            document.getElementById('ucmUniError').textContent = '';
-          });
-        }
-      } else if (ucmStep === 1) {
-        const sel = document.getElementById('ucmQualSelect');
-        if (sel) {
-          if (ucmQual) sel.value = ucmQual;
-          sel.addEventListener('change', function() {
-            ucmQual = this.value;
-            document.getElementById('ucmQualError').textContent = '';
-          });
-        }
-      } else if (ucmStep === 2) {
-        // add / remove buttons
-        const addBtn = document.getElementById('ucmAddSubjectBtn');
-        if (addBtn) {
-          addBtn.addEventListener('click', function() {
-            if (ucmSubjects.length < 10) {
-              ucmSubjects.push({ subject: '', mark: '' });
+          selects.forEach((sel, idx) => {
+            sel.addEventListener('change', function() {
+              const selected = this.value;
+              const duplicate = ucmSubjects.some((s, i) => i !== idx && s.subject === selected && selected !== '');
+              if (duplicate) {
+                document.getElementById('ucmSubjectError').textContent = '⚠️ This subject is already selected.';
+                this.value = ucmSubjects[idx]?.subject || '';
+                return;
+              }
+              if (ucmSubjects[idx]) ucmSubjects[idx].subject = selected;
+              document.getElementById('ucmSubjectError').textContent = '';
               renderUCMStep();
-            }
+            });
           });
-        }
-        const removeBtn = document.getElementById('ucmRemoveSubjectBtn');
-        if (removeBtn) {
-          removeBtn.addEventListener('click', function() {
-            if (ucmSubjects.length > 1) {
-              ucmSubjects.pop();
-              renderUCMStep();
-            }
-          });
-        }
-        // sync subject selects and marks
-        const selects = document.querySelectorAll('.ucm-subject-select');
-        const marks = document.querySelectorAll('.ucm-subject-mark');
 
-        selects.forEach((sel, idx) => {
-          sel.addEventListener('change', function() {
-            const selected = this.value;
-            // check duplicate
-            const duplicate = ucmSubjects.some((s, i) => i !== idx && s.subject === selected && selected !== '');
-            if (duplicate) {
-              document.getElementById('ucmSubjectError').textContent = '⚠️ This subject is already selected.';
-              this.value = ucmSubjects[idx]?.subject || '';
-              return;
-            }
-            if (ucmSubjects[idx]) ucmSubjects[idx].subject = selected;
-            document.getElementById('ucmSubjectError').textContent = '';
-            // re-render to update disabled options
-            renderUCMStep();
+          marks.forEach((inp, idx) => {
+            inp.addEventListener('input', function() {
+              const val = parseFloat(this.value);
+              if (!isNaN(val) && val >= 0 && val <= 100) {
+                if (ucmSubjects[idx]) ucmSubjects[idx].mark = val;
+              } else {
+                if (ucmSubjects[idx]) ucmSubjects[idx].mark = this.value || '';
+              }
+              document.getElementById('ucmSubjectError').textContent = '';
+            });
           });
-        });
 
-        marks.forEach((inp, idx) => {
-          inp.addEventListener('input', function() {
-            const val = parseFloat(this.value);
-            if (!isNaN(val) && val >= 0 && val <= 100) {
-              if (ucmSubjects[idx]) ucmSubjects[idx].mark = val;
-            } else {
-              if (ucmSubjects[idx]) ucmSubjects[idx].mark = this.value || '';
-            }
-            document.getElementById('ucmSubjectError').textContent = '';
-          });
-        });
-
-        // counter
-        const counter = document.getElementById('ucmSubjectCounter');
-        if (counter) counter.textContent = `${ucmSubjects.length} / 10`;
-        const rBtn = document.getElementById('ucmRemoveSubjectBtn');
-        if (rBtn) rBtn.disabled = ucmSubjects.length <= 1;
-        const aBtn = document.getElementById('ucmAddSubjectBtn');
-        if (aBtn) aBtn.disabled = ucmSubjects.length >= 10;
-      } else if (ucmStep === 3) {
-        const checkBtn = document.getElementById('ucmCheckEligibilityBtn');
-        if (checkBtn) {
-          checkBtn.addEventListener('click', performCheck);
+          const counter = document.getElementById('ucmSubjectCounter');
+          if (counter) counter.textContent = `${ucmSubjects.length} / 10`;
+          const rBtn = document.getElementById('ucmRemoveSubjectBtn');
+          if (rBtn) rBtn.disabled = ucmSubjects.length <= 1;
+          const aBtn = document.getElementById('ucmAddSubjectBtn');
+          if (aBtn) aBtn.disabled = ucmSubjects.length >= 10;
+        } else if (ucmStep === 3) {
+          const checkBtn = document.getElementById('ucmCheckEligibilityBtn');
+          if (checkBtn) {
+            checkBtn.addEventListener('click', performCheck);
+          }
         }
       }
-    }
 
-    function updateNavButtons() {
-      prevBtn.disabled = ucmStep === 0;
-      nextBtn.textContent = ucmStep === totalSteps - 1 ? '✓ Finish' : 'Next →';
-    }
-
-    function goNext() {
-      if (ucmStep === 0) {
-        const sel = document.getElementById('ucmUniSelect');
-        if (sel) ucmUni = sel.value;
-        if (!ucmUni) {
-          document.getElementById('ucmUniError').textContent = '⚠️ Please select a university.';
-          return;
-        }
-        document.getElementById('ucmUniError').textContent = '';
-      } else if (ucmStep === 1) {
-        const sel = document.getElementById('ucmQualSelect');
-        if (sel) ucmQual = sel.value;
-        if (!ucmQual) {
-          document.getElementById('ucmQualError').textContent = '⚠️ Please select a qualification.';
-          return;
-        }
-        document.getElementById('ucmQualError').textContent = '';
-      } else if (ucmStep === 2) {
-        // sync from DOM
-        const selects = document.querySelectorAll('.ucm-subject-select');
-        const marks = document.querySelectorAll('.ucm-subject-mark');
-        let valid = true;
-        let errMsg = '';
-        const names = [];
-        selects.forEach((sel, idx) => {
-          const subj = sel.value;
-          const mark = parseFloat(marks[idx]?.value);
-          if (!subj) { valid = false; errMsg = 'All subjects must be selected.'; return; }
-          if (isNaN(mark) || mark < 0 || mark > 100) { valid = false; errMsg = 'Each subject must have a mark between 0 and 100.'; return; }
-          if (names.includes(subj)) { valid = false; errMsg = 'Subjects must be unique.'; return; }
-          names.push(subj);
-          if (ucmSubjects[idx]) { ucmSubjects[idx].subject = subj; ucmSubjects[idx].mark = mark; }
-        });
-        if (selects.length < 5) { valid = false; errMsg = 'You need at least 5 subjects.'; }
-        if (!valid) {
-          document.getElementById('ucmSubjectError').textContent = '⚠️ ' + errMsg;
-          return;
-        }
-        // store final
-        const entries = [];
-        selects.forEach((sel, idx) => {
-          entries.push({ subject: sel.value, mark: parseFloat(marks[idx].value) });
-        });
-        ucmSubjects = entries;
+      function updateNavButtons() {
+        prevBtn.disabled = ucmStep === 0;
+        nextBtn.textContent = ucmStep === totalSteps - 1 ? '✓ Finish' : 'Next →';
       }
 
-      if (ucmStep < totalSteps - 1) {
-        ucmStep++;
+      function goNext() {
+        if (ucmStep === 0) {
+          const sel = document.getElementById('ucmUniSelect');
+          if (sel) ucmUni = sel.value;
+          if (!ucmUni) {
+            document.getElementById('ucmUniError').textContent = '⚠️ Please select a university.';
+            return;
+          }
+          document.getElementById('ucmUniError').textContent = '';
+        } else if (ucmStep === 1) {
+          const sel = document.getElementById('ucmQualSelect');
+          if (sel) ucmQual = sel.value;
+          if (!ucmQual) {
+            document.getElementById('ucmQualError').textContent = '⚠️ Please select a qualification.';
+            return;
+          }
+          document.getElementById('ucmQualError').textContent = '';
+        } else if (ucmStep === 2) {
+          const selects = document.querySelectorAll('.ucm-subject-select');
+          const marks = document.querySelectorAll('.ucm-subject-mark');
+          let valid = true;
+          let errMsg = '';
+          const names = [];
+          selects.forEach((sel, idx) => {
+            const subj = sel.value;
+            const mark = parseFloat(marks[idx]?.value);
+            if (!subj) { valid = false; errMsg = 'All subjects must be selected.'; return; }
+            if (isNaN(mark) || mark < 0 || mark > 100) { valid = false; errMsg = 'Each subject must have a mark between 0 and 100.'; return; }
+            if (names.includes(subj)) { valid = false; errMsg = 'Subjects must be unique.'; return; }
+            names.push(subj);
+            if (ucmSubjects[idx]) { ucmSubjects[idx].subject = subj; ucmSubjects[idx].mark = mark; }
+          });
+          if (selects.length < 5) { valid = false; errMsg = 'You need at least 5 subjects.'; }
+          if (!valid) {
+            document.getElementById('ucmSubjectError').textContent = '⚠️ ' + errMsg;
+            return;
+          }
+          const entries = [];
+          selects.forEach((sel, idx) => {
+            entries.push({ subject: sel.value, mark: parseFloat(marks[idx].value) });
+          });
+          ucmSubjects = entries;
+        }
+
+        if (ucmStep < totalSteps - 1) {
+          ucmStep++;
+          renderUCMStep();
+        }
+      }
+
+      function goPrev() {
+        if (ucmStep > 0) { ucmStep--; renderUCMStep(); }
+      }
+
+      async function performCheck() {
+        const uni = ucmUni;
+        const qual = ucmQual;
+        const subjects = ucmSubjects.filter(e => e.subject && !isNaN(e.mark) && e.mark >= 0 && e.mark <= 100);
+
+        if (!uni || !qual) {
+          resultPanel.className = 'result-box red';
+          resultTitle.innerHTML = `<span class="red">⛔ Missing information</span>`;
+          resultDetail.textContent = 'Please ensure you have selected both university and qualification.';
+          return;
+        }
+        if (subjects.length < 5) {
+          resultPanel.className = 'result-box red';
+          resultTitle.innerHTML = `<span class="red">⛔ Not enough subjects</span>`;
+          resultDetail.textContent = `You need at least 5 valid subjects (you have ${subjects.length}).`;
+          return;
+        }
+
+        const front_data = {
+          institutionId: institutionId,
+          qualifictionId: qualifictionId,
+          subjects: subjects
+        };
+        const aps_data = await calculateAps('/eligibility', front_data);
+        if (aps_data.error) {
+          if (aps_data.error.length > 0) {
+            resultPanel.className = 'result-box red';
+            resultTitle.innerHTML = `<span class="red">Error</span>`;
+            resultDetail.textContent = `${aps_data.error}`;
+          }
+        }
+        const avg = aps_data.data.average;
+        const eligible = aps_data.data.eligibility;
+
+        resultPanel.className = eligible ? 'result-box green' : 'result-box red';
+        const emoji = eligible ? '✅' : '❌';
+        const titleText = eligible ? 'You qualify!' : 'You do not currently meet the requirements.';
+        resultTitle.innerHTML = `<span class="${eligible ? 'green' : 'red'}">${emoji} ${titleText}</span>`;
+        let details = aps_data.data.requirements || '';
+        details += aps_data.data.reasons || '';
+        details += ` · Institution: ${uni} · Qualification: ${qual}`;
+        details += ` · ${eligible ? 'All requirements met.' : 'Please review the requirements above.'}`;
+        resultDetail.textContent = details;
+      }
+
+      function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+      // ---- open / close modal ----
+      function openUCM() {
+        ucmStep = 0;
+        if (!ucmUni && !ucmQual) {
+          ucmUni = '';
+          ucmQual = '';
+          ucmSubjects = Array(5).fill().map(() => ({ subject: '', mark: '' }));
+        }
+        const modal = document.getElementById('ucm_modal');
+        modal.classList.add('show');
         renderUCMStep();
-      }
-    }
-
-    function goPrev() {
-      if (ucmStep > 0) { ucmStep--; renderUCMStep(); }
-    }
-
-async    function performCheck() {
-      const uni = ucmUni;
-      const qual = ucmQual;
-      const subjects = ucmSubjects.filter(e => e.subject && !isNaN(e.mark) && e.mark >= 0 && e.mark <= 100);
-
-      if (!uni || !qual) {
-        resultPanel.className = 'result-box red';
-        resultTitle.innerHTML = `<span class="red">⛔ Missing information</span>`;
-        resultDetail.textContent = 'Please ensure you have selected both university and qualification.';
-        return;
-      }
-      if (subjects.length < 5) {
-        resultPanel.className = 'result-box red';
-        resultTitle.innerHTML = `<span class="red">⛔ Not enough subjects</span>`;
-        resultDetail.textContent = `You need at least 5 valid subjects (you have ${subjects.length}).`;
-        return;
-      }
-      /*
-      const reqMap = {
-        'BCom (General)': { aps: 36, avg: 68 },
-        'BSc (Computer Science)': { aps: 42, avg: 74 },
-        'BA (Humanities)': { aps: 30, avg: 62 },
-        'BEng (Mechanical)': { aps: 44, avg: 80 }
-      };
-      const req = reqMap[qual] || { aps: 35, avg: 65 };
-      
-      function calcAPS(mark) {
-        if (mark >= 80) return 7;
-        if (mark >= 70) return 6;
-        if (mark >= 60) return 5;
-        if (mark >= 50) return 4;
-        if (mark >= 40) return 3;
-        if (mark >= 30) return 2;
-        return 1;
+        resultPanel.className = 'result-box';
+        resultTitle.innerHTML = '📋 Eligibility';
+        resultDetail.textContent = 'Complete all steps, then click "Check Eligibility" on the final step.';
       }
 
-      let totalAPS = 0, totalMarks = 0;
-      */
-      //alert(`subjects ${JSON.stringify(subjects)}`);
-      const front_data = {
-        institutionId:institutionId,
-        qualifictionId:qualifictionId,
-        subjects:subjects
+      function closeUCM() {
+        document.getElementById('ucm_modal').classList.remove('show');
       }
-      const aps_data = await calculateAps('/eligibility',front_data);
-      //subjects.forEach(s => { totalAPS += calcAPS(s.mark); totalMarks += s.mark; });
-      if(aps_data.error){
-        if(aps_data.error.length>0){
-        resultPanel.className = 'result-box red';
-        resultTitle.innerHTML = `<span class="red">Error</span>`;
-        resultDetail.textContent = `${aps_data.error}`;
-          
-        }
-      }
-      const avg = aps_data.data.average//totalMarks / subjects.length;
-      const meetsAPS = aps_data.data.eligibility;
-      const meetsAvg = aps_data.data.eligibility;
-      const eligible = aps_data.data.eligibility; //meetsAPS && meetsAvg;
 
-      resultPanel.className = eligible ? 'result-box green' : 'result-box red';
-      const emoji = eligible ? '✅' : '❌';
-      const titleText = eligible ? 'You qualify!' : 'You do not currently meet the requirements.';
-      resultTitle.innerHTML = `<span class="${eligible ? 'green' : 'red'}">${emoji} ${titleText}</span>`;
-      let details = aps_data.data.requirements;
-      details += `${aps_data.data.reasons}`;
-      details += ` · Institution: ${uni} · Qualification: ${qual}`;
-      details += ` · ${eligible ? 'All requirements met.' : 'Please review the requirements above.'}`;
-      resultDetail.textContent = details;
-    }
+      // ---- wire up ----
+      document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('ucm_open_btn').addEventListener('click', openUCM);
+        document.getElementById('ucm_close_btn').addEventListener('click', closeUCM);
+        prevBtn.addEventListener('click', goPrev);
+        nextBtn.addEventListener('click', goNext);
 
-    function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-    // ---- open / close modal ----
-    function openUCM() {
-      ucmStep = 0;
-      if (!ucmUni && !ucmQual) {
-        ucmUni = '';
-        ucmQual = '';
-        ucmSubjects = Array(5).fill().map(() => ({ subject: '', mark: '' }));
-      }
-      const modal = document.getElementById('ucm_modal');
-      modal.classList.add('show');
-      renderUCMStep();
-      resultPanel.className = 'result-box';
-      resultTitle.innerHTML = '📋 Eligibility';
-      resultDetail.textContent = 'Complete all steps, then click "Check Eligibility" on the final step.';
-    }
-
-    function closeUCM() {
-      document.getElementById('ucm_modal').classList.remove('show');
-    }
-
-    // ---- wire up ----
-    document.addEventListener('DOMContentLoaded', function() {
-      document.getElementById('ucm_open_btn').addEventListener('click', openUCM);
-      document.getElementById('ucm_close_btn').addEventListener('click', closeUCM);
-      prevBtn.addEventListener('click', goPrev);
-      nextBtn.addEventListener('click', goNext);
-
-      const modal = document.getElementById('ucm_modal');
-      modal.addEventListener('click', function(e) {
-        if (e.target === modal) closeUCM();
+        const modal = document.getElementById('ucm_modal');
+        modal.addEventListener('click', function(e) {
+          if (e.target === modal) closeUCM();
+        });
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape' && modal.classList.contains('show')) closeUCM();
+        });
       });
-      document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && modal.classList.contains('show')) closeUCM();
-      });
-    });
 
-    window.openUCM = openUCM;
-    window.closeUCM = closeUCM;
-  })();
-</script>
+      window.openUCM = openUCM;
+      window.closeUCM = closeUCM;
+    })();
+  </script>
 </body>
 </html>
