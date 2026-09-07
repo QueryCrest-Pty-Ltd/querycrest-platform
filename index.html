@@ -2,14 +2,13 @@
 <html lang="en">
 <head>
     
-    
    <script>
 (function () {
   try {
     var ref = new URLSearchParams(window.location.search).get('ref');
     if (ref && ref.trim()) {
       localStorage.setItem('referral_code', ref.trim().toUpperCase());
-      console.log('[referral] \u2713 Captured:', ref.trim().toUpperCase());
+      console.log('[referral] ✓ Captured:', ref.trim().toUpperCase());
     }
   } catch (e) {}
 })();
@@ -27,7 +26,7 @@
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://www.QueryCrest.com/">
-  <meta property="og:title" content="QueryCrest \u2013 Free Prospectuses, Bursaries, Study Tips &amp; Application Help for South African Students">
+  <meta property="og:title" content="QueryCrest – Free Prospectuses, Bursaries, Study Tips &amp; Application Help for South African Students">
   <meta property="og:image" content="https://www.QueryCrest.com/assets/QueryCrest-logo.png">
   <meta name="google-site-verification" content="L1E11tJ7BkMPG11AS3cj8_sCDSgkd-3T_7W93PMmsPs"/>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -36,6 +35,7 @@
   <link rel="stylesheet" href="css/pages.css">
 
   <script src="https://unpkg.com/phosphor-icons"></script>  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{font-family:'Poppins',sans-serif;background:#f8fafc;color:#0f172a;overflow-x:hidden;scroll-behavior:smooth;line-height:1.6}
@@ -217,6 +217,120 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
 @keyframes spin{to{transform:rotate(360deg)}}
 @media(max-width:900px){.footer-inner{grid-template-columns:1fr 1fr;}}
 @media(max-width:600px){section{padding:64px 20px;}.hero{padding:60px 20px 48px;min-height:auto;}.hero-stats{gap:24px;}.footer-inner{grid-template-columns:1fr;gap:28px;}.footer-bottom{flex-direction:column;text-align:center;}.news-grid,.news-skeleton-grid{grid-template-columns:1fr;}}
+
+/* ===== UNIVERSITY CHECKER SECTION ===== */
+.checker-section {
+  background: #ffffff;
+  padding: 80px 24px;
+  border-bottom: 1px solid #eef2f6;
+}
+.checker-section .checker-inner {
+  max-width: 820px;
+  margin: 0 auto;
+}
+.checker-section .section-header {
+  margin-bottom: 40px;
+}
+.checker-card {
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 24px;
+  padding: 40px 36px;
+  text-align: center;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.checker-card:hover {
+  border-color: #2563eb;
+  box-shadow: 0 12px 40px rgba(37, 99, 235, 0.08);
+}
+.checker-card .checker-icon {
+  width: 72px;
+  height: 72px;
+  background: #eff6ff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  color: #2563eb;
+}
+.checker-card .checker-icon svg {
+  width: 34px;
+  height: 34px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+.checker-card h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 8px;
+}
+.checker-card p {
+  font-size: 0.95rem;
+  color: #64748b;
+  max-width: 480px;
+  margin: 0 auto 24px;
+  line-height: 1.7;
+}
+.checker-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 32px;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 60px;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.25);
+}
+.checker-btn:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(37, 99, 235, 0.35);
+}
+.checker-btn svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+.checker-features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 28px;
+}
+.checker-feature {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  font-size: 0.82rem;
+  color: #475569;
+}
+.checker-feature svg {
+  width: 18px;
+  height: 18px;
+  stroke: #2563eb;
+  fill: none;
+  stroke-width: 2;
+  flex-shrink: 0;
+}
+@media (max-width: 640px) {
+  .checker-card { padding: 28px 20px; }
+  .checker-features { grid-template-columns: 1fr; gap: 10px; }
+  .checker-feature { justify-content: flex-start; }
+}
 </style>
 </head>
 <body>
@@ -227,7 +341,7 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
     <button class="nav-close-btn" id="nav-close">&times;</button>
     <a href="index.html">Home</a>
     <a href="pages/Prospectus.html">Prospectuses</a>
-    <a href="pages/about.html.html">About Us</a>
+    <a href="pages/about.html">About Us</a>
     <a href="pages/howToApply.html">How to Apply</a>
     <a href="pages/StudyAbroad.html">Study Abroad</a>
     <a href="affiliate/affiliate-public.html">Become A Partner</a>
@@ -296,6 +410,53 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
       <div class="service-card"><div class="service-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="26"><path d="M21.721 12.752a9.711 9.711 0 0 0-.945-5.003 12.754 12.754 0 0 1-4.339 2.708 18.991 18.991 0 0 1-.214 4.772 17.165 17.165 0 0 0 5.498-2.477ZM14.634 15.55a17.324 17.324 0 0 0 .332-4.647c-.952.227-1.945.347-2.966.347-1.021 0-2.014-.12-2.966-.347a17.515 17.515 0 0 0 .332 4.647 17.385 17.385 0 0 0 5.268 0ZM9.772 17.119a18.963 18.963 0 0 0 4.456 0A17.182 17.182 0 0 1 12 21.724a17.18 17.18 0 0 1-2.228-4.605ZM7.777 15.23a18.87 18.87 0 0 1-.214-4.774 12.753 12.753 0 0 1-4.34-2.708 9.711 9.711 0 0 0-.944 5.004 17.165 17.165 0 0 0 5.498 2.477ZM21.356 14.752a9.765 9.765 0 0 1-7.478 6.817 18.64 18.64 0 0 0 1.988-4.718 18.627 18.627 0 0 0 5.49-2.098ZM2.644 14.752c1.682.971 3.53 1.688 5.49 2.099a18.64 18.64 0 0 0 1.988 4.718 9.765 9.765 0 0 1-7.478-6.816ZM13.878 2.43a9.755 9.755 0 0 1 6.116 3.986 11.267 11.267 0 0 1-3.746 2.504 18.63 18.63 0 0 0-2.37-6.49ZM12 2.276a17.152 17.152 0 0 1 2.805 7.121c-.897.23-1.837.353-2.805.353-.968 0-1.908-.122-2.805-.353A17.151 17.151 0 0 1 12 2.276ZM10.122 2.43a18.629 18.629 0 0 0-2.37 6.49 11.266 11.266 0 0 1-3.746-2.504 9.754 9.754 0 0 1 6.116-3.985Z"/></svg></div><h3>Study Abroad</h3><p>Explore international study opportunities and get guidance on what you need to study outside South Africa.</p><a href="pages/StudyAbroad.html" class="service-link">Explore options</a></div>
       <div class="service-card"><div class="service-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="26"><path fill-rule="evenodd" d="M9 4.5a.75.75 0 0 1 .721.544l.813 2.846a3.75 3.75 0 0 0 2.576 2.576l2.846.813a.75.75 0 0 1 0 1.442l-2.846.813a3.75 3.75 0 0 0-2.576 2.576l-.813 2.846a.75.75 0 0 1-1.442 0l-.813-2.846a3.75 3.75 0 0 0-2.576-2.576l-2.846-.813a.75.75 0 0 1 0-1.442l2.846-.813A3.75 3.75 0 0 0 7.466 7.89l.813-2.846A.75.75 0 0 1 9 4.5ZM18 1.5a.75.75 0 0 1 .728.568l.258 1.036c.236.94.97 1.674 1.91 1.91l1.036.258a.75.75 0 0 1 0 1.456l-1.036.258c-.94.236-1.674.97-1.91 1.91l-.258 1.036a.75.75 0 0 1-1.456 0l-.258-1.036a2.625 2.625 0 0 0-1.91-1.91l-1.036-.258a.75.75 0 0 1 0-1.456l1.036-.258a2.625 2.625 0 0 0 1.91-1.91l.258-1.036A.75.75 0 0 1 18 1.5Z" clip-rule="evenodd"/></svg></div><h3>Study Tips &amp; Tools</h3><p>Practical study strategies, time management tools, and exam techniques curated for South African students.</p><a href="pages/tipsAndTutorials.html" class="service-link">Start learning</a></div>
       <div class="service-card"><div class="service-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="26"><path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clip-rule="evenodd"/></svg></div><h3>Check My Chances</h3><p>Enter your grades and see which programmes you qualify for at top institutions across the country.</p><a href="account/login-signup.html" class="service-link">Check now</a></div>
+    </div>
+  </div>
+</section>
+<!---->
+<!-- University Checker-->
+<section class="cta-section">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div class="cta-inner">
+      <h2>Check Your University Eligibility</h2>
+      <p>Find out if your marks meet the admission requirements for your chosen university and qualification.</p>
+      <a href="#" class="btn-cta" onclick="openUniversityChecker();return false;">Check Your Eligibility</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== UNIVERSITY CHECKER SECTION ===== -->
+<section class="checker-section" id="universityChecker">
+  <div class="checker-inner">
+    <div class="section-header centered">
+      <span class="section-label">Eligibility Tool</span>
+      <h2 class="section-title">Check Your University Eligibility</h2>
+      <p class="section-sub">Find out if you qualify for your dream university in minutes.</p>
+    </div>
+    <div class="checker-card">
+      <div class="checker-icon">
+        <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      </div>
+      <h3>University Eligibility Checker</h3>
+      <p>Select your institution, choose a qualification, add your subjects and marks, and instantly see if you meet the requirements.</p>
+      <button class="checker-btn" id="ucm_open_btn_index">
+        <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        Open University Checker
+      </button>
+      <div class="checker-features">
+        <span class="checker-feature">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          APS Score Calculator
+        </span>
+        <span class="checker-feature">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          Subject Requirements
+        </span>
+        <span class="checker-feature">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          Real-time Results
+        </span>
+      </div>
     </div>
   </div>
 </section>
@@ -642,78 +803,608 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
 
   window.loadMoreNews=function(){fetchNews();};
   fetchNews();
+
+  /* ── UCM Checker (index button) ── */
+  var ucmBtn = document.getElementById('ucm_open_btn_index');
+  if (ucmBtn) {
+    ucmBtn.addEventListener('click', function() {
+      // If the global openUCM function exists (from the checker script), call it.
+      // Otherwise, we need to load the checker modal separately.
+      if (typeof window.openUCM === 'function') {
+        window.openUCM();
+      } else {
+        // Fallback: open the checker in a new tab/window or redirect to the checker page.
+        // Since the checker is embedded in this page, we should show the modal.
+        // We'll need to load the checker script dynamically if it's not already loaded.
+        var checkerScript = document.createElement('script');
+        checkerScript.textContent = `
+          // Checker script is already loaded in the page.
+          // If window.openUCM is not defined, something went wrong.
+          alert('University Checker is loading. Please try again.');
+        `;
+        document.body.appendChild(checkerScript);
+      }
+    });
+  }
 })();
 </script>
 
+<!-- ===== UCM CHECKER MODAL ===== -->
+<div id="ucm_modal">
+  <div class="ucm_content">
+    <div class="ucm_header">
+      <div>
+        <h2>University Eligibility Checker</h2>
+        <p>Step-by-step: institution, qualification, subjects, check</p>
+      </div>
+      <button class="ucm_close" id="ucm_close_btn">Close</button>
+    </div>
 
+    <div class="step-indicator">
+      <span id="ucmStepDisplay">Step 1 / 4</span>
+      <span id="ucmStepNameDisplay">Institution</span>
+    </div>
 
+    <div id="ucmStepPanel" class="checker-panel"></div>
 
+    <div class="btn-group">
+      <button class="btn btn-outline" id="ucmPrevBtn" disabled>← Back</button>
+      <button class="btn btn-primary" id="ucmNextBtn">Next →</button>
+    </div>
 
+    <div id="ucmResultPanel" class="result-box">
+      <div class="result-title" id="ucmResultTitle">📋 Eligibility</div>
+      <div class="result-detail" id="ucmResultDetail">Complete all steps, then click "Check Eligibility" on the final step.</div>
+    </div>
+  </div>
+</div>
 
- 
+<!-- ===== UCM CHECKER SCRIPT ===== -->
+<script>
+(function() {
 
+  const API_BASE = "https://xkjsydeavdcarwkthppz.supabase.co/functions/v1";
+  const ORIGIN = window.location.origin;
 
+<<<<<<< HEAD
+  // ---- constants ----
+  const SUBJECTS = [];
+  const UNIVERSITIES = [];
+  const QUALIFICATIONS = [];
 
+  // ---- state ----
+  let ucmStep = 0;
+  const totalSteps = 4;
+  let ucmUni = '';
+  let ucmQual = '';
+  let ucmSubjects = [];
+  let institutionId;
+  let qualifictionId;
+
+  // guide functions
+  async function getInstitutions(endpoint) {
+    try {
+      const response = await fetch(`${API_BASE}${endpoint}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" }
+      });
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      return [];
+    }
+  }
+
+  async function getSubjects(endpoint) {
+    try {
+      const response = await fetch(`${API_BASE}${endpoint}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" }
+      });
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      return [];
+    }
+  }
+
+  async function getQualifications(endpoint) {
+    try {
+      const response = await fetch(`${API_BASE}${endpoint}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" }
+      });
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      return [];
+    }
+  }
+
+  async function calculateAps(endpoint, data) {
+    try {
+      const response = await fetch(`${API_BASE}${endpoint}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ front_data: data })
+      });
+      const data_ = await response.json();
+      return data_;
+    } catch (error) {
+      return [];
+    }
+  }
+
+  async function getInstitutionData() {
+    UNIVERSITIES.length = 0;
+    const data = await getInstitutions(`/eligibility/list`);
+    if (!data.data || data.error) return data?.error;
+    else {
+      for (let i = 0; i < data.data.length; i++) {
+        UNIVERSITIES.push(data.data[i]);
+      }
+      return "";
+    }
+  }
+
+  async function getQualificationData(identifier) {
+    QUALIFICATIONS.length = 0;
+    const data = await getQualifications(`/eligibility/qualifications?identifier=${encodeURIComponent(identifier)}`);
+    if (!data.data || data.error) return data?.error;
+    else {
+      for (let i = 0; i < data.data.length; i++) {
+        QUALIFICATIONS.push(data.data[i]);
+      }
+      return "";
+    }
+  }
+
+  async function getSubjectData() {
+    SUBJECTS.length = 0;
+    const data = await getSubjects(`/eligibility/subjects`);
+    if (!data.data || data.error) return data?.error;
+    else {
+      for (let i = 0; i < data.data.length; i++) {
+        SUBJECTS.push(data.data[i]);
+      }
+      return "";
+    }
+  }
+
+  const stepPanel = document.getElementById('ucmStepPanel');
+  const prevBtn = document.getElementById('ucmPrevBtn');
+  const nextBtn = document.getElementById('ucmNextBtn');
+  const stepDisplay = document.getElementById('ucmStepDisplay');
+  const stepNameDisplay = document.getElementById('ucmStepNameDisplay');
+  const resultTitle = document.getElementById('ucmResultTitle');
+  const resultDetail = document.getElementById('ucmResultDetail');
+  const resultPanel = document.getElementById('ucmResultPanel');
+
+  // ---- render step ----
+  async function renderUCMStep() {
+    const stepNames = ['Institution', 'Qualification', 'Subjects', 'Review & Check'];
+    stepDisplay.textContent = `Step ${ucmStep+1} / ${totalSteps}`;
+    stepNameDisplay.textContent = stepNames[ucmStep];
+    const Indata = await getInstitutionData();
+    let html = '';
+
+    if (ucmStep === 0) {
+      html = `
+        <div class="step-title"><span class="badge-step">1</span> Select your University</div>
+        <div class="field-group">
+          <div class="field-row">
+            <label for="ucmUniSelect">University</label>
+            <select id="ucmUniSelect" required>
+              <option value="">-- please choose --</option>
+              ${UNIVERSITIES.map(u => `<option value="${u?.name}" ${ucmUni === u?.name ? 'selected' : ''}>${u?.name}</option>`).join('')}
+            </select>
+          </div>
+          <div id="ucmUniError" class="error-msg"></div>
+        </div>
+      `;
+      if (Indata.length > 0) document.getElementById('ucmUniError').textContent = Indata;
+    } else if (ucmStep === 1) {
+      institutionId = UNIVERSITIES[UNIVERSITIES.findIndex(uni => uni?.name === document.getElementById('ucmUniSelect').value)].id;
+      const Qudata = await getQualificationData(institutionId);
+      html = `
+        <div class="step-title"><span class="badge-step">2</span> Choose your Qualification</div>
+        <div class="field-group">
+          <div class="field-row">
+            <label for="ucmQualSelect">Qualification</label>
+            <select id="ucmQualSelect" required>
+              <option value="">-- please choose --</option>
+              ${QUALIFICATIONS.map(q => `<option value="${q?.name}" ${ucmQual === q?.name ? 'selected' : ''}>${q?.name}</option>`).join('')}
+            </select>
+          </div>
+          <div id="ucmQualError" class="error-msg"></div>
+        </div>
+      `;
+      if (Qudata.length > 0) document.getElementById('ucmQualError').textContent = Qudata;
+    } else if (ucmStep === 2) {
+      qualifictionId = QUALIFICATIONS[QUALIFICATIONS.findIndex(uni => uni.name === ucmQual)].id;
+      const Subdata = await getSubjectData();
+      if (ucmSubjects.length === 0) {
+        ucmSubjects = Array(5).fill().map(() => ({ subject: '', mark: '' }));
+      }
+      let subjHtml = `
+        <div class="step-title"><span class="badge-step">3</span> Enter 5–10 unique subjects</div>
+        <div class="field-group" id="ucmSubjectContainer">
+      `;
+      const usedSubjects = ucmSubjects.map(e => e.subject).filter(Boolean);
+      ucmSubjects.forEach((entry, idx) => {
+        const currentVal = entry.subject || '';
+        const markVal = entry.mark !== undefined && entry.mark !== '' ? entry.mark : '';
+        const opts = SUBJECTS.map(s => {
+          const disabled = (usedSubjects.includes(s?.name) && s?.name !== currentVal) ? 'disabled' : '';
+          const selected = s?.name === currentVal ? 'selected' : '';
+          return `<option value="${s?.name}" ${selected} ${disabled}>${s?.name}</option>`;
+        }).join('');
+
+        subjHtml += `
+          <div class="subject-entry" data-index="${idx}">
+            <span class="idx">#${idx+1}</span>
+            <select class="ucm-subject-select" data-idx="${idx}" required>
+              <option value="">-- select --</option>
+              ${opts}
+            </select>
+            <input type="number" class="ucm-subject-mark" data-idx="${idx}"
+                   placeholder="0-100" min="0" max="100"
+                   value="${markVal}" required>
+          </div>
+        `;
+      });
+
+      subjHtml += `
+        </div>
+        <div class="subject-actions">
+          <button id="ucmAddSubjectBtn">+ Add subject</button>
+          <button id="ucmRemoveSubjectBtn">− Remove last</button>
+          <span class="text-muted" id="ucmSubjectCounter">${ucmSubjects.length} / 10</span>
+        </div>
+        <div id="ucmSubjectError" class="error-msg"></div>
+      `;
+      html = subjHtml;
+      if (Subdata.length > 0) document.getElementById('ucmSubjectError').textContent = Subdata;
+    } else if (ucmStep === 3) {
+      const subjList = ucmSubjects.filter(e => e.subject && e.mark !== '' && !isNaN(e.mark));
+      html = `
+        <div class="step-title"><span class="badge-step">4</span> Review & check eligibility</div>
+        <div class="review-card">
+          <p><strong>University:</strong> ${esc(ucmUni || 'Not set')}</p>
+          <p><strong>Qualification:</strong> ${esc(ucmQual || 'Not set')}</p>
+          <p><strong>Subjects (${subjList.length}):</strong> ${subjList.length ? subjList.map(e => esc(e.subject) + ' ('+e.mark+'%)').join(' · ') : 'None entered'}</p>
+          <p style="margin-top:0.6rem;font-size:0.85rem;color:#4b5a74;">Click <strong>"Check Eligibility"</strong> below to get your result.</p>
+        </div>
+        <div style="margin-top:1.2rem;">
+          <button class="btn btn-primary" id="ucmCheckEligibilityBtn" style="width:100%;justify-content:center;">🔍 Check Eligibility</button>
+        </div>
+      `;
+    }
+
+    stepPanel.innerHTML = html;
+    attachStepEvents();
+    updateNavButtons();
+  }
+
+  function attachStepEvents() {
+    if (ucmStep === 0) {
+      const sel = document.getElementById('ucmUniSelect');
+      if (sel) {
+        if (ucmUni) sel.value = ucmUni;
+        sel.addEventListener('change', function() {
+          ucmUni = this.value;
+          document.getElementById('ucmUniError').textContent = '';
+        });
+      }
+    } else if (ucmStep === 1) {
+      const sel = document.getElementById('ucmQualSelect');
+      if (sel) {
+        if (ucmQual) sel.value = ucmQual;
+        sel.addEventListener('change', function() {
+          ucmQual = this.value;
+          document.getElementById('ucmQualError').textContent = '';
+        });
+      }
+    } else if (ucmStep === 2) {
+      const addBtn = document.getElementById('ucmAddSubjectBtn');
+      if (addBtn) {
+        addBtn.addEventListener('click', function() {
+          if (ucmSubjects.length < 10) {
+            ucmSubjects.push({ subject: '', mark: '' });
+            renderUCMStep();
+          }
+        });
+      }
+      const removeBtn = document.getElementById('ucmRemoveSubjectBtn');
+      if (removeBtn) {
+        removeBtn.addEventListener('click', function() {
+          if (ucmSubjects.length > 1) {
+            ucmSubjects.pop();
+            renderUCMStep();
+          }
+        });
+      }
+      const selects = document.querySelectorAll('.ucm-subject-select');
+      const marks = document.querySelectorAll('.ucm-subject-mark');
+
+      selects.forEach((sel, idx) => {
+        sel.addEventListener('change', function() {
+          const selected = this.value;
+          const duplicate = ucmSubjects.some((s, i) => i !== idx && s.subject === selected && selected !== '');
+          if (duplicate) {
+            document.getElementById('ucmSubjectError').textContent = '⚠️ This subject is already selected.';
+            this.value = ucmSubjects[idx]?.subject || '';
+            return;
+          }
+          if (ucmSubjects[idx]) ucmSubjects[idx].subject = selected;
+          document.getElementById('ucmSubjectError').textContent = '';
+          renderUCMStep();
+        });
+      });
+
+      marks.forEach((inp, idx) => {
+        inp.addEventListener('input', function() {
+          const val = parseFloat(this.value);
+          if (!isNaN(val) && val >= 0 && val <= 100) {
+            if (ucmSubjects[idx]) ucmSubjects[idx].mark = val;
+          } else {
+            if (ucmSubjects[idx]) ucmSubjects[idx].mark = this.value || '';
+          }
+          document.getElementById('ucmSubjectError').textContent = '';
+        });
+      });
+
+      const counter = document.getElementById('ucmSubjectCounter');
+      if (counter) counter.textContent = `${ucmSubjects.length} / 10`;
+      const rBtn = document.getElementById('ucmRemoveSubjectBtn');
+      if (rBtn) rBtn.disabled = ucmSubjects.length <= 1;
+      const aBtn = document.getElementById('ucmAddSubjectBtn');
+      if (aBtn) aBtn.disabled = ucmSubjects.length >= 10;
+    } else if (ucmStep === 3) {
+      const checkBtn = document.getElementById('ucmCheckEligibilityBtn');
+      if (checkBtn) {
+        checkBtn.addEventListener('click', performCheck);
+      }
+    }
+  }
+
+  function updateNavButtons() {
+    prevBtn.disabled = ucmStep === 0;
+    nextBtn.textContent = ucmStep === totalSteps - 1 ? '✓ Finish' : 'Next →';
+  }
+
+  function goNext() {
+    if (ucmStep === 0) {
+      const sel = document.getElementById('ucmUniSelect');
+      if (sel) ucmUni = sel.value;
+      if (!ucmUni) {
+        document.getElementById('ucmUniError').textContent = '⚠️ Please select a university.';
+        return;
+      }
+      document.getElementById('ucmUniError').textContent = '';
+    } else if (ucmStep === 1) {
+      const sel = document.getElementById('ucmQualSelect');
+      if (sel) ucmQual = sel.value;
+      if (!ucmQual) {
+        document.getElementById('ucmQualError').textContent = '⚠️ Please select a qualification.';
+        return;
+      }
+      document.getElementById('ucmQualError').textContent = '';
+    } else if (ucmStep === 2) {
+      const selects = document.querySelectorAll('.ucm-subject-select');
+      const marks = document.querySelectorAll('.ucm-subject-mark');
+      let valid = true;
+      let errMsg = '';
+      const names = [];
+      selects.forEach((sel, idx) => {
+        const subj = sel.value;
+        const mark = parseFloat(marks[idx]?.value);
+        if (!subj) { valid = false; errMsg = 'All subjects must be selected.'; return; }
+        if (isNaN(mark) || mark < 0 || mark > 100) { valid = false; errMsg = 'Each subject must have a mark between 0 and 100.'; return; }
+        if (names.includes(subj)) { valid = false; errMsg = 'Subjects must be unique.'; return; }
+        names.push(subj);
+        if (ucmSubjects[idx]) { ucmSubjects[idx].subject = subj; ucmSubjects[idx].mark = mark; }
+      });
+      if (selects.length < 5) { valid = false; errMsg = 'You need at least 5 subjects.'; }
+      if (!valid) {
+        document.getElementById('ucmSubjectError').textContent = '⚠️ ' + errMsg;
+        return;
+      }
+      const entries = [];
+      selects.forEach((sel, idx) => {
+        entries.push({ subject: sel.value, mark: parseFloat(marks[idx].value) });
+      });
+      ucmSubjects = entries;
+    }
+
+    if (ucmStep < totalSteps - 1) {
+      ucmStep++;
+      renderUCMStep();
+    }
+  }
+
+  function goPrev() {
+    if (ucmStep > 0) { ucmStep--; renderUCMStep(); }
+  }
+
+  async function performCheck() {
+    const uni = ucmUni;
+    const qual = ucmQual;
+    const subjects = ucmSubjects.filter(e => e.subject && !isNaN(e.mark) && e.mark >= 0 && e.mark <= 100);
+
+    if (!uni || !qual) {
+      resultPanel.className = 'result-box red';
+      resultTitle.innerHTML = `<span class="red">⛔ Missing information</span>`;
+      resultDetail.textContent = 'Please ensure you have selected both university and qualification.';
+      return;
+    }
+    if (subjects.length < 5) {
+      resultPanel.className = 'result-box red';
+      resultTitle.innerHTML = `<span class="red">⛔ Not enough subjects</span>`;
+      resultDetail.textContent = `You need at least 5 valid subjects (you have ${subjects.length}).`;
+      return;
+    }
+
+    const front_data = {
+      institutionId: institutionId,
+      qualifictionId: qualifictionId,
+      subjects: subjects
+    };
+    const aps_data = await calculateAps('/eligibility', front_data);
+    if (aps_data.error) {
+      if (aps_data.error.length > 0) {
+        resultPanel.className = 'result-box red';
+        resultTitle.innerHTML = `<span class="red">Error</span>`;
+        resultDetail.textContent = `${aps_data.error}`;
+      }
+    }
+    const avg = aps_data.data.average;
+    const eligible = aps_data.data.eligibility;
+
+    resultPanel.className = eligible ? 'result-box green' : 'result-box red';
+    const emoji = eligible ? '✅' : '❌';
+    const titleText = eligible ? 'You qualify!' : 'You do not currently meet the requirements.';
+    resultTitle.innerHTML = `<span class="${eligible ? 'green' : 'red'}">${emoji} ${titleText}</span>`;
+    let details = aps_data.data.requirements || '';
+    details += aps_data.data.reasons || '';
+    details += ` · Institution: ${uni} · Qualification: ${qual}`;
+    details += ` · ${eligible ? 'All requirements met.' : 'Please review the requirements above.'}`;
+    resultDetail.textContent = details;
+  }
+
+  function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  // ---- open / close modal ----
+  function openUCM() {
+    ucmStep = 0;
+    if (!ucmUni && !ucmQual) {
+      ucmUni = '';
+      ucmQual = '';
+      ucmSubjects = Array(5).fill().map(() => ({ subject: '', mark: '' }));
+    }
+    const modal = document.getElementById('ucm_modal');
+    modal.classList.add('show');
+    renderUCMStep();
+    resultPanel.className = 'result-box';
+    resultTitle.innerHTML = '📋 Eligibility';
+    resultDetail.textContent = 'Complete all steps, then click "Check Eligibility" on the final step.';
+  }
+
+  function closeUCM() {
+    document.getElementById('ucm_modal').classList.remove('show');
+  }
+
+  // ---- wire up ----
+  document.addEventListener('DOMContentLoaded', function() {
+    // Button on the checker section
+    const openBtn = document.getElementById('ucm_open_btn_index');
+    if (openBtn) {
+      openBtn.addEventListener('click', openUCM);
+    }
+    // Close button
+    document.getElementById('ucm_close_btn').addEventListener('click', closeUCM);
+    prevBtn.addEventListener('click', goPrev);
+    nextBtn.addEventListener('click', goNext);
+
+    const modal = document.getElementById('ucm_modal');
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) closeUCM();
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && modal.classList.contains('show')) closeUCM();
+    });
+  });
+
+  window.openUCM = openUCM;
+  window.closeUCM = closeUCM;
+})();
+</script>
+
+<!-- ===== UCM CHECKER STYLES ===== -->
+=======
+>>>>>>> fa24dc28ca07e99fa4afb75a14717498c76740b5
 <style>
-/* Overlay */
-#preApplyModal {
-  display: none;
+/* UCM modal styles */
+#ucm_modal {
   position: fixed;
   inset: 0;
-  background: rgba(15,23,42,.65);
+  background: rgba(0, 0, 0, 0.55);
   backdrop-filter: blur(4px);
-  z-index: 4000;
+  display: none;
   align-items: center;
   justify-content: center;
+<<<<<<< HEAD
+  padding: 20px;
+  z-index: 9999;
+  transition: opacity 0.2s;
+}
+#ucm_modal.show {
+  display: flex;
+}
+.ucm_content {
+=======
   padding: 16px;
+  overflow: hidden;
 }
 #preApplyModal.open { display: flex; animation: paFadeIn .2s ease; }
 @keyframes paFadeIn { from { opacity:0 } to { opacity:1 } }
 
-/* Card */
-.pa-card {
-  background: #fff;
-  border-radius: 20px;
-  width: 100%;
-  max-width: 640px;
-  max-height: 92vh;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 32px 80px rgba(0,0,0,.28);
-  animation: paSlideUp .25s cubic-bezier(.34,1.56,.64,1);
-}
-@keyframes paSlideUp {
-  from { opacity:0; transform:translateY(24px) scale(.97) }
-  to   { opacity:1; transform:translateY(0) scale(1) }
+body.pa-modal-open {
+  overflow: hidden !important;
+  height: 100vh !important;
 }
 
-/* Header */
-.pa-hdr {
-  padding: 20px 24px 14px;
-  border-bottom: 1px solid #e2e8f0;
-  flex-shrink: 0;
+/* Card */
+.pa-card {
+>>>>>>> fa24dc28ca07e99fa4afb75a14717498c76740b5
+  background: #fff;
+  border-radius: 28px;
+  padding: 28px 26px;
+  max-width: 700px;
+  width: 100%;
+<<<<<<< HEAD
+  max-height: 92vh;
+  overflow-y: auto;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.2);
+  animation: slideUp 0.25s ease;
 }
-.pa-hdr-row {
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.ucm_header {
+=======
+  max-width: 640px;
+  max-height: calc(100vh - 32px);
+  overflow: hidden;
+>>>>>>> fa24dc28ca07e99fa4afb75a14717498c76740b5
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 12px;
+  gap: 14px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
 }
-.pa-hdr h2 {
-  font-size: 1.05rem;
+.ucm_header h2 {
+  font-size: 1.2rem;
   font-weight: 700;
-  color: #0f172a;
-  margin: 0 0 2px;
-  font-family: 'Poppins', sans-serif;
+  color: #0b1e3a;
 }
-.pa-hdr p {
-  font-size: .78rem;
-  color: #64748b;
-  margin: 0;
-  font-family: 'Poppins', sans-serif;
+<<<<<<< HEAD
+.ucm_header p {
+  font-size: 0.8rem;
+  color: #6b7280;
+  margin-top: 2px;
 }
+.ucm_close {
+  background: #f1f4f9;
+  border: none;
+  border-radius: 40px;
+  padding: 6px 18px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: #1f2a44;
+=======
 .pa-close {
   width: 32px; height: 32px;
   border: none; background: #f1f5f9; border-radius: 8px;
@@ -764,10 +1455,17 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
   background: linear-gradient(90deg, #1e40af, #2563eb);
   border-radius: 99px;
   transition: width .35s ease;
+  width: 0%;
 }
 
 /* Body */
-.pa-body { flex: 1; overflow-y: auto; padding: 22px 24px; }
+.pa-body { 
+  flex: 1; 
+  overflow-y: auto; 
+  padding: 22px 24px;
+  overscroll-behavior: contain;
+  min-height: 0;
+}
 .pa-step { display: none; }
 .pa-step.on { display: block; }
 .pa-sh {
@@ -791,73 +1489,216 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
   font-family: 'Poppins', sans-serif;
   color: #94a3b8;
   background: #fff;
+>>>>>>> fa24dc28ca07e99fa4afb75a14717498c76740b5
   cursor: pointer;
-  text-align: left;
+  font-family: 'Poppins', sans-serif;
+  transition: 0.15s;
+}
+.ucm_close:hover {
+  background: #e2e8f0;
+}
+.step-indicator {
+  display: flex;
+  justify-content: space-between;
+  background: #f0f4fe;
+  padding: 0.4rem 1.2rem;
+  border-radius: 60px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: #1f2a44;
+  margin-bottom: 1.5rem;
+}
+.step-indicator span:last-child {
+  background: white;
+  padding: 0.2rem 1rem;
+  border-radius: 40px;
+  color: #3b7cff;
+}
+.checker-panel {
+  background: #f9fafc;
+  border-radius: 1.5rem;
+  padding: 1.8rem 1.8rem 1.5rem;
+  border: 1px solid #e9edf4;
+  min-height: 240px;
+}
+.step-title {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #0b1e3a;
+  margin-bottom: 1.2rem;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  transition: border-color .18s, box-shadow .18s;
-  box-sizing: border-box;
+  gap: 0.6rem;
 }
-.pa-uni-trigger.has-val { color: #0f172a; font-weight: 600; }
+<<<<<<< HEAD
+.badge-step {
+  background: #3b7cff;
+  color: white;
+  border-radius: 40px;
+  padding: 0.1rem 0.9rem;
+  font-size: 0.7rem;
+}
+.field-group { display: flex; flex-direction: column; gap: 0.9rem; }
+.field-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.2rem;
+  align-items: center;
+=======
+.pa-uni-trigger.has-val { color: #0f172a; font-weight: 600; border-color: #2563eb; background: #eff6ff; }
 .pa-uni-trigger.bad     { border-color: #dc2626; background: #fff5f5; }
 .pa-uni-trigger:focus,
 .pa-uni-trigger.open    { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,.1); outline: none; }
 .pa-uni-trigger svg { flex-shrink: 0; transition: transform .2s; }
 .pa-uni-trigger.open svg { transform: rotate(180deg); }
 
-/* The panel is now rendered outside the modal (appended to <body>) and
-   positioned with fixed coordinates that track the trigger's location,
-   so it is never clipped by the modal's scroll/overflow container. */
+/* Floating dropdown panel */
 .pa-uni-panel {
   display: none;
   position: fixed;
   background: #fff;
   border: 1.5px solid #e2e8f0;
-  border-radius: 12px;
+  border-radius: 8px;
   box-shadow: 0 16px 40px rgba(0,0,0,.14);
   z-index: 5000;
   overflow: hidden;
+  font-family: 'Poppins', sans-serif;
 }
-.pa-uni-panel.open { display: block; }
+.pa-uni-panel.open { 
+  display: block; 
+  animation: paDropdownIn .18s ease;
+}
+@keyframes paDropdownIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 .pa-uni-search-wrap {
   padding: 10px;
   border-bottom: 1px solid #e2e8f0;
   position: relative;
+>>>>>>> fa24dc28ca07e99fa4afb75a14717498c76740b5
 }
-.pa-uni-search {
-  width: 100%;
-  padding: 8px 12px 8px 32px;
-  border: 1.5px solid #e2e8f0;
-  border-radius: 8px;
-  font-size: .83rem;
+.field-row label {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #1f2a44;
+  min-width: 100px;
+}
+.field-row select,
+.field-row input {
+  flex: 1;
+  min-width: 180px;
+  padding: 0.65rem 1rem;
+  border-radius: 14px;
+  border: 1.5px solid #dce2ec;
+  background: white;
   font-family: 'Poppins', sans-serif;
-  color: #0f172a;
-  background: #f8fafc;
-  outline: none;
-  box-sizing: border-box;
-  transition: border-color .18s;
+  font-size: 0.9rem;
+  transition: 0.15s;
+  color: #0b1e3a;
 }
-.pa-uni-search:focus { border-color: #2563eb; }
-.pa-uni-search-ico {
-  position: absolute;
-  left: 20px; top: 50%;
-  transform: translateY(-50%);
-  color: #94a3b8;
+.field-row select:focus,
+.field-row input:focus {
+  border-color: #3b7cff;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 124, 255, 0.15);
+}
+.subject-entry {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 0.8rem;
+  background: white;
+  padding: 0.5rem 1rem 0.5rem 1.2rem;
+  border-radius: 40px;
+  border: 1px solid #e3e9f2;
+  margin-bottom: 6px;
+}
+.subject-entry select {
+  flex: 2;
+  min-width: 130px;
+  border: none;
+  background: transparent;
+  padding: 0.3rem 0.2rem;
+  font-weight: 500;
+  font-size: 0.85rem;
+  border-bottom: 1.5px dashed #d0d9e8;
+  border-radius: 0;
+  font-family: 'Poppins', sans-serif;
+}
+.subject-entry select:focus {
+  border-bottom-color: #3b7cff;
+  outline: none;
+}
+.subject-entry input {
+  width: 80px;
+  border: none;
+  background: transparent;
+  padding: 0.3rem 0.2rem;
+  font-weight: 500;
+  font-size: 0.85rem;
+  border-bottom: 1.5px dashed #d0d9e8;
+  border-radius: 0;
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
+}
+.subject-entry input:focus {
+  border-bottom-color: #3b7cff;
+  outline: none;
+}
+.subject-entry .idx {
+  font-weight: 600;
+  color: #4b5a74;
+  font-size: 0.75rem;
+  width: 22px;
+}
+.subject-actions {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-top: 0.8rem;
+}
+.subject-actions button {
+  padding: 0.3rem 1.2rem;
+  font-size: 0.8rem;
+  border-radius: 40px;
+  border: 1.5px solid #dce2ec;
+  background: white;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  transition: 0.15s;
+}
+.subject-actions button:hover {
+  background: #f0f4fe;
+  border-color: #b0c4e0;
+}
+.subject-actions button:disabled {
+  opacity: 0.4;
   pointer-events: none;
 }
-.pa-uni-list { max-height: 220px; overflow-y: auto; }
-.pa-uni-opt {
-  padding: 10px 14px;
-  font-size: .86rem;
-  font-family: 'Poppins', sans-serif;
-  color: #0f172a;
-  cursor: pointer;
-  transition: background .12s;
+.text-muted {
+  font-size: 0.8rem;
+  color: #6b7a93;
+  align-self: center;
 }
+<<<<<<< HEAD
+.btn-group {
+=======
 .pa-uni-opt:hover { background: #eff6ff; color: #1d4ed8; }
 .pa-uni-opt.sel   { background: #eff6ff; color: #1d4ed8; font-weight: 600; }
 .pa-uni-opt.hid   { display: none; }
+
+/* Empty state */
+.pa-uni-empty {
+  padding: 14px;
+  font-size: .8rem;
+  color: #64748b;
+  text-align: center;
+  display: none;
+  font-family: 'Poppins', sans-serif;
+}
+.pa-uni-empty.on { display: block; }
 
 /* Form fields */
 .pa-f { margin-bottom: 14px; }
@@ -901,139 +1742,244 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
 }
 .pa-err.on { display: flex; }
 
+/* Alert boxes for bursary */
+.pa-alert {
+  display: flex;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  margin-bottom: 16px;
+  font-family: 'Poppins', sans-serif;
+}
+.pa-alert.info {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+}
+.pa-alert.warn {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+}
+.pa-alert svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  width: 18px;
+  height: 18px;
+  color: #2563eb;
+}
+.pa-alert.warn svg { color: #d97706; }
+.pa-alert h4 {
+  font-size: .85rem;
+  font-weight: 700;
+  color: #1e3a8a;
+  margin: 0 0 4px;
+}
+.pa-alert.warn h4 { color: #92400e; }
+.pa-alert p {
+  font-size: .8rem;
+  color: #374151;
+  margin: 0;
+  line-height: 1.5;
+}
+.pa-alert ul {
+  margin: 8px 0 6px;
+  padding-left: 18px;
+}
+.pa-alert li {
+  font-size: .78rem;
+  color: #374151;
+  line-height: 1.5;
+}
+.pa-alert a {
+  color: #2563eb;
+  font-weight: 600;
+  text-decoration: none;
+}
+.pa-alert a:hover { text-decoration: underline; }
+
+/* Promo code link */
+.pa-promo-link {
+  display: inline-block;
+  margin-top: 10px;
+  color: #2563eb;
+  font-size: .82rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  font-family: 'Poppins', sans-serif;
+  background: none;
+  border: none;
+  padding: 0;
+}
+.pa-promo-link:hover { color: #1d4ed8; }
+
+/* Promo code input */
+.pa-promo-input-wrap {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+.pa-promo-input {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: .85rem;
+  font-family: 'Poppins', sans-serif;
+  color: #0f172a;
+  outline: none;
+  transition: border-color .18s;
+}
+.pa-promo-input:focus { border-color: #2563eb; }
+.pa-promo-apply-btn {
+  padding: 10px 16px;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: .85rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  transition: background .15s;
+}
+.pa-promo-apply-btn:hover { background: #1d4ed8; }
+
+/* Application fee */
+.pa-fee {
+  margin-top: 10px;
+  font-size: .82rem;
+  color: #64748b;
+  font-family: 'Poppins', sans-serif;
+}
+.pa-fee strong { color: #0f172a; }
+
 /* Redirect message step */
 .pa-redirect-msg {
+>>>>>>> fa24dc28ca07e99fa4afb75a14717498c76740b5
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 32px 16px;
-  gap: 14px;
+  gap: 0.8rem;
+  margin-top: 1.5rem;
 }
-.pa-redirect-icon {
-  width: 60px; height: 60px;
-  border-radius: 50%;
-  background: #dcfce7;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.6rem;
+.btn {
+  padding: 0.6rem 1.5rem;
+  border-radius: 40px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  border: none;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  transition: 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
-.pa-redirect-title {
-  font-size: 1rem; font-weight: 700; color: #0f172a;
-  font-family: 'Poppins', sans-serif; margin: 0;
+.btn-outline {
+  background: #fff;
+  border: 1.5px solid #dce2ec;
+  color: #1f2a44;
 }
-.pa-redirect-sub {
-  font-size: .83rem; color: #64748b; line-height: 1.6;
-  font-family: 'Poppins', sans-serif; margin: 0;
+.btn-outline:hover:not(:disabled) {
+  border-color: #3b7cff;
+  color: #3b7cff;
 }
-.pa-redirect-dots {
-  display: flex; gap: 6px; justify-content: center;
-}
-.pa-redirect-dots span {
-  width: 8px; height: 8px;
-  border-radius: 50%;
+.btn-primary {
   background: #2563eb;
-  animation: paDotPulse 1.2s infinite;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
 }
-.pa-redirect-dots span:nth-child(2) { animation-delay: .2s; }
-.pa-redirect-dots span:nth-child(3) { animation-delay: .4s; }
-@keyframes paDotPulse {
-  0%,80%,100% { transform: scale(.7); opacity:.4 }
-  40%         { transform: scale(1);  opacity:1  }
+.btn-primary:hover:not(:disabled) {
+  background: #1d4ed8;
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.3);
 }
+<<<<<<< HEAD
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.review-card {
+  background: white;
+  border-radius: 1rem;
+  padding: 0.8rem 1.2rem;
+  border: 1px solid #e9edf4;
+=======
 
 /* Footer */
 .pa-ftr {
   padding: 14px 24px;
   border-top: 1px solid #e2e8f0;
-  display: flex; gap: 10px; flex-shrink: 0;
+  display: none;
+  gap: 10px; flex-shrink: 0;
 }
+.pa-ftr.show { display: flex; }
 .pa-btn {
   flex: 1; padding: 12px; border-radius: 9px;
   font-family: 'Poppins', sans-serif;
   font-size: .88rem; font-weight: 600; cursor: pointer; border: none;
   transition: background .15s, transform .12s;
+>>>>>>> fa24dc28ca07e99fa4afb75a14717498c76740b5
 }
-.pa-btn:active { transform: scale(.98); }
-.pa-btn.primary { background: #2563eb; color: #fff; }
-.pa-btn.primary:hover { background: #1d4ed8; }
-.pa-btn.secondary { background: #f1f5f9; color: #374151; border: 1.5px solid #e2e8f0; }
-.pa-btn.secondary:hover { background: #e2e8f0; }
+.review-card p { margin: 0.2rem 0; font-size: 0.9rem; }
+.review-card strong { color: #1f2a44; }
+.result-box {
+  margin-top: 1.5rem;
+  padding: 1rem 1.5rem;
+  border-radius: 20px;
+  background: #f0f4fe;
+  border: 1px solid #d6e2f5;
+  transition: 0.2s;
+}
+.result-box.green {
+  background: #e3f7ec;
+  border-color: #45c48b;
+}
+<<<<<<< HEAD
+.result-box.red {
+  background: #ffe9ea;
+  border-color: #ff7a7a;
+}
+.result-title {
+  font-weight: 700;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.result-title .green { color: #0d7c4a; }
+.result-title .red { color: #bd2c2c; }
+.result-detail {
+  font-size: 0.85rem;
+  color: #1a2b4a;
+  margin-top: 0.3rem;
+  background: rgba(255, 255, 255, 0.5);
+  padding: 0.5rem 0.8rem;
+  border-radius: 12px;
+}
+.error-msg {
+  color: #bd2c2c;
+  font-size: 0.8rem;
+  margin-top: 0.2rem;
+}
+@media (max-width: 640px) {
+  .ucm_content { padding: 20px 16px; }
+  .field-row { flex-direction: column; align-items: stretch; }
+  .field-row label { min-width: auto; }
+  .field-row select, .field-row input { min-width: auto; }
+  .subject-entry { flex-wrap: wrap; }
+  .btn-group { flex-direction: column; }
+  .btn { width: 100%; justify-content: center; }
+}
+</style>
 
-/* Type selection cards (Step 0) */
-.pa-type-grid { display: flex; flex-direction: column; gap: 12px; }
-.pa-type-card {
-  display: flex; align-items: center; gap: 14px;
-  padding: 16px; border: 1.5px solid #e2e8f0; border-radius: 12px;
-  cursor: pointer; text-align: left; background: #fff; width: 100%;
-  font-family: 'Poppins', sans-serif;
-  transition: border-color .15s, background .15s, transform .15s, box-shadow .15s;
-}
-.pa-type-card:hover { border-color: #2563eb; background: #eff6ff; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(37,99,235,.1); }
-.pa-type-icon {
-  width: 44px; height: 44px; border-radius: 10px; background: #eff6ff;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0; color: #2563eb; transition: background .15s, color .15s;
-}
+=======
 .pa-type-card:hover .pa-type-icon { background: #2563eb; color: #fff; }
 .pa-type-text h4 { font-size: .92rem; font-weight: 700; color: #0f172a; margin: 0 0 3px; }
 .pa-type-text p  { font-size: .78rem; color: #64748b; margin: 0; line-height: 1.5; }
 .pa-type-arrow   { margin-left: auto; color: #94a3b8; flex-shrink: 0; }
 .pa-type-card.selected { border-color: #2563eb; background: #eff6ff; }
 .pa-type-card.selected .pa-type-icon { background: #2563eb; color: #fff; }
-.pa-type-card.bad { border-color: #ef4444; }
-.pa-skip-link {
-  display: block; margin: 14px auto 0; background: none; border: none;
-  color: #2563eb; font-size: .82rem; font-weight: 600; cursor: pointer;
-  text-decoration: underline; font-family: 'Poppins', sans-serif; padding: 4px;
-}
-.pa-skip-link:hover { color: #1d4ed8; }
-
-/* Privacy consent (Bursary) */
-.pa-privacy-box {
-  background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px;
-  padding: 14px 16px; max-height: 170px; overflow-y: auto;
-  font-size: .79rem; color: #475569; line-height: 1.65; margin-bottom: 16px;
-  font-family: 'Poppins', sans-serif;
-}
-.pa-privacy-box p { margin-bottom: 8px; }
-.pa-privacy-box p:last-child { margin-bottom: 0; }
-.pa-consent {
-  display: flex; align-items: flex-start; gap: 10px;
-  padding: 12px 14px; border: 1.5px solid #e2e8f0; border-radius: 9px;
-  cursor: pointer; transition: border-color .15s, background .15s;
-}
-.pa-consent:hover { border-color: #2563eb; background: #eff6ff; }
-.pa-consent.bad   { border-color: #dc2626; background: #fff5f5; }
-.pa-consent input[type=checkbox] { margin-top: 2px; accent-color: #2563eb; width: 16px; height: 16px; flex-shrink: 0; }
-.pa-consent span  { font-size: .84rem; color: #374151; line-height: 1.55; }
-.pa-consent a     { color: #2563eb; font-weight: 600; text-decoration: none; }
-.pa-consent a:hover { text-decoration: underline; }
-
-/* Bursary: how-to-apply / required documents */
-.pa-howto-steps { counter-reset: pahow; display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; list-style: none; }
-.pa-howto-steps li {
-  counter-increment: pahow; position: relative;
-  padding: 10px 14px 10px 42px; background: #eff6ff; border-radius: 9px;
-  font-size: .84rem; color: #1e3a8a; font-family: 'Poppins', sans-serif; line-height: 1.5;
-}
-.pa-howto-steps li::before {
-  content: counter(pahow); position: absolute; left: 12px; top: 12px;
-  width: 20px; height: 20px; background: #2563eb; color: #fff; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center; font-size: .7rem; font-weight: 800;
-}
-.pa-docs-sub { font-size: .82rem; font-weight: 700; color: #0f172a; margin: 4px 0 10px; font-family: 'Poppins', sans-serif; }
-.pa-docs-list { list-style: none; display: flex; flex-direction: column; gap: 9px; margin-bottom: 4px; }
-.pa-docs-list li {
-  display: flex; align-items: flex-start; gap: 10px;
-  padding: 11px 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 9px;
-  font-size: .84rem; color: #374151; font-family: 'Poppins', sans-serif; line-height: 1.5;
-}
-.pa-docs-check {
-  width: 19px; height: 19px; border-radius: 50%; background: #dcfce7; color: #16a34a;
-  display: flex; align-items: center; justify-content: center;
-  font-size: .68rem; font-weight: 800; flex-shrink: 0; margin-top: 1px;
-}
 
 @media (max-width:600px) {
   .pa-g2 { grid-template-columns: 1fr; }
@@ -1052,13 +1998,12 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
     <div class="pa-hdr">
       <div class="pa-hdr-row">
         <div>
-          <h2 id="paTitle">Start Your Application</h2>
-          <p>Free to start — your details are saved as you go</p>
+          <h2 id="paTitle">What would you like to apply for?</h2>
         </div>
         <button class="pa-close" onclick="closePreApply()" aria-label="Close">&times;</button>
       </div>
 
-      <!-- University chip — shown once a university is selected -->
+      <!-- University chip -->
       <div class="pa-chip" id="paChip">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
              stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
@@ -1068,12 +2013,12 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
         <span id="paChipName"></span>
       </div>
 
-      <!-- Progress -->
-      <div class="pa-prog-labels">
-        <span id="paPT">Step 1 of 3 — Institution</span>
+      <!-- Progress bar -->
+      <div class="pa-prog-labels" id="paProgLabels" style="display:none;">
+        <span id="paPT">Step 1 of 3 — INSTITUTION</span>
         <span class="pct" id="paPP">33%</span>
       </div>
-      <div class="pa-prog-track">
+      <div class="pa-prog-track" id="paProgTrack" style="display:none;">
         <div class="pa-prog-fill" id="paPF" style="width:33%"></div>
       </div>
     </div>
@@ -1081,28 +2026,16 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
     <!-- Body -->
     <div class="pa-body" id="paBody">
 
-      <!-- ── Step 0: Application type ── -->
+      <!-- Step 0: Application type -->
       <div class="pa-step on" id="paS0">
-        <p class="pa-sh">What would you like to apply for?</p>
-        <p class="pa-ss">Choose an option below to get started — you can always come back and apply for something else later.</p>
         <div class="pa-type-grid">
           <button type="button" class="pa-type-card" onclick="paChooseType('uni')">
             <div class="pa-type-icon">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
             </div>
             <div class="pa-type-text">
-              <h4>University</h4>
-              <p>Apply to one of South Africa's public universities.</p>
-            </div>
-            <svg class="pa-type-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-          </button>
-          <button type="button" class="pa-type-card" onclick="paChooseType('tvet')">
-            <div class="pa-type-icon">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 9h18M8 20h8"/></svg>
-            </div>
-            <div class="pa-type-text">
-              <h4>TVET College</h4>
-              <p>Apply to a public TVET college for NCV or NATED courses.</p>
+              <h4>University / College</h4>
+              <p>Apply to an institution's programs</p>
             </div>
             <svg class="pa-type-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
           </button>
@@ -1119,41 +2052,17 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
         </div>
       </div>
 
-      <!-- ── Step: Bursary — Choose which bursary to apply for (external redirect) ── -->
-      <div class="pa-step" id="paSC">
-        <p class="pa-sh">Which bursary would you like to apply for?</p>
-        <p class="pa-ss">Select a bursary below — we'll open its official application page in a new tab so you can apply directly, and keep helping you track it here.</p>
-
-        <div class="pa-f">
-          <label class="pa-lbl" id="paBursaryLbl">Bursary <span class="pa-req">*</span></label>
-          <div class="pa-uni-wrap" id="paBursaryWrap">
-            <button type="button" class="pa-uni-trigger" id="paBursaryTrigger"
-                    onclick="paToggleBursaryPicker()" aria-haspopup="listbox">
-              <span id="paBursaryTriggerTxt">Select bursary…</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                   stroke="currentColor" stroke-width="2">
-                <path d="M6 9l6 6 6-6"/>
-              </svg>
-            </button>
-          </div>
-          <div class="pa-err" id="paEC">Please select a bursary above, or skip for now.</div>
-        </div>
-
-        <button type="button" class="pa-skip-link" onclick="paSkipChoose()">I haven't decided yet — skip for now</button>
-      </div>
-
-      <!-- ── Step: Institution (University or TVET) ── -->
+      <!-- Step 1: Institution -->
       <div class="pa-step" id="paS1">
-        <p class="pa-sh" id="paS1Heading">Which university are you applying to?</p>
-        <p class="pa-ss" id="paS1Sub">Select the South African university or college you want to apply to.</p>
+        <p class="pa-sh" id="paS1Heading">Select your institution</p>
+        <p class="pa-ss" id="paS1Sub">Choose the university or college you are applying to.</p>
 
         <div class="pa-f">
-          <label class="pa-lbl" id="paUniLbl">University  <span class="pa-req">*</span></label>
+          <label class="pa-lbl" id="paUniLbl">University / College <span class="pa-req">*</span></label>
           <div class="pa-uni-wrap" id="paUniWrap">
-            <!-- Trigger button -->
             <button type="button" class="pa-uni-trigger" id="paUniTrigger"
                     onclick="paTogglePicker()" aria-haspopup="listbox">
-              <span id="paUniTriggerTxt">Select university…</span>
+              <span id="paUniTriggerTxt">Select university or college…</span>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
                    stroke="currentColor" stroke-width="2">
                 <path d="M6 9l6 6 6-6"/>
@@ -1164,10 +2073,27 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
         </div>
       </div>
 
-      <!-- ── Step: Programs ── -->
+      <!-- Step 2: Experience -->
+      <div class="pa-step" id="paS3">
+        <p class="pa-sh" id="paS3Heading">Have you applied here before?</p>
+        <p class="pa-ss" id="paS3Sub">This helps us tailor the process for you.</p>
+        <div class="pa-rg">
+          <label class="pa-ro">
+            <input type="radio" name="paApp" value="no">
+            <span>No — this is my first time applying</span>
+          </label>
+          <label class="pa-ro">
+            <input type="radio" name="paApp" value="yes">
+            <span>Yes — I've applied before</span>
+          </label>
+        </div>
+        <div class="pa-err" id="paEA" style="margin-top:8px;">Please select an option.</div>
+      </div>
+
+      <!-- Step 3: Programs -->
       <div class="pa-step" id="paS2">
-        <p class="pa-sh">What would you like to study?</p>
-        <p class="pa-ss">Enter up to 3 programs. Your first choice and its course code are required.</p>
+        <p class="pa-sh">Your program choices</p>
+        <p class="pa-ss">Enter up to 3 programs. Program 1 and its code are required</p>
         <div class="pa-g2">
           <div class="pa-f">
             <label class="pa-lbl" for="paP1">Program 1 <span class="pa-req">*</span></label>
@@ -1198,60 +2124,105 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
         </div>
       </div>
 
-      <!-- ── Step: Bursary — Privacy consent ── -->
-      <div class="pa-step" id="paSBP">
-        <p class="pa-sh">Before we continue</p>
-        <p class="pa-ss">Bursary applications require us to share a few of your details with the funder. Please review and accept our privacy terms to continue.</p>
-        <div class="pa-privacy-box">
-          <p>By applying for a bursary through QueryCrest, you agree that the personal information you submit (including your name, contact details, academic results, and financial need) may be shared with the relevant bursary provider or funder for the sole purpose of processing your application.</p>
-          <p>Your information will never be sold to third parties, and you can request its removal at any time. Read our full <a href="pages/privacy.html" target="_blank" rel="noopener">Privacy Policy</a> for details on how we collect, use, and protect your data.</p>
+      <!-- Step 4: Credentials (ONLY for returning students) -->
+      <div class="pa-step" id="paS5">
+        <p class="pa-sh">Your student credentials</p>
+        <p class="pa-ss">Enter your existing student details.</p>
+        <div class="pa-f">
+          <label class="pa-lbl" for="studentNumber">Student Number <span class="pa-req">*</span></label>
+          <input class="pa-in" type="text" id="studentNumber" placeholder="e.g. 210012345">
+          <div class="pa-err" id="paESN">Required.</div>
         </div>
-        <label class="pa-consent" id="paConsentWrap">
-          <input type="checkbox" id="paPrivacyCheck">
-          <span>I have read and accept the <a href="pages/privacy.html" target="_blank" rel="noopener">Privacy Policy</a>, and I consent to my information being shared with bursary funders for application purposes.</span>
-        </label>
-        <div class="pa-err" id="paEPriv" style="margin-top:8px;">Please accept the Privacy Policy to continue.</div>
-      </div>
-
-      <!-- ── Step: Bursary — How to apply / required documents ── -->
-      <div class="pa-step" id="paSBD">
-        <p class="pa-sh">How bursary applications work</p>
-        <p class="pa-ss">Follow these steps and have your documents ready before you apply.</p>
-        <ol class="pa-howto-steps">
-          <li>Sign in or create your free QueryCrest account.</li>
-          <li>Browse bursaries matched to your field of study and eligibility.</li>
-          <li>Upload the required documents (listed below) once per profile — reuse them for every bursary you apply to.</li>
-          <li>Submit your application and track its status from your dashboard.</li>
-        </ol>
-        <p class="pa-docs-sub">Documents you'll typically need</p>
-        <ul class="pa-docs-list">
-          <li><span class="pa-docs-check">&#10003;</span> Certified copy of your South African ID or birth certificate</li>
-          <li><span class="pa-docs-check">&#10003;</span> Latest academic results (Matric certificate or most recent transcript)</li>
-          <li><span class="pa-docs-check">&#10003;</span> Proof of registration or university/TVET acceptance letter (if already accepted)</li>
-          <li><span class="pa-docs-check">&#10003;</span> Proof of household income (parent/guardian payslips, affidavit, or SASSA letter)</li>
-          <li><span class="pa-docs-check">&#10003;</span> Signed motivational letter explaining your financial need and goals</li>
-          <li><span class="pa-docs-check">&#10003;</span> Bank confirmation letter in your name (or parent/guardian's)</li>
-        </ul>
-      </div>
-
-      <!-- ── Step: Returning applicant? ── -->
-      <div class="pa-step" id="paS3">
-        <p class="pa-sh" id="paS3Heading">Have you applied here before?</p>
-        <p class="pa-ss" id="paS3Sub">This helps us tailor the process for you.</p>
-        <div class="pa-rg">
-          <label class="pa-ro">
-            <input type="radio" name="paApp" value="no">
-            <span>No — this is my first time applying</span>
-          </label>
-          <label class="pa-ro">
-            <input type="radio" name="paApp" value="yes">
-            <span>Yes — I have applied here before</span>
-          </label>
+        <div class="pa-f">
+          <label class="pa-lbl" for="itsPin">ITS PIN <span class="pa-req">*</span></label>
+          <input class="pa-in" type="password" id="itsPin" placeholder="Enter your ITS PIN">
+          <div class="pa-err" id="paEPN">Required.</div>
         </div>
-        <div class="pa-err" id="paEA" style="margin-top:8px;">Please select an option.</div>
+        <div class="pa-f">
+          <label class="pa-lbl" for="amPW">Password <span class="pa-req">*</span></label>
+          <input class="pa-in" type="password" id="amPW" placeholder="Portal password">
+          <div class="pa-err" id="paEPW">Required.</div>
+        </div>
+        <div class="pa-f">
+          <label class="pa-consent" id="paConsentWrap">
+            <input type="checkbox" id="consentReturning">
+            <span>I have read and accept the <a href="pages/privacy.html" target="_blank" rel="noopener">Privacy Policy</a> and consent to my data being processed.</span>
+          </label>
+          <div class="pa-err" id="paECR" style="margin-top:8px;">Please accept the Privacy Policy to continue.</div>
+        </div>
       </div>
 
-      <!-- ── Step: Redirect message ── -->
+      <!-- Step: Bursary Application -->
+      <div class="pa-step" id="paSB">
+        <div class="pa-f" style="margin-bottom:18px;">
+          <label class="pa-lbl">Select Bursary <span class="pa-req">*</span></label>
+          <div class="pa-uni-wrap" id="paBursaryWrap">
+            <button type="button" class="pa-uni-trigger" id="paBursaryTrigger"
+                    onclick="paToggleBursaryPicker()" aria-haspopup="listbox">
+              <span id="paBursaryTriggerTxt">Select bursary&hellip;</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2">
+                <path d="M6 9l6 6 6-6"/>
+              </svg>
+            </button>
+          </div>
+          <div class="pa-err" id="paEC">Please select a bursary.</div>
+        </div>
+
+        <!-- Documents info alert -->
+        <div class="pa-alert info" style="margin-bottom:16px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12.01" y2="8"/><line x1="12" y1="12" x2="12" y2="16"/></svg>
+          <div>
+            <h4>Documents you'll likely need</h4>
+            <p style="margin-top:4px;">External bursary providers commonly require:</p>
+            <ul style="margin:8px 0 6px;padding-left:18px;">
+              <li>South African ID document (Certified)</li>
+              <li>Latest academic results (Certified)</li>
+              <li>Parent(s) or guardian(s) ID documents (Certified)</li>
+              <li>Proof of university acceptance or registration (where applicable)</li>
+              <li>CV (required by some bursaries)</li>
+              <li>Proof of residence (Certified)</li>
+              <li>Parent(s) or guardian(s) bank statements</li>
+              <li>Proof of unemployment, SASSA grant confirmation, or payslip</li>
+              <li>Motivational letter (required by some bursaries)</li>
+            </ul>
+            <p>These are commonly required by external bursary providers. Please ensure they're uploaded in the <a href="javascript:void(0)" id="bsGoToDocsLink">Documents</a> section of your QueryCrest profile before submitting.</p>
+          </div>
+        </div>
+
+        <!-- Have you applied before -->
+        <div class="pa-f" style="margin-bottom:6px;">
+          <label class="pa-lbl">Have you applied for this bursary before?</label>
+          <div style="display:flex;gap:16px;margin-top:8px;">
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:.86rem;"><input type="radio" name="bsPrevApplied" value="no"> No</label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:.86rem;"><input type="radio" name="bsPrevApplied" value="yes"> Yes</label>
+          </div>
+          <div class="pa-err" id="paEP" style="margin-top:6px;">Please answer this question.</div>
+        </div>
+
+        <!-- Adviser notice -->
+        <div class="pa-alert warn" id="paAdviserNotice" style="display:none;margin-top:14px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <div><h4>We'll take it from here</h4><p>A QueryCrest adviser will contact you to collect your previous application details so that we can submit your bursary application on your behalf.</p></div>
+        </div>
+
+        <!-- Application fee -->
+        <div class="pa-fee" id="paFee">Application fee: <strong>unavailable</strong></div>
+
+        <!-- Promo code link -->
+        <button type="button" class="pa-promo-link" id="paPromoLink" onclick="paTogglePromo()">+ Have a promo code?</button>
+
+        <!-- Promo code input (hidden by default) -->
+        <div id="paPromoWrap" style="display:none;">
+          <div class="pa-promo-input-wrap">
+            <input class="pa-promo-input" id="paPromoCode" type="text" placeholder="Enter code">
+            <button type="button" class="pa-promo-apply-btn" onclick="paApplyPromo()">Apply</button>
+          </div>
+          <button type="button" class="pa-promo-link" onclick="paTogglePromo()" style="margin-top:8px;">− Hide promo code</button>
+        </div>
+      </div>
+
+      <!-- Step: Redirect message -->
       <div class="pa-step" id="paS4">
         <div class="pa-redirect-msg">
           <div class="pa-redirect-icon">✓</div>
@@ -1269,16 +2240,16 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
 
     </div>
 
-    <!-- Footer — hidden on step 4 -->
+    <!-- Footer -->
     <div class="pa-ftr" id="paFtr">
       <button class="pa-btn secondary" id="paBK" onclick="paBkBtn()">Cancel</button>
-      <button class="pa-btn primary"   id="paNX" onclick="paNtBtn()">Next →</button>
+      <button class="pa-btn primary"   id="paNX" onclick="paNtBtn()">Next</button>
     </div>
 
   </div>
 </div>
 
-<!-- University picker panel — lives outside the modal DOM/scroll container -->
+<!-- University picker panel -->
 <div class="pa-uni-panel" id="paUniPanel" role="listbox">
   <div class="pa-uni-search-wrap">
     <svg class="pa-uni-search-ico" width="14" height="14"
@@ -1286,13 +2257,14 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
       <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
     </svg>
     <input class="pa-uni-search" id="paUniSearch" type="text"
-           placeholder="Search universities…"
+           placeholder="Search universities and colleges…"
            oninput="paFilterUni()" onkeydown="paSearchKey(event)">
   </div>
   <div class="pa-uni-list" id="paUniList"></div>
+  <div class="pa-uni-empty" id="paUniEmpty">No universities or colleges found</div>
 </div>
 
-<!-- Bursary picker panel — same pattern as the university picker -->
+<!-- Bursary picker panel -->
 <div class="pa-uni-panel" id="paBursaryPanel" role="listbox">
   <div class="pa-uni-search-wrap">
     <svg class="pa-uni-search-ico" width="14" height="14"
@@ -1304,17 +2276,19 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
            oninput="paFilterBursary()" onkeydown="paBursarySearchKey(event)">
   </div>
   <div class="pa-uni-list" id="paBursaryList"></div>
+  <div class="pa-uni-empty" id="paBursaryEmpty">No bursaries found</div>
 </div>
 
 <!-- ── SCRIPT ──────────────────────────────────────────────── -->
 <script>
 (function () {
   var PA_KEY = 'qc_pre_apply';
-  var paUni  = { v: '', l: '' };
+  var paUni  = { v: '', l: '', type: '' };
   var paIsReturning     = false;
   var paChosenBursary = null;
+  var paPromoApplied = false;
 
-  /* Bursaries a user can pick to be redirected to the official application site */
+  /* Bursaries */
   var BURSARIES = [
     { id: 'nsfas',       name: 'NSFAS',                 url: 'https://www.nsfas.org.za' },
     { id: 'funza',       name: 'Funza Lushaka',          url: 'https://www.funza.co.za' },
@@ -1324,7 +2298,7 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
     { id: 'zabursaries', name: 'Zabursaries Database',   url: 'https://www.zabursaries.co.za' },
   ];
 
-  /* ── All 26 South African public universities (hardcoded — no endpoint fetch) ── */
+  /* Universities */
   var UNIVERSITIES = [
     { id:'uct',     name:'University of Cape Town',                    abbr:'UCT'    },
     { id:'wits',    name:'University of the Witwatersrand',            abbr:'Wits'   },
@@ -1353,7 +2327,7 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
     { id:'univen',  name:'University of Venda',                        abbr:'Univen' },
   ];
 
-  /* ── All 50 South African public TVET colleges (hardcoded — no endpoint fetch) ── */
+  /* TVET Colleges */
   var TVET_COLLEGES = [
     { id:'boland',       name:'Boland TVET College' },
     { id:'buffalocity',  name:'Buffalo City TVET College' },
@@ -1407,23 +2381,31 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
     { id:'western',      name:'Western TVET College' },
   ];
 
-  /* ── Build institution list in panel — source depends on selected type ── */
+  /* Build combined institution list */
   function buildUniList() {
     var list = document.getElementById('paUniList');
-    var source = paType === 'tvet' ? TVET_COLLEGES : UNIVERSITIES;
-    list.innerHTML = ''; // rebuild — the source can change between University and TVET
-    source.forEach(function (u) {
+    var combinedList = UNIVERSITIES.concat(TVET_COLLEGES);
+    list.innerHTML = '';
+    
+    combinedList.forEach(function (u) {
       var div = document.createElement('div');
       div.className = 'pa-uni-opt';
       div.setAttribute('role', 'option');
       div.dataset.value = u.id;
-      div.textContent = u.abbr ? (u.name + ' (' + u.abbr + ')') : u.name;
+      div.dataset.type = u.abbr ? 'university' : 'tvet';
+      
+      if (!u.abbr) {
+        div.textContent = u.name + ' (TVET College)';
+      } else {
+        div.textContent = u.name + ' (' + u.abbr + ')';
+      }
+      
       div.addEventListener('click', function () { paSelectUni(u); });
       list.appendChild(div);
     });
   }
 
-  /* ── Position the panel against the trigger, since it now lives outside the modal ── */
+  /* Position the panel */
   function paPositionPanel() {
     var trigger = document.getElementById('paUniTrigger');
     var panel   = document.getElementById('paUniPanel');
@@ -1434,7 +2416,7 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
     panel.style.width = r.width + 'px';
   }
 
-  /* ── Toggle picker panel ── */
+  /* Toggle picker panel */
   window.paTogglePicker = function () {
     buildUniList();
     var trigger = document.getElementById('paUniTrigger');
@@ -1462,8 +2444,7 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
     if (s) { s.value = ''; paFilterUni(); }
   }
 
-  /* Keep the panel aligned with the trigger if the window resizes while open,
-     and close it if the modal body is scrolled (so it never drifts out of place). */
+  /* Keep panel aligned on resize */
   window.addEventListener('resize', function () {
     var panel = document.getElementById('paUniPanel');
     if (panel && panel.classList.contains('open')) paPositionPanel();
@@ -1473,17 +2454,25 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
     if (body) body.addEventListener('scroll', paClosePicker);
   });
 
-  /* ── Filter list (no "No universities found" message — list is always complete) ── */
+  /* Filter list with empty state */
   window.paFilterUni = function () {
     var q = (document.getElementById('paUniSearch').value || '').toLowerCase().trim();
     var opts = document.querySelectorAll('.pa-uni-opt');
+    var visibleCount = 0;
+    
     opts.forEach(function (o) {
       var match = !q || o.textContent.toLowerCase().indexOf(q) > -1;
       o.classList.toggle('hid', !match);
+      if (match) visibleCount++;
     });
+    
+    var emptyEl = document.getElementById('paUniEmpty');
+    if (emptyEl) {
+      emptyEl.classList.toggle('on', visibleCount === 0);
+    }
   };
 
-  /* Search keyboard: Enter picks first visible */
+  /* Search keyboard */
   window.paSearchKey = function (e) {
     if (e.key === 'Escape') { paClosePicker(); return; }
     if (e.key === 'Enter') {
@@ -1492,60 +2481,85 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
     }
   };
 
-  /* ── Select an institution (university or TVET college) ── */
+  /* Select institution */
   function paSelectUni(u) {
-    paUni = { v: u.id, l: u.name };
+    paUni = { 
+      v: u.id, 
+      l: u.name,
+      type: u.abbr ? 'university' : 'tvet'
+    };
+    
     var trigger = document.getElementById('paUniTrigger');
     var triggerTxt = document.getElementById('paUniTriggerTxt');
     triggerTxt.textContent = u.name;
     trigger.classList.add('has-val');
     trigger.classList.remove('bad');
+    
     document.querySelectorAll('.pa-uni-opt').forEach(function (o) {
       o.classList.toggle('sel', o.dataset.value === u.id);
     });
+    
     document.getElementById('paEU').classList.remove('on');
     paClosePicker();
   }
 
-  /* Close picker on outside click (trigger OR the now-external panel) */
+  /* Close picker on outside click */
   document.addEventListener('click', function (e) {
     var wrap  = document.getElementById('paUniWrap');
     var panel = document.getElementById('paUniPanel');
     if (wrap && panel && !wrap.contains(e.target) && !panel.contains(e.target)) paClosePicker();
   });
 
-  /* ── Open / Close modal ── */
+  /* Open / Close modal */
   window.openPreApply = function () {
     document.getElementById('preApplyModal').classList.add('open');
+    document.body.classList.add('pa-modal-open');
     document.body.style.overflow = 'hidden';
     paResetState();
     showStep('type');
   };
   window.closePreApply = function () {
     document.getElementById('preApplyModal').classList.remove('open');
+    document.body.classList.remove('pa-modal-open');
     document.body.style.overflow = '';
     paClosePicker();
+    paCloseBursaryPicker();
   };
 
-  /* Reset all form state so re-opening the modal always starts clean */
+  /* Reset all form state */
   function paResetState() {
     paType = null;
-    paUni  = { v: '', l: '' };
+    paUni  = { v: '', l: '', type: '' };
     paIsReturning = false;
     paChosenBursary = null;
+    paPromoApplied = false;
     ['paP1','paC1','paP2','paC2','paP3','paC3'].forEach(function (id) {
       var el = g(id); if (el) el.value = '';
     });
+    ['studentNumber','itsPin','amPW'].forEach(function (id) {
+      var el = g(id); if (el) el.value = '';
+    });
     document.querySelectorAll('input[name="paApp"]').forEach(function (r) { r.checked = false; });
-    var pc = g('paPrivacyCheck'); if (pc) pc.checked = false;
+    document.querySelectorAll('input[name="bsPrevApplied"]').forEach(function (r) { r.checked = false; });
+    var consent = g('consentReturning'); if (consent) consent.checked = false;
+    var promoCode = g('paPromoCode'); if (promoCode) promoCode.value = '';
+    var promoWrap = g('paPromoWrap'); if (promoWrap) promoWrap.style.display = 'none';
+    var promoLink = g('paPromoLink'); if (promoLink) promoLink.textContent = '+ Have a promo code?';
+    var fee = g('paFee'); if (fee) fee.innerHTML = 'Application fee: <strong>unavailable</strong>';
     var trig = g('paUniTrigger'), trigTxt = g('paUniTriggerTxt');
     if (trig) trig.classList.remove('has-val', 'bad');
-    if (trigTxt) trigTxt.textContent = 'Select university…';
+    if (trigTxt) trigTxt.textContent = 'Select university or college…';
     var list = g('paUniList'); if (list) list.innerHTML = '';
+    var emptyEl = document.getElementById('paUniEmpty');
+    if (emptyEl) emptyEl.classList.remove('on');
     var bTrig = g('paBursaryTrigger'), bTrigTxt = g('paBursaryTriggerTxt');
     if (bTrig) bTrig.classList.remove('has-val', 'bad');
     if (bTrigTxt) bTrigTxt.textContent = 'Select bursary…';
     var bList = g('paBursaryList'); if (bList) bList.innerHTML = '';
+    var bEmpty = document.getElementById('paBursaryEmpty');
+    if (bEmpty) bEmpty.classList.remove('on');
+    var notice = document.getElementById('paAdviserNotice');
+    if (notice) notice.style.display = 'none';
     clearErrors();
   }
 
@@ -1560,30 +2574,71 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
     }
   });
 
-  /* ── Step management (flow is dependent on the chosen application type) ── */
-  var paType = null; // 'uni' | 'tvet' | 'bursary'
-  var paKey  = 'type'; // current step key
+  /* Radio change for bursary - show/hide adviser notice */
+  document.addEventListener('change', function(e) {
+    if (e.target.name === 'bsPrevApplied') {
+      var notice = document.getElementById('paAdviserNotice');
+      if (notice) {
+        notice.style.display = e.target.value === 'yes' ? 'flex' : 'none';
+      }
+    }
+  });
 
-  /* Ordered step keys per application type. 'type' and 'redirect' are shared by all. */
+  /* Promo code toggle */
+  window.paTogglePromo = function () {
+    var promoWrap = document.getElementById('paPromoWrap');
+    var promoLink = document.getElementById('paPromoLink');
+    if (promoWrap.style.display === 'none') {
+      promoWrap.style.display = 'block';
+      promoLink.textContent = '';
+    } else {
+      promoWrap.style.display = 'none';
+      promoLink.textContent = '+ Have a promo code?';
+    }
+  };
+
+  /* Apply promo code */
+  window.paApplyPromo = function () {
+    var code = document.getElementById('paPromoCode').value.trim();
+    if (code) {
+      paPromoApplied = true;
+      var fee = document.getElementById('paFee');
+      if (fee) fee.innerHTML = 'Application fee: <strong style="color:#16a34a;">R0.00 (Promo applied)</strong>';
+      document.getElementById('paPromoCode').value = '';
+      document.getElementById('paPromoWrap').style.display = 'none';
+      document.getElementById('paPromoLink').textContent = '+ Have a promo code?';
+    }
+  };
+
+  /* Step management */
+  var paType = null;
+  var paKey  = 'type';
+
   var FLOWS = {
-    uni:     ['type', 'inst', 'programs', 'returning', 'redirect'],
-    tvet:    ['type', 'inst', 'programs', 'returning', 'redirect'],
-    bursary: ['type', 'returning', 'choose', 'privacy', 'docs', 'redirect'],
+    uni:     ['type', 'inst', 'returning', 'programs', 'credentials', 'redirect'],
+    bursary: ['type', 'bursary', 'redirect'],
   };
 
-  /* Step element + label lookup */
   var STEP_META = {
-    type:      { el: 'paS0',  label: 'Application Type' },
-    inst:      { el: 'paS1',  label: null /* set dynamically */ },
-    programs:  { el: 'paS2',  label: 'Programs' },
-    returning: { el: 'paS3',  label: 'Experience' },
-    choose:    { el: 'paSC',  label: 'Choose Bursary' },
-    privacy:   { el: 'paSBP', label: 'Privacy' },
-    docs:      { el: 'paSBD', label: 'How to Apply' },
-    redirect:  { el: 'paS4',  label: 'Done' },
+    type:        { el: 'paS0',  label: 'Application Type' },
+    inst:        { el: 'paS1',  label: 'Institution' },
+    returning:   { el: 'paS3',  label: 'Experience' },
+    programs:    { el: 'paS2',  label: 'Programs' },
+    credentials: { el: 'paS5',  label: 'Credentials' },
+    bursary:     { el: 'paSB',  label: 'Bursary Application' },
+    redirect:    { el: 'paS4',  label: 'Done' },
   };
 
-  function currentFlow() { return FLOWS[paType] || FLOWS.uni; }
+  function currentFlow() { 
+    var flow = FLOWS[paType] || FLOWS.uni;
+    
+    /* If first-time university applicant, remove credentials from flow */
+    if (paType === 'uni' && !paIsReturning) {
+      return flow.filter(function(step) { return step !== 'credentials'; });
+    }
+    
+    return flow;
+  }
 
   function showStep(key) {
     paKey = key;
@@ -1594,69 +2649,86 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
     var el = document.getElementById(STEP_META[key].el);
     if (el) el.classList.add('on');
 
+    /* Footer visibility */
     var ftr = document.getElementById('paFtr');
-    if (key === 'redirect') {
-      if (ftr) ftr.style.display = 'none';
-      return;
+    if (key === 'type' || key === 'redirect') {
+      if (ftr) ftr.classList.remove('show');
+    } else {
+      if (ftr) ftr.classList.add('show');
     }
-    if (ftr) ftr.style.display = 'flex';
 
-    var total = flow.length - 1; // exclude the final redirect step from the counter
-    var stepNum = idx + 1;
+    /* Progress bar visibility - only for university flow */
+    var progLabels = document.getElementById('paProgLabels');
+    var progTrack = document.getElementById('paProgTrack');
+    if (paType === 'bursary' || key === 'type' || key === 'redirect') {
+      if (progLabels) progLabels.style.display = 'none';
+      if (progTrack) progTrack.style.display = 'none';
+    } else {
+      if (progLabels) progLabels.style.display = 'flex';
+      if (progTrack) progTrack.style.display = 'block';
+    }
+
+    /* Dynamic total based on returning status */
+    var total = paIsReturning ? 4 : 3;
+    var stepNum = idx;
     var pct = Math.round((stepNum / total) * 100);
 
     var label = STEP_META[key].label;
-    if (key === 'inst') label = paType === 'tvet' ? 'TVET College' : 'University';
-
-    document.getElementById('paPT').textContent = 'Step ' + stepNum + ' of ' + total + ' — ' + label;
-    document.getElementById('paPP').textContent  = pct + '%';
-    document.getElementById('paPF').style.width  = pct + '%';
-    var isFinalStep = (key === 'returning' && paType !== 'bursary') || key === 'docs';
-    document.getElementById('paNX').textContent  = isFinalStep ? 'Save & Continue →' : 'Next →';
-    document.getElementById('paBK').textContent  = key === 'type' ? 'Cancel' : '← Back';
-
-    /* Institution step: swap labels/placeholder for University vs TVET */
-    if (key === 'inst') {
-      var isT = paType === 'tvet';
-      g('paS1Heading').textContent = isT ? 'Which TVET college are you applying to?' : 'Which university are you applying to?';
-      g('paS1Sub').textContent     = isT ? 'Select the public TVET college you want to apply to.' : 'Select the South African university or college you want to apply to.';
-      g('paUniLbl').innerHTML      = (isT ? 'TVET College' : 'University / College') + ' <span class="pa-req">*</span>';
-      g('paUniTriggerTxt').textContent = paUni.l || (isT ? 'Select TVET college…' : 'Select university…');
+    
+    if (paType === 'uni') {
+      document.getElementById('paPT').textContent = 'Step ' + stepNum + ' of ' + total + ' — ' + label.toUpperCase();
+      document.getElementById('paPP').textContent  = pct + '%';
+      document.getElementById('paPF').style.width  = pct + '%';
     }
-
-    /* Dynamic "returning applicant" question, phrased for the chosen type */
-    if (key === 'returning') {
-      var heading = document.getElementById('paS3Heading');
-      var sub3    = document.getElementById('paS3Sub');
-      if (paType === 'bursary') {
-        heading.textContent = 'Is this your first time applying for a bursary?';
-        sub3.textContent = 'If you\u2019ve applied before, we\u2019ll take you straight to the bursary\u2019s official site so you can apply.';
+    
+    /* Button text */
+    if (paType === 'bursary') {
+      document.getElementById('paNX').textContent = 'Submit';
+      document.getElementById('paBK').textContent = 'Cancel';
+    } else {
+      var isFinalStep = (paIsReturning && key === 'credentials') || (!paIsReturning && key === 'programs');
+      document.getElementById('paNX').textContent = isFinalStep ? 'Submit' : 'Next';
+      if (idx === 1) {
+        document.getElementById('paBK').textContent = 'Cancel';
       } else {
-        heading.textContent = paUni.l
-          ? 'Have you applied to ' + paUni.l + ' before?'
-          : 'Have you applied here before?';
-        sub3.textContent = 'This helps us tailor the process for you.';
+        document.getElementById('paBK').textContent = 'Back';
       }
     }
 
-    /* Redirect step copy, tailored per type */
+    /* Institution step */
+    if (key === 'inst') {
+      g('paS1Heading').textContent = 'Select your institution';
+      g('paS1Sub').textContent = 'Choose the university or college you are applying to.';
+      g('paUniLbl').innerHTML = 'University / College <span class="pa-req">*</span>';
+      g('paUniTriggerTxt').textContent = paUni.l || 'Select university or college…';
+    }
+
+    /* Returning applicant question */
+    if (key === 'returning') {
+      var heading = document.getElementById('paS3Heading');
+      var sub3    = document.getElementById('paS3Sub');
+      heading.textContent = paUni.l
+        ? 'Have you applied to ' + paUni.l + ' before?'
+        : 'Have you applied here before?';
+      sub3.textContent = 'This helps us tailor the form.';
+    }
+
+    /* Redirect step copy */
     if (key === 'redirect') {
       var sub = document.getElementById('paRedirectSub');
       if (paType === 'bursary') {
-        sub.textContent = paChosenBursary
-          ? 'You\u2019ve opened ' + paChosenBursary.name + '\u2019s official application page in a new tab. Meanwhile, we\u2019re signing you in so your documents checklist is ready on your dashboard.'
-          : 'You\u2019re being taken to sign in so we can match your profile with bursary funders. Your documents checklist will be waiting for you on your dashboard.';
+        sub.textContent = 'Your bursary application has been submitted. We\'re signing you in so your documents checklist is ready on your dashboard.';
       } else {
-        sub.innerHTML = 'You\u2019re being taken to sign in so we can submit your application to <strong id="paRedirectUniName"></strong>. Your details will be pre-filled and ready to go.';
+        sub.innerHTML = 'You\'re being taken to sign in so we can submit your application to <strong id="paRedirectUniName"></strong>. Your details will be pre-filled and ready to go.';
         g('paRedirectUniName').textContent = paUni.l;
       }
     }
 
     var chip = document.getElementById('paChip');
-    if (key !== 'type' && key !== 'choose' && paUni.l && paType !== 'bursary') {
+    if (key !== 'type' && paUni.l && paType !== 'bursary') {
       document.getElementById('paChipName').textContent = paUni.l;
       chip.classList.add('on');
-    } else if (key !== 'type' && key !== 'choose' && paType === 'bursary' && paChosenBursary) {
+    } else if (key !== 'type' && paType === 'bursary' && paChosenBursary) {
       document.getElementById('paChipName').textContent = paChosenBursary.name;
       chip.classList.add('on');
     } else {
@@ -1664,34 +2736,43 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
     }
   }
 
-  /* ── Type selection (Step 0) ── */
+  /* Type selection */
   window.paChooseType = function (t) {
     paType = t;
     var flow = currentFlow();
-    showStep(flow[1]); // move to the step right after 'type'
+    showStep(flow[1]);
   };
 
   window.paNtBtn = function () {
     clearErrors();
-    if (paKey === 'choose')    return sChoose();
-    if (paKey === 'inst')      return sInst();
-    if (paKey === 'programs')  return sPrograms();
-    if (paKey === 'privacy')   return sPrivacy();
-    if (paKey === 'docs')      return sDocs();
-    if (paKey === 'returning') return sReturning();
+    if (paType === 'bursary') return sBursary();
+    if (paKey === 'inst')        return sInst();
+    if (paKey === 'returning')   return sReturning();
+    if (paKey === 'programs')    return sPrograms();
+    if (paKey === 'credentials') return sCredentials();
   };
 
   window.paBkBtn = function () {
     clearErrors();
-    if (paKey === 'type') { window.closePreApply(); return; }
-    /* First-time bursary applicants skip 'choose', so send them back to 'returning' not 'choose' */
-    if (paKey === 'privacy' && paType === 'bursary' && !paIsReturning) {
-      showStep('returning');
+    
+    if (paType === 'bursary') {
+      window.closePreApply();
       return;
     }
+    
     var flow = currentFlow();
     var idx  = flow.indexOf(paKey);
-    if (idx <= 0) { window.closePreApply(); return; }
+    
+    if (idx === 1) {
+      window.closePreApply();
+      return;
+    }
+    
+    if (idx <= 0) { 
+      window.closePreApply(); 
+      return; 
+    }
+    
     showStep(flow[idx - 1]);
   };
 
@@ -1701,8 +2782,7 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
     showStep(flow[idx + 1]);
   }
 
-  /* ── Bursary: choose one and get redirected to its official site ── */
-  /* ── Bursary picker (dropdown, same pattern as the university picker) ── */
+  /* Bursary picker */
   function buildBursaryList() {
     var list = document.getElementById('paBursaryList');
     if (!list) return;
@@ -1767,10 +2847,18 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
   window.paFilterBursary = function () {
     var q = (document.getElementById('paBursarySearch').value || '').toLowerCase().trim();
     var opts = document.querySelectorAll('#paBursaryPanel .pa-uni-opt');
+    var visibleCount = 0;
+    
     opts.forEach(function (o) {
       var match = !q || o.textContent.toLowerCase().indexOf(q) > -1;
       o.classList.toggle('hid', !match);
+      if (match) visibleCount++;
     });
+    
+    var emptyEl = document.getElementById('paBursaryEmpty');
+    if (emptyEl) {
+      emptyEl.classList.toggle('on', visibleCount === 0);
+    }
   };
 
   window.paBursarySearchKey = function (e) {
@@ -1793,34 +2881,35 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
     });
     var err = g('paEC'); if (err) err.classList.remove('on');
     paCloseBursaryPicker();
-
-    /* Open the real bursary application site in a new tab */
-    window.open(b.url, '_blank', 'noopener');
-
-    /* Give the selection a moment to register visually, then continue */
-    setTimeout(function () { paGoNext(); }, 450);
   }
 
-  /* Close picker on outside click (trigger OR the now-external panel) */
+  /* Close picker on outside click */
   document.addEventListener('click', function (e) {
     var wrap  = document.getElementById('paBursaryWrap');
     var panel = document.getElementById('paBursaryPanel');
     if (wrap && panel && !wrap.contains(e.target) && !panel.contains(e.target)) paCloseBursaryPicker();
   });
 
-  window.paSkipChoose = function () {
-    paChosenBursary = null;
-    paGoNext();
-  };
-
-  function sChoose() {
+  function sBursary() {
+    var ok = true;
+    
     if (!paChosenBursary) {
       var trig = document.getElementById('paBursaryTrigger');
       if (trig) trig.classList.add('bad');
       g('paEC').classList.add('on');
-      return;
+      ok = false;
     }
-    paGoNext();
+    
+    var prevApplied = document.querySelector('input[name="bsPrevApplied"]:checked');
+    if (!prevApplied) {
+      g('paEP').classList.add('on');
+      ok = false;
+    }
+    
+    if (!ok) return;
+    
+    paIsReturning = prevApplied.value === 'yes';
+    finishApplication();
   }
 
   function sInst() {
@@ -1832,29 +2921,6 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
     paGoNext();
   }
 
-  function sPrograms() {
-    var p1 = g('paP1').value.trim(), c1 = g('paC1').value.trim(), ok = true;
-    if (!p1) { g('paP1').classList.add('bad'); g('paEP1').classList.add('on'); ok = false; }
-    if (!c1) { g('paC1').classList.add('bad'); g('paEC1').classList.add('on'); ok = false; }
-    if (!ok) return;
-    paGoNext();
-  }
-
-  function sPrivacy() {
-    var checked = g('paPrivacyCheck').checked;
-    if (!checked) {
-      g('paConsentWrap').classList.add('bad');
-      g('paEPriv').classList.add('on');
-      return;
-    }
-    paGoNext();
-  }
-
-  function sDocs() {
-    /* Purely informational, and the last content step before redirecting */
-    finishApplication();
-  }
-
   function sReturning() {
     var sel = document.querySelector('input[name="paApp"]:checked');
     if (!sel) {
@@ -1863,45 +2929,71 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
       return;
     }
     paIsReturning = sel.value === 'yes';
+    paGoNext();
+  }
 
-    if (paType === 'bursary') {
-      /* Not their first time → let them pick a bursary and go apply on its real site */
-      if (paIsReturning) { showStep('choose'); return; }
-      /* First time → skip straight to privacy consent, no bursary chosen yet */
-      showStep('privacy');
-      return;
+  function sPrograms() {
+    var p1 = g('paP1').value.trim(), c1 = g('paC1').value.trim(), ok = true;
+    if (!p1) { g('paP1').classList.add('bad'); g('paEP1').classList.add('on'); ok = false; }
+    if (!c1) { g('paC1').classList.add('bad'); g('paEC1').classList.add('on'); ok = false; }
+    if (!ok) return;
+    
+    /* If returning student, go to credentials. If first-time, submit directly */
+    if (paIsReturning) {
+      showStep('credentials');
+    } else {
+      finishApplication();
     }
-    /* University / TVET: this is the final data step before redirecting */
+  }
+
+  function sCredentials() {
+    var sn = g('studentNumber').value.trim();
+    var pin = g('itsPin').value.trim();
+    var pw = g('amPW').value.trim();
+    var consent = g('consentReturning').checked;
+    var ok = true;
+    
+    if (!sn) { g('studentNumber').classList.add('bad'); g('paESN').classList.add('on'); ok = false; }
+    if (!pin) { g('itsPin').classList.add('bad'); g('paEPN').classList.add('on'); ok = false; }
+    if (!pw) { g('amPW').classList.add('bad'); g('paEPW').classList.add('on'); ok = false; }
+    if (!consent) { g('paConsentWrap').classList.add('bad'); g('paECR').classList.add('on'); ok = false; }
+    
+    if (!ok) return;
     finishApplication();
   }
 
   function finishApplication() {
-    /* Save to sessionStorage */
     var payload = {
       application_type:   paType,
       has_applied_before:  paIsReturning,
       attempt_type:        paIsReturning ? 'second_time' : 'first_time',
     };
     if (paType === 'bursary') {
-      payload.privacy_accepted = true;
       if (paChosenBursary) {
         payload.bursary_choice = paChosenBursary.name;
         payload.bursary_choice_url = paChosenBursary.url;
       }
+      if (paPromoApplied) {
+        payload.promo_applied = true;
+      }
     } else {
       payload.university_name = paUni.l;
       payload.university_id   = paUni.v;
-      payload.institution_kind = paType === 'tvet' ? 'tvet' : 'university';
+      payload.institution_kind = paUni.type || 'university';
       payload.programs      = [g('paP1').value.trim(), g('paP2').value.trim(), g('paP3').value.trim()].filter(Boolean);
       payload.course_codes  = [g('paC1').value.trim(), g('paC2').value.trim(), g('paC3').value.trim()].filter(Boolean);
+      /* Only save credentials for returning students */
+      if (paIsReturning) {
+        payload.student_number = g('studentNumber').value.trim();
+        payload.its_pin = g('itsPin').value.trim();
+        payload.portal_password = g('amPW').value.trim();
+      }
     }
     try { sessionStorage.setItem(PA_KEY, JSON.stringify(payload)); } catch (e) {}
     sessionStorage.setItem('qc_next_after_login', paType === 'bursary' ? 'bursary' : 'apply');
 
-    /* Show redirect message step */
     showStep('redirect');
 
-    /* Redirect after 2.8 seconds */
     setTimeout(function () {
       window.location.href = paType === 'bursary'
         ? 'account/login-signup.html?next=bursary'
@@ -1920,6 +3012,6 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
 
 })();
 </script>
-
+>>>>>>> fa24dc28ca07e99fa4afb75a14717498c76740b5
 </body>
 </html>
