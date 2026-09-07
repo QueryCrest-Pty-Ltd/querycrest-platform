@@ -1,0 +1,436 @@
+/* ============================================================
+   QUERYCREST ONBOARDING SYSTEM - STYLES (MOBILE FIXED)
+   ============================================================ */
+
+/* ----- OVERLAY ----- */
+#onboarding-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9998;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    pointer-events: none;
+    animation: overlayFadeIn 0.4s ease;
+}
+
+@keyframes overlayFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* ----- TARGET HIGHLIGHT ----- */
+#onboarding-highlight {
+    position: relative;
+    z-index: 9999;
+    border-radius: 6px;
+    box-shadow: 0 0 0 4px #667eea, 0 0 0 8px rgba(102, 126, 234, 0.3);
+    animation: highlightPulse 1.5s ease-in-out infinite;
+    pointer-events: none !important;
+    transition: all 0.3s ease;
+}
+
+#onboarding-highlight * {
+    pointer-events: none !important;
+}
+
+@keyframes highlightPulse {
+    0%, 100% { 
+        box-shadow: 0 0 0 4px #667eea, 0 0 0 8px rgba(102, 126, 234, 0.3); 
+    }
+    50% { 
+        box-shadow: 0 0 0 6px #667eea, 0 0 0 12px rgba(102, 126, 234, 0.15); 
+    }
+}
+
+/* ----- BUBBLE CONTAINER - DESKTOP ----- */
+#onboarding-bubble {
+    position: fixed;
+    z-index: 9999;
+    pointer-events: all;
+    max-width: 400px;
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.25);
+    display: none; /* Hidden by default, shown by JS */
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ----- BUBBLE CONTENT ----- */
+#onboarding-bubble h3 {
+    color: #1a202c;
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.3;
+}
+
+#onboarding-bubble p {
+    color: #4a5568;
+    font-size: 15px;
+    line-height: 1.7;
+    margin: 0 0 20px 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* ----- BUBBLE FOOTER ----- */
+#onboarding-bubble .bubble-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Poppins', sans-serif;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+#onboarding-bubble .step-counter {
+    color: #a0aec0;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+#onboarding-bubble .bubble-buttons {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* ----- ARROW ----- */
+.onboarding-arrow {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 14px solid transparent;
+    border-right: 14px solid transparent;
+    border-bottom: 14px solid #ffffff;
+    filter: drop-shadow(0 -2px 4px rgba(0, 0, 0, 0.05));
+}
+
+.onboarding-arrow.up {
+    bottom: -14px;
+    left: 50%;
+    transform: translateX(-50%) rotate(0deg);
+}
+
+.onboarding-arrow.down {
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%) rotate(180deg);
+}
+
+.onboarding-arrow.left {
+    right: -14px;
+    top: 50%;
+    transform: translateY(-50%) rotate(90deg);
+}
+
+.onboarding-arrow.right {
+    left: -14px;
+    top: 50%;
+    transform: translateY(-50%) rotate(-90deg);
+}
+
+/* ----- BUTTONS ----- */
+.onboarding-btn {
+    padding: 8px 18px;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: 'Poppins', sans-serif;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.onboarding-btn:hover {
+    transform: translateY(-2px);
+}
+
+.onboarding-btn:active {
+    transform: translateY(0px);
+}
+
+.onboarding-btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.onboarding-btn-primary:hover {
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.onboarding-btn-secondary {
+    background: #edf2f7;
+    color: #4a5568;
+}
+
+.onboarding-btn-secondary:hover {
+    background: #e2e8f0;
+}
+
+.onboarding-btn-skip {
+    background: none;
+    color: #a0aec0;
+    padding: 8px 12px;
+}
+
+.onboarding-btn-skip:hover {
+    color: #4a5568;
+    background: #f7fafc;
+}
+
+.onboarding-btn-finish {
+    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3);
+}
+
+.onboarding-btn-finish:hover {
+    box-shadow: 0 6px 20px rgba(72, 187, 120, 0.4);
+}
+
+/* ----- COMPLETION OVERLAY ----- */
+#onboarding-completion {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 20px;
+}
+
+#onboarding-completion.show {
+    display: flex;
+    animation: overlayFadeIn 0.5s ease;
+}
+
+.completion-card {
+    background: white;
+    border-radius: 20px;
+    padding: 48px 40px;
+    max-width: 500px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3);
+    animation: bubbleSlideIn 0.5s ease;
+}
+
+.completion-icon {
+    font-size: 64px;
+    margin-bottom: 16px;
+    display: block;
+}
+
+.completion-title {
+    color: #1a202c;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.completion-content {
+    color: #4a5568;
+    font-size: 16px;
+    line-height: 1.7;
+    margin-bottom: 24px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.completion-btn {
+    padding: 14px 40px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: 'Poppins', sans-serif;
+    box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+}
+
+.completion-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+}
+
+@keyframes bubbleSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* ============================================================
+   MOBILE RESPONSIVE - AGGRESSIVE OVERRIDES
+   ============================================================ */
+
+/* ----- MOBILE (< 768px) - FORCE BUBBLE TO SHOW ----- */
+@media (max-width: 768px) {
+    /* Force bubble to be at bottom center */
+    #onboarding-bubble {
+        position: fixed !important;
+        bottom: 20px !important;
+        top: auto !important;
+        left: 50% !important;
+        right: auto !important;
+        transform: translateX(-50%) !important;
+        width: calc(100% - 32px) !important;
+        max-width: 400px !important;
+        z-index: 9999 !important;
+        display: block !important;
+        background: white !important;
+        border-radius: 16px !important;
+        padding: 20px !important;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: all !important;
+        margin: 0 !important;
+        animation: none !important;
+    }
+    
+    /* Hide arrows on mobile */
+    .onboarding-arrow {
+        display: none !important;
+    }
+    
+    /* Mobile title */
+    #onboarding-bubble h3 {
+        font-size: 17px !important;
+        margin-bottom: 6px !important;
+    }
+    
+    /* Mobile content */
+    #onboarding-bubble p {
+        font-size: 14px !important;
+        line-height: 1.6 !important;
+        margin-bottom: 16px !important;
+    }
+    
+    /* Mobile footer */
+    #onboarding-bubble .bubble-footer {
+        flex-direction: column-reverse !important;
+        gap: 12px !important;
+        align-items: stretch !important;
+    }
+    
+    #onboarding-bubble .bubble-buttons {
+        width: 100% !important;
+        justify-content: center !important;
+    }
+    
+    #onboarding-bubble .bubble-buttons button {
+        flex: 1 !important;
+        text-align: center !important;
+        justify-content: center !important;
+        padding: 12px 16px !important;
+        font-size: 14px !important;
+        min-height: 44px !important;
+    }
+    
+    #onboarding-bubble .step-counter {
+        text-align: center !important;
+        font-size: 12px !important;
+    }
+    
+    /* Mobile completion modal */
+    .completion-card {
+        padding: 32px 24px !important;
+        margin: 0 16px !important;
+        width: calc(100% - 32px) !important;
+    }
+    
+    .completion-icon {
+        font-size: 48px !important;
+    }
+    
+    .completion-title {
+        font-size: 22px !important;
+    }
+    
+    .completion-content {
+        font-size: 15px !important;
+    }
+    
+    .completion-btn {
+        width: 100% !important;
+        padding: 14px 20px !important;
+    }
+    
+    /* Ensure overlay covers full screen */
+    #onboarding-overlay {
+        z-index: 9998 !important;
+    }
+}
+
+/* ----- SMALL MOBILE (< 480px) ----- */
+@media (max-width: 480px) {
+    #onboarding-bubble {
+        width: calc(100% - 24px) !important;
+        padding: 16px !important;
+        bottom: 12px !important;
+        border-radius: 12px !important;
+    }
+    
+    #onboarding-bubble h3 {
+        font-size: 16px !important;
+    }
+    
+    #onboarding-bubble p {
+        font-size: 13px !important;
+        line-height: 1.5 !important;
+        margin-bottom: 14px !important;
+    }
+    
+    #onboarding-bubble .bubble-buttons button {
+        padding: 10px 12px !important;
+        font-size: 13px !important;
+        min-height: 40px !important;
+    }
+}
+
+/* ============================================================
+   ACCESSIBILITY
+   ============================================================ */
+
+/* Focus styles for keyboard navigation */
+.onboarding-btn:focus-visible {
+    outline: 3px solid #667eea;
+    outline-offset: 2px;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+    #onboarding-bubble,
+    #onboarding-overlay,
+    #onboarding-highlight,
+    #onboarding-completion,
+    .completion-card {
+        animation: none !important;
+        transition: none !important;
+    }
+    
+    #onboarding-highlight {
+        animation: none !important;
+        box-shadow: 0 0 0 4px #667eea, 0 0 0 8px rgba(102, 126, 234, 0.3);
+    }
+}
