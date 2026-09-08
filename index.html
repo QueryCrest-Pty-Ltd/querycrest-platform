@@ -60,8 +60,7 @@ header h1{font-size:1.1rem;font-weight:700;color:#2563eb;white-space:nowrap;over
 }
 .top-marquee{background:#2563eb;color:#fff;padding:10px 0;font-size:.88rem;font-weight:500;margin-top:64px;}
 .hero{min-height:92vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:80px 24px 60px;background:linear-gradient(160deg,#0f172a 0%,#1e3a8a 60%,#2563eb 100%);position:relative;overflow:hidden;}
-.hero::after{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;}
-.hero-inner{position:relative;z-index:1;max-width:760px;margin:0 auto;}
+.hero-inner{position:relative;z-index:2;max-width:760px;margin:0 auto;}
 .hero-badge{display:inline-block;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.9);font-size:.82rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:7px 18px;border-radius:99px;margin-bottom:28px;}
 .hero h1{font-size:clamp(2.2rem,6vw,3.8rem);font-weight:800;color:#fff;line-height:1.15;margin-bottom:20px;letter-spacing:-.02em;}
 .hero h1 span{color:#93c5fd;}
@@ -75,6 +74,84 @@ header h1{font-size:1.1rem;font-weight:700;color:#2563eb;white-space:nowrap;over
 .hero-stat{color:#fff;text-align:center;}
 .hero-stat-number{font-size:2rem;font-weight:800;display:block;letter-spacing:-.02em;}
 .hero-stat-label{font-size:.85rem;color:rgba(255,255,255,.6);margin-top:2px;display:block;}
+
+/* ===== HERO CAROUSEL - FIXED DISSOLVE TRANSITION ===== */
+.hero-carousel {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hero-carousel .slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  animation: dissolve1 15s ease-in-out infinite;
+  will-change: opacity;
+}
+
+.hero-carousel .slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Overlay for better text readability */
+.hero-carousel .slide .overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  z-index: 1;
+}
+
+/* Individual dissolve animations for each slide */
+/* Slide 1: 0s - 5s visible, then fade out */
+@keyframes dissolve1 {
+  0% { opacity: 0; }
+  5% { opacity: 1; }        /* Fade in: 0-0.75s */
+  28% { opacity: 1; }       /* Hold: 0.75s-4.2s (3.45s hold) */
+  33% { opacity: 0; }       /* Fade out: 4.2s-5s */
+  100% { opacity: 0; }
+}
+
+/* Slide 2: 5s - 10s visible */
+@keyframes dissolve2 {
+  0% { opacity: 0; }
+  5% { opacity: 0; }
+  38% { opacity: 0; }
+  43% { opacity: 1; }       /* Fade in: 5s-5.75s */
+  66% { opacity: 1; }       /* Hold: 5.75s-9.2s (3.45s hold) */
+  71% { opacity: 0; }       /* Fade out: 9.2s-10s */
+  100% { opacity: 0; }
+}
+
+/* Slide 3: 10s - 15s visible, then loop back to slide 1 */
+@keyframes dissolve3 {
+  0% { opacity: 0; }
+  5% { opacity: 0; }
+  38% { opacity: 0; }
+  71% { opacity: 0; }
+  76% { opacity: 1; }       /* Fade in: 10s-10.75s */
+  99% { opacity: 1; }       /* Hold: 10.75s-14.2s (3.45s hold) */
+  100% { opacity: 0; }      /* Fade out: 14.2s-15s */
+}
+
+.hero-carousel .slide:nth-child(1) { animation-name: dissolve1; animation-delay: 0s; }
+.hero-carousel .slide:nth-child(2) { animation-name: dissolve2; animation-delay: 0s; }
+.hero-carousel .slide:nth-child(3) { animation-name: dissolve3; animation-delay: 0s; }
+
+/* Pause animation on hover */
+.hero-carousel:hover .slide {
+  animation-play-state: paused;
+}
+
+/* ===== END HERO CAROUSEL ===== */
+
 section{padding:96px 24px;}
 .section-label{display:inline-block;background:#eff6ff;color:#2563eb;font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:6px 16px;border-radius:99px;margin-bottom:14px;}
 .section-title{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;color:#0f172a;line-height:1.2;letter-spacing:-.02em;margin-bottom:14px;}
@@ -331,6 +408,73 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
   .checker-features { grid-template-columns: 1fr; gap: 10px; }
   .checker-feature { justify-content: flex-start; }
 }
+
+/* ===== RESPONSIVE CAROUSEL ===== */
+@media (max-width: 768px) {
+  .hero-carousel .slide {
+    animation-duration: 15s;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    min-height: 88vh;
+    padding: 60px 16px 40px;
+  }
+  .hero h1 {
+    font-size: clamp(1.8rem, 8vw, 2.4rem);
+  }
+  .hero p {
+    font-size: clamp(0.85rem, 3vw, 1rem);
+  }
+  .hero-stats {
+    gap: 20px;
+    margin-top: 32px;
+  }
+  .hero-stat-number {
+    font-size: 1.5rem;
+  }
+  .hero-stat-label {
+    font-size: 0.7rem;
+  }
+  .btn-hero-primary,
+  .btn-hero-outline {
+    padding: 12px 20px;
+    font-size: 0.88rem;
+  }
+  .hero-badge {
+    font-size: 0.7rem;
+    padding: 5px 14px;
+    margin-bottom: 18px;
+  }
+}
+
+@media (max-width: 380px) {
+  .hero {
+    min-height: 82vh;
+    padding: 50px 12px 32px;
+  }
+  .hero h1 {
+    font-size: clamp(1.5rem, 7vw, 1.8rem);
+  }
+  .hero-cta {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .btn-hero-primary,
+  .btn-hero-outline {
+    width: 100%;
+    max-width: 260px;
+    text-align: center;
+  }
+  .hero-stats {
+    gap: 12px;
+  }
+  .hero-stat-number {
+    font-size: 1.2rem;
+  }
+}
 </style>
 </head>
 <body>
@@ -352,14 +496,32 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
   </nav>
 </header>
 
-<!-- MARQUEE - FIXED WITH DEFAULT MESSAGE -->
+<!-- MARQUEE -->
 <div class="top-marquee" id="top-marquee">
   <marquee behavior="scroll" direction="left" scrollamount="6" id="marqueeContent">
     🎓 QueryCrest — Free prospectuses, bursaries, and application help for South African students. Visit QueryCrest.com today!
   </marquee>
 </div>
 
-<section class="hero">
+<!-- ===== HERO WITH FIXED DISSOLVE TRANSITION ===== -->
+<section class="hero" id="heroSection">
+  <!-- Carousel Background with dissolve transition -->
+  <div class="hero-carousel" id="heroCarousel" aria-hidden="true">
+    <div class="slide">
+      <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&q=80" alt="Students studying together" loading="lazy">
+      <div class="overlay"></div>
+    </div>
+    <div class="slide">
+      <img src="https://images.unsplash.com/photo-1606761568499-6d2451b23c66?w=1200&q=80" alt="University graduation ceremony" loading="lazy">
+      <div class="overlay"></div>
+    </div>
+    <div class="slide">
+      <img src="https://preply.com/wp-content/uploads/2023/10/group-of-college-students-talking.jpg" alt="College students talking" loading="lazy">
+      <div class="overlay"></div>
+    </div>
+  </div>
+
+  <!-- Hero Content -->
   <div class="hero-inner">
     <span class="hero-badge">South Africa's #1 Student Platform</span>
     <h1>Apply to University<br><span>Without the Stress</span></h1>
@@ -617,11 +779,10 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
   window.addEventListener("scroll",function(){btt.classList.toggle("visible",window.pageYOffset>300);});
   btt.addEventListener("click",function(e){e.preventDefault();window.scrollTo({top:0,behavior:"smooth"});});
 
-  /* MARQUEE - FIXED WITH FALLBACK */
+  /* MARQUEE */
   (function() {
     var marqueeContent = document.getElementById("marqueeContent");
     
-    // Set default message immediately (already in HTML, but ensure it's there)
     if (marqueeContent && !marqueeContent.textContent.trim()) {
       marqueeContent.textContent = '🎓 QueryCrest — Free prospectuses, bursaries, and application help for South African students. Visit QueryCrest.com today!';
     }
@@ -637,11 +798,9 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
         }
       } catch(e) {
         console.log('[marquee] Using default message - API unavailable');
-        // Keep the default message already set
       }
     }
 
-    // Try to fetch the marquee content
     fetchMarquee();
   })();
 
@@ -792,7 +951,6 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
       if (typeof window.openUCM === 'function') {
         window.openUCM();
       } else {
-        // Wait for the UCM script to load
         var attempts = 0;
         var maxAttempts = 10;
         var checkInterval = setInterval(function() {
@@ -802,7 +960,6 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
             window.openUCM();
           } else if (attempts >= maxAttempts) {
             clearInterval(checkInterval);
-            // Fallback: try to open modal directly
             var modal = document.getElementById('ucm_modal');
             if (modal) {
               modal.classList.add('show');
@@ -815,6 +972,92 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
       }
     });
   }
+
+  /* ===== HERO CAROUSEL - FIXED DISSOLVE ===== */
+  (function() {
+    var API_ENDPOINT = 'https://xkjsydeavdcarwkthppz.supabase.co/functions/v1/get-carousel-images';
+    var TIMEOUT_MS = 15000;
+    var carousel = document.getElementById('heroCarousel');
+
+    var fallbackImages = [
+      'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&q=80',
+      'https://images.unsplash.com/photo-1606761568499-6d2451b23c66?w=1200&q=80',
+      'https://preply.com/wp-content/uploads/2023/10/group-of-college-students-talking.jpg'
+    ];
+
+    function updateCarousel(images) {
+      if (!carousel || !images || images.length === 0) return;
+      
+      carousel.innerHTML = '';
+      
+      // Create slides with individual animations
+      images.forEach(function(imgUrl, index) {
+        var slide = document.createElement('div');
+        slide.className = 'slide';
+        
+        var img = document.createElement('img');
+        img.src = imgUrl;
+        img.alt = 'University campus scene';
+        img.loading = 'lazy';
+        
+        var overlay = document.createElement('div');
+        overlay.className = 'overlay';
+        
+        // Set animation based on position
+        if (index === 0) {
+          slide.style.animationName = 'dissolve1';
+        } else if (index === 1) {
+          slide.style.animationName = 'dissolve2';
+        } else if (index === 2) {
+          slide.style.animationName = 'dissolve3';
+        }
+        slide.style.animationDuration = '15s';
+        slide.style.animationTimingFunction = 'ease-in-out';
+        slide.style.animationIterationCount = 'infinite';
+        slide.style.animationDelay = '0s';
+        
+        slide.appendChild(img);
+        slide.appendChild(overlay);
+        carousel.appendChild(slide);
+      });
+    }
+
+    function fetchCarouselImages() {
+      var timeoutId = setTimeout(function() {
+        console.log('[carousel] API timeout after 15s, using fallback images');
+        updateCarousel(fallbackImages);
+      }, TIMEOUT_MS);
+
+      fetch(API_ENDPOINT)
+        .then(function(response) {
+          clearTimeout(timeoutId);
+          if (!response.ok) throw new Error('HTTP ' + response.status);
+          return response.json();
+        })
+        .then(function(data) {
+          if (data && data.images && Array.isArray(data.images) && data.images.length > 0) {
+            console.log('[carousel] Loaded ' + data.images.length + ' images from API');
+            updateCarousel(data.images);
+          } else {
+            console.log('[carousel] No images from API, using fallback');
+            updateCarousel(fallbackImages);
+          }
+        })
+        .catch(function(err) {
+          clearTimeout(timeoutId);
+          console.log('[carousel] API error: ' + err.message + ', using fallback');
+          updateCarousel(fallbackImages);
+        });
+    }
+
+    // Initialize with fallback images immediately
+    updateCarousel(fallbackImages);
+    
+    if (carousel) {
+      fetchCarouselImages();
+    }
+  })();
+
 })();
 </script>
 
@@ -1284,12 +1527,10 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
 
   // ---- wire up ----
   document.addEventListener('DOMContentLoaded', function() {
-    // Button on the checker section
     const openBtn = document.getElementById('ucm_open_btn_index');
     if (openBtn) {
       openBtn.addEventListener('click', openUCM);
     }
-    // Close button
     document.getElementById('ucm_close_btn').addEventListener('click', closeUCM);
     prevBtn.addEventListener('click', goPrev);
     nextBtn.addEventListener('click', goNext);
