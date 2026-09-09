@@ -975,7 +975,7 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
 
   /* ===== HERO CAROUSEL - FIXED DISSOLVE ===== */
   (function() {
-    var API_ENDPOINT = 'https://xkjsydeavdcarwkthppz.supabase.co/functions/v1/get-carousel-images';
+    var API_ENDPOINT = 'https://xkjsydeavdcarwkthppz.supabase.co/functions/v1/hero-carousel/list';
     var TIMEOUT_MS = 15000;
     var carousel = document.getElementById('heroCarousel');
 
@@ -1035,9 +1035,43 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
           return response.json();
         })
         .then(function(data) {
-          if (data && data.images && Array.isArray(data.images) && data.images.length > 0) {
-            console.log('[carousel] Loaded ' + data.images.length + ' images from API');
-            updateCarousel(data.images);
+
+          const imgs = []
+          const imgs_idx =[]
+          if(typeof data.urls[0] ==="object")
+          for(let i = 0; i < data.urls.length;i++){
+          if(typeof data.urls[i].order !=="undefined"){//if(data.urls[i].order){
+            
+            for(const item of data.urls){
+             imgs.push(item.link);
+             if(typeof item.order !=="undefined") imgs_idx.push(item.order);
+            }
+            imgs.length =0;
+            imgs_idx.sort()
+            
+            for(let k =0;k< imgs_idx.length;k++){
+             //alert(`imgs_idx: ${imgs_idx[k]}  data.urls.findIndex(url => url.order === imgs_idx[k] ) ${data.urls.findIndex(url => url.order === imgs_idx[k] )} `)
+             //if(imgs_idx[k] === data.urls[data.urls.findIndex(url => url.order === imgs_idx[k] )].order )imgs.push(data.urls[i].link);
+             if( data.urls.findIndex(url => url.order === imgs_idx[k] ) >=-1 && data.urls.findIndex(url => url.order === imgs_idx[k] ) <data.urls.length )imgs.push(data.urls[data.urls.findIndex(url => url.order === imgs_idx[k] )].link);
+
+            }
+
+
+          //}
+        }else {
+            //first set the timeout for the urls so that they get refreshed if timed out:
+            //setTimeout(fetchCarouselImages(),data.urls[0].TTL); no need for this since its public.
+            for(const link of data.urls[i].links){
+              imgs.push(link)
+            }
+            break;
+          }
+        }  
+               
+
+          if (data && imgs && Array.isArray(imgs) && imgs.length > 0) {
+            console.log('[carousel] Loaded ' + imgs.length + ' images from API');
+            updateCarousel(imgs);
           } else {
             console.log('[carousel] No images from API, using fallback');
             updateCarousel(fallbackImages);
@@ -1122,7 +1156,7 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
       const data = await response.json();
       return data;
     } catch (error) {
-      return [];
+      return {error:'failed to fetch institutions data',data:[]};
     }
   }
 
@@ -1135,7 +1169,7 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
       const data = await response.json();
       return data;
     } catch (error) {
-      return [];
+      return {error:'failed to fetch subjects data',data:[]};
     }
   }
 
@@ -1148,7 +1182,7 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
       const data = await response.json();
       return data;
     } catch (error) {
-      return [];
+      return {error:'failed to fetch qualifications data',data:[]};
     }
   }
 
@@ -1162,7 +1196,7 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
       const data_ = await response.json();
       return data_;
     } catch (error) {
-      return [];
+      return {error:'failed to fetch calculated APS data',data:[]};
     }
   }
 
