@@ -301,6 +301,51 @@ return {found:required_subjects,missing:missing_subjects,marks:marks_data};
 
 }
 
+
+async function getQualifiedQualifications(svc: ReturnType<typeof _SVC>,qualifications:any[],subjects){
+  const data = [] 
+  for(const item of qualifications){
+      const requirements = await getRequirements(svc,item.id);
+      if(requirements){
+      // not needed
+      //if((requirements.minimum_aps ===0 || requirements.minimum_aps === null)||(requirements.minimum_average ===0 || requirements.minimum_average === null))       return _json({ error: "We cannot verify eligibility for this qualification yet because the required admission data is unavailable",data:[]}, 400);
+      //if minimum_aps is not null if its null the they dont require the APS
+      if(!(requirements.minimum_aps === null)){
+      const aps = calculateAps(subjects,requirements)
+      
+
+      let required_mark_eligibility;
+      
+      const found_missing_subj = requiredSubjects(subjects,requirements);
+      //return for invalid data 
+
+      if(aps>=requirements.minimum_aps ){
+
+        required_mark_eligibility =true;
+        for(const entry of found_missing_subj.marks){
+        //return for invalid data 
+        //if(!(entry.required_mark >=0 && entry.required_mark <=100))       return _json({ error: "We cannot verify eligibility for this qualification yet because the required admission data is unavailable",data:[]}, 400);
+
+        if(entry.student_mark < entry.required_mark){
+          required_mark_eligibility =false;
+          }
+      }
+        if(found_missing_subj.missing.length ===0){
+          if(required_mark_eligibility)data.push(item.name)
+
+        }
+
+      }
+
+    }else {
+     data.push(item.name)
+    }
+       
+    }
+
+   }
+   return data;      
+}
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return _json("ok");//new Response("ok", { headers: CORS });
   try {
@@ -424,7 +469,6 @@ Deno.serve(async (req) => {
         return _json({error:"A maximum of 10 subjects allowed"},400);                
        }       
 
-      
 
       const requirements = await getRequirements(svc,qualifictionId);
 
@@ -449,7 +493,7 @@ Deno.serve(async (req) => {
       let req_details = "";
 
       const found_missing_subj = requiredSubjects(subjects,requirements);
-              //return for invalid data 
+      //return for invalid data 
 
       if(aps>=requirements.minimum_aps ){
         eligibility=true;
@@ -491,10 +535,21 @@ Deno.serve(async (req) => {
         aps_r = `Calculated APS: ${aps} FPS, minimum APS: ${requirements.minimum_aps } FPS , average APS: ${minimum_average_d} FPS`
        }else  aps_r = `Calculated APS: ${aps}, minimum APS: ${requirements.minimum_aps } , average APS: ${minimum_average_d}`
        const requirement = `${aps_r} and required subjects: ${requirements.subject_requirements.required} `;
+       let alt = null;
+       if(!eligibility||!required_mark_eligibility){
+        const qualifications =[]
+        const qualifications_data =  await   getQualifications(svc ,institutionId);
+        for(const item of qualifications_data){
+          qualifications.push(item)
+        }
+        alt = getQualifiedQualifications(svc,qualifications,subjects);
+        }
+
        const data = {aps:aps,average:average,eligibility:eligibility,reasons:reasons,requirements:requirement}
        //add record
        await setApsData(svc,data);
-       return _json({ error: "",data:data}, 200);
+       const data_d = {...data,alt:alt}
+       return _json({ error: "",data:data_d}, 200);
 
     }else {
 

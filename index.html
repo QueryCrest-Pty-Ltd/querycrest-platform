@@ -1036,9 +1036,9 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
         })
         .then(function(data) {
 
-          const imgs = []
+          let imgs = []
           const imgs_idx =[]
-          if(typeof data.urls[0] ==="object")
+          if(sessionStorage.getItem('hero-imgs') ===null)if(typeof data.urls[0] ==="object")
           for(let i = 0; i < data.urls.length;i++){
           if(typeof data.urls[i].order !=="undefined"){//if(data.urls[i].order){
             
@@ -1066,9 +1066,11 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
             }
             break;
           }
-        }  
+         // alert(imgs)
+        //sessionStorage.setItem('hero-imgs',[imgs]);
+        } else imgs = sessionStorage.getItem('hero-imgs')  
                
-
+          //alert(sessionStorage.getItem('hero-imgs'))
           if (data && imgs && Array.isArray(imgs) && imgs.length > 0) {
             console.log('[carousel] Loaded ' + imgs.length + ' images from API');
             updateCarousel(imgs);
@@ -1250,7 +1252,19 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
     const stepNames = ['Institution', 'Qualification', 'Subjects', 'Review & Check'];
     stepDisplay.textContent = `Step ${ucmStep+1} / ${totalSteps}`;
     stepNameDisplay.textContent = stepNames[ucmStep];
-    const Indata = await getInstitutionData();
+    let Indata =''
+    const InstitutionData = JSON.parse(sessionStorage.getItem('InstitutionData'));
+      //alert(JSON.parse(InstitutionData))    
+      //sessionStorage.clear('InstitutionData')
+      if(  InstitutionData  !== null){
+      for(const item of InstitutionData )UNIVERSITIES.push(item);}
+    else {
+      Indata = await getInstitutionData();
+
+      sessionStorage.setItem('InstitutionData', JSON.stringify(UNIVERSITIES))   
+      //alert(sessionStorage.getItem('InstitutionData'))
+
+    }
     let html = '';
 
     if (ucmStep === 0) {
@@ -1269,7 +1283,9 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
       `;
       if (Indata.length > 0) document.getElementById('ucmUniError').textContent = Indata;
     } else if (ucmStep === 1) {
+      if(document.getElementById('ucmUniSelect') !==null){
       institutionId = UNIVERSITIES[UNIVERSITIES.findIndex(uni => uni?.name === document.getElementById('ucmUniSelect').value)].id;
+      }
       const Qudata = await getQualificationData(institutionId);
       html = `
         <div class="step-title"><span class="badge-step">2</span> Choose your Qualification</div>
@@ -1287,7 +1303,17 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
       if (Qudata.length > 0) document.getElementById('ucmQualError').textContent = Qudata;
     } else if (ucmStep === 2) {
       qualifictionId = QUALIFICATIONS[QUALIFICATIONS.findIndex(uni => uni.name === ucmQual)].id;
-      const Subdata = await getSubjectData();
+      let Subdata ='' 
+
+      const SubjectData = JSON.parse( sessionStorage.getItem('SubjectData'));
+
+      if(  SubjectData  !==null){
+      for(const item of SubjectData )SUBJECTS.push(item);}
+      else{
+
+       Subdata = await getSubjectData();
+       sessionStorage.setItem('SubjectData',JSON.stringify(SUBJECTS))
+        }
       if (ucmSubjects.length === 0) {
         ucmSubjects = Array(5).fill().map(() => ({ subject: '', mark: '' }));
       }
@@ -1521,6 +1547,7 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
         resultPanel.className = 'result-box red';
         resultTitle.innerHTML = `<span class="red">Error</span>`;
         resultDetail.textContent = `${aps_data.error}`;
+        return;
       }
     }
     const avg = aps_data.data.average;
@@ -1533,7 +1560,7 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
     let details = aps_data.data.requirements || '';
     details += aps_data.data.reasons || '';
     details += ` · Institution: ${uni} · Qualification: ${qual}`;
-    details += ` · ${eligible ? 'All requirements met.' : 'Please review the requirements above.'}`;
+    details += ` · ${eligible ? 'All requirements met.' : `Please review the requirements above. alternative qualifications that you qualify for ${JSON.stringify(aps_data.data.alt)}`}`;
     resultDetail.textContent = details;
   }
 

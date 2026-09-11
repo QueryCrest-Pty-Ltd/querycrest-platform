@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<style>
+.hero{min-height:92vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:80px 24px 60px;background:linear-gradient(160deg,#0f172a 0%,#1e3a8a 60%,#2563eb 100%);position:relative;overflow:hidden;}
+.hero-inner{position:relative;z-index:2;max-width:760px;margin:0 auto;}
+.hero-badge{display:inline-block;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.9);font-size:.82rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:7px 18px;border-radius:99px;margin-bottom:28px;}
+.hero h1{font-size:clamp(2.2rem,6vw,3.8rem);font-weight:800;color:#fff;line-height:1.15;margin-bottom:20px;letter-spacing:-.02em;}
+.hero h1 span{color:#93c5fd;}
+.hero p{font-size:clamp(1rem,2.5vw,1.2rem);color:rgba(255,255,255,.75);line-height:1.7;max-width:580px;margin:0 auto 40px;}
+.hero-cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.btn-hero-primary{padding:15px 32px;background:#fff;color:#2563eb;font-size:1rem;font-weight:700;border:none;border-radius:14px;cursor:pointer;text-decoration:none;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 20px rgba(0,0,0,.2);display:inline-block;}
+.btn-hero-primary:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,0,0,.28);}
+.btn-hero-outline{padding:15px 32px;background:transparent;color:#fff;font-size:1rem;font-weight:600;border:2px solid rgba(255,255,255,.4);border-radius:14px;cursor:pointer;text-decoration:none;transition:border-color .2s,background .2s;display:inline-block;}
+.btn-hero-outline:hover{border-color:#fff;background:rgba(255,255,255,.06);}
+.hero-stats{display:flex;gap:40px;justify-content:center;margin-top:56px;flex-wrap:wrap;}
+.hero-stat{color:#fff;text-align:center;}
+.hero-stat-number{font-size:2rem;font-weight:800;display:block;letter-spacing:-.02em;}
+.hero-stat-label{font-size:.85rem;color:rgba(255,255,255,.6);margin-top:2px;display:block;}
+
+/* ===== HERO CAROUSEL - FIXED DISSOLVE TRANSITION ===== */
+.hero-carousel {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hero-carousel .slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  animation: dissolve1 15s ease-in-out infinite;
+  will-change: opacity;
+}
+
+.hero-carousel .slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Overlay for better text readability */
+.hero-carousel .slide .overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  z-index: 1;
+}
+
+/* Individual dissolve animations for each slide */
+/* Slide 1: 0s - 5s visible, then fade out */
+@keyframes dissolve1 {
+  0% { opacity: 0; }
+  5% { opacity: 1; }        /* Fade in: 0-0.75s */
+  28% { opacity: 1; }       /* Hold: 0.75s-4.2s (3.45s hold) */
+  33% { opacity: 0; }       /* Fade out: 4.2s-5s */
+  100% { opacity: 0; }
+}
+
+/* Slide 2: 5s - 10s visible */
+@keyframes dissolve2 {
+  0% { opacity: 0; }
+  5% { opacity: 0; }
+  38% { opacity: 0; }
+  43% { opacity: 1; }       /* Fade in: 5s-5.75s */
+  66% { opacity: 1; }       /* Hold: 5.75s-9.2s (3.45s hold) */
+  71% { opacity: 0; }       /* Fade out: 9.2s-10s */
+  100% { opacity: 0; }
+}
+
+/* Slide 3: 10s - 15s visible, then loop back to slide 1 */
+@keyframes dissolve3 {
+  0% { opacity: 0; }
+  5% { opacity: 0; }
+  38% { opacity: 0; }
+  71% { opacity: 0; }
+  76% { opacity: 1; }       /* Fade in: 10s-10.75s */
+  99% { opacity: 1; }       /* Hold: 10.75s-14.2s (3.45s hold) */
+  100% { opacity: 0; }      /* Fade out: 14.2s-15s */
+}
+
+.hero-carousel .slide:nth-child(1) { animation-name: dissolve1; animation-delay: 0s; }
+.hero-carousel .slide:nth-child(2) { animation-name: dissolve2; animation-delay: 0s; }
+.hero-carousel .slide:nth-child(3) { animation-name: dissolve3; animation-delay: 0s; }
+
+/* Pause animation on hover */
+.hero-carousel:hover .slide {
+  animation-play-state: paused;
+}
+
+/* ===== END HERO CAROUSEL ===== */
+
+
+@media (max-width: 380px) {
+  .hero {
+    min-height: 82vh;
+    padding: 50px 12px 32px;
+  }
+  .hero h1 {
+    font-size: clamp(1.5rem, 7vw, 1.8rem);
+  }
+  .hero-cta {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .btn-hero-primary,
+  .btn-hero-outline {
+    width: 100%;
+    max-width: 260px;
+    text-align: center;
+  }
+  .hero-stats {
+    gap: 12px;
+  }
+  .hero-stat-number {
+    font-size: 1.2rem;
+  }
+}
+</style>
+</head>
+<body>
+<!-- ===== HERO WITH FIXED DISSOLVE TRANSITION ===== -->
+<section class="hero" id="heroSection">
+  <!-- Carousel Background with dissolve transition -->
+  <div class="hero-carousel" id="heroCarousel" aria-hidden="true">
+    <div class="slide">
+      <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&q=80" alt="Students studying together" loading="lazy">
+      <div class="overlay"></div>
+    </div>
+    <div class="slide">
+      <img src="https://images.unsplash.com/photo-1606761568499-6d2451b23c66?w=1200&q=80" alt="University graduation ceremony" loading="lazy">
+      <div class="overlay"></div>
+    </div>
+    <div class="slide">
+      <img src="https://preply.com/wp-content/uploads/2023/10/group-of-college-students-talking.jpg" alt="College students talking" loading="lazy">
+      <div class="overlay"></div>
+    </div>
+  </div>
+
+  <!-- Hero Content -->
+  <div class="hero-inner">
+    <span class="hero-badge">South Africa's #1 Student Platform</span>
+    <h1>Apply to University<br><span>Without the Stress</span></h1>
+    <p>QueryCrest guides South African students through every step &mdash; from finding the right programme to submitting a successful application.</p>
+    <div class="hero-cta">
+      <a href="#" class="btn-hero-primary" onclick="openPreApply();return false;">Start Your Application</a>
+      <a href="account/plans.html" class="btn-hero-outline">View Plans</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><span class="hero-stat-number">50+</span><span class="hero-stat-label">Universities Covered</span></div>
+      <div class="hero-stat"><span class="hero-stat-number">From R60</span><span class="hero-stat-label">Once-Off Payment</span></div>
+      <div class="hero-stat"><span class="hero-stat-number">24/7</span><span class="hero-stat-label">Support Available</span></div>
+    </div>
+  </div>
+</section>
+
+
+<script>
+  /* ===== HERO CAROUSEL - FIXED DISSOLVE ===== */
+  (function() {
+    var API_ENDPOINT = 'https://xkjsydeavdcarwkthppz.supabase.co/functions/v1/hero-carousel/list';
+    var TIMEOUT_MS = 15000;
+    var carousel = document.getElementById('heroCarousel');
+
+    var fallbackImages = [
+      'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&q=80',
+      'https://images.unsplash.com/photo-1606761568499-6d2451b23c66?w=1200&q=80',
+      'https://preply.com/wp-content/uploads/2023/10/group-of-college-students-talking.jpg'
+    ];
+
+    function updateCarousel(images) {
+      if (!carousel || !images || images.length === 0) return;
+      
+      carousel.innerHTML = '';
+      
+      // Create slides with individual animations
+      images.forEach(function(imgUrl, index) {
+        var slide = document.createElement('div');
+        slide.className = 'slide';
+        
+        var img = document.createElement('img');
+        img.src = imgUrl;
+        img.alt = 'University campus scene';
+        img.loading = 'lazy';
+        
+        var overlay = document.createElement('div');
+        overlay.className = 'overlay';
+        
+        // Set animation based on position
+        if (index === 0) {
+          slide.style.animationName = 'dissolve1';
+        } else if (index === 1) {
+          slide.style.animationName = 'dissolve2';
+        } else if (index === 2) {
+          slide.style.animationName = 'dissolve3';
+        }
+        slide.style.animationDuration = '15s';
+        slide.style.animationTimingFunction = 'ease-in-out';
+        slide.style.animationIterationCount = 'infinite';
+        slide.style.animationDelay = '0s';
+        
+        slide.appendChild(img);
+        slide.appendChild(overlay);
+        carousel.appendChild(slide);
+      });
+    }
+
+    function fetchCarouselImages() {
+      var timeoutId = setTimeout(function() {
+        console.log('[carousel] API timeout after 15s, using fallback images');
+        updateCarousel(fallbackImages);
+      }, TIMEOUT_MS);
+
+      fetch(API_ENDPOINT)
+        .then(function(response) {
+          clearTimeout(timeoutId);
+          if (!response.ok) throw new Error('HTTP ' + response.status);
+          return response.json();
+        })
+        .then(function(data) {
+
+          let imgs = []
+          const imgs_idx =[]
+          if(sessionStorage.getItem('hero-imgs') ===null)if(typeof data.urls[0] ==="object")
+          for(let i = 0; i < data.urls.length;i++){
+          if(typeof data.urls[i].order !=="undefined"){//if(data.urls[i].order){
+            
+            for(const item of data.urls){
+             imgs.push(item.link);
+             if(typeof item.order !=="undefined") imgs_idx.push(item.order);
+            }
+            imgs.length =0;
+            imgs_idx.sort()
+            
+            for(let k =0;k< imgs_idx.length;k++){
+             //alert(`imgs_idx: ${imgs_idx[k]}  data.urls.findIndex(url => url.order === imgs_idx[k] ) ${data.urls.findIndex(url => url.order === imgs_idx[k] )} `)
+             //if(imgs_idx[k] === data.urls[data.urls.findIndex(url => url.order === imgs_idx[k] )].order )imgs.push(data.urls[i].link);
+             if( data.urls.findIndex(url => url.order === imgs_idx[k] ) >=-1 && data.urls.findIndex(url => url.order === imgs_idx[k] ) <data.urls.length )imgs.push(data.urls[data.urls.findIndex(url => url.order === imgs_idx[k] )].link);
+
+            }
+
+
+          //}
+        }else {
+            //first set the timeout for the urls so that they get refreshed if timed out:
+            //setTimeout(fetchCarouselImages(),data.urls[0].TTL); no need for this since its public.
+            for(const link of data.urls[i].links){
+              imgs.push(link)
+            }
+            break;
+          }
+         // alert(imgs)
+        //sessionStorage.setItem('hero-imgs',[imgs]);
+        } else imgs = sessionStorage.getItem('hero-imgs')  
+               
+          //alert(sessionStorage.getItem('hero-imgs'))
+          if (data && imgs && Array.isArray(imgs) && imgs.length > 0) {
+            console.log('[carousel] Loaded ' + imgs.length + ' images from API');
+            updateCarousel(imgs);
+          } else {
+            console.log('[carousel] No images from API, using fallback');
+            updateCarousel(fallbackImages);
+          }
+        })
+        .catch(function(err) {
+          clearTimeout(timeoutId);
+          console.log('[carousel] API error: ' + err.message + ', using fallback');
+          updateCarousel(fallbackImages);
+        });
+    }
+
+    // Initialize with fallback images immediately
+    updateCarousel(fallbackImages);
+    
+    if (carousel) {
+      fetchCarouselImages();
+    }
+  })();
+
+
+
+</script>
+</body>
+</html>
