@@ -1,0 +1,1340 @@
+<style>
+/* UCM modal styles */
+#ucm_modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 9999;
+  transition: opacity 0.2s;
+}
+#ucm_modal.show {
+  display: flex;
+}
+.ucm_content {
+  background: #fff;
+  border-radius: 28px;
+  padding: 28px 26px;
+  max-width: 700px;
+  width: 100%;
+  max-height: 92vh;
+  overflow-y: auto;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.2);
+  animation: slideUp 0.25s ease;
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.ucm_header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+.ucm_header h2 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #0b1e3a;
+}
+.ucm_header p {
+  font-size: 0.8rem;
+  color: #6b7280;
+  margin-top: 2px;
+}
+.ucm_close {
+  background: #f1f4f9;
+  border: none;
+  border-radius: 40px;
+  padding: 6px 18px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: #1f2a44;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  transition: 0.15s;
+}
+.ucm_close:hover {
+  background: #e2e8f0;
+}
+.step-indicator {
+  display: flex;
+  justify-content: space-between;
+  background: #f0f4fe;
+  padding: 0.4rem 1.2rem;
+  border-radius: 60px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: #1f2a44;
+  margin-bottom: 1.5rem;
+}
+.step-indicator span:last-child {
+  background: white;
+  padding: 0.2rem 1rem;
+  border-radius: 40px;
+  color: #3b7cff;
+}
+.checker-panel {
+  background: #f9fafc;
+  border-radius: 1.5rem;
+  padding: 1.8rem 1.8rem 1.5rem;
+  border: 1px solid #e9edf4;
+  min-height: 240px;
+}
+.step-title {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #0b1e3a;
+  margin-bottom: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.badge-step {
+  background: #3b7cff;
+  color: white;
+  border-radius: 40px;
+  padding: 0.1rem 0.9rem;
+  font-size: 0.7rem;
+}
+.field-group { display: flex; flex-direction: column; gap: 0.9rem; }
+.field-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.2rem;
+  align-items: center;
+}
+.field-row label {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #1f2a44;
+  min-width: 100px;
+}
+.field-row select,
+.field-row input {
+  flex: 1;
+  min-width: 180px;
+  padding: 0.65rem 1rem;
+  border-radius: 14px;
+  border: 1.5px solid #dce2ec;
+  background: white;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.9rem;
+  transition: 0.15s;
+  color: #0b1e3a;
+}
+.field-row select:focus,
+.field-row input:focus {
+  border-color: #3b7cff;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 124, 255, 0.15);
+}
+.subject-entry {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 0.8rem;
+  background: white;
+  padding: 0.5rem 1rem 0.5rem 1.2rem;
+  border-radius: 40px;
+  border: 1px solid #e3e9f2;
+  margin-bottom: 6px;
+}
+.subject-entry select {
+  flex: 2;
+  min-width: 130px;
+  border: none;
+  background: transparent;
+  padding: 0.3rem 0.2rem;
+  font-weight: 500;
+  font-size: 0.85rem;
+  border-bottom: 1.5px dashed #d0d9e8;
+  border-radius: 0;
+  font-family: 'Poppins', sans-serif;
+}
+.subject-entry select:focus {
+  border-bottom-color: #3b7cff;
+  outline: none;
+}
+.subject-entry input {
+  width: 80px;
+  border: none;
+  background: transparent;
+  padding: 0.3rem 0.2rem;
+  font-weight: 500;
+  font-size: 0.85rem;
+  border-bottom: 1.5px dashed #d0d9e8;
+  border-radius: 0;
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
+}
+.subject-entry input:focus {
+  border-bottom-color: #3b7cff;
+  outline: none;
+}
+.subject-entry .idx {
+  font-weight: 600;
+  color: #4b5a74;
+  font-size: 0.75rem;
+  width: 22px;
+}
+.subject-actions {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-top: 0.8rem;
+}
+.subject-actions button {
+  padding: 0.3rem 1.2rem;
+  font-size: 0.8rem;
+  border-radius: 40px;
+  border: 1.5px solid #dce2ec;
+  background: white;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  transition: 0.15s;
+}
+.subject-actions button:hover {
+  background: #f0f4fe;
+  border-color: #b0c4e0;
+}
+.subject-actions button:disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+.text-muted {
+  font-size: 0.8rem;
+  color: #6b7a93;
+  align-self: center;
+}
+.btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.8rem;
+  margin-top: 1.5rem;
+}
+.btn {
+  padding: 0.6rem 1.5rem;
+  border-radius: 40px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  border: none;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  transition: 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn-outline {
+  background: #fff;
+  border: 1.5px solid #dce2ec;
+  color: #1f2a44;
+}
+.btn-outline:hover:not(:disabled) {
+  border-color: #3b7cff;
+  color: #3b7cff;
+}
+.btn-primary {
+  background: #2563eb;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+.btn-primary:hover:not(:disabled) {
+  background: #1d4ed8;
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.3);
+}
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.review-card {
+  background: white;
+  border-radius: 1rem;
+  padding: 0.8rem 1.2rem;
+  border: 1px solid #e9edf4;
+}
+.review-card p { margin: 0.2rem 0; font-size: 0.9rem; }
+.review-card strong { color: #1f2a44; }
+.result-box {
+  margin-top: 1.5rem;
+  padding: 1rem 1.5rem;
+  border-radius: 20px;
+  background: #f0f4fe;
+  border: 1px solid #d6e2f5;
+  transition: 0.2s;
+}
+.result-box.green {
+  background: #e3f7ec;
+  border-color: #45c48b;
+}
+.result-box.red {
+  background: #ffe9ea;
+  border-color: #ff7a7a;
+}
+.result-title {
+  font-weight: 700;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.result-title .green { color: #0d7c4a; }
+.result-title .red { color: #bd2c2c; }
+.result-detail {
+  font-size: 0.85rem;
+  color: #1a2b4a;
+  margin-top: 0.3rem;
+  background: rgba(255, 255, 255, 0.5);
+  padding: 0.5rem 0.8rem;
+  border-radius: 12px;
+}
+.error-msg {
+  color: #bd2c2c;
+  font-size: 0.8rem;
+  margin-top: 0.2rem;
+}
+@media (max-width: 640px) {
+  .ucm_content { padding: 20px 16px; }
+  .field-row { flex-direction: column; align-items: stretch; }
+  .field-row label { min-width: auto; }
+  .field-row select, .field-row input { min-width: auto; }
+  .subject-entry { flex-wrap: wrap; }
+  .btn-group { flex-direction: column; }
+  .btn { width: 100%; justify-content: center; }
+}
+</style>
+
+<!-- ===== UNIVERSITY CHECKER SECTION ===== -->
+<section class="checker-section" id="universityChecker">
+  <div class="checker-inner">
+    <div class="section-header centered">
+      <span class="section-label">Eligibility Tool</span>
+      <h2 class="section-title">Check Your University Eligibility</h2>
+      <p class="section-sub">Find out if you qualify for your dream university in minutes.</p>
+    </div>
+    <div class="checker-card">
+      <div class="checker-icon">
+        <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      </div>
+      <h3>University Eligibility Checker</h3>
+      <p>Select your institution, choose a qualification, add your subjects and marks, and instantly see if you meet the requirements.</p>
+      <button class="checker-btn" id="ucm_open_btn_index">
+        <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        Open University Checker
+      </button>
+      <div class="checker-features">
+        <span class="checker-feature">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          APS Score Calculator
+        </span>
+        <span class="checker-feature">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          Subject Requirements
+        </span>
+        <span class="checker-feature">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          Real-time Results
+        </span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<script src="js/cookie.js"></script>
+<script src="js/feedback.js"></script>
+<script>
+(function(){
+
+  /* ── UCM Checker (index button) ── */
+  var ucmBtn = document.getElementById('ucm_open_btn_index');
+  if (ucmBtn) {
+    ucmBtn.addEventListener('click', function() {
+      if (typeof window.openUCM === 'function') {
+        window.openUCM();
+      } else {
+        var attempts = 0;
+        var maxAttempts = 10;
+        var checkInterval = setInterval(function() {
+          attempts++;
+          if (typeof window.openUCM === 'function') {
+            clearInterval(checkInterval);
+            window.openUCM();
+          } else if (attempts >= maxAttempts) {
+            clearInterval(checkInterval);
+            var modal = document.getElementById('ucm_modal');
+            if (modal) {
+              modal.classList.add('show');
+              if (typeof window.renderUCMStep === 'function') {
+                window.renderUCMStep();
+              }
+            }
+          }
+        }, 300);
+      }
+    });
+  }
+})();
+</script>
+
+<!-- ===== UCM CHECKER MODAL ===== -->
+<div id="ucm_modal">
+  <div class="ucm_content">
+    <div class="ucm_header">
+      <div>
+        <h2>University Eligibility Checker</h2>
+        <p>Step-by-step: institution, qualification, subjects, check</p>
+      </div>
+      <button class="ucm_close" id="ucm_close_btn">Close</button>
+    </div>
+
+    <div class="step-indicator">
+      <span id="ucmStepDisplay">Step 1 / 4</span>
+      <span id="ucmStepNameDisplay">Institution</span>
+    </div>
+
+    <div id="ucmStepPanel" class="checker-panel"></div>
+
+    <div class="btn-group">
+      <button class="btn btn-outline" id="ucmPrevBtn" disabled>← Back</button>
+      <button class="btn btn-primary" id="ucmNextBtn">Next →</button>
+    </div>
+
+    <div id="ucmResultPanel" class="result-box">
+      <div class="result-title" id="ucmResultTitle">📋 Eligibility</div>
+      <div class="result-detail" id="ucmResultDetail">Complete all steps, then click "Check Eligibility" on the final step.</div>
+
+      <!-- Other qualifications the student also qualifies for -->
+      <div id="ucmOtherQualsWrap" style="display:none; margin-top:1rem; padding-top:1rem; border-top:1px dashed #cbd5e1;">
+        <div style="font-weight:700; font-size:0.95rem; color:#0b1e3a; margin-bottom:0.6rem;">
+          You also qualify for these at the same institution:
+        </div>
+        <div id="ucmOtherQualsList" style="display:flex; flex-direction:column; gap:8px;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== UCM CHECKER SCRIPT ===== -->
+<script>
+(function() {
+
+  const API_BASE = "https://xkjsydeavdcarwkthppz.supabase.co/functions/v1";
+  const ORIGIN = window.location.origin;
+
+  // ---- Mutually exclusive subject pairs ----
+  const EXCLUSIVE_PAIRS = [
+    ['Mathematics', 'Mathematical Literacy']
+  ];
+
+  function isExclusiveConflict(candidate, selectedSubjects, currentIdx) {
+    if (!candidate) return false;
+    for (const [a, b] of EXCLUSIVE_PAIRS) {
+      let partner = null;
+      if (candidate === a) partner = b;
+      if (candidate === b) partner = a;
+      if (!partner) continue;
+      const conflict = selectedSubjects.some((s, i) =>
+        i !== currentIdx && s.subject === partner
+      );
+      if (conflict) return partner;
+    }
+    return false;
+  }
+
+  // ---- constants ----
+  const SUBJECTS = [];
+  const UNIVERSITIES = [];
+  const QUALIFICATIONS = [];
+
+  // ---- state ----
+  let ucmStep = 0;
+  const totalSteps = 4;
+  let ucmUni = '';
+  let ucmQual = '';
+  let ucmSubjects = [];
+  let institutionId;
+  let qualifictionId;
+
+  async function getInstitutions(endpoint) {
+    try {
+      const response = await fetch(`${API_BASE}${endpoint}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" }
+      });
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      return [];
+    }
+  }
+
+  async function getSubjects(endpoint) {
+    try {
+      const response = await fetch(`${API_BASE}${endpoint}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" }
+      });
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      return [];
+    }
+  }
+
+  async function getQualifications(endpoint) {
+    try {
+      const response = await fetch(`${API_BASE}${endpoint}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" }
+      });
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      return [];
+    }
+  }
+
+  async function calculateAps(endpoint, data) {
+    try {
+      const response = await fetch(`${API_BASE}${endpoint}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ front_data: data })
+      });
+      const data_ = await response.json();
+      return data_;
+    } catch (error) {
+      return [];
+    }
+  }
+
+  async function getInstitutionData() {
+    UNIVERSITIES.length = 0;
+    const data = await getInstitutions(`/eligibility/list`);
+    if (!data.data || data.error) return data?.error;
+    else {
+      for (let i = 0; i < data.data.length; i++) {
+        UNIVERSITIES.push(data.data[i]);
+      }
+      return "";
+    }
+  }
+
+  async function getQualificationData(identifier) {
+    QUALIFICATIONS.length = 0;
+    const data = await getQualifications(`/eligibility/qualifications?identifier=${encodeURIComponent(identifier)}`);
+    if (!data.data || data.error) return data?.error;
+    else {
+      for (let i = 0; i < data.data.length; i++) {
+        QUALIFICATIONS.push(data.data[i]);
+      }
+      return "";
+    }
+  }
+
+  async function getSubjectData() {
+    SUBJECTS.length = 0;
+    const data = await getSubjects(`/eligibility/subjects`);
+    if (!data.data || data.error) return data?.error;
+    else {
+      for (let i = 0; i < data.data.length; i++) {
+        SUBJECTS.push(data.data[i]);
+      }
+      return "";
+    }
+  }
+
+  const stepPanel = document.getElementById('ucmStepPanel');
+  const prevBtn = document.getElementById('ucmPrevBtn');
+  const nextBtn = document.getElementById('ucmNextBtn');
+  const stepDisplay = document.getElementById('ucmStepDisplay');
+  const stepNameDisplay = document.getElementById('ucmStepNameDisplay');
+  const resultTitle = document.getElementById('ucmResultTitle');
+  const resultDetail = document.getElementById('ucmResultDetail');
+  const resultPanel = document.getElementById('ucmResultPanel');
+
+  async function renderUCMStep() {
+    const stepNames = ['Institution', 'Qualification', 'Subjects', 'Review & Check'];
+    stepDisplay.textContent = `Step ${ucmStep+1} / ${totalSteps}`;
+    stepNameDisplay.textContent = stepNames[ucmStep];
+    const Indata = await getInstitutionData();
+    let html = '';
+
+    if (ucmStep === 0) {
+      html = `
+        <div class="step-title"><span class="badge-step">1</span> Select your University</div>
+        <div class="field-group">
+          <div class="field-row">
+            <label for="ucmUniSelect">University</label>
+            <select id="ucmUniSelect" required>
+              <option value="">-- please choose --</option>
+              ${UNIVERSITIES.map(u => `<option value="${u?.name}" ${ucmUni === u?.name ? 'selected' : ''}>${u?.name}</option>`).join('')}
+            </select>
+          </div>
+          <div id="ucmUniError" class="error-msg"></div>
+        </div>
+      `;
+      if (Indata.length > 0) document.getElementById('ucmUniError').textContent = Indata;
+    } else if (ucmStep === 1) {
+      institutionId = UNIVERSITIES[UNIVERSITIES.findIndex(uni => uni?.name === document.getElementById('ucmUniSelect').value)].id;
+      const Qudata = await getQualificationData(institutionId);
+      html = `
+        <div class="step-title"><span class="badge-step">2</span> Choose your Qualification</div>
+        <div class="field-group">
+          <div class="field-row">
+            <label for="ucmQualSelect">Qualification</label>
+            <select id="ucmQualSelect" required>
+              <option value="">-- please choose --</option>
+              ${QUALIFICATIONS.map(q => `<option value="${q?.name}" ${ucmQual === q?.name ? 'selected' : ''}>${q?.name}</option>`).join('')}
+            </select>
+          </div>
+          <div id="ucmQualError" class="error-msg"></div>
+        </div>
+      `;
+      if (Qudata.length > 0) document.getElementById('ucmQualError').textContent = Qudata;
+    } else if (ucmStep === 2) {
+      qualifictionId = QUALIFICATIONS[QUALIFICATIONS.findIndex(uni => uni.name === ucmQual)].id;
+      const Subdata = await getSubjectData();
+      if (ucmSubjects.length === 0) {
+        ucmSubjects = Array(5).fill().map(() => ({ subject: '', mark: '' }));
+      }
+      let subjHtml = `
+        <div class="step-title"><span class="badge-step">3</span> Enter 5–10 unique subjects</div>
+        <div class="field-group" id="ucmSubjectContainer">
+      `;
+      const usedSubjects = ucmSubjects.map(e => e.subject).filter(Boolean);
+      ucmSubjects.forEach((entry, idx) => {
+        const currentVal = entry.subject || '';
+        const markVal = entry.mark !== undefined && entry.mark !== '' ? entry.mark : '';
+
+        const opts = SUBJECTS.map(s => {
+          const name = s?.name;
+
+          // 1) Block exact duplicates
+          const isDuplicate = usedSubjects.includes(name) && name !== currentVal;
+
+          // 2) Block mutually exclusive partner
+          const conflictPartner = isExclusiveConflict(name, ucmSubjects, idx);
+          const isExclusive = conflictPartner && name !== currentVal;
+
+          const disabled = (isDuplicate || isExclusive) ? 'disabled' : '';
+          const selected = name === currentVal ? 'selected' : '';
+
+          const title = isExclusive
+            ? ` title="Cannot be combined with ${conflictPartner}"`
+            : (isDuplicate ? ' title="Already selected"' : '');
+
+          return `<option value="${name}" ${selected} ${disabled}${title}>${name}</option>`;
+        }).join('');
+
+        subjHtml += `
+          <div class="subject-entry" data-index="${idx}">
+            <span class="idx">#${idx+1}</span>
+            <select class="ucm-subject-select" data-idx="${idx}" required>
+              <option value="">-- select --</option>
+              ${opts}
+            </select>
+            <input type="number" class="ucm-subject-mark" data-idx="${idx}"
+                   placeholder="0-100" min="0" max="100"
+                   value="${markVal}" required>
+          </div>
+        `;
+      });
+
+      subjHtml += `
+        </div>
+        <div class="subject-actions">
+          <button id="ucmAddSubjectBtn">+ Add subject</button>
+          <button id="ucmRemoveSubjectBtn">− Remove last</button>
+          <span class="text-muted" id="ucmSubjectCounter">${ucmSubjects.length} / 10</span>
+        </div>
+        <div id="ucmSubjectError" class="error-msg"></div>
+      `;
+      html = subjHtml;
+      if (Subdata.length > 0) document.getElementById('ucmSubjectError').textContent = Subdata;
+    } else if (ucmStep === 3) {
+      const subjList = ucmSubjects.filter(e => e.subject && e.mark !== '' && !isNaN(e.mark));
+      html = `
+        <div class="step-title"><span class="badge-step">4</span> Review & check eligibility</div>
+        <div class="review-card">
+          <p><strong>University:</strong> ${esc(ucmUni || 'Not set')}</p>
+          <p><strong>Qualification:</strong> ${esc(ucmQual || 'Not set')}</p>
+          <p><strong>Subjects (${subjList.length}):</strong> ${subjList.length ? subjList.map(e => esc(e.subject) + ' ('+e.mark+'%)').join(' · ') : 'None entered'}</p>
+          <p style="margin-top:0.6rem;font-size:0.85rem;color:#4b5a74;">Click <strong>"Check Eligibility"</strong> below to get your result.</p>
+        </div>
+        <div style="margin-top:1.2rem;">
+          <button class="btn btn-primary" id="ucmCheckEligibilityBtn" style="width:100%;justify-content:center;">🔍 Check Eligibility</button>
+        </div>
+      `;
+    }
+
+    stepPanel.innerHTML = html;
+    attachStepEvents();
+    updateNavButtons();
+  }
+
+  function attachStepEvents() {
+    if (ucmStep === 0) {
+      const sel = document.getElementById('ucmUniSelect');
+      if (sel) {
+        if (ucmUni) sel.value = ucmUni;
+        sel.addEventListener('change', function() {
+          ucmUni = this.value;
+          document.getElementById('ucmUniError').textContent = '';
+        });
+      }
+    } else if (ucmStep === 1) {
+      const sel = document.getElementById('ucmQualSelect');
+      if (sel) {
+        if (ucmQual) sel.value = ucmQual;
+        sel.addEventListener('change', function() {
+          ucmQual = this.value;
+          document.getElementById('ucmQualError').textContent = '';
+        });
+      }
+    } else if (ucmStep === 2) {
+      const addBtn = document.getElementById('ucmAddSubjectBtn');
+      if (addBtn) {
+        addBtn.addEventListener('click', function() {
+          if (ucmSubjects.length < 10) {
+            ucmSubjects.push({ subject: '', mark: '' });
+            renderUCMStep();
+          }
+        });
+      }
+      const removeBtn = document.getElementById('ucmRemoveSubjectBtn');
+      if (removeBtn) {
+        removeBtn.addEventListener('click', function() {
+          if (ucmSubjects.length > 1) {
+            ucmSubjects.pop();
+            renderUCMStep();
+          }
+        });
+      }
+      const selects = document.querySelectorAll('.ucm-subject-select');
+      const marks = document.querySelectorAll('.ucm-subject-mark');
+
+      selects.forEach((sel, idx) => {
+        sel.addEventListener('change', function() {
+          const selected = this.value;
+
+          // 1) Exact duplicate check
+          const duplicate = ucmSubjects.some(
+            (s, i) => i !== idx && s.subject === selected && selected !== ''
+          );
+          if (duplicate) {
+            document.getElementById('ucmSubjectError').textContent =
+              '⚠️ This subject is already selected.';
+            this.value = ucmSubjects[idx]?.subject || '';
+            return;
+          }
+
+          // 2) Mutually exclusive check
+          const conflict = isExclusiveConflict(selected, ucmSubjects, idx);
+          if (conflict) {
+            document.getElementById('ucmSubjectError').textContent =
+              `⚠️ You cannot select both Mathematics and Mathematical Literacy. Please choose one.`;
+            this.value = ucmSubjects[idx]?.subject || '';
+            return;
+          }
+
+          if (ucmSubjects[idx]) ucmSubjects[idx].subject = selected;
+          document.getElementById('ucmSubjectError').textContent = '';
+          renderUCMStep();
+        });
+      });
+
+      marks.forEach((inp, idx) => {
+        inp.addEventListener('input', function() {
+          const val = parseFloat(this.value);
+          if (!isNaN(val) && val >= 0 && val <= 100) {
+            if (ucmSubjects[idx]) ucmSubjects[idx].mark = val;
+          } else {
+            if (ucmSubjects[idx]) ucmSubjects[idx].mark = this.value || '';
+          }
+          document.getElementById('ucmSubjectError').textContent = '';
+        });
+      });
+
+      const counter = document.getElementById('ucmSubjectCounter');
+      if (counter) counter.textContent = `${ucmSubjects.length} / 10`;
+      const rBtn = document.getElementById('ucmRemoveSubjectBtn');
+      if (rBtn) rBtn.disabled = ucmSubjects.length <= 1;
+      const aBtn = document.getElementById('ucmAddSubjectBtn');
+      if (aBtn) aBtn.disabled = ucmSubjects.length >= 10;
+    } else if (ucmStep === 3) {
+      const checkBtn = document.getElementById('ucmCheckEligibilityBtn');
+      if (checkBtn) {
+        checkBtn.addEventListener('click', performCheck);
+      }
+    }
+  }
+
+  function updateNavButtons() {
+    prevBtn.disabled = ucmStep === 0;
+    nextBtn.textContent = ucmStep === totalSteps - 1 ? '✓ Finish' : 'Next →';
+  }
+
+  function goNext() {
+    if (ucmStep === 0) {
+      const sel = document.getElementById('ucmUniSelect');
+      if (sel) ucmUni = sel.value;
+      if (!ucmUni) {
+        document.getElementById('ucmUniError').textContent = '⚠️ Please select a university.';
+        return;
+      }
+      document.getElementById('ucmUniError').textContent = '';
+    } else if (ucmStep === 1) {
+      const sel = document.getElementById('ucmQualSelect');
+      if (sel) ucmQual = sel.value;
+      if (!ucmQual) {
+        document.getElementById('ucmQualError').textContent = '⚠️ Please select a qualification.';
+        return;
+      }
+      document.getElementById('ucmQualError').textContent = '';
+    } else if (ucmStep === 2) {
+      const selects = document.querySelectorAll('.ucm-subject-select');
+      const marks = document.querySelectorAll('.ucm-subject-mark');
+      let valid = true;
+      let errMsg = '';
+      const names = [];
+      selects.forEach((sel, idx) => {
+        const subj = sel.value;
+        const mark = parseFloat(marks[idx]?.value);
+        if (!subj) { valid = false; errMsg = 'All subjects must be selected.'; return; }
+        if (isNaN(mark) || mark < 0 || mark > 100) {
+          valid = false;
+          errMsg = 'Each subject must have a mark between 0 and 100.';
+          return;
+        }
+        if (names.includes(subj)) {
+          valid = false;
+          errMsg = 'Subjects must be unique.';
+          return;
+        }
+        names.push(subj);
+        if (ucmSubjects[idx]) { ucmSubjects[idx].subject = subj; ucmSubjects[idx].mark = mark; }
+      });
+
+      // Mutually exclusive check
+      for (const [a, b] of EXCLUSIVE_PAIRS) {
+        if (names.includes(a) && names.includes(b)) {
+          valid = false;
+          errMsg = `You cannot select both ${a} and ${b}. Please choose one.`;
+          break;
+        }
+      }
+
+      if (selects.length < 5) { valid = false; errMsg = 'You need at least 5 subjects.'; }
+      if (!valid) {
+        document.getElementById('ucmSubjectError').textContent = '⚠️ ' + errMsg;
+        return;
+      }
+      const entries = [];
+      selects.forEach((sel, idx) => {
+        entries.push({ subject: sel.value, mark: parseFloat(marks[idx].value) });
+      });
+      ucmSubjects = entries;
+    } else if (ucmStep === 3) {
+      // Final step — "Finish" should run the eligibility check
+      performCheck();
+      return;
+    }
+
+    if (ucmStep < totalSteps - 1) {
+      ucmStep++;
+      renderUCMStep();
+    }
+  }
+
+  function goPrev() {
+    if (ucmStep > 0) { ucmStep--; renderUCMStep(); }
+  }
+
+  async function performCheck() {
+    const uni = ucmUni;
+    const qual = ucmQual;
+    const subjects = ucmSubjects.filter(e => e.subject && !isNaN(e.mark) && e.mark >= 0 && e.mark <= 100);
+
+    // Hide previous other-quals list before every check
+    const otherWrap = document.getElementById('ucmOtherQualsWrap');
+    const otherList = document.getElementById('ucmOtherQualsList');
+    if (otherWrap) otherWrap.style.display = 'none';
+    if (otherList) otherList.innerHTML = '';
+
+    if (!uni || !qual) {
+      resultPanel.className = 'result-box red';
+      resultTitle.innerHTML = `<span class="red">⛔ Missing information</span>`;
+      resultDetail.textContent = 'Please ensure you have selected both university and qualification.';
+      return;
+    }
+    if (subjects.length < 5) {
+      resultPanel.className = 'result-box red';
+      resultTitle.innerHTML = `<span class="red">⛔ Not enough subjects</span>`;
+      resultDetail.textContent = `You need at least 5 valid subjects (you have ${subjects.length}).`;
+      return;
+    }
+
+    // Final local safety check for Maths / Maths Lit before hitting backend
+    const finalNames = subjects.map(s => s.subject);
+    for (const [a, b] of EXCLUSIVE_PAIRS) {
+      if (finalNames.includes(a) && finalNames.includes(b)) {
+        resultPanel.className = 'result-box red';
+        resultTitle.innerHTML = `<span class="red">⛔ Conflicting subjects</span>`;
+        resultDetail.textContent = `You cannot select both ${a} and ${b}. Please choose one.`;
+        return;
+      }
+    }
+
+    const front_data = {
+      institutionId: institutionId,
+      qualifictionId: qualifictionId,
+      subjects: subjects
+    };
+
+    const aps_data = await calculateAps('/eligibility', front_data);
+
+    if (aps_data && aps_data.error && String(aps_data.error).length > 0) {
+      resultPanel.className = 'result-box red';
+      resultTitle.innerHTML = `<span class="red">Error</span>`;
+      resultDetail.textContent = String(aps_data.error);
+      return;
+    }
+
+    const eligible = aps_data?.data?.eligibility;
+    const avg = aps_data?.data?.average;
+
+    resultPanel.className = eligible ? 'result-box green' : 'result-box red';
+    const emoji = eligible ? '' : '';
+    const titleText = eligible ? 'You qualify!' : 'You do not currently meet the requirements.';
+    resultTitle.innerHTML = `<span class="${eligible ? 'green' : 'red'}">${emoji} ${titleText}</span>`;
+
+    let details = '';
+    if (aps_data?.data?.requirements) details += aps_data.data.requirements;
+    if (aps_data?.data?.reasons)     details += aps_data.data.reasons;
+    details += ` · Institution: ${uni} · Qualification: ${qual}`;
+    details += ` · ${eligible ? 'All requirements met.' : 'Please review the requirements above.'}`;
+    resultDetail.textContent = details;
+
+    //Mock data
+    if (!aps_data.data) aps_data.data = {};
+    if (!Array.isArray(aps_data.data.other_qualifications)) {
+      aps_data.data.other_qualifications = [
+        {
+          qualification_id: "mock-1",
+          name: "Bachelor of Commerce (BCom) in Accounting",
+          faculty: "Commerce",
+          minimum_aps: 30,
+          eligible: true
+        },
+        {
+          qualification_id: "mock-2",
+          name: "Bachelor of Commerce (BCom) in Economics",
+          faculty: "Commerce",
+          minimum_aps: 28,
+          eligible: true
+        },
+        {
+          qualification_id: "mock-3",
+          name: "Bachelor of Commerce (BCom) in Marketing",
+          faculty: "Commerce",
+          minimum_aps: 26,
+          eligible: true
+        }
+      ];
+    }
+
+    //END of mock data
+
+
+    //Show  other qualifications
+    const others = Array.isArray(aps_data?.data?.other_qualifications)
+      ? aps_data.data.other_qualifications
+      : [];
+
+    if (others.length > 0 && otherWrap && otherList) {
+      otherList.innerHTML = others.map(q => `
+        <div style="
+          display:flex; justify-content:space-between; align-items:center;
+          background:#ffffff; border:1px solid #dbe7f6; border-radius:14px;
+          padding:10px 14px; font-size:0.85rem;
+        ">
+          <div style="display:flex; flex-direction:column; gap:2px;">
+            <span style="font-weight:600; color:#0b1e3a;">${esc(q.name)}</span>
+            ${q.faculty ? `<span style="font-size:0.75rem; color:#64748b;">${esc(q.faculty)}</span>` : ''}
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:flex-end; gap:2px;">
+            ${typeof q.minimum_aps === 'number'
+              ? `<span style="font-size:0.72rem; color:#475569;">Min APS: ${q.minimum_aps}</span>`
+              : ''}
+            <span style="
+              font-size:0.72rem; font-weight:700;
+              color:${q.eligible ? '#0d7c4a' : '#bd2c2c'};
+            ">${q.eligible ? 'Eligible' : 'Not eligible'}</span>
+          </div>
+        </div>
+      `).join('');
+      otherWrap.style.display = 'block';
+    }
+  }
+
+  function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  function openUCM() {
+    ucmStep = 0;
+    if (!ucmUni && !ucmQual) {
+      ucmUni = '';
+      ucmQual = '';
+      ucmSubjects = Array(5).fill().map(() => ({ subject: '', mark: '' }));
+    }
+    const modal = document.getElementById('ucm_modal');
+    modal.classList.add('show');
+    renderUCMStep();
+
+    // Reset result panel
+    resultPanel.className = 'result-box';
+    resultTitle.innerHTML = '📋 Eligibility';
+    resultDetail.textContent = 'Complete all steps, then click "Check Eligibility" on the final step.';
+
+    // Reset other-qualifications display
+    const otherWrap = document.getElementById('ucmOtherQualsWrap');
+    const otherList = document.getElementById('ucmOtherQualsList');
+    if (otherWrap) otherWrap.style.display = 'none';
+    if (otherList) otherList.innerHTML = '';
+  }
+
+  function closeUCM() {
+    document.getElementById('ucm_modal').classList.remove('show');
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const openBtn = document.getElementById('ucm_open_btn_index');
+    if (openBtn) {
+      openBtn.addEventListener('click', openUCM);
+    }
+    document.getElementById('ucm_close_btn').addEventListener('click', closeUCM);
+    prevBtn.addEventListener('click', goPrev);
+    nextBtn.addEventListener('click', goNext);
+
+    const modal = document.getElementById('ucm_modal');
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) closeUCM();
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && modal.classList.contains('show')) closeUCM();
+    });
+  });
+
+  window.openUCM = openUCM;
+  window.closeUCM = closeUCM;
+  window.renderUCMStep = renderUCMStep;
+})();
+</script>
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{font-family:'Poppins',sans-serif;background:#f8fafc;color:#0f172a;overflow-x:hidden;scroll-behavior:smooth;line-height:1.6}
+header{position:fixed!important;top:0;left:0;right:0;height:64px;background:rgba(255,255,255,0.97)!important;backdrop-filter:blur(14px);border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;padding:0 40px;z-index:2000;box-shadow:0 1px 3px rgba(0,0,0,.07);}
+header h1{font-size:1.1rem;font-weight:700;color:#2563eb;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0;}
+.hamburger{display:none;font-size:22px;cursor:pointer;background:none;border:none;color:#0f172a;padding:4px;line-height:1;flex-shrink:0;}
+#nav-links{display:flex!important;gap:4px;align-items:center;flex-shrink:0;position:static!important;background:transparent!important;height:auto!important;padding:0!important;flex-direction:row!important;overflow:visible!important;}
+#nav-links a{color:#334155!important;text-decoration:none;font-size:.88rem;font-weight:500;padding:7px 12px;border-radius:8px;transition:background .18s,color .18s;white-space:nowrap;}
+#nav-links a:hover{background:#eff6ff!important;color:#2563eb!important;}
+#nav-links a.login-btn{background:#2563eb!important;color:#fff!important;font-weight:600;padding:8px 18px;border-radius:8px;}
+#nav-links a.login-btn:hover{background:#1d4ed8!important;}
+.nav-close-btn{display:none!important;}
+@media(max-width:900px){
+  header{padding:0 20px!important;}
+  .hamburger{display:block!important;}
+  #nav-links{display:none!important;position:fixed!important;top:0!important;left:0!important;right:0!important;bottom:0!important;width:100%!important;height:100vh!important;background:#0f172a!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;flex-direction:column!important;align-items:flex-start!important;padding:72px 32px 40px!important;z-index:3000!important;gap:0!important;overflow-y:auto!important;}
+  #nav-links.show{display:flex!important;}
+  #nav-links a{color:rgba(255,255,255,.85)!important;font-size:1.05rem!important;font-weight:500!important;padding:14px 0!important;border-bottom:1px solid rgba(255,255,255,.08)!important;width:100%!important;border-radius:0!important;background:transparent!important;}
+  #nav-links a:hover{color:#fff!important;background:transparent!important;}
+  #nav-links a.login-btn{background:#2563eb!important;color:#fff!important;border-radius:8px!important;padding:14px 20px!important;border-bottom:none!important;margin-top:16px!important;display:block!important;width:100%!important;text-align:center!important;}
+  .nav-close-btn{display:block!important;position:absolute!important;top:18px!important;right:22px!important;font-size:1.9rem!important;color:rgba(255,255,255,.6)!important;background:none!important;border:none!important;cursor:pointer!important;line-height:1!important;z-index:3001!important;}
+}
+.top-marquee{background:#2563eb;color:#fff;padding:10px 0;font-size:.88rem;font-weight:500;margin-top:64px;}
+.hero{min-height:92vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:80px 24px 60px;background:linear-gradient(160deg,#0f172a 0%,#1e3a8a 60%,#2563eb 100%);position:relative;overflow:hidden;}
+.hero::after{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;}
+.hero-inner{position:relative;z-index:1;max-width:760px;margin:0 auto;}
+.hero-badge{display:inline-block;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.9);font-size:.82rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:7px 18px;border-radius:99px;margin-bottom:28px;}
+.hero h1{font-size:clamp(2.2rem,6vw,3.8rem);font-weight:800;color:#fff;line-height:1.15;margin-bottom:20px;letter-spacing:-.02em;}
+.hero h1 span{color:#93c5fd;}
+.hero p{font-size:clamp(1rem,2.5vw,1.2rem);color:rgba(255,255,255,.75);line-height:1.7;max-width:580px;margin:0 auto 40px;}
+.hero-cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.btn-hero-primary{padding:15px 32px;background:#fff;color:#2563eb;font-size:1rem;font-weight:700;border:none;border-radius:14px;cursor:pointer;text-decoration:none;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 20px rgba(0,0,0,.2);display:inline-block;}
+.btn-hero-primary:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,0,0,.28);}
+.btn-hero-outline{padding:15px 32px;background:transparent;color:#fff;font-size:1rem;font-weight:600;border:2px solid rgba(255,255,255,.4);border-radius:14px;cursor:pointer;text-decoration:none;transition:border-color .2s,background .2s;display:inline-block;}
+.btn-hero-outline:hover{border-color:#fff;background:rgba(255,255,255,.06);}
+.hero-stats{display:flex;gap:40px;justify-content:center;margin-top:56px;flex-wrap:wrap;}
+.hero-stat{color:#fff;text-align:center;}
+.hero-stat-number{font-size:2rem;font-weight:800;display:block;letter-spacing:-.02em;}
+.hero-stat-label{font-size:.85rem;color:rgba(255,255,255,.6);margin-top:2px;display:block;}
+section{padding:96px 24px;}
+.section-label{display:inline-block;background:#eff6ff;color:#2563eb;font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:6px 16px;border-radius:99px;margin-bottom:14px;}
+.section-title{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;color:#0f172a;line-height:1.2;letter-spacing:-.02em;margin-bottom:14px;}
+.section-sub{font-size:1.05rem;color:#64748b;line-height:1.7;max-width:560px;}
+.section-header{margin-bottom:56px;}
+.section-header.centered{text-align:center;}
+.section-header.centered .section-sub{margin:0 auto;}
+.how-section{background:#fff;}
+.steps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:32px;max-width:1100px;margin:0 auto;}
+.step-card{background:#f8fafc;border:1px solid #e2e8f0;border-radius:20px;padding:36px 28px;text-align:center;transition:transform .2s,box-shadow .2s,border-color .2s;}
+.step-card:hover{transform:translateY(-6px);box-shadow:0 12px 32px rgba(0,0,0,.14);border-color:#bfdbfe;}
+.step-number{width:52px;height:52px;border-radius:50%;background:#2563eb;color:#fff;font-size:1.1rem;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;}
+.step-card h3{font-size:1.05rem;font-weight:700;color:#0f172a;margin-bottom:10px;}
+.step-card p{font-size:.92rem;color:#64748b;line-height:1.6;}
+.services-section{background:#f8fafc;}
+.services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;max-width:1100px;margin:0 auto;}
+.service-card{background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:32px 28px;transition:transform .2s,box-shadow .2s,border-color .2s;}
+.service-card:hover{transform:translateY(-5px);box-shadow:0 12px 32px rgba(0,0,0,.14);border-color:#bfdbfe;}
+.service-icon{width:52px;height:52px;border-radius:14px;background:#eff6ff;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:20px;}
+.service-card h3{font-size:1.05rem;font-weight:700;color:#0f172a;margin-bottom:10px;}
+.service-card p{font-size:.9rem;color:#64748b;line-height:1.65;margin-bottom:18px;}
+.service-link{color:#2563eb;font-size:.88rem;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:5px;transition:gap .18s;}
+.service-link:hover{gap:9px;}
+.service-link::after{content:"\2192";}
+.trust-section{background:#2563eb;padding:60px 24px;}
+.trust-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-around;flex-wrap:wrap;gap:40px;text-align:center;}
+.trust-item{color:#fff;}
+.trust-number{font-size:2.4rem;font-weight:800;display:block;letter-spacing:-.02em;}
+.trust-label{font-size:.88rem;color:rgba(255,255,255,.7);margin-top:4px;display:block;}
+.testimonials-section{background:#fff;}
+.testimonials-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;max-width:1100px;margin:0 auto;}
+.testimonial-card{background:#f8fafc;border:1px solid #e2e8f0;border-radius:20px;padding:32px 28px;transition:transform .2s,box-shadow .2s;}
+.testimonial-card:hover{transform:translateY(-4px);box-shadow:0 4px 14px rgba(0,0,0,.1);}
+.quote-mark{font-size:3.5rem;color:#bfdbfe;line-height:1;font-family:Georgia,serif;margin-bottom:12px;display:block;}
+.testimonial-text{font-size:.95rem;color:#334155;line-height:1.7;font-style:italic;margin-bottom:24px;}
+.testimonial-author{display:flex;align-items:center;gap:12px;}
+.author-avatar{width:42px;height:42px;border-radius:50%;background:#2563eb;color:#fff;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:700;flex-shrink:0;}
+.author-name{font-size:.9rem;font-weight:700;color:#0f172a;display:block;}
+.author-label{font-size:.8rem;color:#64748b;display:block;}
+.stars{color:#f59e0b;font-size:.85rem;margin-bottom:16px;}
+.trustpilot-wrap{max-width:480px;margin:44px auto 0;overflow:hidden;text-align:center;}
+.cta-section{background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 100%);padding:100px 24px;text-align:center;}
+.cta-section h2{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;color:#fff;margin-bottom:18px;letter-spacing:-.02em;line-height:1.2;}
+.cta-section p{font-size:1.1rem;color:rgba(255,255,255,.7);max-width:520px;margin:0 auto 40px;line-height:1.7;}
+.cta-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.btn-cta-primary{padding:15px 32px;background:#fff;color:#2563eb;font-size:1rem;font-weight:700;border:none;border-radius:14px;cursor:pointer;text-decoration:none;display:inline-block;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 20px rgba(0,0,0,.25);}
+.btn-cta-primary:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,0,0,.3);}
+.btn-cta-outline{padding:15px 32px;background:transparent;color:#fff;font-size:1rem;font-weight:600;border:2px solid rgba(255,255,255,.4);border-radius:14px;cursor:pointer;text-decoration:none;display:inline-block;transition:border-color .2s,background .2s;}
+.btn-cta-outline:hover{border-color:#fff;background:rgba(255,255,255,.06);}
+footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
+.footer-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:48px;}
+.footer-brand h3{font-size:1.1rem;font-weight:700;color:#fff;margin-bottom:12px;}
+.footer-brand p{font-size:.88rem;color:rgba(255,255,255,.5);line-height:1.7;max-width:260px;margin-bottom:20px;}
+.footer-social{display:flex;gap:10px;}
+.footer-social a{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.65);text-decoration:none;transition:background .18s,color .18s;}
+.footer-social a:hover{background:#2563eb;color:#fff;}
+.footer-col h4{font-size:.82rem;font-weight:700;color:#fff;letter-spacing:.06em;text-transform:uppercase;margin-bottom:16px;}
+.footer-col ul{list-style:none;padding:0;}
+.footer-col ul li{margin-bottom:10px;}
+.footer-col ul li a{color:rgba(255,255,255,.5);text-decoration:none;font-size:.88rem;transition:color .18s;}
+.footer-col ul li a:hover{color:#fff;}
+.footer-subscribe{display:flex;gap:8px;margin-top:4px;}
+.footer-subscribe input{flex:1;padding:10px 14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:8px;color:#fff;font-size:.88rem;font-family:'Poppins',sans-serif;outline:none;transition:border-color .18s;}
+.footer-subscribe input::placeholder{color:rgba(255,255,255,.35);}
+.footer-subscribe input:focus{border-color:#2563eb;}
+.footer-subscribe button{padding:10px 16px;background:#2563eb;color:#fff;border:none;border-radius:8px;font-size:.88rem;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'Poppins',sans-serif;transition:background .18s;width:auto;}
+.footer-subscribe button:hover{background:#1d4ed8;}
+.footer-bottom{max-width:1100px;margin:0 auto;padding-top:32px;border-top:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;font-size:.82rem;color:rgba(255,255,255,.35);}
+.footer-bottom a{color:inherit;text-decoration:none;transition:color .18s;}
+.footer-bottom a:hover{color:rgba(255,255,255,.7);}
+#subscribe-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);justify-content:center;align-items:center;z-index:9999;}
+#subscribe-modal-content{background:#fff;padding:28px 32px;border-radius:16px;max-width:380px;width:90%;text-align:center;position:relative;box-shadow:0 12px 32px rgba(0,0,0,.18);font-family:'Poppins',sans-serif;color:#0f172a;}
+.back-to-top{position:fixed;bottom:30px;right:30px;width:44px;height:44px;background:#2563eb;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:1.1rem;box-shadow:0 4px 14px rgba(0,0,0,.1);opacity:0;visibility:hidden;transition:all .3s;z-index:99;}
+.back-to-top.visible{opacity:1;visibility:visible;}
+.back-to-top:hover{background:#1d4ed8;transform:translateY(-3px);}
+
+/* ── NEWS SECTION ── */
+.news-section{background:#f8fafc;}
+.news-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px;max-width:1100px;margin:0 auto;}
+.news-card{background:#fff;border:1px solid #e2e8f0;border-radius:20px;overflow:hidden;cursor:pointer;transition:transform .2s,box-shadow .2s,border-color .2s;display:flex;flex-direction:column;}
+.news-card:hover{transform:translateY(-6px);box-shadow:0 12px 32px rgba(0,0,0,.14);border-color:#bfdbfe;}
+.news-card-img-wrap{position:relative;height:200px;overflow:hidden;background:linear-gradient(135deg,#0f172a,#1e3a8a);}
+.news-card-img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s;}
+.news-card:hover .news-card-img{transform:scale(1.04);}
+.news-card-img-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;opacity:.25;}
+.news-card-badge{position:absolute;top:12px;left:12px;background:#2563eb;color:#fff;font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:99px;}
+.news-card-body{padding:22px;flex:1;display:flex;flex-direction:column;}
+.news-card-title{font-size:1rem;font-weight:700;color:#0f172a;line-height:1.35;margin:0 0 10px;}
+.news-card-excerpt{font-size:.88rem;color:#64748b;line-height:1.65;margin:0 0 18px;flex:1;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+.news-card-footer{display:flex;align-items:center;justify-content:space-between;border-top:1px solid #f1f5f9;padding-top:12px;}
+.news-card-meta{font-size:.75rem;color:#94a3b8;}
+.news-card-read{font-size:.8rem;font-weight:600;color:#2563eb;}
+
+/* Skeleton */
+.news-skeleton-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px;max-width:1100px;margin:0 auto;}
+.skeleton-card{background:#fff;border:1px solid #e2e8f0;border-radius:20px;overflow:hidden;}
+.skeleton-img{height:200px;background:linear-gradient(90deg,#f1f5f9 25%,#e2e8f0 50%,#f1f5f9 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;}
+.skeleton-body{padding:22px;}
+.skeleton-line{height:11px;background:linear-gradient(90deg,#f1f5f9 25%,#e2e8f0 50%,#f1f5f9 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:6px;margin-bottom:10px;}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* View More */
+.news-more-wrap{text-align:center;margin-top:48px;}
+.news-more-btn{display:inline-flex;align-items:center;gap:8px;padding:13px 32px;background:#fff;color:#2563eb;font-size:.95rem;font-weight:600;border:2px solid #dbeafe;border-radius:12px;cursor:pointer;font-family:'Poppins',sans-serif;transition:background .18s,border-color .18s,transform .18s;}
+.news-more-btn:hover{background:#eff6ff;border-color:#2563eb;transform:translateY(-2px);}
+.news-more-btn:disabled{opacity:.55;cursor:not-allowed;transform:none;}
+@keyframes news-spin{to{transform:rotate(360deg)}}
+.news-spin{animation:news-spin 1s linear infinite;}
+
+/* Article modal */
+.article-overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,.7);backdrop-filter:blur(4px);z-index:3000;align-items:flex-start;justify-content:center;padding:24px;overflow-y:auto;}
+.article-overlay.open{display:flex;}
+.article-modal{background:#fff;border-radius:20px;width:100%;max-width:780px;margin:auto;box-shadow:0 40px 80px rgba(0,0,0,.3);animation:articleIn .28s ease;overflow:hidden;position:relative;}
+@keyframes articleIn{from{opacity:0;transform:translateY(20px) scale(.97)}to{opacity:1;transform:none}}
+.article-close{position:absolute;top:14px;right:14px;width:38px;height:38px;background:rgba(255,255,255,.95);border:none;border-radius:50%;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(0,0,0,.12);transition:background .18s,transform .15s;z-index:1;}
+.article-close:hover{background:#fff;transform:scale(1.08);}
+.article-cover{width:100%;height:300px;object-fit:cover;display:block;}
+.article-cover-placeholder{width:100%;height:220px;background:linear-gradient(135deg,#0f172a,#1e3a8a);display:flex;align-items:center;justify-content:center;opacity:.5;}
+.article-body{padding:36px 44px 44px;}
+.article-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px;}
+.article-cat{background:#eff6ff;color:#2563eb;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 10px;border-radius:99px;}
+.article-date,.article-author{font-size:.8rem;color:#64748b;}
+.article-dot{color:#e2e8f0;}
+.article-title{font-size:clamp(1.4rem,3vw,2rem);font-weight:800;color:#0f172a;line-height:1.25;letter-spacing:-.02em;margin-bottom:12px;}
+.article-excerpt{font-size:1rem;color:#2563eb;font-weight:500;line-height:1.7;margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid #e2e8f0;}
+.article-content{font-size:.97rem;color:#334155;line-height:1.85;white-space:pre-wrap;}
+@media(max-width:640px){.article-body{padding:22px 22px 32px;}.article-cover{height:200px;}.article-cover-placeholder{height:160px;}}
+
+/* Image lightbox */
+.img-lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:4000;align-items:center;justify-content:center;cursor:zoom-out;}
+.img-lightbox.open{display:flex;}
+.img-lightbox img{max-width:92vw;max-height:92vh;border-radius:8px;box-shadow:0 24px 80px rgba(0,0,0,.6);object-fit:contain;}
+.img-lightbox-close{position:absolute;top:16px;right:20px;width:42px;height:42px;background:rgba(255,255,255,.12);border:none;border-radius:50%;color:#fff;font-size:1.4rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .18s;}
+.img-lightbox-close:hover{background:rgba(255,255,255,.25);}
+
+/* News empty/error */
+.news-state{text-align:center;padding:48px 24px;max-width:1100px;margin:0 auto;}
+.news-state p{font-size:.95rem;color:#94a3b8;}
+
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:900px){.footer-inner{grid-template-columns:1fr 1fr;}}
+@media(max-width:600px){section{padding:64px 20px;}.hero{padding:60px 20px 48px;min-height:auto;}.hero-stats{gap:24px;}.footer-inner{grid-template-columns:1fr;gap:28px;}.footer-bottom{flex-direction:column;text-align:center;}.news-grid,.news-skeleton-grid{grid-template-columns:1fr;}}
+
+/* ===== UNIVERSITY CHECKER SECTION ===== */
+.checker-section {
+  background: #ffffff;
+  padding: 80px 24px;
+  border-bottom: 1px solid #eef2f6;
+}
+.checker-section .checker-inner {
+  max-width: 820px;
+  margin: 0 auto;
+}
+.checker-section .section-header {
+  margin-bottom: 40px;
+}
+.checker-card {
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 24px;
+  padding: 40px 36px;
+  text-align: center;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.checker-card:hover {
+  border-color: #2563eb;
+  box-shadow: 0 12px 40px rgba(37, 99, 235, 0.08);
+}
+.checker-card .checker-icon {
+  width: 72px;
+  height: 72px;
+  background: #eff6ff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  color: #2563eb;
+}
+.checker-card .checker-icon svg {
+  width: 34px;
+  height: 34px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+.checker-card h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 8px;
+}
+.checker-card p {
+  font-size: 0.95rem;
+  color: #64748b;
+  max-width: 480px;
+  margin: 0 auto 24px;
+  line-height: 1.7;
+}
+.checker-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 32px;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 60px;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.25);
+}
+.checker-btn:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(37, 99, 235, 0.35);
+}
+.checker-btn svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+.checker-features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 28px;
+}
+.checker-feature {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  font-size: 0.82rem;
+  color: #475569;
+}
+.checker-feature svg {
+  width: 18px;
+  height: 18px;
+  stroke: #2563eb;
+  fill: none;
+  stroke-width: 2;
+  flex-shrink: 0;
+}
+@media (max-width: 640px) {
+  .checker-card { padding: 28px 20px; }
+  .checker-features { grid-template-columns: 1fr; gap: 10px; }
+  .checker-feature { justify-content: flex-start; }
+}
+</style>
