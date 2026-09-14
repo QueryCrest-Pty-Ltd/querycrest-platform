@@ -1123,6 +1123,15 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
     <div id="ucmResultPanel" class="result-box">
       <div class="result-title" id="ucmResultTitle">📋 Eligibility</div>
       <div class="result-detail" id="ucmResultDetail">Complete all steps, then click "Check Eligibility" on the final step.</div>
+
+      <!-- Other qualifications the student also qualifies for -->
+      <div id="ucmOtherQualsWrap" style="display:none; margin-top:1rem; padding-top:1rem; border-top:1px dashed #cbd5e1;">
+        <div style="font-weight:700; font-size:0.95rem; color:#0b1e3a; margin-bottom:0.6rem;">
+          You also qualify for these at the same institution:
+        </div>
+        <div id="ucmOtherQualsList" style="display:flex; flex-direction:column; gap:8px;"></div>
+      </div>
+
     </div>
   </div>
 </div>
@@ -1133,6 +1142,11 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
 
   const API_BASE = "https://xkjsydeavdcarwkthppz.supabase.co/functions/v1";
   const ORIGIN = window.location.origin;
+
+  // ---- Mutually exclusive subject pairs ----
+  const EXCLUSIVE_PAIRS = [
+    ['Mathematics', 'Mathematical Literacy']
+  ];  
 
   // ---- constants ----
   const SUBJECTS = [];
@@ -1254,15 +1268,13 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
     stepNameDisplay.textContent = stepNames[ucmStep];
     let Indata =''
     const InstitutionData = JSON.parse(sessionStorage.getItem('InstitutionData'));
-      //alert(JSON.parse(InstitutionData))    
-      //sessionStorage.clear('InstitutionData')
-      if(  InstitutionData  !== null){
+      if(  InstitutionData  !== null && UNIVERSITIES.length===0 ){
       for(const item of InstitutionData )UNIVERSITIES.push(item);}
     else {
       Indata = await getInstitutionData();
 
       sessionStorage.setItem('InstitutionData', JSON.stringify(UNIVERSITIES))   
-      //alert(sessionStorage.getItem('InstitutionData'))
+
 
     }
     let html = '';
@@ -1307,13 +1319,14 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
 
       const SubjectData = JSON.parse( sessionStorage.getItem('SubjectData'));
 
-      if(  SubjectData  !==null){
+      if(  SubjectData  !==null && SUBJECTS.length===0){
       for(const item of SubjectData )SUBJECTS.push(item);}
       else{
 
        Subdata = await getSubjectData();
        sessionStorage.setItem('SubjectData',JSON.stringify(SUBJECTS))
         }
+      
       if (ucmSubjects.length === 0) {
         ucmSubjects = Array(5).fill().map(() => ({ subject: '', mark: '' }));
       }
@@ -1523,6 +1536,13 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
     const qual = ucmQual;
     const subjects = ucmSubjects.filter(e => e.subject && !isNaN(e.mark) && e.mark >= 0 && e.mark <= 100);
 
+    // Hide previous other-quals list before every check
+    const otherWrap = document.getElementById('ucmOtherQualsWrap');
+    const otherList = document.getElementById('ucmOtherQualsList');
+    if (otherWrap) otherWrap.style.display = 'none';
+    if (otherList) otherList.innerHTML = '';
+
+
     if (!uni || !qual) {
       resultPanel.className = 'result-box red';
       resultTitle.innerHTML = `<span class="red">⛔ Missing information</span>`;
@@ -1535,6 +1555,17 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
       resultDetail.textContent = `You need at least 5 valid subjects (you have ${subjects.length}).`;
       return;
     }
+
+    // Final local safety check for Maths / Maths Lit before hitting backend
+    const finalNames = subjects.map(s => s.subject);
+    for (const [a, b] of EXCLUSIVE_PAIRS) {
+      if (finalNames.includes(a) && finalNames.includes(b)) {
+        resultPanel.className = 'result-box red';
+        resultTitle.innerHTML = `<span class="red">⛔ Conflicting subjects</span>`;
+        resultDetail.textContent = `You cannot select both ${a} and ${b}. Please choose one.`;
+        return;
+      }
+    }    
 
     const front_data = {
       institutionId: institutionId,
@@ -1552,7 +1583,10 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
     }
     const avg = aps_data.data.average;
     const eligible = aps_data.data.eligibility;
-
+    const other_qualifications =[];
+    if(Object.keys(aps_data?.alt).length>0){
+      for(const item of aps_data.alt)other_qualifications.push(item);
+    }
     resultPanel.className = eligible ? 'result-box green' : 'result-box red';
     const emoji = eligible ? '✅' : '❌';
     const titleText = eligible ? 'You qualify!' : 'You do not currently meet the requirements.';
@@ -1560,8 +1594,44 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
     let details = aps_data.data.requirements || '';
     details += aps_data.data.reasons || '';
     details += ` · Institution: ${uni} · Qualification: ${qual}`;
-    details += ` · ${eligible ? 'All requirements met.' : `Please review the requirements above. alternative qualifications that you qualify for ${JSON.stringify(aps_data.data.alt)}`}`;
+    details += ` · ${eligible ? 'All requirements met.' : `Please review the requirements above.`}`;
     resultDetail.textContent = details;
+
+
+  
+
+
+
+     
+    // ── Render other qualifications ──
+    const others = other_qualifications
+    //alert( Array.isArray(other_qualifications))
+    if (others.length > 0 && otherWrap && otherList) {
+      otherList.innerHTML = others.map(q => `
+        <div style="
+          display:flex; justify-content:space-between; align-items:center;
+          background:#ffffff; border:1px solid #dbe7f6; border-radius:14px;
+          padding:10px 14px; font-size:0.85rem;
+        ">
+          <div style="display:flex; flex-direction:column; gap:2px;">
+            <span style="font-weight:600; color:#0b1e3a;">${esc(q.name)}</span>
+            ${q.faculty ? `<span style="font-size:0.75rem; color:#64748b;">${esc(q.faculty)}</span>` : ''}
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:flex-end; gap:2px;">
+            ${
+               `<span style="font-size:0.72rem; color:#475569;">Min APS: ${q.minimum_aps}</span>`
+              }
+            <span style="
+              font-size:0.72rem; font-weight:700;
+              color:${q.eligible ? '#0d7c4a' : '#bd2c2c'};
+            ">${q.eligible ? 'Eligible' : 'Not eligible'}</span>
+          </div>
+        </div>
+      `).join('');
+      otherWrap.style.display = 'block';
+    }
+    
+
   }
 
   function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
@@ -1613,14 +1683,13 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
 
 <!-- ===== UCM CHECKER STYLES ===== -->
 <style>
-/* Overlay */
-#preApplyModal {
-  display: none;
+/* UCM modal styles */
+#ucm_modal {
   position: fixed;
   inset: 0;
-  background: rgba(15,23,42,.65);
+  background: rgba(0, 0, 0, 0.55);
   backdrop-filter: blur(4px);
-  z-index: 4000;
+  display: none;
   align-items: center;
   justify-content: center;
   padding: 20px;
@@ -1632,28 +1701,29 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
 }
 .ucm_content {
   background: #fff;
-  border-radius: 20px;
+  border-radius: 28px;
+  padding: 28px 26px;
+  max-width: 700px;
   width: 100%;
   max-height: 92vh;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 32px 80px rgba(0,0,0,.28);
-  animation: paSlideUp .25s cubic-bezier(.34,1.56,.64,1);
+  overflow-y: auto;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.2);
+  animation: slideUp 0.25s ease;
 }
-@keyframes paSlideUp {
-  from { opacity:0; transform:translateY(24px) scale(.97) }
-  to   { opacity:1; transform:translateY(0) scale(1) }
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 .ucm_header {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 12px;
+  gap: 14px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
 }
-.pa-hdr h2 {
-  font-size: 1.05rem;
+.ucm_header h2 {
+  font-size: 1.2rem;
   font-weight: 700;
   color: #0b1e3a;
 }
@@ -1671,9 +1741,14 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
   font-size: 0.8rem;
   color: #1f2a44;
   cursor: pointer;
-  text-align: left;
+  font-family: 'Poppins', sans-serif;
+  transition: 0.15s;
+}
+.ucm_close:hover {
+  background: #e2e8f0;
+}
+.step-indicator {
   display: flex;
-  align-items: center;
   justify-content: space-between;
   background: #f0f4fe;
   padding: 0.4rem 1.2rem;
@@ -1719,68 +1794,144 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
   gap: 0.6rem 1.2rem;
   align-items: center;
 }
-.pa-uni-search {
-  width: 100%;
-  padding: 8px 12px 8px 32px;
-  border: 1.5px solid #e2e8f0;
-  border-radius: 8px;
-  font-size: .83rem;
-  font-family: 'Poppins', sans-serif;
-  color: #0f172a;
-  background: #f8fafc;
-  outline: none;
-  box-sizing: border-box;
-  transition: border-color .18s;
+.field-row label {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #1f2a44;
+  min-width: 100px;
 }
-.pa-uni-search:focus { border-color: #2563eb; }
-.pa-uni-search-ico {
-  position: absolute;
-  left: 20px; top: 50%;
-  transform: translateY(-50%);
-  color: #94a3b8;
+.field-row select,
+.field-row input {
+  flex: 1;
+  min-width: 180px;
+  padding: 0.65rem 1rem;
+  border-radius: 14px;
+  border: 1.5px solid #dce2ec;
+  background: white;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.9rem;
+  transition: 0.15s;
+  color: #0b1e3a;
+}
+.field-row select:focus,
+.field-row input:focus {
+  border-color: #3b7cff;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 124, 255, 0.15);
+}
+.subject-entry {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 0.8rem;
+  background: white;
+  padding: 0.5rem 1rem 0.5rem 1.2rem;
+  border-radius: 40px;
+  border: 1px solid #e3e9f2;
+  margin-bottom: 6px;
+}
+.subject-entry select {
+  flex: 2;
+  min-width: 130px;
+  border: none;
+  background: transparent;
+  padding: 0.3rem 0.2rem;
+  font-weight: 500;
+  font-size: 0.85rem;
+  border-bottom: 1.5px dashed #d0d9e8;
+  border-radius: 0;
+  font-family: 'Poppins', sans-serif;
+}
+.subject-entry select:focus {
+  border-bottom-color: #3b7cff;
+  outline: none;
+}
+.subject-entry input {
+  width: 80px;
+  border: none;
+  background: transparent;
+  padding: 0.3rem 0.2rem;
+  font-weight: 500;
+  font-size: 0.85rem;
+  border-bottom: 1.5px dashed #d0d9e8;
+  border-radius: 0;
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
+}
+.subject-entry input:focus {
+  border-bottom-color: #3b7cff;
+  outline: none;
+}
+.subject-entry .idx {
+  font-weight: 600;
+  color: #4b5a74;
+  font-size: 0.75rem;
+  width: 22px;
+}
+.subject-actions {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-top: 0.8rem;
+}
+.subject-actions button {
+  padding: 0.3rem 1.2rem;
+  font-size: 0.8rem;
+  border-radius: 40px;
+  border: 1.5px solid #dce2ec;
+  background: white;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  transition: 0.15s;
+}
+.subject-actions button:hover {
+  background: #f0f4fe;
+  border-color: #b0c4e0;
+}
+.subject-actions button:disabled {
+  opacity: 0.4;
   pointer-events: none;
 }
-.pa-uni-list { max-height: 220px; overflow-y: auto; }
-.pa-uni-opt {
-  padding: 10px 14px;
-  font-size: .86rem;
-  font-family: 'Poppins', sans-serif;
-  color: #0f172a;
-  cursor: pointer;
-  transition: background .12s;
+.text-muted {
+  font-size: 0.8rem;
+  color: #6b7a93;
+  align-self: center;
 }
 .btn-group {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 32px 16px;
-  gap: 14px;
+  gap: 0.8rem;
+  margin-top: 1.5rem;
 }
-.pa-redirect-icon {
-  width: 60px; height: 60px;
-  border-radius: 50%;
-  background: #dcfce7;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.6rem;
+.btn {
+  padding: 0.6rem 1.5rem;
+  border-radius: 40px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  border: none;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  transition: 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
-.pa-redirect-title {
-  font-size: 1rem; font-weight: 700; color: #0f172a;
-  font-family: 'Poppins', sans-serif; margin: 0;
+.btn-outline {
+  background: #fff;
+  border: 1.5px solid #dce2ec;
+  color: #1f2a44;
 }
-.pa-redirect-sub {
-  font-size: .83rem; color: #64748b; line-height: 1.6;
-  font-family: 'Poppins', sans-serif; margin: 0;
+.btn-outline:hover:not(:disabled) {
+  border-color: #3b7cff;
+  color: #3b7cff;
 }
-.pa-redirect-dots {
-  display: flex; gap: 6px; justify-content: center;
-}
-.pa-redirect-dots span {
-  width: 8px; height: 8px;
-  border-radius: 50%;
+.btn-primary {
   background: #2563eb;
-  animation: paDotPulse 1.2s infinite;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
 }
 .btn-primary:hover:not(:disabled) {
   background: #1d4ed8;

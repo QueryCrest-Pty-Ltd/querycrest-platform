@@ -11,7 +11,7 @@ const _SVC = () => createClient(
 // ===== CORS HELPERS =====
 function getCorsHeaders(origin: string | null) {
   return {
-    "Access-Control-Allow-Origin": "http://127.0.0.1:5500",
+    "Access-Control-Allow-Origin": "https://www.querycrest.com",
     "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, origin",
     "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
     "Access-Control-Max-Age": "86400",
@@ -272,19 +272,24 @@ const marks_data = [];
 let subj_mark;
 let status;
 //adding required_subjects
+
 for (const entry of subjects){
-    //.includes(entry.subject)
-    if(requirements.subject_requirements.required?.some(subject => subject.toLowerCase() === entry.subject.toLowerCase())){
-      required_subjects.push(entry.subject);
+
+    if(requirements?.subject_requirements.required?.some(subject => subject?.toLowerCase() === entry?.subject?.toLowerCase())){
+      required_subjects.push(entry?.subject);
 
     }
 }
+
+
 // adding missing_subjects
-for (const entry of requirements.subject_requirements.required){
+for (const entry of requirements?.subject_requirements?.required){
     //!required_subjects?.includes(entry)
-    if(!(required_subjects.some(subject =>subject.toLowerCase() ===entry.toLowerCase())))missing_subjects.push(entry);
+    if(!(required_subjects?.some(subject =>subject?.toLowerCase() ===entry?.toLowerCase())))missing_subjects.push(entry||null);
 
 }
+
+
 
 //adding marks_data
 for(let i =0 ;i<subjects.length;i++){
@@ -297,16 +302,17 @@ if(!(idx ===-1)){
 }
 
 }
+
 return {found:required_subjects,missing:missing_subjects,marks:marks_data};
 
 }
 
 
-async function getQualifiedQualifications(svc: ReturnType<typeof _SVC>,qualifications:any[],subjects){
+async function getQualifiedQualifications(svc: ReturnType<typeof _SVC>,qualifications,subjects){
   const data = [] 
   for(const item of qualifications){
       const requirements = await getRequirements(svc,item.id);
-      if(requirements){
+      if(typeof  requirements ==='object' && typeof requirements !=='undefined'){
       // not needed
       //if((requirements.minimum_aps ===0 || requirements.minimum_aps === null)||(requirements.minimum_average ===0 || requirements.minimum_average === null))       return _json({ error: "We cannot verify eligibility for this qualification yet because the required admission data is unavailable",data:[]}, 400);
       //if minimum_aps is not null if its null the they dont require the APS
@@ -314,13 +320,13 @@ async function getQualifiedQualifications(svc: ReturnType<typeof _SVC>,qualifica
       const aps = calculateAps(subjects,requirements)
       
 
-      let required_mark_eligibility;
-      
-      const found_missing_subj = requiredSubjects(subjects,requirements);
+      //let required_mark_eligibility;
+      //error needs fixing
+      //const found_missing_subj = requiredSubjects(subjects,requirements);
       //return for invalid data 
 
       if(aps>=requirements.minimum_aps ){
-
+/*
         required_mark_eligibility =true;
         for(const entry of found_missing_subj.marks){
         //return for invalid data 
@@ -331,14 +337,15 @@ async function getQualifiedQualifications(svc: ReturnType<typeof _SVC>,qualifica
           }
       }
         if(found_missing_subj.missing.length ===0){
-          if(required_mark_eligibility)data.push(item.name)
+          if(required_mark_eligibility)data.push({name:item.name,aps:requirements.minimum_aps})
 
         }
-
+*/
+      data.push({name:item.name,faculty:item.faculty,minimum_aps:requirements.minimum_aps,eligible: true})
       }
 
     }else {
-     data.push(item.name)
+     data.push({name:item.name,faculty:item.faculty,minimum_aps:"No APS required",eligible: true})
     }
        
     }
@@ -351,7 +358,7 @@ Deno.serve(async (req) => {
   try {
 
     const origin = req.headers.get("origin");
-  if (origin && origin !== "http://127.0.0.1:5500") {
+  if (origin && origin !== "https://www.querycrest.com") {
     return _json({ error: "Origin not allowed" }, 403);
   }
 
@@ -537,19 +544,23 @@ Deno.serve(async (req) => {
        const requirement = `${aps_r} and required subjects: ${requirements.subject_requirements.required} `;
        let alt = null;
        if(!eligibility||!required_mark_eligibility){
-        const qualifications =[]
+        const qualifications =[];
+        
         const qualifications_data =  await   getQualifications(svc ,institutionId);
+        if(qualifications_data && Array.isArray(qualifications_data)){
         for(const item of qualifications_data){
           qualifications.push(item)
         }
-        alt = getQualifiedQualifications(svc,qualifications,subjects);
+        alt = await getQualifiedQualifications(svc,qualifications,subjects);
+        }
+
         }
 
        const data = {aps:aps,average:average,eligibility:eligibility,reasons:reasons,requirements:requirement}
        //add record
        await setApsData(svc,data);
-       const data_d = {...data,alt:alt}
-       return _json({ error: "",data:data_d}, 200);
+       
+       return _json({ error: "",data:data,alt:alt}, 200);
 
     }else {
 
@@ -589,7 +600,7 @@ Deno.serve(async (req) => {
        const data = {aps:0,average:0,eligibility:eligibility,reasons:reasons,requirements:requirement}
        //add record
        await setApsData(svc,data);       
-       return _json({ error: "",data:data}, 200);
+       return _json({ error: "",data:data,alt:null}, 200);
 
     }
        
@@ -600,7 +611,7 @@ Deno.serve(async (req) => {
       }
    }
    else {
-        return _json({ error: "API call failed",data:[] }, 400);    
+        return _json({ error: "API call failed",data:[] }, 300);    
    }
 
   } catch {
