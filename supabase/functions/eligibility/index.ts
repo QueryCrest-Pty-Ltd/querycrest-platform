@@ -358,7 +358,7 @@ Deno.serve(async (req) => {
   try {
 
     const origin = req.headers.get("origin");
-  if (origin && origin !== "https://www.querycrest.com") {
+  if (origin && origin !== "https://www.querycrest.com" ) {
     return _json({ error: "Origin not allowed" }, 403);
   }
 

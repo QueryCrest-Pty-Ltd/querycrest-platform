@@ -1268,9 +1268,10 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
     stepNameDisplay.textContent = stepNames[ucmStep];
     let Indata =''
     const InstitutionData = JSON.parse(sessionStorage.getItem('InstitutionData'));
-      if(  InstitutionData  !== null && UNIVERSITIES.length===0 ){
+
+    if(  InstitutionData  !== null && UNIVERSITIES.length <InstitutionData.length ){
       for(const item of InstitutionData )UNIVERSITIES.push(item);}
-    else {
+    else if(  InstitutionData  === null && UNIVERSITIES.length ===0) {
       Indata = await getInstitutionData();
 
       sessionStorage.setItem('InstitutionData', JSON.stringify(UNIVERSITIES))   
@@ -1319,9 +1320,9 @@ footer{background:#0f172a;color:rgba(255,255,255,.65);padding:64px 24px 32px;}
 
       const SubjectData = JSON.parse( sessionStorage.getItem('SubjectData'));
 
-      if(  SubjectData  !==null && SUBJECTS.length===0){
+      if(  SubjectData  !==null && SUBJECTS.length <SubjectData.length){
       for(const item of SubjectData )SUBJECTS.push(item);}
-      else{
+      else if(  SubjectData  ===null && SUBJECTS.length ===0){
 
        Subdata = await getSubjectData();
        sessionStorage.setItem('SubjectData',JSON.stringify(SUBJECTS))
