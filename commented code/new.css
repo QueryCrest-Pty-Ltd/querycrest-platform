@@ -1,0 +1,95 @@
+/*CSS
+on old code removed line 86 and modified .two col will give code below*/
+
+.two-col { display:grid; grid-template-columns:1fr 340px; gap:40px; align-items:start; }
+
+/* new code is line 86 - 122*/
+
+/* ── TWO-COLUMN LAYOUT ── */
+.two-col {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 24px 40px;
+  align-items: start;
+}
+.two-col > .content-card:not(.full-bleed) {
+  grid-column: 1 / 2;
+  min-width: 0;
+}
+.two-col > aside {
+  grid-column: 2 / 3;
+  grid-row: 1 / 3;
+  position: sticky;
+  top: 84px;
+  min-width: 0;
+}
+.two-col > .full-bleed {
+  grid-column: 1 / -1;
+  width: 100%;
+}
+@media (max-width: 900px) {
+  .two-col {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .two-col > aside {
+    grid-column: 1 / -1;
+    grid-row: auto;
+    position: static;
+    top: auto;
+  }
+  .two-col > .full-bleed {
+    grid-column: 1 / -1;
+  }
+}
+
+
+/*line 83*/
+.page-body { max-width:1100px; margin:0 auto; padding:64px 24px; }
+
+/*new code line 83 added the 90 px*/
+.page-body { max-width:1100px; margin:0 auto; padding:64px 90px 64px 24px; }
+
+
+/* added new .ad-slot code after line 272 new code is below*/
+/*on new code inline is line 318 to 331*/
+
+/* ── INLINE AD ── */
+.ad-slot { margin:28px 0; text-align:center; overflow:hidden; }
+/* ── ad slots new ones aded ── */
+.ad-slot { margin:28px 0; text-align:center; overflow:hidden; min-height:0; }
+.ad-slot ins.adsbygoogle:not([data-ad-status="filled"]) {
+  display: none !important;
+}
+.ad-slot ins.adsbygoogle[data-ad-status="unfilled"] {
+  display: none !important;
+}
+.ad-slot:has(ins.adsbygoogle:not([data-ad-status="filled"])) {
+  margin: 0;
+  padding: 0;
+}
+
+/* Added new stying for how to apply button since it was not properly coloured line 272 - 282*/
+/* How to apply button was not properly styled so added a new class for it and used the same styling as the primary button */
+.content-card a.btn-primary-page,
+.content-card a.btn-outline-page {
+  color: #fff;
+  text-decoration: none;
+}
+.content-card a.btn-primary-page:hover,
+.content-card a.btn-outline-page:hover {
+  color: #fff;
+  text-decoration: none;
+}
+
+/*line 412 was commented out */
+/*line 408 - 417*/
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  header { padding:0 20px; }
+    .hamburger { display:block; }
+    /*line commented out because it was causing issues with the mobile nav
+  .two-col { grid-template-columns:1fr; }
+  */
+  .footer-inner { grid-template-columns:1fr 1fr; }
+  .sidebar-card { position:static; }

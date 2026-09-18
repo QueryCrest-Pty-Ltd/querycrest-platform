@@ -120,6 +120,30 @@ header h1{font-size:1.1rem;font-weight:700;color:#2563eb;white-space:nowrap;over
 </div>
 <div class="page-body">
   <div class="two-col">
+
+    <!-- Row 1, right column: selector card -->
+     <!--Moved Quick links below for better ui and css changes and main-col and used full bleed to make the content fill the page will give entire change and original of page body-->
+    <div class="content-card">
+      <h2>Select an Institution</h2>
+      <div class="switcher">
+        <select id="institution-select" onchange="switchInstitution()" class="filter-select" style="min-width:240px;">
+          <option value="unisa">UNISA</option>
+          <option value="ukzn">UKZN</option>
+          <option value="uj">University of Johannesburg</option>
+          <option value="uct">University of Cape Town</option>
+          <option value="tut">Tshwane University of Technology</option>
+          <option value="general">General Application Steps</option>
+        </select>
+      </div>
+    </div>
+    <!--Added disclaimer card-->
+    <div class="content-card">
+  <h2>Disclaimer</h2>
+  <p>QueryCrest is an independent student resource hub. We are not affiliated with any university, college, or government funding body. All information is provided for general guidance only.</p>
+  <p><a href="disclaimer.html">Read Full Disclaimer</a></p>
+</div>
+
+    <!-- Row 1, left column: sidebar -->
     <aside>
       <div class="sidebar-card">
         <h3>Quick Links</h3>
@@ -135,116 +159,110 @@ header h1{font-size:1.1rem;font-weight:700;color:#2563eb;white-space:nowrap;over
         </ul>
       </div>
     </aside>
-    <div class="main-col">
-      <div class="content-card">
-        <h2>Select an Institution</h2>
-        <div class="switcher">
-          <select id="institution-select" onchange="switchInstitution()" class="filter-select" style="min-width:240px;">
-            <option value="unisa">UNISA</option>
-            <option value="ukzn">UKZN</option>
-            <option value="uj">University of Johannesburg</option>
-            <option value="uct">University of Cape Town</option>
-            <option value="tut">Tshwane University of Technology</option>
-            <option value="general">General Application Steps</option>
-          </select>
-        </div>
-      </div>
 
-      <div id="unisa" class="content-card institution-section">
-        <h3>UNISA — How to Apply</h3>
-        <div class="callout callout-blue"><span class="callout-icon">ℹ️</span><span>UNISA is a distance learning institution. All applications and study materials are managed online.</span></div>
-        <h4><span class="step-num">1</span> Visit the UNISA website</h4>
-        <p>Go to <a href="https://www.unisa.ac.za" target="_blank" rel="noopener">www.unisa.ac.za</a> and click on "Apply". Applications open between October and January for the following year.</p>
-        <h4><span class="step-num">2</span> Create a myUnisa account</h4>
-        <p>Register on the myUnisa student portal. You'll use this account for all future communication, results, and study material access.</p>
-        <h4><span class="step-num">3</span> Choose your qualification</h4>
-        <p>Search for your desired qualification by name or code. Check the admission requirements carefully — each programme has different APS score and subject requirements.</p>
-        <h4><span class="step-num">4</span> Upload your documents</h4>
-        <p>Submit certified copies of your ID and latest academic results. Make sure certifications are not older than 3 months.</p>
-        <h4><span class="step-num">5</span> Pay the application fee</h4>
-        <p>UNISA charges an application fee. Pay via EFT, credit card, or at a participating bank. Keep your proof of payment.</p>
-        <h4><span class="step-num">6</span> Track your application</h4>
-        <p>Log back into myUnisa to check the status of your application. Successful applicants will receive a formal acceptance letter.</p>
-      </div>
-
-      <div id="ukzn" class="content-card institution-section">
-        <h3>UKZN — How to Apply</h3>
-        <div class="callout callout-blue"><span class="callout-icon">ℹ️</span><span>UKZN has campuses in Durban, Pietermaritzburg, and surrounding areas. Applications open in April each year.</span></div>
-        <h4><span class="step-num">1</span> Check closing dates</h4>
-        <p>Visit <a href="https://www.ukzn.ac.za" target="_blank" rel="noopener">www.ukzn.ac.za</a>. UKZN typically opens applications in April and closes in September for the following year.</p>
-        <h4><span class="step-num">2</span> Apply online</h4>
-        <p>Complete the online application form on the UKZN student portal. You will need your NSC results or predicted results if you are still in Grade 12.</p>
-        <h4><span class="step-num">3</span> Upload certified documents</h4>
-        <p>Upload your ID, results, and proof of address. All documents must be certified by a commissioner of oaths.</p>
-        <h4><span class="step-num">4</span> Pay the application fee</h4>
-        <p>Pay the non-refundable application fee via the UKZN payment portal or at any FNB branch.</p>
-        <h4><span class="step-num">5</span> Apply for residence</h4>
-        <p>If you need on-campus accommodation, apply for residence at the same time as your academic application — spaces are limited and competitive.</p>
-      </div>
-
-      <div id="uj" class="content-card institution-section">
-        <h3>University of Johannesburg — How to Apply</h3>
-        <div class="callout callout-orange"><span class="callout-icon">⚠️</span><span>UJ is highly competitive. Applications close early — usually by September. Do not miss the deadline.</span></div>
-        <h4><span class="step-num">1</span> Check minimum requirements</h4>
-        <p>Visit <a href="https://www.uj.ac.za" target="_blank" rel="noopener">www.uj.ac.za</a> and search for your desired programme. Each faculty has different APS and subject requirements.</p>
-        <h4><span class="step-num">2</span> Apply via UJ's online portal</h4>
-        <p>Create a profile on the UJ application portal and complete the online form. You can apply for up to 3 programmes in one application.</p>
-        <h4><span class="step-num">3</span> Prepare supporting documents</h4>
-        <p>Certified ID copy, Grade 11 results (or final Grade 12 if available), and proof of residence.</p>
-        <h4><span class="step-num">4</span> Pay the application fee</h4>
-        <p>The application fee is non-refundable. Payment can be made online or at a participating bank.</p>
-      </div>
-
-      <div id="uct" class="content-card institution-section">
-        <h3>University of Cape Town — How to Apply</h3>
-        <div class="callout callout-orange"><span class="callout-icon">⚠️</span><span>UCT is one of the most competitive universities in Africa. Applications open in April and close in July.</span></div>
-        <h4><span class="step-num">1</span> Check selection requirements</h4>
-        <p>UCT uses a points system based on your NSC results. Visit <a href="https://www.uct.ac.za" target="_blank" rel="noopener">www.uct.ac.za</a> to calculate your score for your chosen faculty.</p>
-        <h4><span class="step-num">2</span> Complete the online application</h4>
-        <p>Apply via UCT's Student Admissions portal. You'll need to create an account and complete the application form carefully.</p>
-        <h4><span class="step-num">3</span> Submit certified documents</h4>
-        <p>UCT requires certified copies of your ID and your most recent results. International students need additional documentation.</p>
-        <h4><span class="step-num">4</span> Monitor your application</h4>
-        <p>Log back into the admissions portal to check your status. UCT notifies applicants via email and the portal.</p>
-      </div>
-
-      <div id="tut" class="content-card institution-section">
-        <h3>Tshwane University of Technology — How to Apply</h3>
-        <div class="callout callout-blue"><span class="callout-icon">ℹ️</span><span>TUT has multiple campuses across Gauteng, Limpopo, and Mpumalanga.</span></div>
-        <h4><span class="step-num">1</span> Browse programmes</h4>
-        <p>Visit <a href="https://www.tut.ac.za" target="_blank" rel="noopener">www.tut.ac.za</a> and explore available diplomas, bachelor degrees, and postgraduate programmes.</p>
-        <h4><span class="step-num">2</span> Apply online</h4>
-        <p>Complete TUT's online application form. Applications typically open in April each year.</p>
-        <h4><span class="step-num">3</span> Submit documents</h4>
-        <p>Certified ID, certified Grade 11 or 12 results, and proof of address. Late applications are not accepted.</p>
-        <h4><span class="step-num">4</span> Choose your campus</h4>
-        <p>Specify which TUT campus you prefer when applying. Not all programmes are offered at all campuses.</p>
-      </div>
-
-      <div id="general" class="content-card institution-section">
-        <h3>General Application Steps</h3>
-        <div class="callout callout-green"><span class="callout-icon">✅</span><span>These steps apply to most South African universities. Always verify the specific requirements on the institution's official website.</span></div>
-        <h4><span class="step-num">1</span> Research your options</h4>
-        <p>Choose 3–5 universities that offer your desired programme. Compare requirements, fees, location, and campus culture.</p>
-        <h4><span class="step-num">2</span> Check APS requirements</h4>
-        <p>Calculate your Admission Point Score (APS) and confirm you meet the minimum for your chosen programmes.</p>
-        <h4><span class="step-num">3</span> Prepare documents in advance</h4>
-        <p>Certified ID, school results, proof of address, and a motivational letter if required. Get documents certified early.</p>
-        <h4><span class="step-num">4</span> Apply online</h4>
-        <p>Complete each university's online application. Most charge a non-refundable application fee of R100–R200.</p>
-        <h4><span class="step-num">5</span> Apply for funding</h4>
-        <p>Apply for NSFAS or relevant bursaries at the same time. Don't wait for an acceptance letter before applying for funding.</p>
-        <h4><span class="step-num">6</span> Track and follow up</h4>
-        <p>Keep track of all your applications and follow up if you haven't received a response within 4 weeks after the closing date.</p>
-      </div>
-
-      <div class="ad-slot"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2099814834007515" crossorigin="anonymous"></script><ins class="adsbygoogle" style="display:block;width:100%;overflow:hidden;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-2099814834007515" data-ad-slot="2058791620"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div>
-      <div class="content-card">
-        <h2>Ready to Apply?</h2>
-        <p>Use your QueryCrest dashboard to manage all your applications in one place — upload documents, track status, and get notified in real time.</p>
-        <a href="../account/login-signup.html" class="btn-primary-page" style="margin-top:8px;">Start Your Application</a>
-      </div>
+    <!-- Row 2+: full width under the sidebar -->
+    <div id="unisa" class="content-card institution-section full-bleed">
+      <h3>UNISA — How to Apply</h3>
+      <div class="callout callout-blue"><span class="callout-icon">ℹ️</span><span>UNISA is a distance learning institution. All applications and study materials are managed online.</span></div>
+      <h4><span class="step-num">1</span> Visit the UNISA website</h4>
+      <p>Go to <a href="https://www.unisa.ac.za" target="_blank" rel="noopener">www.unisa.ac.za</a> and click on "Apply". Applications open between October and January for the following year.</p>
+      <h4><span class="step-num">2</span> Create a myUnisa account</h4>
+      <p>Register on the myUnisa student portal. You'll use this account for all future communication, results, and study material access.</p>
+      <h4><span class="step-num">3</span> Choose your qualification</h4>
+      <p>Search for your desired qualification by name or code. Check the admission requirements carefully — each programme has different APS score and subject requirements.</p>
+      <h4><span class="step-num">4</span> Upload your documents</h4>
+      <p>Submit certified copies of your ID and latest academic results. Make sure certifications are not older than 3 months.</p>
+      <h4><span class="step-num">5</span> Pay the application fee</h4>
+      <p>UNISA charges an application fee. Pay via EFT, credit card, or at a participating bank. Keep your proof of payment.</p>
+      <h4><span class="step-num">6</span> Track your application</h4>
+      <p>Log back into myUnisa to check the status of your application. Successful applicants will receive a formal acceptance letter.</p>
     </div>
+
+    <div id="ukzn" class="content-card institution-section full-bleed">
+      <h3>UKZN — How to Apply</h3>
+      <div class="callout callout-blue"><span class="callout-icon">ℹ️</span><span>UKZN has campuses in Durban, Pietermaritzburg, and surrounding areas. Applications open in April each year.</span></div>
+      <h4><span class="step-num">1</span> Check closing dates</h4>
+      <p>Visit <a href="https://www.ukzn.ac.za" target="_blank" rel="noopener">www.ukzn.ac.za</a>. UKZN typically opens applications in April and closes in September for the following year.</p>
+      <h4><span class="step-num">2</span> Apply online</h4>
+      <p>Complete the online application form on the UKZN student portal. You will need your NSC results or predicted results if you are still in Grade 12.</p>
+      <h4><span class="step-num">3</span> Upload certified documents</h4>
+      <p>Upload your ID, results, and proof of address. All documents must be certified by a commissioner of oaths.</p>
+      <h4><span class="step-num">4</span> Pay the application fee</h4>
+      <p>Pay the non-refundable application fee via the UKZN payment portal or at any FNB branch.</p>
+      <h4><span class="step-num">5</span> Apply for residence</h4>
+      <p>If you need on-campus accommodation, apply for residence at the same time as your academic application — spaces are limited and competitive.</p>
+    </div>
+
+    <div id="uj" class="content-card institution-section full-bleed">
+      <h3>University of Johannesburg — How to Apply</h3>
+      <div class="callout callout-orange"><span class="callout-icon">⚠️</span><span>UJ is highly competitive. Applications close early — usually by September. Do not miss the deadline.</span></div>
+      <h4><span class="step-num">1</span> Check minimum requirements</h4>
+      <p>Visit <a href="https://www.uj.ac.za" target="_blank" rel="noopener">www.uj.ac.za</a> and search for your desired programme. Each faculty has different APS and subject requirements.</p>
+      <h4><span class="step-num">2</span> Apply via UJ's online portal</h4>
+      <p>Create a profile on the UJ application portal and complete the online form. You can apply for up to 3 programmes in one application.</p>
+      <h4><span class="step-num">3</span> Prepare supporting documents</h4>
+      <p>Certified ID copy, Grade 11 results (or final Grade 12 if available), and proof of residence.</p>
+      <h4><span class="step-num">4</span> Pay the application fee</h4>
+      <p>The application fee is non-refundable. Payment can be made online or at a participating bank.</p>
+    </div>
+
+    <div id="uct" class="content-card institution-section full-bleed">
+      <h3>University of Cape Town — How to Apply</h3>
+      <div class="callout callout-orange"><span class="callout-icon">⚠️</span><span>UCT is one of the most competitive universities in Africa. Applications open in April and close in July.</span></div>
+      <h4><span class="step-num">1</span> Check selection requirements</h4>
+      <p>UCT uses a points system based on your NSC results. Visit <a href="https://www.uct.ac.za" target="_blank" rel="noopener">www.uct.ac.za</a> to calculate your score for your chosen faculty.</p>
+      <h4><span class="step-num">2</span> Complete the online application</h4>
+      <p>Apply via UCT's Student Admissions portal. You'll need to create an account and complete the application form carefully.</p>
+      <h4><span class="step-num">3</span> Submit certified documents</h4>
+      <p>UCT requires certified copies of your ID and your most recent results. International students need additional documentation.</p>
+      <h4><span class="step-num">4</span> Monitor your application</h4>
+      <p>Log back into the admissions portal to check your status. UCT notifies applicants via email and the portal.</p>
+    </div>
+
+    <div id="tut" class="content-card institution-section full-bleed">
+      <h3>Tshwane University of Technology — How to Apply</h3>
+      <div class="callout callout-blue"><span class="callout-icon">ℹ️</span><span>TUT has multiple campuses across Gauteng, Limpopo, and Mpumalanga.</span></div>
+      <h4><span class="step-num">1</span> Browse programmes</h4>
+      <p>Visit <a href="https://www.tut.ac.za" target="_blank" rel="noopener">www.tut.ac.za</a> and explore available diplomas, bachelor degrees, and postgraduate programmes.</p>
+      <h4><span class="step-num">2</span> Apply online</h4>
+      <p>Complete TUT's online application form. Applications typically open in April each year.</p>
+      <h4><span class="step-num">3</span> Submit documents</h4>
+      <p>Certified ID, certified Grade 11 or 12 results, and proof of address. Late applications are not accepted.</p>
+      <h4><span class="step-num">4</span> Choose your campus</h4>
+      <p>Specify which TUT campus you prefer when applying. Not all programmes are offered at all campuses.</p>
+    </div>
+
+    <div id="general" class="content-card institution-section full-bleed">
+      <h3>General Application Steps</h3>
+      <div class="callout callout-green"><span class="callout-icon">✅</span><span>These steps apply to most South African universities. Always verify the specific requirements on the institution's official website.</span></div>
+      <h4><span class="step-num">1</span> Research your options</h4>
+      <p>Choose 3–5 universities that offer your desired programme. Compare requirements, fees, location, and campus culture.</p>
+      <h4><span class="step-num">2</span> Check APS requirements</h4>
+      <p>Calculate your Admission Point Score (APS) and confirm you meet the minimum for your chosen programmes.</p>
+      <h4><span class="step-num">3</span> Prepare documents in advance</h4>
+      <p>Certified ID, school results, proof of address, and a motivational letter if required. Get documents certified early.</p>
+      <h4><span class="step-num">4</span> Apply online</h4>
+      <p>Complete each university's online application. Most charge a non-refundable application fee of R100–R200.</p>
+      <h4><span class="step-num">5</span> Apply for funding</h4>
+      <p>Apply for NSFAS or relevant bursaries at the same time. Don't wait for an acceptance letter before applying for funding.</p>
+      <h4><span class="step-num">6</span> Track and follow up</h4>
+      <p>Keep track of all your applications and follow up if you haven't received a response within 4 weeks after the closing date.</p>
+    </div>
+
+
+    <div class="content-card full-bleed">
+      <h2>Ready to Apply?</h2>
+      <p>Use your QueryCrest dashboard to manage all your applications in one place — upload documents, track status, and get notified in real time.</p>
+      <a href="../account/login-signup.html" class="btn-primary-page" style="margin-top:8px;">Start Your Application</a>
+    </div>
+    
+
+    <div class="ad-slot full-bleed">
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2099814834007515" crossorigin="anonymous"></script>
+      <ins class="adsbygoogle" style="display:block;width:100%;overflow:hidden;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-2099814834007515" data-ad-slot="2058791620"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
   </div>
 </div>
 <a href="https://wa.me/27692483470?text=Hi%20QueryCrest%20👋" target="_blank" style="position:fixed;right:20px;bottom:90px;width:54px;height:54px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,.22);z-index:99;transition:transform .2s" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" style="width:26px;height:26px;" alt="WhatsApp"></a>
