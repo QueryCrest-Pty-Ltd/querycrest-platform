@@ -24,7 +24,7 @@ function getCorsHeaders(origin: string | null) {
   return {
     "Access-Control-Allow-Origin": "http://127.0.0.1:5500",
     "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, origin",
-    "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+    "Access-Control-Allow-Methods": "GET, PUT, OPTIONS",
     "Access-Control-Max-Age": "86400",
   };
 }
@@ -1098,7 +1098,7 @@ const tools: Anthropic.Tool[] = [
       if(typeof chat_history?.data ==="object")if(chat_history?.data.abuse_flag)if(chat_history?.data.abuse_count>chat_history?.data.abuse_max_count)      return _json({error:"",data:"you have been banned from the support service, for further assistant contact querycrest support ",human_agent:true},200);
       current_chat_history = chat_history; 
       let messages: Anthropic.MessageParam[] =  [
-        { role: "user", content: `prompt:${prompt} ,user abuse stats: ,flagged for abuse:${chat_history?.data.abuse_flag} count:${chat_history?.data.abuse_count} ` }
+        { role: "user", content: `prompt:${prompt} ,user abuse stats: ,flagged for abuse:${chat_history?.data.abuse_flag} count:${chat_history?.data.abuse_count} , date: ${new Date().toISOString} ` }
       ]; 
 
       //add new chat
@@ -1194,7 +1194,7 @@ const tools: Anthropic.Tool[] = [
       if(typeof chat_history?.data ==="object")if(chat_history?.data.abuse_flag)if(chat_history?.data.abuse_count>chat_history?.data.abuse_max_count)      return _json({error:"",data:"you have been banned from the support service, for further assistant contact querycrest support ",human_agent:true},200);
       current_chat_history = chat_history; 
       let messages: Anthropic.MessageParam[] =  [
-        { role: "user", content: `prompt:${prompt} ,user abuse stats: ,flagged for abuse:${chat_history?.data.abuse_flag} count:${chat_history?.data.abuse_count} ` }
+        { role: "user", content: `prompt:${prompt} ,user abuse stats: ,flagged for abuse:${chat_history?.data.abuse_flag} count:${chat_history?.data.abuse_count} date: ${new Date().toISOString} ` }
       ]; 
       let history = [];
       
