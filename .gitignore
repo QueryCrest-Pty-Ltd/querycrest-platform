@@ -5,6 +5,7 @@
 
 # Supabase local config
 .supabase/
+.node_modules/
 
 # System files
 .DS_Store

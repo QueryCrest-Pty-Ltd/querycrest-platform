@@ -10,7 +10,7 @@ const _SVC = () => createClient(
 // ===== CORS HELPERS =====
 function getCorsHeaders(origin: string | null) {
   return {
-    "Access-Control-Allow-Origin": "https://www.querycrest.com",
+    "Access-Control-Allow-Origin": "http://127.0.0.1:5500",
     "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, origin",
     "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
     "Access-Control-Max-Age": "86400",
@@ -66,15 +66,15 @@ async function getAccommodation(svc: ReturnType<typeof _SVC>,page_idx:number) {
  if(error||!data){
       //
       console.error({error:`failed to retrieve accommodation data, error:${error.message}`,code:400});
-      return _json({error:`failed to retrieve accommodation data,`,data:[],urls:[]},400);        
+      return {error:`failed to retrieve accommodation data,`,data:[],code:400};        
    }
  if(data) {
-      return data
+      return {error:"",data:data,code:200};
 
     }
  } catch (_error) {
       console.error({error:`internal error at accomodation data retrieval, error:${_error}`,code:500});  
-      return _json({error:`internal error at accomodation data retrieval, `,data:[],urls:[]}),500;
+      return {error:`internal error at accomodation data retrieval, `,data:[],code:500};
  }
 }
 
@@ -99,7 +99,7 @@ async function getAccommodationImages(svc: ReturnType<typeof _SVC>,accommodation
 
    if(error){
         console.error({error:`failed to retrieve accommodation data, error:${error}`,code:400});
-        return _json({error:`failed to retrieve accommodation data, `,data:[],urls:[]},400);
+        return {error:`failed to retrieve accommodation data, `,data:[],code:400};
      }
     if(!files || files.length ===0)break;
     allPaths.push(...files.map(item=> `${folder}/${item.name}`));
@@ -130,11 +130,11 @@ async function getAccommodationImages(svc: ReturnType<typeof _SVC>,accommodation
 
 
   }
-
-    return link_data;
+  
+  return {error:"",data:link_data,code:200};
  } catch (_error) {
       console.error({error:`internal error at accomodation data retrieval, error:${_error}`,code:500});  
-      return _json({error:`internal error at accomodation data retrieval, `,data:[],urls:[]},500);  
+      return {error:`internal error at accomodation data retrieval, `,data:[],code:500};  
  }
 }
 
@@ -157,12 +157,12 @@ try {
         .range(start_idx,end_idx);
 
       if (error||!data) {
-        return  _json({ error: `Search failed error `,data:[],urls:[]},400);
+        return  { error: `Search failed error `,data:[],code:400};
       }
-      return data;
+      return {error:"",data:data,code:200};
  
 } catch  {
-        return _json({ error: "Search failed",data:[],urls:[] }, 500);
+        return { error: "Search failed",data:[] ,code:500};
           
 }      
 
@@ -177,7 +177,7 @@ Deno.serve(async (req) => {
   try {
 
     const origin = req.headers.get("origin");
-  if (origin && origin !== "https://www.querycrest.com") {
+  if (origin && origin !== "http://127.0.0.1:5500") {
     return _json({ error: "Origin not allowed" }, 403);
   }
 
@@ -205,8 +205,13 @@ Deno.serve(async (req) => {
     const page = url.searchParams.get("page") || "1";
     const page_idx:number = Number(page);
     const accommodations  = await getAccommodation(svc,page_idx);
-    const data = await getAccommodationImages(svc,accommodations,'accommodation_images',3600);
-    return _json({data:accommodations,urls:data},200);
+    
+    if(accommodations)if(accommodations.error.length >0)    return _json({error:accommodations.error,data:accommodations.data,urls:[]},accommodations.code);
+
+    const data = await getAccommodationImages(svc,accommodations?.data,'accommodation_images',3600);
+    if(data.error.length >0)    return _json({error:data.error,data:data.data,urls:[]},data.code);
+
+    return _json({error:data.error,data:accommodations?.data,urls:data.data},data.code);
     }
   
 
@@ -224,9 +229,13 @@ Deno.serve(async (req) => {
       const page = url.searchParams.get("page") || "1";
       const page_idx:number = Number(page);
 
-      const results = await getSearch(svc,query,page_idx);      
-      const data = await getAccommodationImages(svc,results,'accommodation_images',3600);
-      return _json({data:results,urls:data},200);
+      const results = await getSearch(svc,query,page_idx);
+      if(results.error.length >0)    return _json({error:results.error,data:results.data},results.code);
+      
+      const data = await getAccommodationImages(svc,results.data,'accommodation_images',3600);
+      if(data.error.length >0)    return _json({error:data.error,data:data.data},data.code);
+
+      return _json({error:data.error,data:results.data,urls:data.data},data.code);
              
       } catch  {
           return _json({ error: "server error Search failed",data:[],urls:[] }, 500);        

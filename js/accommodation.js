@@ -162,10 +162,10 @@ try {
     if(Boolean(accredited))accreditation='nsfas' ;
     else accreditation ='private'  
    let cover_image =[];
-   if(urls[i].links)cover_image =urls[i].links[0];
+   if(urls.length>0)if(urls[i].links)cover_image =urls[i].links[0];
 
    let images =[];
-   if(urls[i].links)images =urls[i].links;
+   if(urls.length>0)if(urls[i].links)images =urls[i].links;
       
    
     _accAll.push(

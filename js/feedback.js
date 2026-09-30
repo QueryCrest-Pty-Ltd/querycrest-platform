@@ -1,11 +1,11 @@
 
   /*widget js*/
   //DOM refs
-  const toggleBtn = document.getElementById('widgetToggleBtn');
-  const feedbackCard = document.getElementById('feedbackCard');
-  const feedbackWidget = document.getElementById('feedbackWidget');
-  const cancelBtn = document.getElementById('cancelFeedbackBtn');
-  const sendBtn = document.getElementById('sendFeedbackBtn');
+  /*
+  const toggleBtn = document.getElementById('chatbotToggleBtn');
+  const feedbackWidget = document.getElementById('chatbotWidget');
+  const cancelBtn = document.getElementById('cbCancel-btn');
+  const sendBtn = document.getElementById('addCbChatBtn');
   const toastMsg = document.getElementById('toastMsg');
   const feedbackText = document.getElementById('feedbackText');
   const email = document.getElementById('fbEmail');
@@ -112,4 +112,5 @@ async  function sendFeedback(){
     e.stopPropagation();
     sendFeedback();
   })
-  
+
+  */

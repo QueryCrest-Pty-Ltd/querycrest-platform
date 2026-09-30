@@ -11,7 +11,7 @@ const _SVC = () => createClient(
 // ===== CORS HELPERS =====
 function getCorsHeaders(origin: string | null) {
   return {
-    "Access-Control-Allow-Origin": "https://www.querycrest.com",
+    "Access-Control-Allow-Origin": "http://127.0.0.1:5500",
     "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, origin",
     "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
     "Access-Control-Max-Age": "86400",
@@ -358,7 +358,7 @@ Deno.serve(async (req) => {
   try {
 
     const origin = req.headers.get("origin");
-  if (origin && origin !== "https://www.querycrest.com" ) {
+  if (origin && origin !== "http://127.0.0.1:5500" ) {
     return _json({ error: "Origin not allowed" }, 403);
   }
 
@@ -395,7 +395,7 @@ Deno.serve(async (req) => {
     // ============================================================
     //     
 
-    if (method === "GET" && path.includes("subjects")  ){     
+    else if (method === "GET" && path.includes("subjects")  ){     
       const data = await  getSubjects(svc);
 
       return _json({data:data},200);
@@ -408,7 +408,7 @@ Deno.serve(async (req) => {
     // ============================================================
     //     
 
-    if (method === "GET" &&   path.includes("qualifications")) {     
+   else if (method === "GET" &&   path.includes("qualifications")) {     
     const institutionId = url.searchParams.get("identifier") || "";
       if(typeof institutionId  === 'string'){
       const data =  await   getQualifications(svc ,institutionId);
@@ -606,7 +606,7 @@ Deno.serve(async (req) => {
        
     }
 
-    } catch  {
+    } catch {
           return _json({ error: `server error APS calculation  failed `,data:[] }, 300);        
       }
    }
