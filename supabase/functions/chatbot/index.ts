@@ -123,7 +123,7 @@ async function getChatHistory(svc: ReturnType<typeof _SVC>,first_name:string,sur
 
   const {data,error} = await svc
  .from('chatbot_histories')
- .select('id,first_name,surname,email,role,chat,abuse_flag,abuse_count,abuse_max_count',{count:'exact'})
+ .select('id,first_name,surname,email,role,chat,abuse_flag,abuse_count,abuse_max_count,abuse_description',{count:'exact'})
  .eq(`email`,email)   
  .single()
 
@@ -575,7 +575,11 @@ async function getSourceData(institution_id:string) {
 
 async function logBehaviour(abuse_flag:string,abuse_count:number,abuse_description:string,email:string) {
  const svc =_SVC();
- const des = current_chat_history?.abuse_flag.push(abuse_description);
+ const des = []
+ for(const item of current_chat_history){
+  des.push(item);
+ }
+ des.push(abuse_description);
  const _log = {abuse_flag:abuse_flag,abuse_count:abuse_count,abuse_description:des}
  
  const data = await addUser_ChatLog(svc,_log,email);
@@ -999,10 +1003,10 @@ const tools: Anthropic.Tool[] = [
       properties: {
         abuse_flag: { type: "boolean", description: "flag the user for misuse of the querycrest services" },
         abuse_count: { type: "number", description: "number of misuse , starting from 0 which means they havent done any thing to 3 which is the max ,0,1,2,3" },        
-        abuse_descriptiont: { type: "string", description: "description of the misuse in detail " }, 
+        abuse_description: { type: "string", description: "description of the misuse in detail " }, 
         email: { type: "string", description: "email of the user" }               
       },
-      required: ["abuse_flag","abuse_count","abuse_descriptiont","email"]
+      required: ["abuse_flag","abuse_count","abuse_description","email"]
     }
   },
 {
@@ -1096,9 +1100,11 @@ const tools: Anthropic.Tool[] = [
       const chat_history = await getChatHistory(svc,firstName,surname,email);
       if(chat_history?.error)if(chat_history.error.length>0)return _json({error:chat_history?.error,data:chat_history?.data},chat_history?.code); 
       if(typeof chat_history?.data ==="object")if(chat_history?.data.abuse_flag)if(chat_history?.data.abuse_count>chat_history?.data.abuse_max_count)      return _json({error:"",data:"you have been banned from the support service, for further assistant contact querycrest support ",human_agent:true},200);
-      current_chat_history = chat_history; 
+      if(Array.isArray(chat_history?.data?.abuse_description))current_chat_history = chat_history?.data.abuse_description; 
+      else current_chat_history =[]
+ 
       let messages: Anthropic.MessageParam[] =  [
-        { role: "user", content: `prompt:${prompt} ,user abuse stats: ,flagged for abuse:${chat_history?.data.abuse_flag} count:${chat_history?.data.abuse_count} , date: ${new Date().toISOString} ` }
+        { role: "user", content: `prompt:${prompt} ,user abuse stats: ,flagged for abuse:${chat_history?.data.abuse_flag} count:${chat_history?.data.abuse_count} , date: ${new Date().toISOString()} ` }
       ]; 
 
       //add new chat
@@ -1192,9 +1198,11 @@ const tools: Anthropic.Tool[] = [
       const chat_history = await getChatHistory(svc,firstName,surname,email);
       if(chat_history?.error)if(chat_history.error.length>0)return _json({error:chat_history?.error,data:chat_history?.data},chat_history?.code); 
       if(typeof chat_history?.data ==="object")if(chat_history?.data.abuse_flag)if(chat_history?.data.abuse_count>chat_history?.data.abuse_max_count)      return _json({error:"",data:"you have been banned from the support service, for further assistant contact querycrest support ",human_agent:true},200);
-      current_chat_history = chat_history; 
+      if(Array.isArray(chat_history?.data?.abuse_description))current_chat_history = chat_history?.data.abuse_description; 
+      else current_chat_history =[]
+ 
       let messages: Anthropic.MessageParam[] =  [
-        { role: "user", content: `prompt:${prompt} ,user abuse stats: ,flagged for abuse:${chat_history?.data.abuse_flag} count:${chat_history?.data.abuse_count} date: ${new Date().toISOString} ` }
+        { role: "user", content: `prompt:${prompt} ,user abuse stats: ,flagged for abuse:${chat_history?.data.abuse_flag} count:${chat_history?.data.abuse_count} date: ${new Date().toISOString()} ` }
       ]; 
       let history = [];
       
