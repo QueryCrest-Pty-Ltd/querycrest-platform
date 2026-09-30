@@ -100,7 +100,7 @@ async function getSettings(svc: ReturnType<typeof _SVC>) {
 
   const {data,error} = await svc
  .from('chatbot_setting')
- .select('id,chat_tokens,model,system_prompt',{count:'exact'})
+ .select('id,chat_tokens,model,system_prompt,manual_models,adaptive_thinking,manual_thinking,manual_models',{count:'exact'})
  .single()
  if(error){
       //
@@ -680,16 +680,33 @@ async function chat(client, svc,settings,chat,history,tools,username,email){
     // Claude replies with a tool_use block naming the tool and its arguments.
     //return chat;
     //return chat;
-    const message = await client.messages.create({
+    let model_config ;
+if(settings.manual_models.includes(String(settings.model))) model_config = 
+    {
       model: String(settings.model),
       max_tokens: Number(settings.chat_tokens),
       cache_control:settings.cache_control,
+      thinking:settings.manual_thinking,
       system:String(settings.system_prompt),
       tools,
       // Ask for at most one tool call per turn.
       tool_choice: { type: "auto", disable_parallel_tool_use: true },
       messages:chat
-    });
+    };else model_config = 
+    {
+      model: String(settings.model),
+      max_tokens: Number(settings.chat_tokens),
+      cache_control:settings.cache_control,
+      thinking:settings.thinking,
+      output_config:settings.output_config,
+      system:String(settings.system_prompt),
+      tools,
+      // Ask for at most one tool call per turn.
+      tool_choice: { type: "auto", disable_parallel_tool_use: true },
+      messages:chat
+    };
+
+    const message = await client.messages.create(model_config);
 
 
     //response = message.content.filter((block): block is Anthropic.TextBlock => block.type === "text").map((block)=> block.text).join("\n");
@@ -733,21 +750,13 @@ async function chat(client, svc,settings,chat,history,tools,username,email){
   
 
       // follow up chat
-      const followup = await client.messages.create({
-      model: String(settings.model),
-      max_tokens: Number(settings.chat_tokens),
-      cache_control:settings.cache_control,      
-      system:String(settings.system_prompt),
-        tools,
-        // Ask for at most one tool call per turn.
-        tool_choice: { type: "auto", disable_parallel_tool_use: true },
-        messages:chat
-      });
+      const {tools,tool_choice ,...without_tools}= model_config;
+      const followup = await client.messages.create(without_tools);
 
       toolUse = followup.content.find(
         (block): block is Anthropic.ToolUseBlock => block.type === "tool_use"
       )!;
-       
+     /*       
      if(toolUse && toolUse !==null ){      
       if(toolUse.name ==="getInstitutionData")tool_results= JSON.stringify(await getInstitutionData());
       else if(toolUse.name ==="getQualificationData")tool_results =JSON.stringify( await getQualificationData(toolUse.input.identifier));
@@ -775,6 +784,8 @@ async function chat(client, svc,settings,chat,history,tools,username,email){
       );
 
       }
+
+      */      
       // Claude uses the result to answer the original question.
       const finalText = followup.content.find(
         (block): block is Anthropic.TextBlock => block.type === "text"
@@ -786,7 +797,7 @@ async function chat(client, svc,settings,chat,history,tools,username,email){
        const chat_log = await addChat_log(svc,{model:new_followup.model,type:new_followup.type,role:new_followup.role,content:new_followup.content,container:new_followup.container,stop_reason:new_followup.stop_reason,stop_sequence:new_followup.stop_sequence,stop_details:new_followup.stop_details,usage:new_followup.usage,chat_id:new_followup.chat_id,username:username,email:email})
 
       if(chat_log?.error)if(chat_log?.error.length>0)return {error:chat_log?.error,data:chat_log.data,code:chat_log?.code};
-      if(!toolUse)toolUse = null;
+      toolUse = null;
       toll_call_count++;
     }//end of loop
 

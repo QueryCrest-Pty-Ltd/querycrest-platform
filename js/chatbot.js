@@ -31,7 +31,9 @@
   } 
 
   function clearChat(){
-    alert("sss")
+    if(isWidgetVisible){
+      hideWiget();
+    }
    if(messagesEl.children.length ===0)return
     // remove user details
     sessionStorage.removeItem("user-chatbot-details");
@@ -59,7 +61,7 @@
     e.stopPropagation();
     if(isWidgetVisible){
       hideWiget();
-    }else showWidget();
+    }//else showWidget();
   });
 
 
