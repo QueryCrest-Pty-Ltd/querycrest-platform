@@ -80,7 +80,7 @@
     return; 
   }
   //clear chat history
-  clearChat();
+   if(messagesEl.children.length !==0) messagesEl.replaceChildren();
   addMessage(buildUserDetailsMessage(data),'user');
   //unlock the chatbot form
   chatInput.disabled =false;
