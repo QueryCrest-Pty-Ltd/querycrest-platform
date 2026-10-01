@@ -18,17 +18,23 @@
     let intro = null;
     let clearChatId = null;
 
-    function hideWiget(){
-    chatbotWidget.classList.add('hide');
-    isWidgetVisible = false;
+    const toggleContainer = document.getElementById('chatbotToggleContainer');
 
-  }
+// 3. Updated Hide Function
+function hideWiget() {
+  chatbotWidget.classList.add('hide');
+  // ADD THIS LINE: Show the "Need help?" text again when chat closes
+  toggleContainer.classList.remove('hide'); 
+  isWidgetVisible = false;
+}
 
-  function showWidget(){
-    chatbotWidget.classList.remove('hide');
-    isWidgetVisible = true;
-
-  } 
+// 4. Updated Show Function
+function showWidget() {
+  chatbotWidget.classList.remove('hide');
+  // ADD THIS LINE: Hide the "Need help?" text when chat opens
+  toggleContainer.classList.add('hide'); 
+  isWidgetVisible = true;
+}
 
   function clearChat(){
     if(isWidgetVisible){
@@ -252,23 +258,37 @@
   return box;
   }
 
-  function buildUserDetailsMessage(data){
-   const box = document.createElement("div");
-   box.className ="details";
-   [["First name",data.firstName],
-    ["Surname",data.surname],
-    ["Email",data.email] 
-  ].forEach(([label,value]) =>{
+  function buildUserDetailsMessage(data) {
+  // 1. Create the main message wrapper
+  const box = document.createElement("div");
+  box.className = "message user"; // Add chat classes here!
+
+  // 2. Create the inner bubble container
+  const content = document.createElement("div");
+  content.className = "msg-content";
+
+  // 3. Build the rows inside the bubble
+  [
+    ["First name", data.firstName],
+    ["Surname", data.surname],
+    ["Email", data.email]
+  ].forEach(([label, value]) => {
     const row = document.createElement("div");
+    row.className = "details-row"; // Optional: for extra styling
+    
     const strong = document.createElement("strong");
-    strong.textContent = label+": ";
+    strong.textContent = label + ": ";
+    
     row.appendChild(strong);
     row.appendChild(document.createTextNode(value));
-    box.appendChild(row);
-
+    content.appendChild(row); // Append to content, not box
   });
-  return box
-  }
+
+  // 4. Put the content inside the message wrapper
+  box.appendChild(content);
+
+  return box;
+}
   async function startChat(){
     intro = createIntroFormMessage();
    //if(sessionStorage.getItem("details_form")===null)sessionStorage.setItem("details_form",intro);
