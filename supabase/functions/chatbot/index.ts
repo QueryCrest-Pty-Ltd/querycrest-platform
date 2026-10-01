@@ -1197,14 +1197,14 @@ const tools: Anthropic.Tool[] = [
       //vaildate
       const regex = /^[A-Za-z]+$/;
 
-      if (!first_name.trim() || !(regex.test(first_name.trim()) ) ) {
+      if (!first_name.trim()  ) {
         return _json({ error: "first name field required" ,data:[]}, 400);
       }
-      if (!surname.trim() || !(regex.test(surname.trim()) ) ) {
+      if (!surname.trim()  ) {
         return _json({ error: "surname field required" ,data:[]}, 400);
       }
       if ( !(regex.test(first_name.trim()) ) ) {
-        return _json({ error: "first name field requires only letters" ,data:[]}, 400);
+        return _json({ error: `first name field requires only letters ` ,data:[]}, 400);
       }
       if ( !(regex.test(surname.trim()) ) ) {
         return _json({ error: "surname field requires only letters" ,data:[]}, 400);

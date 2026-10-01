@@ -337,7 +337,7 @@ async function getChatHistory() {
   if(  sessionStorage.getItem('user-chatbot-details') ===null)return;
   const data =JSON.parse(sessionStorage.getItem('user-chatbot-details'));
 
-  const history = await getChat(`/chatbot/chat?firstName=${encodeURIComponent(data.firstName)}/&surname=${encodeURIComponent(data.surname)}/&email=${encodeURIComponent(data.email)} `,data);
+  const history = await getChat(`/chatbot/chat?firstName=${encodeURIComponent(data.firstName)}&surname=${encodeURIComponent(data.surname)}&email=${encodeURIComponent(data.email)} `,data);
   if(history.error.length>0){
     addMessage(history.error,'bot');
     return;  
