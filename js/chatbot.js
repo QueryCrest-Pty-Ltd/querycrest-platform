@@ -75,7 +75,12 @@
   const data =JSON.parse(sessionStorage.getItem('user-chatbot-details'));
 
   const history = await addChat("/chatbot/new",{...data,prompt:`you are connected to user : first name: ${data.firstName}  , surname: ${data.surname} , email:${data.email}`});
-  if(history.error.length>0)alert(history.error);
+  if(history.error.length>0){
+    addMessage(history.error,'bot');
+    return; 
+  }
+  //clear chat history
+  clearChat();
   addMessage(buildUserDetailsMessage(data),'user');
   //unlock the chatbot form
   chatInput.disabled =false;
@@ -290,8 +295,9 @@
 
     //validation
     let problem ="";
-    if(!data.firstName) problem = "Please enter your first name,";
-    if(!data.surname)problem = "Please enter your surname name,";
+    const regex = /^[A-Za-z]+$/;
+    if(!data.firstName || !regex.test(data.firstName)) problem = "Please enter your first name,";
+    if(!data.surname || !regex.test(data.surname))problem = "Please enter your surname name,";
     if(!data.email)problem = "Please enter your email address,";
     //if(!validator.isEmail(data.email))problem = "Please enter a valid email address,";  
     if(problem){
@@ -332,7 +338,10 @@ async function getChatHistory() {
   const data =JSON.parse(sessionStorage.getItem('user-chatbot-details'));
 
   const history = await getChat(`/chatbot/chat?firstName=${encodeURIComponent(data.firstName)}/&surname=${encodeURIComponent(data.surname)}/&email=${encodeURIComponent(data.email)} `,data);
-  if(history.error.length>0)alert(history.error);
+  if(history.error.length>0){
+    addMessage(history.error,'bot');
+    return;  
+  }
   addMessage(buildUserDetailsMessage(data),'user');
   //unlock the chatbot form
   chatInput.disabled =false;
@@ -355,13 +364,13 @@ async function getChatHistory() {
   */
  let content
   if(history.data){
-    for (const chats of history.data){
-    for(const chat of chats){
+    for (const chat of history.data){
+    //for(const chat of chats){
 
     //add user messages
       if(chat.role==="user"){
       //skip conversation starter
-      if(!chat.content.includes(`you are connected to user : first name: ${data.firstName}  , surname: ${data.surname} , email:${data.email}`))
+      if(!chat.content.includes(`you are connected to user : first name: ${data.firstName}  , surname: ${data.surname} , email:${data.email}`) && !(Array.isArray(chat.content))){
       content = chat.content;
       const start = content.indexOf("user abuse stats:");
 
@@ -372,6 +381,9 @@ async function getChatHistory() {
 
 
       addMessage(content,'user',false);
+      }else if(chat.content.includes(`you are connected to user : first name: ${data.firstName}  , surname: ${data.surname} , email:${data.email}`)){
+          addMessage(buildUserDetailsMessage(data),'user');
+      }      
       }
     else if(chat.role==="assistant"){
     //add bot messages,item.content  is array
@@ -383,7 +395,7 @@ async function getChatHistory() {
 
     }      
 
-    }
+    //}
 
 
     }

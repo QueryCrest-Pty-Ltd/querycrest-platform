@@ -89,7 +89,7 @@ async function getSources(svc: ReturnType<typeof _SVC>,identifier:string) {
     }
  } catch (_error) {
       console.error({error:`Something went wrong. Please try again later , error:${_error}`,code:300});  
-      return {error:`Something went wrong. Please try again later `,data:[],code:300};
+      return {error:`Something went wrong. Please try again later error ${_error}`,data:[],code:300};
  }
 }
 
@@ -113,7 +113,7 @@ async function getSettings(svc: ReturnType<typeof _SVC>) {
     }
  } catch (_error) {
       console.error({error:`Something went wrong. Please try again later , error:${_error}`,code:300});  
-      return {error:`Something went wrong. Please try again later `,data:[],code:300};
+      return {error:`Something went wrong. Please try again later error ${_error} `,data:[],code:300};
  }
 }
  //sources 
@@ -128,15 +128,29 @@ async function getChatHistory(svc: ReturnType<typeof _SVC>,first_name:string,sur
  .single()
 
   if(!data){
-      const {error:insert_error} = await svc
-    .from('chatbot_histories')
-      .insert([{'first_name':first_name,'surname':surname,'email':email,'role':'user'}]);
+      const {data:new_data,error:insert_error} = await svc
+      .from('chatbot_histories')
+      .insert([{'first_name':first_name,'surname':surname,'email':email,'role':'user'}])
+      .select()
+      .eq(`email`,email)   
+      .single();
 
     if(insert_error){
           //
           console.error({error:`chatbot history insertion data failed, error:${error?.message}`,code:404});
           return {error:` chatbot history insertion data failed,`,data:{},code:404};        
-      }        
+      } 
+    if(new_data) {
+          const {chat,...data_without_chat } =new_data; 
+
+          let history = [];
+          if (Array.isArray(chat.history))history=chat.history;
+ 
+
+
+          return {error:"",data:{...data_without_chat,chat:history},code:200};
+        }      
+      
   }
  if(error){
       
@@ -149,11 +163,16 @@ async function getChatHistory(svc: ReturnType<typeof _SVC>,first_name:string,sur
 
 
 
-      return {error:"",data:{...data_without_chat,chat:chat.history},code:200};
+      let history = [];
+      if (Array.isArray(chat.history))history=chat.history;
+
+
+
+      return {error:"",data:{...data_without_chat,chat:history},code:200};
     }
  } catch (_error) {
       console.error({error:`Something went wrong. Please try again later , error:${_error}`,code:300});  
-      return {error:`Something went wrong. Please try again later `,data:{},code:300};
+      return {error:`Something went wrong. Please try again later error ${_error} `,data:{},code:300};
  }
 }
 
@@ -179,7 +198,7 @@ async function getChatRole(svc: ReturnType<typeof _SVC>,email:string) {
     }
  } catch (_error) {
       console.error({error:`Something went wrong. Please try again later , error:${_error}`,code:300});  
-      return {error:`Something went wrong. Please try again later `,data:{},code:300};
+      return {error:`Something went wrong. Please try again later error ${_error} `,data:{},code:300};
  }
 }
 
@@ -205,7 +224,7 @@ async function getChatFqa(svc: ReturnType<typeof _SVC>) {
     }
  } catch (_error) {
       console.error({error:`Something went wrong. Please try again later , error:${_error}`,code:300});  
-      return {error:`Something went wrong. Please try again later `,data:{},code:300};
+      return {error:`Something went wrong. Please try again later error ${_error}`,data:{},code:300};
  }
 }
 
@@ -229,7 +248,7 @@ async function addChat(svc: ReturnType<typeof _SVC>,chat,email) {
     }
  } catch (_error) {
       console.error({error:`Something went wrong. Please try again later , error:${_error}`,code:300});  
-      return {error:`Something went wrong. Please try again later `,data:{},code:300};
+      return {error:`Something went wrong. Please try again later error ${_error}`,data:{},code:300};
  }
 }
 
@@ -252,7 +271,7 @@ async function addUser_ChatLog(svc: ReturnType<typeof _SVC>,log,email) {
     }
  } catch (_error) {
       console.error({error:`Something went wrong. Please try again later , error:${_error}`,code:300});  
-      return {error:`Something went wrong. Please try again later `,data:{},code:300};
+      return {error:`Something went wrong. Please try again later error ${_error}`,data:{},code:300};
  }
 }
 
@@ -1104,12 +1123,33 @@ const tools: Anthropic.Tool[] = [
       //Read and parse the JSON request body. 
       const {firstName,surname,email,prompt} = JSON.parse(body);
 
+      //vaildate
+      const regex = /^[A-Za-z]+$/;
+
+      if (!firstName.trim()  ) {
+        return _json({ error: "first name field required" ,data:[]}, 400);
+      }
+      if (!surname.trim()  ) {
+        return _json({ error: "surname field required" ,data:[]}, 400);
+      }
+      if ( !(regex.test(firstName.trim()) ) ) {
+        return _json({ error: "first name field requires only letters" ,data:[]}, 400);
+      }
+      if ( !(regex.test(surname.trim()) ) ) {
+        return _json({ error: "surname field requires only letters" ,data:[]}, 400);
+      }
+
+      if (!email.trim()) {
+        return _json({ error: "email field required" ,data:[]}, 400);
+      }
+      if(!validator.isEmail(email))return _json({ error: "email pattern invaild" ,data:[]}, 400);    
+      
        const username = `${firstName}  ${surname}`;      
       const settings = await getSettings(svc);
       if(settings?.error)if(settings.error.length>0)return _json({error:settings?.error,data:settings?.data},settings?.code);      
 
       const chat_history = await getChatHistory(svc,firstName,surname,email);
-      if(chat_history?.error)if(chat_history.error.length>0)return _json({error:chat_history?.error,data:chat_history?.data},chat_history?.code); 
+      if(chat_history?.error)if(chat_history.error.length>0)return _json({error:chat_history?.error,data:"chat_history?.data"},chat_history?.code); 
       if(typeof chat_history?.data ==="object")if(chat_history?.data.abuse_flag)if(chat_history?.data.abuse_count>chat_history?.data.abuse_max_count)      return _json({error:"",data:"you have been banned from the support service, for further assistant contact querycrest support ",human_agent:true},200);
       if(Array.isArray(chat_history?.data?.abuse_description))current_chat_history = chat_history?.data.abuse_description; 
       else current_chat_history =[]
@@ -1127,7 +1167,7 @@ const tools: Anthropic.Tool[] = [
       }
       new_chat.push(messages)
       const chat_add =  await  addChat(svc,new_chat,email);
-      if(chat_add?.error)if(chat_add?.error.length>0)return _json({error:chat_add?.error,data:new_chat},chat_add?.code);
+      if(chat_add?.error)if(chat_add?.error.length>0)return _json({error:chat_add?.error,data:"new_chat"},chat_add?.code);
 
 
       let history = [];
@@ -1154,22 +1194,31 @@ const tools: Anthropic.Tool[] = [
       const first_name = url.searchParams.get("firstName") || "";
       const surname = url.searchParams.get("surname") || "";      
       const email = url.searchParams.get("email") || "";
+      //vaildate
+      const regex = /^[A-Za-z]+$/;
 
-      if (!first_name.trim()) {
+      if (!first_name.trim() || !(regex.test(first_name.trim()) ) ) {
         return _json({ error: "first name field required" ,data:[]}, 400);
       }
-      if (!surname.trim()) {
+      if (!surname.trim() || !(regex.test(surname.trim()) ) ) {
         return _json({ error: "surname field required" ,data:[]}, 400);
       }
+      if ( !(regex.test(first_name.trim()) ) ) {
+        return _json({ error: "first name field requires only letters" ,data:[]}, 400);
+      }
+      if ( !(regex.test(surname.trim()) ) ) {
+        return _json({ error: "surname field requires only letters" ,data:[]}, 400);
+      }      
       if (!email.trim()) {
         return _json({ error: "email field required" ,data:[]}, 400);
       }
       if(!validator.isEmail(email))return _json({ error: "email pattern invaild" ,data:[]}, 400);    
-      const chat_history = await getChatHistory(svc,first_name,surname,email);
-      if(chat_history?.error)if(chat_history.error.length>0){return _json({error:chat_history?.error,data:chat_history?.data?.chat},chat_history?.code); }
-      if(chat_history?.data)return _json({error:chat_history?.error,data:chat_history?.data?.chat},chat_history?.code); 
       
-      return _json({error:"failed to get history data",data:[]},404);
+      const chat_history = await getChatHistory(svc,first_name,surname,email);
+      if(chat_history?.error)if(chat_history.error.length>0){return _json({error:chat_history?.error,data:"chat_history?.data?.chat"},chat_history?.code); }
+      if(chat_history?.data)return _json({error:chat_history?.error,data:chat_history?.data?.chat[chat_history?.data?.chat.length-1]},chat_history?.code); 
+      
+      //return _json({error:"failed to get history data",data:[]},404);
     }
     // ============================================================
     // GET - Ticket
@@ -1189,12 +1238,22 @@ const tools: Anthropic.Tool[] = [
       }
       //Read and parse the JSON request body. 
       const {firstName,surname,email,prompt} = JSON.parse(body);
-      if (!firstName.trim()) {
+      //vaildate
+      const regex = /^[A-Za-z]+$/;
+
+      if (!firstName.trim()  ) {
         return _json({ error: "first name field required" ,data:[]}, 400);
       }
-      if (!surname.trim()) {
+      if (!surname.trim()  ) {
         return _json({ error: "surname field required" ,data:[]}, 400);
       }
+      if ( !(regex.test(firstName.trim() ) ) ) {
+        return _json({ error: "first name field requires only letters" ,data:[]}, 400);
+      }
+      if ( !(regex.test(surname.trim() ) ) ) {
+        return _json({ error: "surname field requires only letters" ,data:[]}, 400);
+      }
+
       if (!email.trim()) {
         return _json({ error: "email field required" ,data:[]}, 400);
       }
@@ -1202,7 +1261,7 @@ const tools: Anthropic.Tool[] = [
         return _json({ error: "prompt field required" ,data:[]}, 400);
       }
 
-       if(!validator.isEmail(email))return _json({ error: "email pattern invaild" ,data:[]}, 400);     
+    if(!validator.isEmail(email))return _json({ error: "email pattern invaild" ,data:[]}, 400);     
       const settings = await getSettings(svc);
       if(settings?.error)if(settings.error.length>0)return _json({error:settings?.error,data:settings?.data},settings?.code);      
 
