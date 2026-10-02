@@ -1,6 +1,7 @@
 //import validator from "npm:validator";
 (async ()=>{
-    
+
+
     "use strict"
      
     //refs
@@ -11,24 +12,33 @@
     const chatbotToggleBtn = document.getElementById('chatbotToggleBtn');
     const chatbotWidget = document.getElementById('chatbotWidget');
     const cancelBtn = document.getElementById('cancelCbBtn');
-    const newChatBtn = document.getElementById('addCbChatBtn');    
+    const newChatBtn = document.getElementById('addCbChatBtn');
+    const newConvoBtn = document.getElementById('newConvoBtn');    
+        
     const API_BASE = "https://xkjsydeavdcarwkthppz.supabase.co/functions/v1";
     let profile =null;
     let isWidgetVisible = false;    
     let intro = null;
     let clearChatId = null;
 
-    function hideWiget(){
-    chatbotWidget.classList.add('hide');
-    isWidgetVisible = false;
+    const toggleContainer = document.getElementById('chatbotToggleContainer');
 
-  }
+// 3. Updated Hide Function
+function hideWiget() {
+  chatbotWidget.classList.add('hide');
+  // ADD THIS LINE: Show the "Need help?" text again when chat closes
+  toggleContainer.classList.remove('hide'); 
+  isWidgetVisible = false;
+}
 
-  function showWidget(){
-    chatbotWidget.classList.remove('hide');
-    isWidgetVisible = true;
+// 4. Updated Show Function
+function showWidget() {
+  chatbotWidget.classList.remove('hide');
+  // ADD THIS LINE: Hide the "Need help?" text when chat opens
+  toggleContainer.classList.add('hide'); 
+  isWidgetVisible = true;
+}
 
-  } 
 
   function clearChat(){
     if(isWidgetVisible){
@@ -80,7 +90,7 @@
     return; 
   }
   //clear chat history
-   if(messagesEl.children.length !==0) messagesEl.replaceChildren();
+  if(messagesEl.children.length !==0) messagesEl.replaceChildren();
   addMessage(buildUserDetailsMessage(data),'user');
   //unlock the chatbot form
   chatInput.disabled =false;
@@ -106,6 +116,45 @@
     }
   });
 
+  
+  // create new chat and get response without showing the detail form
+  newConvoBtn.addEventListener('click',async function (e){
+    e.stopPropagation();
+    if(isWidgetVisible){
+  if(  sessionStorage.getItem('user-chatbot-details') ===null) return;
+  const data =JSON.parse(sessionStorage.getItem('user-chatbot-details'));
+
+  const history = await addChat("/chatbot/new",{...data,prompt:`you are connected to user : first name: ${data.firstName}  , surname: ${data.surname} , email:${data.email}`});
+  if(history.error.length>0){
+    addMessage(history.error,'bot');
+    return; 
+  }
+  //clear chat history
+  if(messagesEl.children.length !==0) messagesEl.replaceChildren();
+  addMessage(buildUserDetailsMessage(data),'user');
+  //unlock the chatbot form
+  chatInput.disabled =false;
+  sendBtn.disabled =false;
+  chatInput.placeholder = "Type your message..";
+  chatInput.focus();  
+
+  /*    intro = sessionStorage.getItem("details_form");    
+  const form = intro[0].querySelector(".intro-form");
+  const errorEl = form.querySelector(".error");
+
+    if(history.error.length>0){
+      errorEl.textContent =history.error;
+      errorEl.style.display ="block";
+      return;
+    }
+    errorEl.style.display ="none"; 
+    */
+    //add bot response
+
+    await addMessage(history.data,'bot',true);
+    
+    }
+  });  
   const escapeHtml = (str)=> String(str).replace(/[&,."'"]/g,(c) =>({"&":"&amp;","<":"&alt;",">":"&gt;",'"':"&quot;","'":"&339;"}[c])) 
   
   function scrollToBottom(){
@@ -194,8 +243,8 @@
   function showTyping(){
     const wrap = document.createElement("div");
     wrap.className ="message bot";
-    wrap.innerHTML = '<div class="bot"><i class="ph ph-robot"></i></div>'+
-    '<div class "bubble typing"> <span></span><span></span><span></span> </div>';
+    wrap.innerHTML = '<div class="avater"><i class="ph ph-robot"></i></div>'+
+    '<div class="bubble typing"> <span></span><span></span><span></span> </div>';
     messagesEl.appendChild(wrap);
     scrollToBottom();
     return wrap;
@@ -218,7 +267,7 @@
     else chat = response.data 
     const box =addMessage(chat,'bot',true);
     typing.remove();
-    if(data.human_agent)window.location.href = "https://wa.me/27692483470?text=Hi%20QueryCrest%20%F0%9F%91%8B";
+    if(data.human_agent)    window.open( "https://wa.me/27692483470?text=Hi%20QueryCrest%20%F0%9F%91%8B","_blank");
     return box
   }else{
    const box = addMessage(html,'bot',true);
@@ -252,23 +301,37 @@
   return box;
   }
 
-  function buildUserDetailsMessage(data){
-   const box = document.createElement("div");
-   box.className ="details";
-   [["First name",data.firstName],
-    ["Surname",data.surname],
-    ["Email",data.email] 
-  ].forEach(([label,value]) =>{
+  function buildUserDetailsMessage(data) {
+  // 1. Create the main message wrapper
+  const box = document.createElement("div");
+  box.className = "message user"; // Add chat classes here!
+
+  // 2. Create the inner bubble container
+  const content = document.createElement("div");
+  content.className = "msg-content";
+
+  // 3. Build the rows inside the bubble
+  [
+    ["First name", data.firstName],
+    ["Surname", data.surname],
+    ["Email", data.email]
+  ].forEach(([label, value]) => {
     const row = document.createElement("div");
+    row.className = "details-row"; // Optional: for extra styling
+    
     const strong = document.createElement("strong");
-    strong.textContent = label+": ";
+    strong.textContent = label + ": ";
+    
     row.appendChild(strong);
     row.appendChild(document.createTextNode(value));
-    box.appendChild(row);
-
+    content.appendChild(row); // Append to content, not box
   });
-  return box
-  }
+
+  // 4. Put the content inside the message wrapper
+  box.appendChild(content);
+
+  return box;
+}
   async function startChat(){
     intro = createIntroFormMessage();
    //if(sessionStorage.getItem("details_form")===null)sessionStorage.setItem("details_form",intro);
