@@ -21,7 +21,7 @@ fs.writeFileSync(,pdfBytes);
 */
 
 // pdf.js  <-- a CommonJS module
-const { PDFDocument } = require('pdf-lib');
+const { PDFDocument, StandardFonts,rgb } = require('pdf-lib');
 const fs = require('fs');
 const path = require('path');
 
@@ -66,18 +66,50 @@ placementPeriod:{page:0,x:165,y:495,size:9},
 portalPassword:{page:0,x:165,y:455,size:9},
 itsPin:{page:0,x:165,y:435,size:9}
  }};
-
-const pdfBytes = fs.readFileSync("C:/Users/USER-PC/Downloads/Student-Details-Varsity-College.pdf");
+const file = "C:/Users/USER-PC/Downloads/Student-Details-Varsity-College.pdf";
+const pdfBytes = fs.readFileSync(file);
 const pdfDoc = await PDFDocument.load(pdfBytes);
 
-const form = pdfDoc.getForm();
-const fields = form.getFields();
-console.log(form.getFields());
-fields.forEach((field) => {
-  const name = field.getName();
-  const type = field.constructor.name; // e.g., PDFTextField, PDFCheckBox
-  console.log(`${name} -> ${type}`);
-});
+
+async function replaceArea({page,x,y,width,height,text,size=9}){
+    const _page = pdfDoc.getPages()[page];
+    const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+    //cover the old template values/placeholders.
+    _page.drawRectangle({x,y,width,height,color:(1,1,1),borderWidth:0});
+
+    //draw new values
+    _page.drawText(string(text ??''),{x,y:y+2,size,font,color:rgb(0,0,0),maxWidth:width});
+}
+
+//replace values
+
+for(const key in varistyCollegeTemplate.fields){
+ for(const _key in student){
+    if(key === _key){
+    replaceArea({...varistyCollegeTemplate.fields[key],width:250,height:14,text:student[_key]});
+
+    }
+}
+ for(const _key in application){
+    if(key === _key){
+    replaceArea({...varistyCollegeTemplate.fields[key],width:250,height:14,text:application[_key]});
+
+    }
+}
+
+
+}
+
+// make it non editable
+//pdfDoc.getPage().flatten();
+
+const save_pdfBytes = await pdfDoc.save();
+let save_name ="";
+if(file.toLowerCase().includes("bursary"))save_name= `${student.firstName}_Bursary_Application_Confirmation`;
+else if(file.toLowerCase().includes("varsity"))save_name= `${student.firstName}_Application_Confirmation`;
+
+fs.writeFileSync(save_name,save_pdfBytes);
+
 }
 main().catch(console.error);
 
