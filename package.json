@@ -2,6 +2,7 @@
   "dependencies": {
     "@anthropic-ai/sdk": "^0.125.0",
     "@types/nanoid": "^2.1.0",
-    "nanoid": "^6.0.1"
+    "nanoid": "^6.0.1",
+    "pdf-lib": "^1.17.1"
   }
 }

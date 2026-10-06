@@ -22,7 +22,7 @@ let human_agent = false;
 // ===== CORS HELPERS =====
 function getCorsHeaders(origin: string | null) {
   return {
-    "Access-Control-Allow-Origin": "http://127.0.0.1:5500",
+    "Access-Control-Allow-Origin": "https://www.querycrest.com",
     "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, origin",
     "Access-Control-Allow-Methods": "GET, PUT, OPTIONS",
     "Access-Control-Max-Age": "86400",
@@ -89,7 +89,7 @@ async function getSources(spbase_client: ReturnType<typeof supabase_client>,iden
     }
  } catch (_error) {
       console.error({error:`Something went wrong. Please try again later , error:${_error}`,code:300});  
-      return {error:`Something went wrong. Please try again later error ${_error}`,data:[],code:300};
+      return {error:`Something went wrong. Please try again later error `,data:[],code:300};
  }
 }
 
@@ -113,7 +113,7 @@ async function getSettings(spbase_client: ReturnType<typeof supabase_client>) {
     }
  } catch (_error) {
       console.error({error:`Something went wrong. Please try again later , error:${_error}`,code:300});  
-      return {error:`Something went wrong. Please try again later error ${_error} `,data:[],code:300};
+      return {error:`Something went wrong. Please try again later error  `,data:[],code:300};
  }
 }
  //sources 
@@ -172,7 +172,7 @@ async function getChatHistory(spbase_client: ReturnType<typeof supabase_client>,
     }
  } catch (_error) {
       console.error({error:`Something went wrong. Please try again later , error:${_error}`,code:300});  
-      return {error:`Something went wrong. Please try again later error ${_error} `,data:{},code:300};
+      return {error:`Something went wrong. Please try again later error  `,data:{},code:300};
  }
 }
 
@@ -198,7 +198,7 @@ async function getChatRole(spbase_client: ReturnType<typeof supabase_client>,ema
     }
  } catch (_error) {
       console.error({error:`Something went wrong. Please try again later , error:${_error}`,code:300});  
-      return {error:`Something went wrong. Please try again later error ${_error} `,data:{},code:300};
+      return {error:`Something went wrong. Please try again later error  `,data:{},code:300};
  }
 }
 
@@ -224,7 +224,7 @@ async function getChatFqa(spbase_client: ReturnType<typeof supabase_client>) {
     }
  } catch (_error) {
       console.error({error:`Something went wrong. Please try again later , error:${_error}`,code:300});  
-      return {error:`Something went wrong. Please try again later error ${_error}`,data:{},code:300};
+      return {error:`Something went wrong. Please try again later error `,data:{},code:300};
  }
 }
 
@@ -248,7 +248,7 @@ async function addChat(spbase_client: ReturnType<typeof supabase_client>,chat,em
     }
  } catch (_error) {
       console.error({error:`Something went wrong. Please try again later , error:${_error}`,code:300});  
-      return {error:`Something went wrong. Please try again later error ${_error}`,data:{},code:300};
+      return {error:`Something went wrong. Please try again later error `,data:{},code:300};
  }
 }
 
@@ -271,7 +271,7 @@ async function addUser_ChatLog(spbase_client: ReturnType<typeof supabase_client>
     }
  } catch (_error) {
       console.error({error:`Something went wrong. Please try again later , error:${_error}`,code:300});  
-      return {error:`Something went wrong. Please try again later error ${_error}`,data:{},code:300};
+      return {error:`Something went wrong. Please try again later error `,data:{},code:300};
  }
 }
 
@@ -295,7 +295,7 @@ async function addChat_timeStamp(spbase_client: ReturnType<typeof supabase_clien
     }
  } catch (_error) {
       console.error({error:`Something went wrong. Please try again later , error:${_error}`,code:300});  
-      return {error:`Something went wrong. Please try again later error ${_error}`,data:{},code:300};
+      return {error:`Something went wrong. Please try again later error `,data:{},code:300};
  }
 }
 
@@ -323,7 +323,7 @@ async function getChatTimeHistory(spbase_client: ReturnType<typeof supabase_clie
     }
  } catch (_error) {
       console.error({error:`Something went wrong. Please try again later , error:${_error}`,code:300});  
-      return {error:`Something went wrong. Please try again later error ${_error} `,data:{},code:300};
+      return {error:`Something went wrong. Please try again later error  `,data:{},code:300};
  }
 }
 
@@ -348,7 +348,7 @@ async function addChat_log(spbase_client: ReturnType<typeof supabase_client>,_da
     }
  } catch (_error) {
       console.error({error:`Something went wrong. Please try again later , error:${_error}`,code:300});  
-      return {error:`Something went wrong. Please try again later  error ${_error}`,data:[],code:300};
+      return {error:`Something went wrong. Please try again later  error `,data:[],code:300};
  }
 }
 
@@ -374,7 +374,7 @@ async function addChat_ticket(spbase_client: ReturnType<typeof supabase_client>,
     }
  } catch (_error) {
       console.error({error:`Something went wrong. Please try again later , error:${_error}`,code:300});  
-      return {error:`Something went wrong. Please try again later  error ${_error}`,data:false,code:300};
+      return {error:`Something went wrong. Please try again later  error `,data:false,code:300};
  }
 }
 
@@ -397,7 +397,7 @@ async function setChat_ticket(spbase_client: ReturnType<typeof supabase_client>,
     }
  } catch (_error) {
       console.error({error:`Something went wrong. Please try again later , error:${_error}`,code:300});  
-      return {error:`Something went wrong. Please try again later  error ${_error}`,data:false,code:300};
+      return {error:`Something went wrong. Please try again later  error `,data:false,code:300};
  }
 }
 
@@ -420,7 +420,7 @@ async function getChat_tickets(spbase_client: ReturnType<typeof supabase_client>
     }
  } catch (_error) {
       console.error({error:`Something went wrong. Please try again later , error:${_error}`,code:300});  
-      return {error:`Something went wrong. Please try again later  error ${_error}`,data:[],code:300};
+      return {error:`Something went wrong. Please try again later  error `,data:[],code:300};
  }
 }
 
@@ -554,7 +554,7 @@ try {
   
 } catch (error) {
 //  
-return `failed to fetch accommodation data ${error}`;
+return `failed to fetch accommodation data `;
 }
 
   }
@@ -787,18 +787,7 @@ if(settings.manual_models.includes(String(settings.model))) model_config =
      if(toolUse && toolUse !==null ){
       console.log(`Claude called ${toolUse.name} with ${JSON.stringify(toolUse.input)}`);
       let tool_results ="";
-      /* for getting data*/
-      /*
-      if(toolUse.name ==="getInstitutionData")tool_results= JSON.stringify(await getInstitutionData());
-      else if(toolUse.name ==="getQualificationData")tool_results =JSON.stringify( await getQualificationData(toolUse.input.identifier));
-      else if(toolUse.name ==="getSubjectData")tool_results = JSON.stringify(await getSubjectData());
-      else if(toolUse.name === "getCalculatedApsData")tool_results = JSON.stringify(await getCalculatedApsData(toolUse.input._data));
-      else if(toolUse.name === "getAccommodationsData")tool_results = JSON.stringify(await getAccommodationsData(toolUse.input._visibleCount)); 
-      else if(toolUse.name === "getChatbotFqa")tool_results = JSON.stringify(await getChatbotFqa()); 
-      else if(toolUse.name === "getUserRole")tool_results = JSON.stringify(await getUserRole(toolUse.input.email));
-      else if(toolUse.name === "getSourceData")tool_results = JSON.stringify(await getSourceData(toolUse.input.institution_id));
-      
-      else*/ if(toolUse.name === "createTicket")tool_results = JSON.stringify(await createTicket(toolUse.input.username,toolUse.input.email,toolUse.input.subject,toolUse.input.description,toolUse.input?.priority));       
+      if(toolUse.name === "createTicket")tool_results = JSON.stringify(await createTicket(toolUse.input.username,toolUse.input.email,toolUse.input.subject,toolUse.input.description,toolUse.input?.priority));       
       else if(toolUse.name === "humanSupport")tool_results = JSON.stringify(await humanSupport(toolUse.input.ticket_id,toolUse.input.email,toolUse.input?.priority));       
       else if(toolUse.name === "setTicketStatus")tool_results = JSON.stringify(await setTicketStatus(toolUse.input.ticket_id,toolUse.input.email,toolUse.input.status,toolUse.input?.priority));       
       else if(toolUse.name === "getTickets")tool_results = JSON.stringify(await getTickets(toolUse.input.ticket_id,toolUse.input.email));       
@@ -829,18 +818,10 @@ if(settings.manual_models.includes(String(settings.model))) model_config =
       )!;
      /* multi tool call failed , next implementation use in build feature.      
      if(toolUse && toolUse !==null ){      
-      if(toolUse.name ==="getInstitutionData")tool_results= JSON.stringify(await getInstitutionData());
-      else if(toolUse.name ==="getQualificationData")tool_results =JSON.stringify( await getQualificationData(toolUse.input.identifier));
-      else if(toolUse.name ==="getSubjectData")tool_results = JSON.stringify(await getSubjectData());
-      else if(toolUse.name === "getCalculatedApsData")tool_results = JSON.stringify(await getCalculatedApsData(toolUse.input._data));
-      else if(toolUse.name === "getUserRole")tool_results = JSON.stringify(await getUserRole(toolUse.input.email));
-      else if(toolUse.name === "getAccommodationsData")tool_results = JSON.stringify(await getAccommodationsData(toolUse.input._visibleCount)); 
-      else if(toolUse.name === "getChatbotFqa")tool_results = JSON.stringify(await getChatbotFqa()); 
-      else if(toolUse.name === "createTicket")tool_results = JSON.stringify(await createTicket(toolUse.input.username,toolUse.input.email,toolUse.input.subject,toolUse.input.description,toolUse.input?.priority));       
+      if(toolUse.name === "createTicket")tool_results = JSON.stringify(await createTicket(toolUse.input.username,toolUse.input.email,toolUse.input.subject,toolUse.input.description,toolUse.input?.priority));       
       else if(toolUse.name === "humanSupport")tool_results = JSON.stringify(await humanSupport(toolUse.input.ticket_id,toolUse.input.email,toolUse.input?.priority));       
       else if(toolUse.name === "setTicketStatus")tool_results = JSON.stringify(await setTicketStatus(toolUse.input.ticket_id,toolUse.input.email,toolUse.input.status,toolUse.input?.priority));       
       else if(toolUse.name === "getTickets")tool_results = JSON.stringify(await getTickets(toolUse.input.ticket_id,toolUse.input.email));       
-      else if(toolUse.name === "getSourceData")tool_results = JSON.stringify(await getSourceData(toolUse.input.institution_id));
       else if(toolUse.name === "logBehaviour")tool_results = JSON.stringify(await logBehaviour(toolUse.input.abuse_flag,toolUse.input.abuse_count,toolUse.input.abuse_description,toolUse.input.email));
 
 
@@ -926,15 +907,15 @@ Deno.serve(async (req) => {
   try {
 
     const origin = req.headers.get("origin");
-  if (origin && origin !== "http://127.0.0.1:5500" ) {
-    return _json({ error: "Origin not allowed" }, 403);
-  }
+    if (origin && origin !== "https://www.querycrest.com" ) {
+      return _json({ error: "Origin not allowed" }, 403);
+    }
 
 
-  const clientIP = req.headers.get("x-forwarded-for") || "unknown";
-  if (!checkRateLimit(clientIP)) {
-    return _json({ error: "Too many attempts. Try again later." }, 429);
-  }
+    const clientIP = req.headers.get("x-forwarded-for") || "unknown";
+    if (!checkRateLimit(clientIP)) {
+      return _json({ error: "Too many attempts. Try again later." }, 429);
+    }
     
     const url = new URL(req.url);
     const method = req.method;
@@ -942,163 +923,82 @@ Deno.serve(async (req) => {
     const path = url.pathname;
   
 
-const tools: Anthropic.Tool[] = [
-  /* for getting querycrest related data
-  {
-    name: "getInstitutionData",
-    description: "Get list of Institutions",
-    input_schema: {
-      type: "object",
- 
-      required: [""]
-    }
-  },
-  {
-    name: "getQualificationData",
-    description: "Get list of Qualification",
-    input_schema: {
-      type: "object",
-      properties: {
-        identifier: { type: "string", description: " id from the list of Institutions " }
-      },
-      required: ["identifier"]
-    }
-  },
-  {
-    name: "getSubjectData",
-    description: "Get list of Subjects",
-    input_schema: {
-      type: "object",
-      required: [""]
-    }
-  },
-  {
-    name: "getCalculatedApsData",
-    description: "Get detailed calculated APS",
-    input_schema: {
-      type: "object",
-      properties: {
-        _data: { type: "object", description: "institutionId:string ,qualifictionId:string ,subjects:array of object{subject,mark}" }
-      },
-      required: ["_data"]
-    }
-  },
-  {
-    name: "getUserRole",
-    description: "Get a role of a user",
-    input_schema: {
-      type: "object",
-      properties: {
-        email: { type: "string", description: "email of the user" }
-      },
-      required: ["email"]
-    }
-  },
-  {
-    name: "getAccommodationsData",
-    description: "Get list of accommodations",
-    input_schema: {
-      type: "object",
-      properties: {
-        _visibleCount: { type: "number", description: "pagination in increament of 15 the page return 15 accommodation per page , first page is  15 then second page is  30 " }
-      },
-      required: ["_visibleCount"]
-    }
-  },
-  {
-    name: "getChatbotFqa",
-    description: "Get list of FQA, Frequently Questioned Answers  A collection of answers to commonly asked questions.",
-    input_schema: {
-      type: "object",
+    const tools: Anthropic.Tool[] = [
 
-      required: [""]
-    }
-  },
-{
-    name: "getSourceData",
-    description: "Get list of Sources",
-    input_schema: {
-      type: "object",
-      properties: {
-        institution_id: { type: "string", description: "institution id for source of information you are looking for" }
+      {
+        name: "humanSupport",
+        description: "Elevate to level 2 and get user connect user with human agent",
+        input_schema: {
+          type: "object",
+          properties: {
+            ticket_id: { type: "string", description: "id for the ticket" },
+            email: { type: "string", description: "email of the user" },
+            priority: { type: "string", description: "priority for the ticket , critical, high, normal , low" }                
+          },
+          required: ["ticket_id","email"]
+        }
+      },{
+        name: "setTicketStatus",
+        description: "Update a ticket",
+        input_schema: {
+          type: "object",
+          properties: {
+            ticket_id: { type: "string", description: "id for the ticket" },
+            email: { type: "string", description: "email of the user" },
+            status:{type: "string", description: "status for the ticket , default: new , new:just created , open:set when called the createTicket , pending:set this after your response after creating ticket , on-hold: waiting on internal system, solved: resolved waiting for confirmation from the user ,closed: final ,reopened : user replies fater closed" },
+            priority: { type: "string", description: "priority for the ticket , default: low , critical, high, normal , low" }                
+          },
+          required: ["ticket_id","email","status"]
+        }
+      },{
+        name: "createTicket",
+        description: "Create a ticket",
+        input_schema: {
+          type: "object",
+          properties: {
+            username: { type: "string", description: "username is made up of user first name surname space between the names" },
+            email: { type: "string", description: "email of the user" },
+            subject: { type: "string", description: "subject is the title of problem discussed" },
+            description: { type: "string", description: "description of the issue the user is facing" },                
+            priority: { type: "string", description: "priority for the ticket , default: low , critical, high, normal , low" }                
+          },
+          required: ["username","email","subject","description",]
+        }
       },
-      required: ["institution_id"]
-    }
-  },*/
-  {
-    name: "humanSupport",
-    description: "Elevate to level 2 and get user connect user with human agent",
-    input_schema: {
-      type: "object",
-      properties: {
-        ticket_id: { type: "string", description: "id for the ticket" },
-        email: { type: "string", description: "email of the user" },
-        priority: { type: "string", description: "priority for the ticket , critical, high, normal , low" }                
-      },
-      required: ["ticket_id","email"]
-    }
-  },{
-    name: "setTicketStatus",
-    description: "Update a ticket",
-    input_schema: {
-      type: "object",
-      properties: {
-        ticket_id: { type: "string", description: "id for the ticket" },
-        email: { type: "string", description: "email of the user" },
-        status:{type: "string", description: "status for the ticket , default: new , new:just created , open:set when called the createTicket , pending:set this after your response after creating ticket , on-hold: waiting on internal system, solved: resolved waiting for confirmation from the user ,closed: final ,reopened : user replies fater closed" },
-        priority: { type: "string", description: "priority for the ticket , default: low , critical, high, normal , low" }                
-      },
-      required: ["ticket_id","email","status"]
-    }
-  },{
-    name: "createTicket",
-    description: "Create a ticket",
-    input_schema: {
-      type: "object",
-      properties: {
-        username: { type: "string", description: "username is made up of user first name surname space between the names" },
-        email: { type: "string", description: "email of the user" },
-        subject: { type: "string", description: "subject is the title of problem discussed" },
-        description: { type: "string", description: "description of the issue the user is facing" },                
-        priority: { type: "string", description: "priority for the ticket , default: low , critical, high, normal , low" }                
-      },
-      required: ["username","email","subject","description",]
-    }
-  },
-{
-    name: "getTickets",
-    description: "Get list of tickets",
-    input_schema: {
-      type: "object",
-      properties: {
-        ticket_id: { type: "string", description: "id for the ticket" },
-        email: { type: "string", description: "email of the user" },
+    {
+        name: "getTickets",
+        description: "Get list of tickets",
+        input_schema: {
+          type: "object",
+          properties: {
+            ticket_id: { type: "string", description: "id for the ticket" },
+            email: { type: "string", description: "email of the user" },
 
+          },
+          required: ["ticket_id","email"]
+        }
       },
-      required: ["ticket_id","email"]
-    }
-  },
-{
-    name: "logBehaviour",
-    description: "log user behaviour",
-    input_schema: {
-      type: "object",
-      properties: {
-        abuse_flag: { type: "boolean", description: "flag the user for misuse of the querycrest services" },
-        abuse_count: { type: "number", description: "number of misuse , starting from 0 which means they havent done any thing to 3 which is the max ,0,1,2,3" },        
-        abuse_description: { type: "string", description: "description of the misuse in detail " }, 
-        email: { type: "string", description: "email of the user" }               
-      },
-      required: ["abuse_flag","abuse_count","abuse_description","email"]
-    }
-  }
+    {
+        name: "logBehaviour",
+        description: "log user behaviour",
+        input_schema: {
+          type: "object",
+          properties: {
+            abuse_flag: { type: "boolean", description: "flag the user for misuse of the querycrest services" },
+            abuse_count: { type: "number", description: "number of misuse , starting from 0 which means they havent done any thing to 3 which is the max ,0,1,2,3" },        
+            abuse_description: { type: "string", description: "description of the misuse in detail " }, 
+            email: { type: "string", description: "email of the user" }               
+          },
+          required: ["abuse_flag","abuse_count","abuse_description","email"]
+        }
+      }
 
 
 
 
 
 
-];
+    ];
     
 
 
@@ -1116,135 +1016,247 @@ const tools: Anthropic.Tool[] = [
     // GET - Chat  add new chat
     // ============================================================
     if (method === "PUT" && path.includes("new") ){
-       //
-      const body = await req.text();
-      //Reject any body larger than 8 KB to prevent payload attacks. 
-      if(body.length > MAX_BODY_SIZE){
-          return _json({error:`Request body is too large. Max size is ${MAX_BODY_SIZE/1024} KB`},400);
-      }
-      //Read and parse the JSON request body. 
-      const {firstName:name,surname:Surname,email:Email,prompt:Prompt} = JSON.parse(body);
-      const firstName = name.toLowerCase();
-      const surname = Surname.toLowerCase();
-      const email = Email.toLowerCase();
-      const prompt = Prompt.toLowerCase();
+        //
+        const body = await req.text();
+        //Reject any body larger than 8 KB to prevent payload attacks. 
+        if(body.length > MAX_BODY_SIZE){
+            return _json({error:`Request body is too large. Max size is ${MAX_BODY_SIZE/1024} KB`},400);
+        }
+        //Read and parse the JSON request body. 
+        const {firstName:name,surname:Surname,email:Email,prompt:Prompt} = JSON.parse(body);
+        const firstName = name.toLowerCase();
+        const surname = Surname.toLowerCase();
+        const email = Email.toLowerCase();
+        const prompt = Prompt.toLowerCase();
 
-      const request_time = new Date();
-      //vaildate
-      const regex = /^[A-Za-z]+$/;
+        const request_time = new Date();
+        //vaildate
+        const regex = /^[A-Za-z]+$/;
 
-      if (!firstName.trim()  ) {
-        return _json({ error: "first name field required" ,data:[]}, 400);
-      }
-      if (!surname.trim()  ) {
-        return _json({ error: "surname field required" ,data:[]}, 400);
-      }
-        if (firstName.length >fields_limits  ) {
-        return _json({ error: `first name field has many values limit:${fields_limits}` ,data:[]}, 400);
-      }
-      if (surname.length > fields_limits  ) {
-        return _json({ error: `surname field has many values limit:${fields_limits}`  ,data:[]}, 400);
-      }
-      if (email.length >fields_limits) {
-        return _json({ error:   `email field has many values limit:${fields_limits}` ,data:[]}, 400);
-      }
-      if (prompt.length>1000 ) {
-        return _json({ error: "prompt field has many values limit:1000" ,data:[]}, 400);
-      }
-      if ( !(regex.test(firstName.trim()) ) ) {
-        return _json({ error: "first name field requires only letters" ,data:[]}, 400);
-      }
-      if ( !(regex.test(surname.trim()) ) ) {
-        return _json({ error: "surname field requires only letters" ,data:[]}, 400);
-      }
-      
-      if (!email.trim() && typeof first_name ==="string") {
-        return _json({ error: "email field required" ,data:[]}, 400);
-      }
-      if(!validator.isEmail(email))return _json({ error: "email pattern invaild" ,data:[]}, 400);    
-      if (!prompt.trim() && typeof prompt ==="string") {
-        return _json({ error: "prompt field required" ,data:[]}, 400);
-      }      
+        if (!firstName.trim()  ) {
+          return _json({ error: "first name field required" ,data:[]}, 400);
+        }
+        if (!surname.trim()  ) {
+          return _json({ error: "surname field required" ,data:[]}, 400);
+        }
+          if (firstName.length >fields_limits  ) {
+          return _json({ error: `first name field has many values limit:${fields_limits}` ,data:[]}, 400);
+        }
+        if (surname.length > fields_limits  ) {
+          return _json({ error: `surname field has many values limit:${fields_limits}`  ,data:[]}, 400);
+        }
+        if (email.length >fields_limits) {
+          return _json({ error:   `email field has many values limit:${fields_limits}` ,data:[]}, 400);
+        }
+        if (prompt.length>1000 ) {
+          return _json({ error: "prompt field has many values limit:1000" ,data:[]}, 400);
+        }
+        if ( !(regex.test(firstName.trim()) ) ) {
+          return _json({ error: "first name field requires only letters" ,data:[]}, 400);
+        }
+        if ( !(regex.test(surname.trim()) ) ) {
+          return _json({ error: "surname field requires only letters" ,data:[]}, 400);
+        }
+        
+        if (!email.trim() && typeof firstName ==="string") {
+          return _json({ error: "email field required" ,data:[]}, 400);
+        }
+        if(!validator.isEmail(email))return _json({ error: "email pattern invaild" ,data:[]}, 400);    
+        if (!prompt.trim() && typeof prompt ==="string") {
+          return _json({ error: "prompt field required" ,data:[]}, 400);
+        }      
 
-       const username = `${firstName}  ${surname}`;      
-      const settings = await getSettings(spbase_client);
-      if(settings?.error)if(settings.error.length>0)return _json({error:settings?.error,data:settings?.data},settings?.code);      
+        const username = `${firstName}  ${surname}`;      
+        const settings = await getSettings(spbase_client);
+        if(settings?.error)if(settings.error.length>0)return _json({error:settings?.error,data:settings?.data},settings?.code);      
 
-      const chat_history = await getChatHistory(spbase_client,firstName,surname,email);
-      const chat_history_time = await getChatTimeHistory(spbase_client,email);
+        const chat_history = await getChatHistory(spbase_client,firstName,surname,email);
+        const chat_history_time = await getChatTimeHistory(spbase_client,email);
 
-      if(chat_history?.error)if(chat_history.error.length>0)return _json({error:chat_history?.error,data:"chat_history?.data"},chat_history?.code); 
-      if(typeof chat_history?.data ==="object")if(chat_history?.data.abuse_flag)if(chat_history?.data.abuse_count>chat_history?.data.abuse_max_count)      return _json({error:"",data:"you have been banned from the support service, for further assistant contact querycrest support ",human_agent:true},200);
-      if(Array.isArray(chat_history?.data?.abuse_description))current_chat_history = chat_history?.data.abuse_description; 
-      else current_chat_history =[]
- 
-      let messages: Anthropic.MessageParam[] =  [
-        { role: "user", content: `prompt:${prompt} ,user abuse stats: ,flagged for abuse:${chat_history?.data.abuse_flag} count:${chat_history?.data.abuse_count} , date: ${new Date().toISOString()} ` }
-      ]; 
+        if(chat_history?.error)if(chat_history.error.length>0)return _json({error:chat_history?.error,data:"chat_history?.data"},chat_history?.code); 
+        if(typeof chat_history?.data ==="object")if(chat_history?.data.abuse_flag)if(chat_history?.data.abuse_count>chat_history?.data.abuse_max_count)      return _json({error:"",data:"you have been banned from the support service, for further assistant contact querycrest support ",human_agent:true},200);
+        if(Array.isArray(chat_history?.data?.abuse_description))current_chat_history = chat_history?.data.abuse_description; 
+        else current_chat_history =[]
+  
+        let messages: Anthropic.MessageParam[] =  [
+          { role: "user", content: `prompt:${prompt} ,user abuse stats: ,flagged for abuse:${chat_history?.data.abuse_flag} count:${chat_history?.data.abuse_count} , date: ${new Date().toISOString()} ` }
+        ]; 
 
-      //add new chat
-      const new_chat = [];
-      if(chat_history)if(chat_history.data){
-       for(const item of chat_history.data?.chat ){
-        new_chat.push(item);
-       }
-      }
-      new_chat.push(messages)
-      const chat_add =  await  addChat(spbase_client,new_chat,email);
-      if(chat_add?.error)if(chat_add?.error.length>0)return _json({error:chat_add?.error,data:"new_chat"},chat_add?.code);
+        //add new chat
+        const new_chat = [];
+        if(chat_history)if(chat_history.data){
+          for(const item of chat_history.data?.chat ){
+            new_chat.push(item);
+          }
+        }
+        new_chat.push(messages)
+        const chat_add =  await  addChat(spbase_client,new_chat,email);
+        if(chat_add?.error)if(chat_add?.error.length>0)return _json({error:chat_add?.error,data:"new_chat"},chat_add?.code);
 
 
-      let history = [];
-      
-      if(new_chat)if(chat_history  !== null){if(new_chat.length >0){
-       const cur_prompt = messages[0];
-        if(new_chat.length >1)messages =   new_chat[new_chat.length-1 ] ;
-        else messages =   new_chat[0] ;
-        if(messages[0] !== cur_prompt)messages.push(cur_prompt);
+        let history = [];
+        
+        if(new_chat)if(chat_history  !== null){
+          if(new_chat.length >0){
+            const cur_prompt = messages[0];
+            //if(new_chat.length >1)messages =   new_chat[new_chat.length-1 ] ;
+            if(new_chat.length >1)messages =   new_chat[new_chat.length-1 ] ;
+            else messages =   new_chat[0] ;
+            if(messages[0] !== cur_prompt)messages.push(cur_prompt);
 
-        history= new_chat;
-      }else history = [];
+            history= new_chat;
+        }else history = [];
+        }
+
+        const response = await chat(chatbot_client,spbase_client,settings?.data,messages,history  ,tools,username,email);
+        /*
+        const chats_time = []
+        //add history time data for missing chats
+        for(let i = 0;i< (Math.abs((chat_history?.data.chat.length)- (chat_history_time?.data?.response_time.history.length)));i++ ){
+              const chat_time = [];
+              //
+              if(chat_history_time?.data?.response_time.history.length <=chat_history?.data.chat.length  )if(chat_history?.data.chat[i].length !==chat_history_time?.data?.response_time.history[i].length ){
+                if(chat_history_time?.data?.response_time.history[i].length <chat_history?.data.chat[i].length){
+                  //
+                  for(let k = 0;k< (Math.abs((chat_history?.data.chat[i].length)- (chat_history_time?.data?.response_time.history[i].length)));k++){
+                    //add null data to the missing data
+                    chat_time.push({
+                      request_time:null,
+                      response_time:null,
+                      duration_time:null
+                    });
+                  }
+                
+                }
+                //add data from chat_history_time
+                
+                for(const time_data of chat_history_time?.data?.response_time?.history){
+                  chat_time.push(time_data);
+                }
+
+              }
+        chats_time.push(chat_time);
+        }
+        
+
+        const response_time = new Date();
+        const duration_time = response_time.getTime() - request_time.getTime();
+        const timeHistory = [];
+        let time_idx=0;
+        if(chat_history_time.data){
+          //if(chat_history_time.data.length>1)time_idx = chat_history_time.data.history.length-1;        
+          if(chat_history_time.data.response_time.history.length>1){
+            time_idx = chat_history_time.data.response_time.history.length-1;
+
+            for(const item of chat_history_time.data.response_time.history[time_idx]){
+              timeHistory.push(item)
+            }
+            timeHistory.push({
+              request_time:request_time,
+              response_time:request_time,
+              duration_time:duration_time
+            });
+            Array(chat_history_time.data.response_time.history)[time_idx]=timeHistory;
+          
+          }
+          const time_log = await addChat_timeStamp(spbase_client,chat_history_time.data.response_time.history,email);
+          if(time_log?.error)if(time_log?.error.length>0)return _json({error:time_log?.error,data:time_log.data},time_log?.code);                  
+        
+        }else{
+          timeHistory.push({
+            request_time:request_time.toISOString(),
+            response_time:request_time.toISOString(),
+            duration_time:duration_time
+          });
+
+          const time_log = await addChat_timeStamp(spbase_client,timeHistory,email);
+          if(time_log?.error)if(time_log?.error.length>0)return _json({error:time_log?.error,data:time_log.data},time_log?.code);                  
+            
+        }*/
+
+           const chats_time = []
+          //add history time data for missing chats
+          
+          if(chat_history?.data &&chat_history_time?.data)if(chat_history.data.chat  !== null && chat_history_time?.data?.response_time.history !==null)if(chat_history.data.chat.length >0){
+                  
+            for(let i = 0;i< (Math.abs((chat_history?.data.chat.length)- (chat_history_time?.data?.response_time.history.length)));i++ ){
+          
+              const chat_time = [];
+              //
+                  if(chat_history_time?.data?.response_time.history.length <=chat_history?.data.chat.length  )
+                  if(chat_history?.data.chat.length >0&& chat_history_time?.data?.response_time.history.length>0)if(chat_history?.data.chat[i].length !== chat_history_time?.data?.response_time.history[i].length ){
+                  
+                    if(chat_history_time?.data?.response_time.history[i].length <chat_history?.data.chat[i].length){
+                  //
+                  for(let k = 0;k< (Math.abs((chat_history?.data.chat[i].length)- (chat_history_time?.data?.response_time.history[i].length)));k++){
+                    //add null data to the missing data
+                    chat_time.push({
+                      request_time:null,
+                      response_time:null,
+                      duration_time:null
+                    });
+                  }
+                  }
+                  //add data from chat_history_time
+                  
+                  for(const time_data of chat_history_time?.data?.response_time?.history){
+                    chat_time.push(time_data);
+                  }
+                  
+                  }
+            chats_time.push(chat_time);
+
+          
+            }
+          
+            const time_log = await addChat_timeStamp(spbase_client,chats_time,email);
+            if(time_log?.error)if(time_log?.error.length>0)return _json({error:time_log?.error,data:time_log.data},time_log?.code);        
+          }
+          
+          const response_time = new Date();
+          const duration_time = response_time.getTime() - request_time.getTime();
+          const timeHistory = [];
+          let time_idx=0;
+          if(chat_history_time.data){
+              //if(chat_history_time.data.length>1)time_idx = chat_history_time.data.history.length-1;        
+              if(chat_history_time.data.response_time.history.length>0){
+                time_idx = chat_history_time.data.response_time.history.length-1;
+
+                for(const item of Array(chat_history_time.data.response_time.history[time_idx] )){
+                  timeHistory.push(item)
+                }
+                timeHistory.push({
+                  request_time:request_time,
+                  response_time:request_time,
+                  duration_time:duration_time
+                });
+                //Array(chat_history_time.data.response_time.history)[time_idx]=timeHistory;
+                //chat_history_time.data.response_time.history
+              chats_time[chats_time.length-1].push(timeHistory);
+              const time_log = await addChat_timeStamp(spbase_client,chats_time,email);
+              if(time_log?.error)if(time_log?.error.length>0)return _json({error:time_log?.error,data:time_log.data},time_log?.code);                
+              }else{
+            timeHistory.push([{
+                request_time:request_time.toISOString(),
+                response_time:request_time.toISOString(),
+                duration_time:duration_time
+              }]);
+
+            const time_log = await addChat_timeStamp(spbase_client,timeHistory,email);
+            if(time_log?.error)if(time_log?.error.length>0)return _json({error:time_log?.error,data:time_log.data},time_log?.code);                  
+              
+          }  
+        }
+
+
+
+        return _json({error:response.error,data:response.data,human_agent:human_agent},response.code);
     }
 
-      const response = await chat(chatbot_client,spbase_client,settings?.data,messages,history  ,tools,username,email);
-      /*
-      const response_time = new Date();
-      const duration_time = response_time.getTime() - request_time.getTime();
-      const timeHistory = [];
-      let time_idx=0;
-      if(chat_history_time.data){
-      if(chat_history_time.data.length>1)time_idx = chat_history_time.data.length-1;
-
-      for(const item of chat_history_time.data[time_idx]){
-        timeHistory.push(item)
-      }
-      timeHistory.push({
-        request_time:request_time,
-        response_time:request_time,
-        duration_time:duration_time
-      });
-      chat_history_time.data[time_idx]=timeHistory;
-      const time_log = await addChat_timeStamp(spbase_client,chat_history_time.data,email);
-      if(time_log?.error)if(time_log?.error.length>0)return _json({error:time_log?.error,data:time_log.data},time_log?.code);                  
-      }else{
-     timeHistory.push({
-        request_time:request_time.toISOString(),
-        response_time:request_time.toISOString(),
-        duration_time:duration_time
-      });
-
-      const time_log = await addChat_timeStamp(spbase_client,timeHistory,email);
-      if(time_log?.error)if(time_log?.error.length>0)return _json({error:time_log?.error,data:time_log.data},time_log?.code);                  
-         
-      }
-      */
-      return _json({error:response.error,data:response.data,human_agent:human_agent},response.code);
-     }
-
-      //}
-    // ============================================================
-    // GET - Chat History
-    // ============================================================
+        //}
+      // ============================================================
+      // GET - Chat History
+      // ============================================================
     else if (method === "GET" && path.includes("chat") ){
       const first_name = url.searchParams.get("firstName")?.toLowerCase() || "";
       const surname = url.searchParams.get("surname")?.toLowerCase() || "";      
@@ -1282,19 +1294,20 @@ const tools: Anthropic.Tool[] = [
       
       const chat_history = await getChatHistory(spbase_client,first_name,surname,email);
       if(chat_history?.error)if(chat_history.error.length>0){return _json({error:chat_history?.error,data:"chat_history?.data?.chat"},chat_history?.code); }
-      if(chat_history?.data)return _json({error:chat_history?.error,data:chat_history?.data?.chat[chat_history?.data?.chat.length-1]},chat_history?.code); 
+      //if(chat_history?.data)return _json({error:chat_history?.error,data:chat_history?.data?.chat[chat_history?.data?.chat.length-1]},chat_history?.code); 
+      if(chat_history?.data)return _json({error:chat_history?.error,data:chat_history?.data?.chat[chat_history?.data?.chat.length]},chat_history?.code); 
       
       //return _json({error:"failed to get history data",data:[]},404);
     }
-    // ============================================================
-    // GET - Ticket
-    // ============================================================
+      // ============================================================
+      // GET - Ticket
+      // ============================================================
 
 
-    // ============================================================
-    // PUT - Chat with Zuzu
-    // ============================================================
-    
+      // ============================================================
+      // PUT - Chat with Zuzu
+      // ============================================================
+      
     
     else if (method === "PUT" ){
       const body = await req.text();
@@ -1348,7 +1361,7 @@ const tools: Anthropic.Tool[] = [
         return _json({ error: "prompt field has many values limit:1000" ,data:[]}, 400);
       }
 
-    if(!validator.isEmail(email))return _json({ error: "email pattern invaild" ,data:[]}, 400);     
+      if(!validator.isEmail(email))return _json({ error: "email pattern invaild" ,data:[]}, 400);     
       const settings = await getSettings(spbase_client);
       if(settings?.error)if(settings.error.length>0)return _json({error:settings?.error,data:settings?.data},settings?.code);      
 
@@ -1365,15 +1378,19 @@ const tools: Anthropic.Tool[] = [
       ]; 
       let history = [];
       
-      if(chat_history?.data)if(chat_history.data.chat  !== null){if(chat_history.data.chat.length >0){
-       const cur_prompt = messages[0];
-        if(chat_history.data.chat.length >0)messages =   chat_history.data.chat[(chat_history.data?.chat.length)-1 ] ;
+      if(chat_history?.data)if(chat_history.data.chat  !== null){
+        if(chat_history.data.chat.length >0){
+        const cur_prompt = messages[0];
+        //if(chat_history.data.chat.length >0)messages =   chat_history.data.chat[(chat_history.data?.chat.length)-1 ] ;
+        if(chat_history.data.chat.length >0)messages =   chat_history.data.chat[(chat_history.data?.chat.length) -1] ;
         else messages =   chat_history.data.chat[0] ;
         messages.push(cur_prompt);
         history= chat_history.data.chat;
       }else history = [];
-    }
+       
+      }
        const username = `${firstName}  ${surname}`;
+      //if(chat_history?.data)if(chat_history.data?.chat.length>0)chat_index = (chat_history.data?.chat.length)-1;else chat_index=0;
       if(chat_history?.data)if(chat_history.data?.chat.length>0)chat_index = (chat_history.data?.chat.length)-1;else chat_index=0;
 
       const response = await chat(chatbot_client,spbase_client,settings?.data,messages,history  ,tools,username,email);
@@ -1388,7 +1405,7 @@ const tools: Anthropic.Tool[] = [
       //add null to missing data
       for(const [time_his_dix,history_item] of chat_history_time.data){
 
-        if(history_item.length ===0 || history_item==null)
+        //if(history_item.length ===0 || history_item==null)
       }
       if(chat_history_time.data.length>1)time_idx = chat_history_time.data.length-1;
 
@@ -1401,6 +1418,7 @@ const tools: Anthropic.Tool[] = [
         response_time:request_time.toISOString(),
         duration_time:duration_time
       });
+
       chat_history_time.data[time_idx]=timeHistory;
       const time_log = await addChat_timeStamp(spbase_client,chat_history_time.data,email);
       if(time_log?.error)if(time_log?.error.length>0)return _json({error:time_log?.error,data:time_log.data},time_log?.code);                  
@@ -1415,8 +1433,83 @@ const tools: Anthropic.Tool[] = [
       if(time_log?.error)if(time_log?.error.length>0)return _json({error:time_log?.error,data:time_log.data},time_log?.code);                  
          
       }
-      */      
-      return _json({error:response.error,data:response.data,human_agent:human_agent},response.code);
+            
+       */
+      const chats_time = []
+      //add history time data for missing chats
+      
+      if(chat_history?.data &&chat_history_time?.data)if(chat_history.data.chat  !== null && chat_history_time?.data?.response_time.history !==null)if(chat_history.data.chat.length >0){
+              
+        for(let i = 0;i< (Math.abs((chat_history?.data.chat.length)- (chat_history_time?.data?.response_time.history.length)));i++ ){
+      
+          const chat_time = [];
+          //
+              if(chat_history_time?.data?.response_time.history.length <=chat_history?.data.chat.length  )
+              if(chat_history?.data.chat.length >0&& chat_history_time?.data?.response_time.history.length>0)if(chat_history?.data.chat[i].length !== chat_history_time?.data?.response_time.history[i].length ){
+               
+                if(chat_history_time?.data?.response_time.history[i].length <chat_history?.data.chat[i].length){
+              //
+              for(let k = 0;k< (Math.abs((chat_history?.data.chat[i].length)- (chat_history_time?.data?.response_time.history[i].length)));k++){
+                //add null data to the missing data
+                chat_time.push({
+                  request_time:null,
+                  response_time:null,
+                  duration_time:null
+                });
+              }
+              }
+              //add data from chat_history_time
+              
+              for(const time_data of chat_history_time?.data?.response_time?.history){
+                chat_time.push(time_data);
+              }
+              
+              }
+        chats_time.push(chat_time);
+
+      
+        }
+       
+        const time_log = await addChat_timeStamp(spbase_client,chats_time,email);
+        if(time_log?.error)if(time_log?.error.length>0)return _json({error:time_log?.error,data:time_log.data},time_log?.code);        
+      }
+      
+      const response_time = new Date();
+      const duration_time = response_time.getTime() - request_time.getTime();
+      const timeHistory = [];
+      let time_idx=0;
+      if(chat_history_time.data){
+          //if(chat_history_time.data.length>1)time_idx = chat_history_time.data.history.length-1;        
+          if(chat_history_time.data.response_time.history.length>0){
+            time_idx = chat_history_time.data.response_time.history.length-1;
+
+            for(const item of Array(chat_history_time.data.response_time.history[time_idx] )){
+              timeHistory.push(item)
+            }
+            timeHistory.push({
+              request_time:request_time,
+              response_time:request_time,
+              duration_time:duration_time
+            });
+            //Array(chat_history_time.data.response_time.history)[time_idx]=timeHistory;
+            //chat_history_time.data.response_time.history
+          chats_time[chats_time.length-1].push(timeHistory);
+          const time_log = await addChat_timeStamp(spbase_client,chats_time,email);
+          if(time_log?.error)if(time_log?.error.length>0)return _json({error:time_log?.error,data:time_log.data},time_log?.code);                
+          }else{
+        timeHistory.push([{
+            request_time:request_time.toISOString(),
+            response_time:request_time.toISOString(),
+            duration_time:duration_time
+          }]);
+
+        const time_log = await addChat_timeStamp(spbase_client,timeHistory,email);
+        if(time_log?.error)if(time_log?.error.length>0)return _json({error:time_log?.error,data:time_log.data},time_log?.code);                  
+          
+      }  
+     }
+
+      return _json({error:response.error ,data:response.data,human_agent:human_agent},response.code);
 
     }
  
@@ -1425,7 +1518,8 @@ const tools: Anthropic.Tool[] = [
    }
 
   } catch (error){
-    return _json({ error: `Server error ${error}`,data:[] }, 300);
+    return _json({ error: `Server error `,data:[] }, 300);
   }
+
 });
 
