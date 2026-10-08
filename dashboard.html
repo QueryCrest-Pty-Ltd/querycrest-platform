@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>QueryCrest — Application Confirmation Generator</title>
+<!--
+  =====================================================================
+  QueryCrest (Pty) Ltd — Internal PDF Generator Dashboard
+  Developer 1 — Dashboard & User Interface
+  Developer 2 — PDF generation (ported from Node to browser)
+  Developer 3 — Supabase Edge Function for generation-code validation
+  ---------------------------------------------------------------------
+  SECURITY NOTICE:
+  - The QueryCrest generation code MUST NEVER be hard-coded here.
+  - It is stored in Supabase Environment Secrets (Developer 3).
+  - This file must contain no secrets, no real student data, no
+    production passwords.
+  =====================================================================
+-->
+<style>
+:root {
+  --qc-primary: #0b3d91;
+  --qc-primary-dark: #082b66;
+  --qc-accent: #1e88e5;
+  --qc-bg: #f4f6fa;
+  --qc-card: #ffffff;
+  --qc-border: #d6dce5;
+  --qc-text: #1a1f2b;
+  --qc-muted: #5b6472;
+  --qc-error: #c62828;
+  --qc-success: #2e7d32;
+  --qc-warning: #ef6c00;
+  --qc-radius: 8px;
+  --qc-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: var(--qc-bg);
+  color: var(--qc-text);
+  line-height: 1.5;
+  font-size: 15px;
+}
+
+/* ---------- Header ---------- */
+.qc-header {
+  background: linear-gradient(135deg, var(--qc-primary) 0%, var(--qc-primary-dark) 100%);
+  color: #fff;
+  padding: 22px 24px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+.qc-header .header-inner { max-width: 960px; margin: 0 auto; }
+.qc-header h1 {
+  margin: 0; font-size: 1.35rem;
+  letter-spacing: 0.4px; font-weight: 700;
+}
+.qc-header .subtitle {
+  margin: 4px 0 0; opacity: 0.85;
+  font-size: 0.88rem; font-weight: 400;
+}
+
+/* ---------- Layout ---------- */
+.qc-container { max-width: 960px; margin: 24px auto 80px; padding: 0 16px; }
+
+.qc-card {
+  background: var(--qc-card);
+  border: 1px solid var(--qc-border);
+  border-radius: var(--qc-radius);
+  box-shadow: var(--qc-shadow);
+  padding: 22px 24px;
+  margin-bottom: 18px;
+}
+.qc-card h2 {
+  margin: 0 0 16px;
+  font-size: 1.05rem;
+  color: var(--qc-primary);
+  border-bottom: 1px solid var(--qc-border);
+  padding-bottom: 8px;
+  font-weight: 600;
+}
+.qc-card .hint {
+  font-size: 0.82rem;
+  color: var(--qc-muted);
+  margin: -6px 0 14px;
+}
+
+/* ---------- Template Selector ---------- */
+.template-selector {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.template-option {
+  position: relative;
+  border: 2px solid var(--qc-border);
+  border-radius: var(--qc-radius);
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  background: #fff;
+}
+.template-option:hover { border-color: var(--qc-accent); }
+.template-option input[type="radio"] {
+  position: absolute; opacity: 0; pointer-events: none;
+}
+.template-option.selected {
+  border-color: var(--qc-primary);
+  background: #eef4fc;
+}
+.template-option .t-title {
+  display: block; font-weight: 600;
+  color: var(--qc-primary); margin-bottom: 2px;
+}
+.template-option .t-desc {
+  display: block; font-size: 0.82rem; color: var(--qc-muted);
+}
+
+/* ---------- Fields ---------- */
+.field-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.field { display: flex; flex-direction: column; }
+.field.full { grid-column: 1 / -1; }
+.field.half { grid-column: span 1; }
+
+.field label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--qc-muted);
+  margin-bottom: 5px;
+  letter-spacing: 0.2px;
+}
+.field label .req { color: var(--qc-error); margin-left: 2px; }
+
+.field input,
+.field select,
+.field textarea {
+  padding: 10px 12px;
+  border: 1px solid var(--qc-border);
+  border-radius: 6px;
+  font-size: 0.94rem;
+  font-family: inherit;
+  color: var(--qc-text);
+  background: #fff;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  width: 100%;
+}
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: var(--qc-accent);
+  box-shadow: 0 0 0 3px rgba(30,136,229,0.15);
+}
+.field input.invalid,
+.field select.invalid {
+  border-color: var(--qc-error);
+  background: #fff8f8;
+}
+.field .helper {
+  font-size: 0.76rem;
+  color: var(--qc-muted);
+  margin-top: 3px;
+}
+.field .error-msg {
+  color: var(--qc-error);
+  font-size: 0.76rem;
+  margin-top: 4px;
+  min-height: 0.9em;
+  font-weight: 500;
+}
+
+/* ---------- Programme Repeater ---------- */
+.programme-row {
+  display: grid;
+  grid-template-columns: 1fr 180px 40px;
+  gap: 8px;
+  align-items: start;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px dashed var(--qc-border);
+  border-radius: 6px;
+  background: #fafbfd;
+}
+.programme-row input { font-size: 0.9rem; }
+.programme-row .remove-programme {
+  align-self: center;
+  background: #fdecea;
+  color: var(--qc-error);
+  border: none;
+  border-radius: 6px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  cursor: pointer;
+  height: 38px;
+  width: 38px;
+  line-height: 1;
+  transition: background 0.15s;
+}
+.programme-row .remove-programme:hover { background: #f9d6d3; }
+.programme-row .choice-input::placeholder,
+.programme-row .programme-input::placeholder { color: #aab; }
+
+/* ---------- Buttons ---------- */
+.btn {
+  cursor: pointer;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 18px;
+  font-size: 0.93rem;
+  font-weight: 600;
+  font-family: inherit;
+  transition: background 0.15s, opacity 0.15s, transform 0.05s;
+}
+.btn:disabled { opacity: 0.55; cursor: not-allowed; }
+.btn:active:not(:disabled) { transform: translateY(1px); }
+
+.btn-primary { background: var(--qc-primary); color: #fff; }
+.btn-primary:hover:not(:disabled) { background: var(--qc-primary-dark); }
+
+.btn-secondary {
+  background: #eef1f6;
+  color: var(--qc-text);
+  border: 1px solid var(--qc-border);
+}
+.btn-secondary:hover:not(:disabled) { background: #e2e7ef; }
+
+.btn-add {
+  background: #fff;
+  color: var(--qc-primary);
+  border: 1px dashed var(--qc-primary);
+  padding: 9px 16px;
+  font-size: 0.88rem;
+}
+.btn-add:hover { background: #eef4fc; }
+
+.actions-bar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+  position: sticky;
+  bottom: 16px;
+  background: rgba(244, 246, 250, 0.95);
+  backdrop-filter: blur(6px);
+  padding: 12px;
+  border-radius: var(--qc-radius);
+  border: 1px solid var(--qc-border);
+  box-shadow: 0 -2px 12px rgba(0,0,0,0.05);
+  z-index: 50;
+}
+
+/* ---------- Modal ---------- */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(15,20,30,0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 1000;
+  animation: fadeIn 0.15s ease-out;
+}
+.modal.hidden { display: none; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.modal-content {
+  background: #fff;
+  border-radius: var(--qc-radius);
+  padding: 24px;
+  max-width: 440px;
+  width: 100%;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+  animation: popIn 0.18s ease-out;
+}
+@keyframes popIn {
+  from { transform: scale(0.96); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+.modal-content h3 {
+  margin: 0 0 8px; color: var(--qc-primary); font-size: 1.1rem;
+}
+.modal-content p {
+  margin: 0 0 16px; color: var(--qc-muted); font-size: 0.88rem;
+}
+.modal-content input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--qc-border);
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-family: inherit;
+}
+.modal-content input:focus {
+  outline: none;
+  border-color: var(--qc-accent);
+  box-shadow: 0 0 0 3px rgba(30,136,229,0.15);
+}
+.modal-content input.invalid { border-color: var(--qc-error); }
+.modal-content .error-msg {
+  color: var(--qc-error);
+  font-size: 0.78rem;
+  margin-top: 6px;
+  min-height: 1em;
+  display: block;
+  font-weight: 500;
+}
+.modal-actions {
+  display: flex; justify-content: flex-end;
+  gap: 8px; margin-top: 16px;
+}
+
+/* ---------- Status / Toast Area ---------- */
+.status-area {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  max-width: 380px;
+  z-index: 900;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.status-toast {
+  padding: 12px 16px;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 0.88rem;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  animation: slideIn 0.2s ease-out;
+  word-wrap: break-word;
+}
+.status-toast.loading { background: var(--qc-accent); }
+.status-toast.success { background: var(--qc-success); }
+.status-toast.error   { background: var(--qc-error); }
+.status-toast.warning { background: var(--qc-warning); }
+
+@keyframes slideIn {
+  from { transform: translateX(20px); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+
+/* ---------- Conditional visibility ---------- */
+.varsity-only, .bursary-only { display: none; }
+body[data-template="varsity"] .varsity-only { display: block; }
+body[data-template="bursary"] .bursary-only { display: block; }
+body[data-template="varsity"] .field.varsity-only { display: flex; }
+body[data-template="bursary"] .field.bursary-only { display: flex; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 700px) {
+  .field-grid { grid-template-columns: 1fr; }
+  .template-selector { grid-template-columns: 1fr; }
+  .programme-row { grid-template-columns: 1fr 1fr 40px; }
+  .programme-row .programme-input { grid-column: 1 / -1; }
+  .actions-bar {
+    flex-direction: column-reverse;
+    position: static;
+  }
+  .actions-bar .btn { width: 100%; }
+  .status-area { left: 12px; right: 12px; max-width: none; }
+}
+</style>
+</head>
+<body data-template="varsity">
+
+<!-- ================= HEADER ================= -->
+<header class="qc-header">
+  <div class="header-inner">
+    <h1>QueryCrest</h1>
+    <p class="subtitle">Application Confirmation PDF Generator — Internal Tool</p>
+  </div>
+</header>
+
+<!-- ================= MAIN ================= -->
+<main class="qc-container">
+  <form id="applicationForm" novalidate autocomplete="off">
+
+    <!-- ---------- Template Selector ---------- -->
+    <section class="qc-card">
+      <h2>Document Template</h2>
+      <p class="hint">Choose the type of confirmation document to generate.</p>
+      <div class="template-selector" role="radiogroup" aria-label="Document template">
+        <label class="template-option selected" data-template="varsity">
+          <input type="radio" name="templateType" value="varsity" checked />
+          <span class="t-title">Varsity / College</span>
+          <span class="t-desc">University or TVET application summary</span>
+        </label>
+        <label class="template-option" data-template="bursary">
+          <input type="radio" name="templateType" value="bursary" />
+          <span class="t-title">Bursary</span>
+          <span class="t-desc">Bursary application summary</span>
+        </label>
+      </div>
+    </section>
+
+    <!-- ---------- Student Information ---------- -->
+    <section class="qc-card">
+      <h2>Student Information</h2>
+      <div class="field-grid">
+        <div class="field">
+          <label for="studentFirstName">Student first name <span class="req">*</span></label>
+          <input type="text" id="studentFirstName" name="studentFirstName" required />
+          <span class="error-msg" data-for="studentFirstName"></span>
+        </div>
+        <div class="field">
+          <label for="studentSurname">Student surname <span class="req">*</span></label>
+          <input type="text" id="studentSurname" name="studentSurname" required />
+          <span class="error-msg" data-for="studentSurname"></span>
+        </div>
+        <div class="field">
+          <label for="studentInitials">Surname &amp; initials <span class="req">*</span></label>
+          <input type="text" id="studentInitials" name="studentInitials" placeholder="e.g. Malema LP" required />
+          <span class="error-msg" data-for="studentInitials"></span>
+        </div>
+        <div class="field">
+          <label for="studentNumber">Student number <span class="req">*</span></label>
+          <input type="text" id="studentNumber" name="studentNumber" required />
+          <span class="error-msg" data-for="studentNumber"></span>
+        </div>
+        <div class="field full">
+          <label for="studentEmail">Student email <span class="req">*</span></label>
+          <input type="email" id="studentEmail" name="studentEmail" required />
+          <span class="error-msg" data-for="studentEmail"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- Institution Information ---------- -->
+    <section class="qc-card">
+      <h2>Institution / Bursary</h2>
+      <div class="field-grid">
+        <div class="field full">
+          <label for="institutionFullName">
+            <span class="varsity-only">Institution name </span>
+            <span class="bursary-only">Bursary name </span>
+            <span class="req">*</span>
+          </label>
+          <input type="text" id="institutionFullName" name="institutionFullName"
+                 placeholder="e.g. University Of Johannesburg / Career Wise" required />
+          <span class="error-msg" data-for="institutionFullName"></span>
+        </div>
+        <div class="field varsity-only half">
+          <label for="institutionShortName">Short name / abbreviation <span class="req">*</span></label>
+          <input type="text" id="institutionShortName" name="institutionShortName" placeholder="e.g. UJ" />
+          <span class="helper">Used in the body text (e.g. "University of Johannesburg (UJ)")</span>
+          <span class="error-msg" data-for="institutionShortName"></span>
+        </div>
+        <div class="field varsity-only half">
+          <label for="bursaryName">Bursary name (optional)</label>
+          <input type="text" id="bursaryName" name="bursaryName" />
+          <span class="error-msg" data-for="bursaryName"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- Application Details ---------- -->
+    <section class="qc-card">
+      <h2>Application Details</h2>
+      <div class="field-grid">
+        <div class="field">
+          <label for="applicationDate">Application date <span class="req">*</span></label>
+          <input type="date" id="applicationDate" name="applicationDate" required />
+          <span class="error-msg" data-for="applicationDate"></span>
+        </div>
+        <div class="field">
+          <label for="queryCrestReference">QueryCrest reference <span class="req">*</span></label>
+          <input type="text" id="queryCrestReference" name="queryCrestReference"
+                 placeholder="e.g. QC-APP-2026-564" required />
+          <span class="error-msg" data-for="queryCrestReference"></span>
+        </div>
+        <div class="field full">
+          <label for="placementPeriod">Placement period <span class="req">*</span></label>
+          <input type="text" id="placementPeriod" name="placementPeriod"
+                 placeholder="e.g. FIRST YEAR - 2027 / Post-Graduate - 2027" required />
+          <span class="error-msg" data-for="placementPeriod"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- Programmes ---------- -->
+    <section class="qc-card">
+      <h2>Programme(s) <span class="req">*</span></h2>
+      <p class="hint">Add one or more programmes. Optionally label each with its choice order (e.g. "1st choice").</p>
+      <div id="programmesContainer"></div>
+      <button type="button" class="btn btn-add" id="addProgrammeBtn">+ Add another programme</button>
+      <span class="error-msg" data-for="programmes"></span>
+    </section>
+
+    <!-- ---------- Credentials ---------- -->
+    <section class="qc-card">
+      <h2>Credentials</h2>
+      <p class="hint">These are printed on the confirmation document as supplied by the student. Handle with care.</p>
+      <div class="field-grid">
+        <div class="field">
+          <label for="portalPassword">
+            <span class="varsity-only">Student Portal Password </span>
+            <span class="bursary-only">Bursary Portal Password </span>
+            <span class="req">*</span>
+          </label>
+          <input type="text" id="portalPassword" name="portalPassword" autocomplete="off" required />
+          <span class="error-msg" data-for="portalPassword"></span>
+        </div>
+        <div class="field varsity-only">
+          <label for="itsPin">ITS PIN <span class="req">*</span></label>
+          <input type="text" id="itsPin" name="itsPin" autocomplete="off" />
+          <span class="error-msg" data-for="itsPin"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- Actions ---------- -->
+    <div class="actions-bar">
+      <button type="button" class="btn btn-secondary" id="resetBtn">Reset form</button>
+      <button type="submit" class="btn btn-primary" id="generateBtn">Generate PDF</button>
+    </div>
+
+  </form>
+</main>
+
+<!-- ================= GENERATION CODE MODAL ================= -->
+<div id="codeModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="codeModalTitle">
+  <div class="modal-content">
+    <h3 id="codeModalTitle">Generation Code Required</h3>
+    <p>Enter the QueryCrest generation code to authorise this PDF. The code is verified securely on the server and is never stored in the browser.</p>
+    <input type="password" id="generationCodeInput" placeholder="Generation code"
+           autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+    <span class="error-msg" data-for="generationCode"></span>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-secondary" id="cancelCodeBtn">Cancel</button>
+      <button type="button" class="btn btn-primary" id="confirmCodeBtn">Authorise &amp; Generate</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= STATUS AREA ================= -->
+<div id="statusArea" class="status-area" aria-live="polite" aria-atomic="false"></div>
+
+<!-- =========================================================
+     pdf-lib from CDN
+     ========================================================= -->
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+
+<!-- =========================================================
+     DEVELOPER 2 — PDF GENERATOR (browser port)
+     ---------------------------------------------------------
+     Original: js/pdf.js on feature/pdf branch (Node script).
+     Ported to browser: fetch + Blob instead of fs.
+     Coordinates and template IDs preserved from the original.
+     ========================================================= -->
+<script>
+window.generateConfirmationPdf = async function generateConfirmationPdf(data) {
+  const { PDFDocument, StandardFonts, rgb } = PDFLib;
+
+  const templatePath = data.templateType === "bursary"
+    ? "pdf_files/Student-Details-Bursary-Template.pdf"
+    : "pdf_files/Student-Details-Varsity-College.pdf";
+
+  const res = await fetch(templatePath);
+  if (!res.ok) throw new Error("Template PDF not found: " + templatePath);
+  const templateBytes = await res.arrayBuffer();
+  const pdfDoc = await PDFDocument.load(templateBytes);
+
+  const varistyCollegeTemplate = {
+    fields: {
+      generatedDate:       { page:0, x:72,  y:990, size:9, width:250, height:14 },
+      applicationReference:{ page:0, x:72,  y:674, size:9, width:250, height:14 },
+      firstName:           { page:0, x:85,  y:603, size:9, width:310, height:14 },
+      surnameAndInitials:  { page:0, x:190, y:555, size:9, width:300, height:14 },
+      studentNumber:       { page:0, x:190, y:540, size:9, width:300, height:14 },
+      email:               { page:0, x:190, y:525, size:9, width:300, height:14 },
+      institutionName:     { page:0, x:190, y:510, size:9, width:300, height:14 },
+      placementPeriod:     { page:0, x:190, y:495, size:9, width:300, height:14 },
+      portalPassword:      { page:0, x:190, y:480, size:9, width:300, height:14 },
+      itsPin:              { page:0, x:190, y:465, size:9, width:300, height:14 },
+      bursaryName:         { page:0, x:190, y:365, size:9, width:300, height:14 },
+      programmes_1:        { page:0, x:190, y:265, size:9, width:300, height:14 },
+      programmes_2:        { page:0, x:190, y:255, size:9, width:300, height:14 }
+    }
+  };
+  const bursaryTemplate = {
+    fields: {
+      firstName:          { page:0, x:85,  y:635, size:9, width:280, height:14 },
+      surnameAndInitials: { page:0, x:199, y:590, size:9, width:310, height:14 },
+      studentNumber:      { page:0, x:199, y:575, size:9, width:310, height:14 },
+      email:              { page:0, x:199, y:560, size:9, width:310, height:14 },
+      institutionName:    { page:0, x:199, y:545, size:9, width:310, height:14 },
+      placementPeriod:    { page:0, x:199, y:530, size:9, width:310, height:14 },
+      portalPassword:     { page:0, x:199, y:510, size:9, width:310, height:14 }
+    }
+  };
+
+  const student = {
+    firstName:          data.studentFirstName,
+    surnameAndInitials: data.studentInitials,
+    email:              data.studentEmail
+  };
+  const application = {
+    studentNumber:   data.studentNumber,
+    institutionName: data.institutionFullName,
+    placementPeriod: data.placementPeriod,
+    portalPassword:  data.credentials.portalPassword,
+    itsPin:          data.credentials.itsPin,
+    shortName:       data.institutionShortName,
+    programmes:      data.programmes.map(p => p.name)
+  };
+  const applicationReference = data.queryCrestReference;
+
+  async function replaceArea({ page, x, y, width, height, text, size = 9 }) {
+    const _page = pdfDoc.getPages()[page];
+    const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+    _page.drawRectangle({ x, y, width, height, color: rgb(1,1,1), borderWidth: 0 });
+    _page.drawText(String(text ?? ""), {
+      x, y: y + 2, size, font, color: rgb(0,0,0), maxWidth: width
+    });
+  }
+
+  const months = ["January","February","March","April","May","June",
+                  "July","August","September","October","November","December"];
+  const generatedDate = new Date();
+  const dateText = `${generatedDate.getDate()} ${months[generatedDate.getMonth()]} ${generatedDate.getFullYear()}`;
+
+  if (data.templateType === "varsity") {
+    replaceArea({ page:0, x:63, y:667, width:350, height:15, text:dateText });
+    replaceArea({ page:0, x:84, y:650, width:350, height:15, text:applicationReference });
+    for (const key in varistyCollegeTemplate.fields) {
+      const field = varistyCollegeTemplate.fields[key];
+      if (key in student)     replaceArea({ ...field, text: student[key] });
+      if (key in application) replaceArea({ ...field, text: application[key] });
+    }
+    if (application.programmes[0]) {
+      replaceArea({ ...varistyCollegeTemplate.fields.programmes_1, text: application.programmes[0] });
+    }
+    if (application.programmes[1]) {
+      replaceArea({ ...varistyCollegeTemplate.fields.programmes_2, text: application.programmes[1] });
+    }
+  } else {
+    replaceArea({ page:0, x:63, y:703, width:350, height:15, text:dateText });
+    replaceArea({ page:0, x:84, y:685, width:350, height:15, text:applicationReference });
+    for (const key in bursaryTemplate.fields) {
+      const field = bursaryTemplate.fields[key];
+      if (key in student)     replaceArea({ ...field, text: student[key] });
+      if (key in application) replaceArea({ ...field, text: application[key] });
+    }
+  }
+
+  const pdfBytes = await pdfDoc.save();
+  return new Blob([pdfBytes], { type: "application/pdf" });
+};
+</script>
+
+<!-- =========================================================
+     DEVELOPER 1 — Dashboard logic
+     ========================================================= -->
+<script>
+(() => {
+  "use strict";
+
+  /* =========================================================
+     CONFIGURATION
+     ---------------------------------------------------------
+     Developer 3's deployed Edge Function for generation code
+     validation. The actual code lives in Supabase Environment
+     Secrets and is NEVER hard-coded here.
+     ========================================================= */
+  const EDGE_FUNCTION_URL =
+    "https://xkjsydeavdcarwkthppz.supabase.co/functions/v1/validate-generation-code";
+
+  /* =========================================================
+     DOM REFERENCES
+     ========================================================= */
+  const form                  = document.getElementById("applicationForm");
+  const body                  = document.body;
+
+  const templateOptions       = document.querySelectorAll(".template-option");
+  const templateRadios        = document.querySelectorAll('input[name="templateType"]');
+
+  const programmesContainer   = document.getElementById("programmesContainer");
+  const addProgrammeBtn       = document.getElementById("addProgrammeBtn");
+  const resetBtn              = document.getElementById("resetBtn");
+  const generateBtn           = document.getElementById("generateBtn");
+
+  const codeModal             = document.getElementById("codeModal");
+  const generationCodeInput   = document.getElementById("generationCodeInput");
+  const confirmCodeBtn        = document.getElementById("confirmCodeBtn");
+  const cancelCodeBtn         = document.getElementById("cancelCodeBtn");
+
+  const statusArea            = document.getElementById("statusArea");
+
+  /* =========================================================
+     STATUS TOASTS
+     ========================================================= */
+  function showStatus(message, type = "loading", timeout = 0) {
+    const el = document.createElement("div");
+    el.className = `status-toast ${type}`;
+    el.textContent = message;
+    statusArea.appendChild(el);
+    if (timeout > 0) setTimeout(() => el.remove(), timeout);
+    return el;
+  }
+
+  /* =========================================================
+     TEMPLATE SELECTOR
+     ========================================================= */
+  function applyTemplate(template) {
+    body.setAttribute("data-template", template);
+
+    templateOptions.forEach((opt) => {
+      const match = opt.dataset.template === template;
+      opt.classList.toggle("selected", match);
+      const radio = opt.querySelector('input[type="radio"]');
+      if (radio) radio.checked = match;
+    });
+
+    document.querySelectorAll(".varsity-only, .bursary-only").forEach((el) => {
+      if (el.offsetParent === null) {
+        el.querySelectorAll("input").forEach((input) => {
+          input.classList.remove("invalid");
+          const msg = document.querySelector(`.error-msg[data-for="${input.id}"]`);
+          if (msg) msg.textContent = "";
+        });
+      }
+    });
+  }
+
+  templateOptions.forEach((opt) => {
+    opt.addEventListener("click", (e) => {
+      e.preventDefault();
+      applyTemplate(opt.dataset.template);
+    });
+  });
+
+  templateRadios.forEach((radio) => {
+    radio.addEventListener("change", (e) => {
+      if (e.target.checked) applyTemplate(e.target.value);
+    });
+  });
+
+  /* =========================================================
+     PROGRAMME REPEATER
+     ========================================================= */
+  function createProgrammeRow(name = "", choice = "") {
+    const row = document.createElement("div");
+    row.className = "programme-row";
+
+    const nameInput = document.createElement("input");
+    nameInput.type = "text";
+    nameInput.className = "programme-input";
+    nameInput.placeholder = "e.g. Bachelor of Radiation Therapy";
+    nameInput.value = name;
+
+    const choiceInput = document.createElement("input");
+    choiceInput.type = "text";
+    choiceInput.className = "choice-input";
+    choiceInput.placeholder = "1st choice (optional)";
+    choiceInput.value = choice;
+
+    const removeBtn = document.createElement("button");
+    removeBtn.type = "button";
+    removeBtn.className = "remove-programme";
+    removeBtn.title = "Remove programme";
+    removeBtn.setAttribute("aria-label", "Remove programme");
+    removeBtn.textContent = "×";
+
+    removeBtn.addEventListener("click", () => {
+      row.remove();
+      if (programmesContainer.children.length === 0) {
+        programmesContainer.appendChild(createProgrammeRow());
+      }
+    });
+
+    row.appendChild(nameInput);
+    row.appendChild(choiceInput);
+    row.appendChild(removeBtn);
+    return row;
+  }
+
+  addProgrammeBtn.addEventListener("click", () => {
+    const newRow = createProgrammeRow();
+    programmesContainer.appendChild(newRow);
+    newRow.querySelector(".programme-input").focus();
+  });
+
+  /* =========================================================
+     VALIDATION HELPERS
+     ========================================================= */
+  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  function setError(fieldName, message) {
+    const span = document.querySelector(`.error-msg[data-for="${fieldName}"]`);
+    if (span) span.textContent = message || "";
+    const input = document.getElementById(fieldName);
+    if (input) input.classList.toggle("invalid", Boolean(message));
+  }
+
+  function clearAllErrors() {
+    document.querySelectorAll(".error-msg").forEach((el) => (el.textContent = ""));
+    document.querySelectorAll("input.invalid").forEach((el) => el.classList.remove("invalid"));
+  }
+
+  function isVisible(el) {
+    return el && el.offsetParent !== null;
+  }
+
+  function validateRequired(id, label, errors) {
+    const el = document.getElementById(id);
+    if (!el) return "";
+    if (!isVisible(el)) return el.value.trim();
+    const value = el.value.trim();
+    if (!value) {
+      setError(id, "This field is required.");
+      errors.push(id);
+    }
+    return value;
+  }
+
+  /* =========================================================
+     COLLECT + VALIDATE
+     ========================================================= */
+  function collectAndValidate() {
+    clearAllErrors();
+    const errors = [];
+
+    const templateType = document.querySelector('input[name="templateType"]:checked')?.value || "varsity";
+
+    const studentFirstName = validateRequired("studentFirstName", "First name", errors);
+    const studentSurname   = validateRequired("studentSurname",   "Surname", errors);
+    const studentInitials  = validateRequired("studentInitials",  "Initials", errors);
+    const studentNumber    = validateRequired("studentNumber",    "Student number", errors);
+    const studentEmail     = validateRequired("studentEmail",     "Email", errors);
+
+    if (studentEmail && !EMAIL_RE.test(studentEmail)) {
+      setError("studentEmail", "Enter a valid email address.");
+      errors.push("studentEmail");
+    }
+
+    const institutionFullName  = validateRequired("institutionFullName", "Institution name", errors);
+    const institutionShortName = templateType === "varsity"
+      ? validateRequired("institutionShortName", "Short name", errors)
+      : "";
+    const bursaryName = templateType === "varsity"
+      ? (document.getElementById("bursaryName")?.value.trim() || "")
+      : "";
+
+    const applicationDate     = validateRequired("applicationDate",     "Application date", errors);
+    const queryCrestReference = validateRequired("queryCrestReference", "Reference", errors);
+    const placementPeriod     = validateRequired("placementPeriod",     "Placement period", errors);
+
+    const programmeRows = programmesContainer.querySelectorAll(".programme-row");
+    const programmes = [];
+    programmeRows.forEach((row, idx) => {
+      const nameInput   = row.querySelector(".programme-input");
+      const choiceInput = row.querySelector(".choice-input");
+      const name = nameInput.value.trim();
+      const choice = choiceInput.value.trim();
+      if (!name) {
+        nameInput.classList.add("invalid");
+        errors.push(`programme_${idx}`);
+      } else {
+        nameInput.classList.remove("invalid");
+        programmes.push({ name, choice });
+      }
+    });
+    if (programmes.length === 0) {
+      setError("programmes", "At least one programme is required.");
+      errors.push("programmes");
+    }
+
+    const portalPassword = validateRequired("portalPassword", "Portal password", errors);
+    const itsPin = templateType === "varsity"
+      ? validateRequired("itsPin", "ITS PIN", errors)
+      : "";
+
+    if (errors.length > 0) {
+      return { ok: false, errors };
+    }
+
+    return {
+      ok: true,
+      data: {
+        templateType,
+        applicationDate,
+        queryCrestReference,
+        placementPeriod,
+        studentFirstName,
+        studentSurname,
+        studentInitials,
+        studentNumber,
+        studentEmail,
+        institutionFullName,
+        institutionShortName,
+        bursaryName,
+        programmes,
+        credentials: {
+          portalPassword,
+          itsPin
+        }
+      }
+    };
+  }
+
+  /* =========================================================
+     MODAL CONTROL
+     ========================================================= */
+  let pendingApplicationData = null;
+
+  function openCodeModal(applicationData) {
+    pendingApplicationData = applicationData;
+    generationCodeInput.value = "";
+    setError("generationCode", "");
+    codeModal.classList.remove("hidden");
+    setTimeout(() => generationCodeInput.focus(), 50);
+  }
+
+  function closeCodeModal() {
+    codeModal.classList.add("hidden");
+    pendingApplicationData = null;
+    generationCodeInput.value = "";
+    setError("generationCode", "");
+  }
+
+  cancelCodeBtn.addEventListener("click", closeCodeModal);
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !codeModal.classList.contains("hidden")) {
+      closeCodeModal();
+    }
+    if (e.key === "Enter" && !codeModal.classList.contains("hidden") &&
+        document.activeElement === generationCodeInput) {
+      e.preventDefault();
+      confirmCodeBtn.click();
+    }
+  });
+
+  codeModal.addEventListener("click", (e) => {
+    if (e.target === codeModal) closeCodeModal();
+  });
+
+  /* =========================================================
+     SUBMIT FLOW
+     ========================================================= */
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const result = collectAndValidate();
+    if (!result.ok) {
+      showStatus("Please fix the highlighted fields.", "error", 4000);
+      const firstInvalid = document.querySelector("input.invalid");
+      firstInvalid?.focus();
+      firstInvalid?.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+    openCodeModal(result.data);
+  });
+
+  /* =========================================================
+     AUTHORISE + GENERATE
+     ========================================================= */
+  confirmCodeBtn.addEventListener("click", async () => {
+    const code = generationCodeInput.value.trim();
+    if (!code) {
+      setError("generationCode", "Please enter the generation code.");
+      return;
+    }
+    if (!pendingApplicationData) {
+      setError("generationCode", "Session expired. Please close and reopen.");
+      return;
+    }
+
+    setError("generationCode", "");
+    confirmCodeBtn.disabled = true;
+    cancelCodeBtn.disabled = true;
+    const originalBtnText = confirmCodeBtn.textContent;
+    confirmCodeBtn.textContent = "Verifying…";
+
+    const loadingToast = showStatus("Verifying code…", "loading");
+
+    try {
+      const authorised = await requestAuthorisation(code);
+
+      if (!authorised) {
+        loadingToast.remove();
+        setError("generationCode", "Incorrect generation code.");
+        confirmCodeBtn.disabled = false;
+        cancelCodeBtn.disabled = false;
+        confirmCodeBtn.textContent = originalBtnText;
+        return;
+      }
+
+      loadingToast.textContent = "Generating PDF…";
+      confirmCodeBtn.textContent = "Generating…";
+
+      const pdfBlob = await generateConfirmationPdf(pendingApplicationData);
+
+      const filename = buildFilename(pendingApplicationData);
+      downloadBlob(pdfBlob, filename);
+
+      loadingToast.remove();
+      showStatus(`PDF generated: ${filename}`, "success", 5000);
+      closeCodeModal();
+    } catch (err) {
+      console.error(err);
+      loadingToast.remove();
+      showStatus(
+        err && err.message
+          ? `Error: ${err.message}`
+          : "Unexpected error. Please try again.",
+        "error",
+        6000
+      );
+    } finally {
+      confirmCodeBtn.disabled = false;
+      cancelCodeBtn.disabled = false;
+      confirmCodeBtn.textContent = originalBtnText;
+    }
+  });
+
+  /* =========================================================
+     SUPABASE EDGE FUNCTION CALL (Developer 3)
+     ========================================================= */
+  async function requestAuthorisation(code) {
+    const res = await fetch(EDGE_FUNCTION_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code }),
+    });
+
+    if (res.status === 401 || res.status === 403) return false;
+    if (!res.ok) throw new Error(`Authorisation failed (HTTP ${res.status}).`);
+
+    let json;
+    try {
+      json = await res.json();
+    } catch {
+      throw new Error("Malformed authorisation response.");
+    }
+    return json.authorised === true;
+  }
+
+  /* =========================================================
+     FILENAME + DOWNLOAD
+     ========================================================= */
+  function buildFilename(data) {
+    const base = `${data.studentFirstName}_${data.studentSurname}`
+      .replace(/[^a-z0-9]+/gi, "_")
+      .replace(/^_+|_+$/g, "");
+    const ref = (data.queryCrestReference || "QC")
+      .replace(/[^a-z0-9]+/gi, "_")
+      .replace(/^_+|_+$/g, "");
+    return `${base || "Student"}_${ref}_Application_Confirmation.pdf`;
+  }
+
+  function downloadBlob(blob, filename) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+  }
+
+  /* =========================================================
+     RESET
+     ========================================================= */
+  resetBtn.addEventListener("click", () => {
+    if (!confirm("Clear all entered information?")) return;
+    form.reset();
+    applyTemplate("varsity");
+    programmesContainer.innerHTML = "";
+    programmesContainer.appendChild(createProgrammeRow());
+    clearAllErrors();
+    showStatus("Form cleared.", "success", 2500);
+  });
+
+  /* =========================================================
+     INITIALISE
+     ========================================================= */
+  function init() {
+    applyTemplate(body.getAttribute("data-template") || "varsity");
+    programmesContainer.appendChild(createProgrammeRow());
+
+    const dateInput = document.getElementById("applicationDate");
+    if (dateInput && !dateInput.value) {
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth() + 1).padStart(2, "0");
+      const dd = String(today.getDate()).padStart(2, "0");
+      dateInput.value = `${yyyy}-${mm}-${dd}`;
+    }
+  }
+
+  init();
+})();
+</script>
+</body>
+</html>
