@@ -1,11 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Chat</title>
-  <script src="https://unpkg.com/phosphor-icons"></script>  
-<style>
 :root {
   --brand:       #2563eb;
   --brand-dark:  #1d4ed8;
@@ -72,8 +64,7 @@ body{
   gap: 10px ;
   z-index: 99999 ;
 }
-
-
+/**/
 /* --- The "Need help?" Text Bubble --- */
 .toggle-label {
   
@@ -686,67 +677,3 @@ cursor: not-allowed;
     padding: 10px 14px;
   }
 }
-</style>
-</head>
-<body>
-
-
-<!-- chatbot widget-->
-<div class="chatbot hide" id="chatbotWidget">
-  <!-- Top Dark Blue Header -->
-<div class="chatbot-header">
-  <div class="header-left">
-<div class="bot-avatar"><i class="ph ph-robot"></i></div>
-<div class="header-text">
-  <h1>QueryCrest Assistant</h1>
-  <p><span class="status-dot"></span>AI - Always available</p>
-</div>
-  </div>
-<div class="chatbot-top-ui-right">
-<button class="cbAddChat-btn" id="addCbChatBtn" title="Start new conversation">
-        <i class="ph ph-plus"></i>
-      </button>
-  <button class="cbCancel-btn" id="cancelCbBtn" title="Close">
-    <i class="ph ph-x"></i>
-  </button>
-</div>
-</div>
-
-<!--White Sub header-->
-<div class="chatbot-subheader">
-    <span class="subheader-title">Current conversation</span>
-    <button class="new-convo-btn" id="newConvoBtn">+ New conversation</button>
-  </div>
-
-  <!--Chat Message Area-->
-   <div class="chatbot-messages" id="chatbot-messages" aria-live="polite">
-    <!-- Messages will be injected here via JS -->
-  </div>
-
-<form class="chatbotform" id="chatbotform" autocomplete="off">
-<input type="text" id="chatbot-input" placeholder="Please complete the form above..." disabled>
-<button type="submit" class="chatbot-send-btn" id="sendChatbotBtn">
-  <i class="ph ph-paper-plane-tilt"></i>
-</button>
-
-</form>
-</div>
-
-
-<!-- Floating Toggle Button Container -->
-<div class="chatbot-toggle-container" id="chatbotToggleContainer">
-  <button class="toggle-label" id="chatbotLabelBtn">Need help?</button>
-  <button class="chatbot-toggle" id="chatbotToggleBtn">
-    <i class="ph ph-chat-circle-dots"></i>
-  </button>
-</div>
-
-
-<!--chatbot-->
-<script  src="js/chatbot.js" ></script>
-
-
-
-</script>
-</body>
-</html>

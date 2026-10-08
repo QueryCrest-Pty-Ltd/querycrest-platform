@@ -20,6 +20,7 @@ Deno.serve(async (req) => {
 // stored secret
     const { code } = body;
     const storedCode = Deno.env.get('QUERYCREST_GENERATION_CODE');
+    //const storedCode = "Test_22";
 
     if (!storedCode) {
       console.error('QUERYCREST_GENERATION_CODE is not set in environment secrets');

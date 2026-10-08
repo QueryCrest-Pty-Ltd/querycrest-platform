@@ -175,7 +175,7 @@ function showWidget() {
       const data_ = await response.json();
       return data_;
     } catch (error) {
-      return {error:`failed to fetch Zuzu response data ${error}`,data:[]};
+      return {error:`failed to fetch Zuzu response data `,data:[]};
     }
   }
   //add new chatbot history
@@ -193,7 +193,7 @@ function showWidget() {
       const data_ = await response.json();
       return data_;
     } catch (error) {
-      return {error:`failed to add new chat  ${error}`,data:[]};
+      return {error:`failed to add new chat  `,data:[]};
     }
   }
   //get chatbot history
@@ -206,7 +206,7 @@ function showWidget() {
       const data_ = await response.json();
       return data_;
     } catch (error) {
-      return {error:`failed to fetch Zuzu response data ${error}`,data:[]};
+      return {error:`failed to fetch Zuzu response data `,data:[]};
     }
   }  
   
