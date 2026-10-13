@@ -1037,7 +1037,7 @@ for(const key in varistyCollegeTemplate.fields){
 
       loadingToast.textContent = "Generating PDF…";
       confirmCodeBtn.textContent = "Generating…";
-
+      /*
       const pdfBlob = await generateConfirmationPdf(pendingApplicationData);
 
       const filename = buildFilename(pendingApplicationData);
@@ -1046,6 +1046,23 @@ for(const key in varistyCollegeTemplate.fields){
       loadingToast.remove();
       showStatus(`PDF generated: ${filename}`, "success", 5000);
       closeCodeModal();
+      */
+     //new code
+     const pdfBlob = await generateConfirmationPdf(pendingApplicationData);
+
+    const filename = buildFilename(pendingApplicationData);
+    downloadBlob(pdfBlob, filename);
+
+    // Archive in the background — never blocks the user
+    window.archivePdf(pdfBlob, filename, code, {
+    studentName: `${pendingApplicationData.studentFirstName} ${pendingApplicationData.studentSurname}`.trim(),
+    studentNumber: pendingApplicationData.studentNumber,
+  });
+
+  loadingToast.remove();
+  showStatus(`PDF generated: ${filename}`, "success", 5000);
+  closeCodeModal();
+//ends here
     } catch (err) {
       console.error(err);
       loadingToast.remove();
@@ -1088,6 +1105,7 @@ for(const key in varistyCollegeTemplate.fields){
   /* =========================================================
      FILENAME + DOWNLOAD
      ========================================================= */
+     /*
   function buildFilename(data) {
     const base = `${data.studentFirstName}_${data.studentSurname}`
       .replace(/[^a-z0-9]+/gi, "_")
@@ -1097,7 +1115,16 @@ for(const key in varistyCollegeTemplate.fields){
       .replace(/^_+|_+$/g, "");
     return `${base || "Student"}_${ref}_Application_Confirmation.pdf`;
   }
-
+  */
+ //new code
+ function buildFilename(data) {
+  const first = (data.studentFirstName || "").trim();
+  const last  = (data.studentSurname   || "").trim();
+  const base = `${first}_${last}`
+    .replace(/[^a-z0-9]+/gi, "_")
+    .replace(/^_+|_+$/g, "");
+  return `${base || "Student"}_Application_summary.pdf`;
+}
   function downloadBlob(blob, filename) {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -1141,6 +1168,52 @@ for(const key in varistyCollegeTemplate.fields){
 
   init();
 })();
+</script>
+<script>
+  const SUPABASE_URL = 'https://xkjsydeavdcarwkthppz.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhranN5ZGVhdmRjYXJ3a3RocHB6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE2NTQwMDMsImV4cCI6MjA3NzIzMDAwM30.elwK1K_mBfNGFrmzeJ3-Os1Zy_hrDJ1PPI0guFTGUrk';
+
+  function blobToBase64(blob) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result.split(',')[1]);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  }
+
+  window.archivePdf = async function archivePdf(pdfBlob, filename, code, meta) {
+    try {
+      const pdfBase64 = await blobToBase64(pdfBlob);
+
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/archive-application-pdf`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        },
+        body: JSON.stringify({
+          code,
+          filename,
+          pdfBase64,
+          studentName: meta.studentName,
+          studentNumber: meta.studentNumber,
+        }),
+      });
+
+      if (!res.ok) {
+        console.error('Archive failed (HTTP ' + res.status + '):', await res.text());
+        return null;
+      }
+
+      const data = await res.json();
+      console.log('Archived to storage:', data.path);
+      return data.path;
+    } catch (err) {
+      console.error('Archive error:', err);
+      return null;
+    }
+  };
 </script>
 </body>
 </html>
