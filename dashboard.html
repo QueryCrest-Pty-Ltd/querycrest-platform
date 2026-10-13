@@ -628,7 +628,7 @@ async function replaceArea({page,x,y,width,height,text,size=9,offset=3,bold=fals
   const months = ["January","February","March","April","May","June",
                   "July","August","September","October","November","December"];
   const generatedDate = new Date();
-  const dateText = `${generatedDate.getDate()} ${months[generatedDate.getMonth()]} ${generatedDate.getFullYear()}`;
+  const dateText = `${generatedDate.getDate() } ${months[generatedDate.getMonth()]} ${generatedDate.getFullYear()}`;
 
 //replace values
 if  (data.templateType === "bursary"){
