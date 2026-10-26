@@ -35,7 +35,7 @@ const student = {firstName:"null",
 };
 const applicationReference = "ddd";
 const application = {studentNumber:null   ,  
-                     institutionName:null,
+                     institutionName:"1234567890",
                      placementPeriod:null,
                      portalPassword:null,
                      itsPin:null,
@@ -78,14 +78,16 @@ const pdfBytes = fs.readFileSync(file);
 const pdfDoc = await PDFDocument.load(pdfBytes);
 
 
-async function replaceArea({page,x,y,width,height,text,size=9,offset=3}){
+async function replaceArea({page,x,y,width,height,text,size=9,offset=3,bold=false,line=false,thickness=0.75,xSL,ySL,xEL,yEL}){
     const _page = pdfDoc.getPages()[page];
-    const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+    let font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+    if(bold)font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
     //cover the old template values/placeholders.
     _page.drawRectangle({x,y,width,height,color:rgb(0.72, 0.255, 1),borderWidth:0});
 
     //draw new values
     _page.drawText(String(text ??''),{x,y:y+offset,size,font,color:rgb(0,0,0),maxWidth:width});
+    if(line)_page.drawLine({start:{x:xSL,y:ySL},end:{x:xEL,y:yEL},thickness:thickness,color:rgb(0,0,0)});
 }
 
 //replace values
@@ -95,15 +97,44 @@ if (file.toLowerCase().includes("varsity")){
 replaceArea({page:0,x:63,y:666,size:9,offset:3,width:350,height:15,text:`${generatedDate.getDay() } ${months[generatedDate.getMonth()] } ${generatedDate.getFullYear() }`});
 //ref
 replaceArea({page:0,x:84,y:650,size:9,offset:3,width:350,height:15,text:applicationReference});
+//re
+replaceArea({page:0,x:80,y:575,size:10,offset:0,width:230,height:15,text:`${application.institutionName} Application Details`,bold:true,line:true,thickness:1.85,xSL:86,ySL:585,xEL:400,yEL:575});
+
 //univerity name
-replaceArea({page:0,x:248,y:440,size:9,offset:3,width:275,height:15,text:application.institutionName });
+if(application.institutionName.length <=58){
+
+    const text = `${application.institutionName} has been  successfully submitted. You have officially applied for the following`;
+    const start_idx =0;
+    const end_idx = 58;
+    const first_text = text.slice(start_idx,end_idx);
+    const last_text = text.slice(end_idx,text.length);
+    const add_text = "has been successfully submitted. You have officially applied for the following";
+    replaceArea({page:0,x:248,y:440,size:9,offset:4,width:275,height:15,text:first_text });
+    //univerity name cover
+    if(last_text.length<20)replaceArea({page:0,x:64,y:427,size:9,offset:4,width:455,height:15,text:`${last_text} ${add_text}`});
+    else replaceArea({page:0,x:64,y:427,size:9,offset:4,width:430,height:15,text:`${last_text} `});    
+}
+else{
+    const start_idx =0;
+    const end_idx = 58;
+    const first_text = application.institutionName.slice(start_idx,end_idx);
+    const last_text = application.institutionName.slice(end_idx,application.institutionName.length);
+    const add_text = "has been successfully submitted. You have officially applied for the following";
+    replaceArea({page:0,x:248,y:440,size:9,offset:3,width:275,height:15,text:first_text });
+    //univerity name cover
+    if(last_text.length<20)replaceArea({page:0,x:64,y:427,size:9,offset:3,width:455,height:15,text:`${last_text} ${add_text}`});
+    else replaceArea({page:0,x:64,y:427,size:9,offset:3,width:430,height:15,text:`${last_text.slice(0,28)} ${add_text}`});    
+}
 //univerity name cover
-replaceArea({page:0,x:64,y:427,size:9,offset:3,width:88,height:15,text:null});
+//replaceArea({page:0,x:64,y:427,size:9,offset:3,width:88,height:15,text:application.institutionName.length});
 //programm 1
 replaceArea({page:0,x:100,y:394,size:9,offset:3,width:415,height:15,text:application.programmes[0] });
 //programm 2
 replaceArea({page:0,x:100,y:370,size:9,offset:3,width:400,height:15,text:application.programmes[1]});
 if(!application.programmes[1])replaceArea({page:0,x:80,y:370,size:9,offset:3,width:10,height:15,text:null});
+
+
+
 
 for(const key in varistyCollegeTemplate.fields){
  for(const _key in student){
@@ -128,11 +159,38 @@ for(const key in varistyCollegeTemplate.fields){
 replaceArea({page:0,x:63,y:702,size:9,offset:3,width:350,height:15,text:`${generatedDate.getDay() } ${months[generatedDate.getMonth()] } ${generatedDate.getFullYear() }`});
 //ref
 replaceArea({page:0,x:84,y:685,size:9,offset:4,width:350,height:15,text:applicationReference});
-//univerity name
-replaceArea({page:0,x:248,y:490,size:9,offset:3,width:275,height:15,text:`${application.institutionName } `});
-//univerity name cover
-replaceArea({page:0,x:64,y:476,size:9,offset:3,width:36,height:15,text:null});
+//re
+replaceArea({page:0,x:80,y:615.5,size:10,offset:0,width:200,height:15,text:`${application.institutionName} Bursary Application Details` ,bold:true});
 
+//univerity name
+//replaceArea({page:0,x:248,y:490,size:9,offset:3,width:275,height:15,text:`${application.institutionName } `});
+//univerity name cover
+//replaceArea({page:0,x:64,y:476,size:9,offset:3,width:36,height:15,text:null});
+//univerity name
+if(application.institutionName.length <=58){
+
+    const text = `${application.institutionName} has been  successfully submitted.`;
+    const start_idx =0;
+    const end_idx = 58;
+    const first_text = text.slice(start_idx,end_idx);
+    const last_text = text.slice(end_idx,text.length);
+    const add_text = "has been successfully submitted.";
+    replaceArea({page:0,x:248,y:490,size:9,offset:3,width:275,height:15,text:first_text });
+    //univerity name cover
+    if(last_text.length<20)replaceArea({page:0,x:64,y:476,size:9,offset:3,width:455,height:15,text:`${last_text}`});
+    else replaceArea({page:0,x:64,y:476,size:9,offset:3,width:430,height:15,text:`${last_text} `});    
+}
+else{
+    const start_idx =0;
+    const end_idx = 58;
+    const first_text = application.institutionName.slice(start_idx,end_idx);
+    const last_text = application.institutionName.slice(end_idx,application.institutionName.length);
+    const add_text = "has been successfully submitted.";
+    replaceArea({page:0,x:248,y:490,size:9,offset:3,width:275,height:15,text:first_text });
+    //univerity name cover
+    if(last_text.length<20)replaceArea({page:0,x:64,y:476,size:9,offset:3,width:455,height:15,text:`${last_text} ${add_text}`});
+    else replaceArea({page:0,x:64,y:476,size:9,offset:3,width:430,height:15,text:`${last_text.slice(0,28)} ${add_text}`});    
+}
 
 for(const key in bursaryTemplate.fields){
  for(const _key in student){
