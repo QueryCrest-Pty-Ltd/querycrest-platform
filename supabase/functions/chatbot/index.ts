@@ -1,22 +1,45 @@
 import { serve } from "https://deno.land/std/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin":      "https://www.querycrest.com",
-  "Access-Control-Allow-Methods":     "POST, OPTIONS",
-  "Access-Control-Allow-Headers":     "Content-Type, Authorization",
-  "Access-Control-Allow-Credentials": "true",
-};
+
+const ALLOWED_ORIGINS = [
+  "https://querycrest.com",// Truehost
+  "https://www.querycrest.com",// Truehost
+  'https://www.portal.querycrest.com', // Digital ocean
+  'https://portal.querycrest.com', // Digital ocean  
+
+];
+let origin = null;
+function getCorsHeaders(origin: string | null) {
+  // Check if the request's origin is in the allowlist.
+  const allowedOrigin = origin && ALLOWED_ORIGINS.includes(origin)
+    ? origin
+    : ALLOWED_ORIGINS[0]; // Fallback to the first allowed origin if not matched
+
+  return {
+    'Access-Control-Allow-Origin': allowedOrigin,
+    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+    'Access-Control-Allow-Methods': " POST, OPTIONS",
+  "Access-Control-Allow-Credentials": "true",   // ← required for cookies
+  };
+}
+
+
+
+
+
+
 
 serve(async (req) => {
+  origin = req.headers.get("origin");
   if (req.method === "OPTIONS") {
-    return new Response(null, { status: 204, headers: corsHeaders });
+    return new Response(null, { status: 204, headers: getCorsHeaders(origin) });
   }
 
   try {
     if (req.method !== "POST") {
       return new Response(JSON.stringify({ error: "Method not allowed" }), {
-        status: 405, headers: corsHeaders
+        status: 405, headers: getCorsHeaders(origin)
       });
     }
 
@@ -24,7 +47,7 @@ serve(async (req) => {
     if (!ANTHROPIC_KEY) {
       console.error("[chatbot] ANTHROPIC_API_KEY not set");
       return new Response(JSON.stringify({ error: "ANTHROPIC_API_KEY secret not configured" }), {
-        status: 500, headers: corsHeaders
+        status: 500, headers: getCorsHeaders(origin)
       });
     }
 
@@ -37,7 +60,7 @@ serve(async (req) => {
     }
     if (!token) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401, headers: corsHeaders
+        status: 401, headers: getCorsHeaders(origin)
       });
     }
 
@@ -49,7 +72,7 @@ serve(async (req) => {
     const { data: authData, error: authError } = await supabase.auth.getUser(token);
     if (authError || !authData.user) {
       return new Response(JSON.stringify({ error: "Invalid token" }), {
-        status: 401, headers: corsHeaders
+        status: 401, headers: getCorsHeaders(origin)
       });
     }
     const userId = authData.user.id;
@@ -71,7 +94,7 @@ serve(async (req) => {
 
       if (convErr) {
         return new Response(JSON.stringify({ error: convErr.message }), {
-          status: 500, headers: corsHeaders
+          status: 500, headers: getCorsHeaders(origin)
         });
       }
 
@@ -83,7 +106,7 @@ serve(async (req) => {
           .single();
         if (insertErr) {
           return new Response(JSON.stringify({ error: insertErr.message }), {
-            status: 500, headers: corsHeaders
+            status: 500, headers: getCorsHeaders(origin)
           });
         }
         conv = newConv;
@@ -96,7 +119,7 @@ serve(async (req) => {
         .order("created_at", { ascending: true });
 
       return new Response(JSON.stringify({ conversation: conv, messages: messages || [] }), {
-        status: 200, headers: corsHeaders
+        status: 200, headers: getCorsHeaders(origin)
       });
     }
 
@@ -104,7 +127,7 @@ serve(async (req) => {
     if (action === "requestHuman") {
       if (!conversation_id) {
         return new Response(JSON.stringify({ error: "conversation_id required" }), {
-          status: 400, headers: corsHeaders
+          status: 400, headers: getCorsHeaders(origin)
         });
       }
 
@@ -159,19 +182,19 @@ serve(async (req) => {
         success:     true,
         adminOnline: (onlineAdmins || []).length > 0,
         adminCount:  (onlineAdmins || []).length,
-      }), { status: 200, headers: corsHeaders });
+      }), { status: 200, headers: getCorsHeaders(origin) });
     }
 
     // ── sendMessage ───────────────────────────────────────────────
     if (action === "sendMessage") {
       if (!message) {
         return new Response(JSON.stringify({ error: "message required" }), {
-          status: 400, headers: corsHeaders
+          status: 400, headers: getCorsHeaders(origin)
         });
       }
       if (!conversation_id) {
         return new Response(JSON.stringify({ error: "conversation_id required" }), {
-          status: 400, headers: corsHeaders
+          status: 400, headers: getCorsHeaders(origin)
         });
       }
 
@@ -183,7 +206,7 @@ serve(async (req) => {
 
       if (!conv) {
         return new Response(JSON.stringify({ error: "Conversation not found" }), {
-          status: 404, headers: corsHeaders
+          status: 404, headers: getCorsHeaders(origin)
         });
       }
 
@@ -197,7 +220,7 @@ serve(async (req) => {
 
       if (conv.status === "active") {
         return new Response(JSON.stringify({ mode: "human", reply: null }), {
-          status: 200, headers: corsHeaders
+          status: 200, headers: getCorsHeaders(origin)
         });
       }
 
@@ -316,7 +339,7 @@ YOUR RULES
         console.error("[chatbot] Anthropic error:", anthropicRes.status, errText);
         return new Response(JSON.stringify({
           error: "AI error (" + anthropicRes.status + "): " + errText
-        }), { status: 500, headers: corsHeaders });
+        }), { status: 500, headers: getCorsHeaders(origin) });
       }
 
       const aiData = await anthropicRes.json();
@@ -324,7 +347,7 @@ YOUR RULES
 
       if (!reply) {
         return new Response(JSON.stringify({ error: "Empty AI response" }), {
-          status: 500, headers: corsHeaders
+          status: 500, headers: getCorsHeaders(origin)
         });
       }
 
@@ -337,7 +360,7 @@ YOUR RULES
       }]);
 
       return new Response(JSON.stringify({ mode: "ai", reply }), {
-        status: 200, headers: corsHeaders
+        status: 200, headers: getCorsHeaders(origin)
       });
     }
 
@@ -345,7 +368,7 @@ YOUR RULES
     if (action === "closeConversation") {
       if (!conversation_id) {
         return new Response(JSON.stringify({ error: "conversation_id required" }), {
-          status: 400, headers: corsHeaders
+          status: 400, headers: getCorsHeaders(origin)
         });
       }
       await supabase
@@ -353,18 +376,18 @@ YOUR RULES
         .update({ status: "closed", updated_at: new Date().toISOString() })
         .eq("id", conversation_id);
       return new Response(JSON.stringify({ success: true }), {
-        status: 200, headers: corsHeaders
+        status: 200, headers: getCorsHeaders(origin)
       });
     }
 
     return new Response(JSON.stringify({ error: "Unknown action: " + action }), {
-      status: 400, headers: corsHeaders
+      status: 400, headers: getCorsHeaders(origin)
     });
 
   } catch (err: any) {
     console.error("[chatbot] unhandled error:", err.message);
     return new Response(JSON.stringify({ error: err.message || "Internal server error" }), {
-      status: 500, headers: corsHeaders
+      status: 500, headers: getCorsHeaders(origin)
     });
   }
 });

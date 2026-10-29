@@ -4,18 +4,42 @@ const _SVC = () => createClient(
   Deno.env.get("SUPABASE_URL")!,
   Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
 );
-const CORS = {
-  "Access-Control-Allow-Origin":      "https://www.querycrest.com",
-  "Access-Control-Allow-Headers":     "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods":     "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+
+
+const ALLOWED_ORIGINS = [
+  "https://querycrest.com",// Truehost
+  "https://www.querycrest.com",// Truehost
+  'https://www.portal.querycrest.com', // Digital ocean
+  'https://portal.querycrest.com', // Digital ocean   
+
+];
+let origin = null;
+function getCorsHeaders(origin: string | null) {
+  // Check if the request's origin is in the allowlist.
+  const allowedOrigin = origin && ALLOWED_ORIGINS.includes(origin)
+    ? origin
+    : ALLOWED_ORIGINS[0]; // Fallback to the first allowed origin if not matched
+
+  return {
+    'Access-Control-Allow-Origin': allowedOrigin,
+    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+    'Access-Control-Allow-Methods': "GET, POST, PUT, DELETE, PATCH, OPTIONS",
   "Access-Control-Max-Age":           "86400",
-  "Access-Control-Allow-Credentials": "true",
-};
-function _json(body: unknown, status = 200): Response {
+  "Access-Control-Allow-Credentials": "true",   // ← required for cookies
+  };
+}
+
+
+function _json(body: unknown, status = 200,origin: string | null): Response {
+  const cors = getCorsHeaders(origin);
   return new Response(JSON.stringify(body), {
-    status, headers: { ...CORS, "Content-Type": "application/json" },
+    status, headers: { ...cors, "Content-Type": "application/json" },
   });
 }
+
+
+
+
 async function _auth(req: Request): Promise<{ userId: string; email: string; svc: ReturnType<typeof _SVC> } | Response> {
   // 1. Try the Authorization header (backward-compat for any direct API callers)
   let token = req.headers.get("Authorization")?.replace("Bearer ", "").trim();
@@ -29,11 +53,11 @@ async function _auth(req: Request): Promise<{ userId: string; email: string; svc
     token         = match?.[1]?.trim();
   }
  
-  if (!token) return _json({ error: "Unauthorized" }, 401);
+  if (!token) return _json({ error: "Unauthorized" }, 401,200,origin);
  
   const svc = _SVC();
   const { data: { user }, error } = await svc.auth.getUser(token);
-  if (error || !user) return _json({ error: "Unauthorized — invalid token" }, 401);
+  if (error || !user) return _json({ error: "Unauthorized — invalid token" }, 401,origin);
   return { userId: user.id, email: user.email ?? "", svc };
 }
 async function _rateLimit(
@@ -47,7 +71,7 @@ async function _rateLimit(
       .eq("user_id", userId).eq("action", action).eq("result", "ok")
       .gte("created_at", since);
     if ((count ?? 0) >= limit)
-      return _json({ error: "Too many requests. Please wait before trying again." }, 429);
+      return _json({ error: "Too many requests. Please wait before trying again." }, 429,origin);
   } catch { /* non-blocking */ }
   return null;
 }
@@ -81,7 +105,8 @@ const ALLOWED_CATEGORIES = ["Technical Issue","Academic Guidance","Application H
 const MAX_ATTACH_BYTES   = 5 * 1024 * 1024; // 5 MB
  
 Deno.serve(async (req) => {
-  if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
+  origin = req.headers.get("origin");   
+  if (req.method === "OPTIONS") return new Response("ok", { headers: getCorsHeaders(origin) });
   try {
     const auth = await _auth(req);
     if (auth instanceof Response) return auth;
@@ -97,8 +122,8 @@ Deno.serve(async (req) => {
         .select("id, subject, category, message, priority, status, created_at")
         .eq("user_id", userId)
         .order("created_at", { ascending: false });
-      if (error) return _json({ error: error.message }, 400);
-      return _json({ success: true, tickets: data ?? [] });
+      if (error) return _json({ error: error.message }, 400,origin);
+      return _json({ success: true, tickets: data ?? [] },200,origin);
     }
  
     // ── POST: create ticket ───────────────────────────────────────────────
@@ -111,27 +136,27 @@ Deno.serve(async (req) => {
       const file     = fd.get("document") as File | null;
  
       if (!subject || !category || !message)
-        return _json({ error: "Subject, category and message are required" }, 400);
+        return _json({ error: "Subject, category and message are required" }, 400,origin);
       if (!ALLOWED_CATEGORIES.includes(category))
-        return _json({ error: `Invalid category. Use: ${ALLOWED_CATEGORIES.join(", ")}` }, 400);
+        return _json({ error: `Invalid category. Use: ${ALLOWED_CATEGORIES.join(", ")}` }, 400,origin);
       if (!["Low","Medium","High"].includes(priority))
-        return _json({ error: "Invalid priority" }, 400);
+        return _json({ error: "Invalid priority" }, 400,origin);
  
       let attachment_url: string | null  = null;
       let attachment_name: string | null = null;
  
       if (file && file.size > 0) {
         if (file.size > MAX_ATTACH_BYTES)
-          return _json({ error: "Attachment too large (max 5 MB)" }, 400);
+          return _json({ error: "Attachment too large (max 5 MB)" }, 400,origin);
         const SAFE_MIME = ["image/jpeg","image/jpg","image/png","application/pdf"];
         if (!SAFE_MIME.includes(file.type))
-          return _json({ error: "Only PDF, JPG and PNG attachments are accepted" }, 400);
+          return _json({ error: "Only PDF, JPG and PNG attachments are accepted" }, 400,origin);
         const ext  = (file.name.split(".").pop() ?? "bin").replace(/[^a-z0-9]/gi, "").toLowerCase();
         const path = `${userId}/${crypto.randomUUID()}.${ext}`;
         const { error: upErr } = await svc.storage
           .from("support-documents")
           .upload(path, file, { contentType: file.type });
-        if (upErr) return _json({ error: "Failed to upload attachment" }, 500);
+        if (upErr) return _json({ error: "Failed to upload attachment" }, 500,origin);
         attachment_url  = path;
         attachment_name = file.name.slice(0, 200);
       }
@@ -140,17 +165,17 @@ Deno.serve(async (req) => {
         user_id: userId, subject, category, message, priority,
         attachment_url, attachment_name,
       });
-      if (error) return _json({ error: error.message }, 400);
+      if (error) return _json({ error: error.message }, 400,origin);
  
       await _log(svc, userId, "support_tickets", req, "ok", { subject, category });
       return _json({
         success: true,
         message: "Ticket submitted. Our team will respond within 24–48 hours.",
-      });
+      },200,origin);
     }
  
-    return _json({ error: "Method not allowed" }, 405);
+    return _json({ error: "Method not allowed" }, 405,origin);
   } catch {
-    return _json({ error: "Server error" }, 500);
+    return _json({ error: "Server error" }, 500,origin);
   }
 });

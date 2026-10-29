@@ -4,18 +4,40 @@ const _SVC = () => createClient(
   Deno.env.get("SUPABASE_URL")!,
   Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
 );
-const CORS = {
-  "Access-Control-Allow-Origin":      "https://www.querycrest.com",
-  "Access-Control-Allow-Headers":     "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods":     "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+
+
+const ALLOWED_ORIGINS = [
+  "https://querycrest.com",// Truehost
+  "https://www.querycrest.com",// Truehost
+  'https://www.portal.querycrest.com', // Digital ocean
+  'https://portal.querycrest.com', // Digital ocean   
+
+];
+let origin = null;
+function getCorsHeaders(origin: string | null) {
+  // Check if the request's origin is in the allowlist.
+  const allowedOrigin = origin && ALLOWED_ORIGINS.includes(origin)
+    ? origin
+    : ALLOWED_ORIGINS[0]; // Fallback to the first allowed origin if not matched
+
+  return {
+    'Access-Control-Allow-Origin': allowedOrigin,
+    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+    'Access-Control-Allow-Methods': "GET, POST, PUT, DELETE, PATCH, OPTIONS",
   "Access-Control-Max-Age":           "86400",
-  "Access-Control-Allow-Credentials": "true",
-};
-function _json(body: unknown, status = 200): Response {
+  "Access-Control-Allow-Credentials": "true",   // ← required for cookies
+  };
+}
+
+
+function _json(body: unknown, status = 200,origin: string | null): Response {
+  const cors = getCorsHeaders(origin);
   return new Response(JSON.stringify(body), {
-    status, headers: { ...CORS, "Content-Type": "application/json" },
+    status, headers: { ...cors, "Content-Type": "application/json" },
   });
 }
+
+
 async function _auth(req: Request): Promise<{ userId: string; email: string; svc: ReturnType<typeof _SVC> } | Response> {
   let token = req.headers.get("Authorization")?.replace("Bearer ", "").trim();
   if (!token) {
@@ -23,11 +45,11 @@ async function _auth(req: Request): Promise<{ userId: string; email: string; svc
     const match   = cookies.match(/(?:^|;\s*)access_token=([^;]+)/);
     token         = match?.[1]?.trim();
   }
-  if (!token) return _json({ error: "Unauthorized" }, 401);
+  if (!token) return _json({ error: "Unauthorized" }, 401,origin);
 
   const svc = _SVC();
   const { data: { user }, error } = await svc.auth.getUser(token);
-  if (error || !user) return _json({ error: "Unauthorized — invalid token" }, 401);
+  if (error || !user) return _json({ error: "Unauthorized — invalid token" }, 401,origin);
   return { userId: user.id, email: user.email ?? "", svc };
 }
 async function _rateLimit(
@@ -41,7 +63,7 @@ async function _rateLimit(
       .eq("user_id", userId).eq("action", action).eq("result", "ok")
       .gte("created_at", since);
     if ((count ?? 0) >= limit)
-      return _json({ error: "Too many requests. Please wait before trying again." }, 429);
+      return _json({ error: "Too many requests. Please wait before trying again." }, 429,origin);
   } catch { /* non-blocking */ }
   return null;
 }
@@ -126,8 +148,9 @@ async function _applyPromo(
 }
 
 Deno.serve(async (req) => {
-  if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
-  if (req.method !== "POST") return _json({ error: "Method not allowed" }, 405);
+  origin = req.headers.get("origin");   
+  if (req.method === "OPTIONS") return new Response("ok", { headers: getCorsHeaders(origin) });
+  if (req.method !== "POST") return _json({ error: "Method not allowed" }, 405,origin);
   try {
     const auth = await _auth(req);
     if (auth instanceof Response) return auth;
@@ -142,18 +165,18 @@ Deno.serve(async (req) => {
     const body = await req.json().catch(() => ({}));
     const { plan_id, preview, promo_code } = body;
     if (!plan_id || typeof plan_id !== "string")
-      return _json({ error: "plan_id is required" }, 400);
+      return _json({ error: "plan_id is required" }, 400,origin);
 
     const { data: plan, error } = await svc
       .from("plans").select("*").eq("plan_id", plan_id).single();
-    if (error || !plan) return _json({ error: "Invalid plan" }, 400);
+    if (error || !plan) return _json({ error: "Invalid plan" }, 400,origin);
 
     const basePriceCents = Math.round(Number(plan.price) * 100);
 
     // Preview mode: return plan + pricing (with promo applied) for the summary modal
     if (preview) {
       const promoResult = await _applyPromo(svc, promo_code, "application_plan", userId, basePriceCents, plan.plan_id);
-      if (!promoResult.ok) return _json({ error: promoResult.error }, 400);
+      if (!promoResult.ok) return _json({ error: promoResult.error }, 400,origin);
       return _json({
         success: true,
         plan: { plan_id: plan.plan_id, plan_name: plan.plan_name, price: plan.price, applications: plan.applications },
@@ -163,13 +186,13 @@ Deno.serve(async (req) => {
           final_price: promoResult.finalCents / 100,
           promo_applied: !!promoResult.promo,
         },
-      });
+      },200,origin);
     }
 
     const promoResult = await _applyPromo(svc, promo_code, "application_plan", userId, basePriceCents, plan.plan_id);
     if (!promoResult.ok) {
       await _log(svc, userId, "process_payment", req, "fail", { reason: "invalid_promo", plan_id });
-      return _json({ error: promoResult.error }, 400);
+      return _json({ error: promoResult.error }, 400,origin);
     }
 
     // Create the order — the single source of truth for what this
@@ -190,7 +213,7 @@ Deno.serve(async (req) => {
 
     if (orderErr || !order) {
       await _log(svc, userId, "process_payment", req, "fail", { reason: "order_insert_failed" });
-      return _json({ error: "Could not start checkout. Please try again." }, 500);
+      return _json({ error: "Could not start checkout. Please try again." }, 500,origin);
     }
 
     // Fully-discounted order — skip PayFast entirely, credit immediately.
@@ -201,7 +224,7 @@ Deno.serve(async (req) => {
         });
         if (!redeemed) {
           await svc.from("orders").update({ status: "failed" }).eq("id", order.id);
-          return _json({ error: "That promo code was just used up. Please try again." }, 409);
+          return _json({ error: "That promo code was just used up. Please try again." }, 409,origin);
         }
         await svc.from("promo_code_redemptions").insert({
           promo_code_id: promoResult.promo.id, user_id: userId, order_id: order.id,
@@ -217,18 +240,18 @@ Deno.serve(async (req) => {
       });
       if (creditErr) {
         await _log(svc, userId, "process_payment", req, "fail", { reason: "free_credit_failed", order_id: order.id });
-        return _json({ error: "Could not activate your plan. Please contact support." }, 500);
+        return _json({ error: "Could not activate your plan. Please contact support." }, 500,origin);
       }
 
       await svc.from("orders").update({ status: "free_completed" }).eq("id", order.id);
       await _log(svc, userId, "process_payment", req, "ok", { order_id: order.id, plan_id: plan.plan_id, free: true });
-      return _json({ success: true, free: true, message: "Plan activated!" });
+      return _json({ success: true, free: true, message: "Plan activated!" },200,origin);
     }
 
     const merchantId  = Deno.env.get("PAYFAST_MERCHANT_ID");
     const merchantKey = Deno.env.get("PAYFAST_MERCHANT_KEY");
     if (!merchantId || !merchantKey)
-      return _json({ error: "Payment configuration error" }, 500);
+      return _json({ error: "Payment configuration error" }, 500,origin);
 
     const amountStr = (order.final_price_cents / 100).toFixed(2);
 
@@ -251,8 +274,8 @@ Deno.serve(async (req) => {
     await _log(svc, userId, "process_payment", req, "ok", {
       order_id: order.id, plan_id: plan.plan_id, amount: amountStr, promo: !!promoResult.promo,
     });
-    return _json({ success: true, payFastUrl });
+    return _json({ success: true, payFastUrl },200,origin);
   } catch {
-    return _json({ error: "Server error" }, 500);
+    return _json({ error: "Server error" }, 500,origin);
   }
 });

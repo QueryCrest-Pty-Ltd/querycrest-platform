@@ -4,18 +4,40 @@ const _SVC = () => createClient(
   Deno.env.get("SUPABASE_URL")!,
   Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
 );
-const CORS = {
-  "Access-Control-Allow-Origin":      "https://www.querycrest.com",
-  "Access-Control-Allow-Headers":     "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods":     "POST, OPTIONS",
+
+
+const ALLOWED_ORIGINS = [
+  "https://querycrest.com",// Truehost
+  "https://www.querycrest.com",// Truehost
+  'https://www.portal.querycrest.com', // Digital ocean
+  'https://portal.querycrest.com', // Digital ocean   
+
+];
+let origin = null;
+function getCorsHeaders(origin: string | null) {
+  // Check if the request's origin is in the allowlist.
+  const allowedOrigin = origin && ALLOWED_ORIGINS.includes(origin)
+    ? origin
+    : ALLOWED_ORIGINS[0]; // Fallback to the first allowed origin if not matched
+
+  return {
+    'Access-Control-Allow-Origin': allowedOrigin,
+    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+    'Access-Control-Allow-Methods': " POST, OPTIONS",
   "Access-Control-Max-Age":           "86400",
-  "Access-Control-Allow-Credentials": "true",
-};
-function _json(body: unknown, status = 200): Response {
+  "Access-Control-Allow-Credentials": "true",   // ← required for cookies
+  };
+}
+
+function _json(body: unknown, status = 200,origin: string | null): Response {
+  const cors = getCorsHeaders(origin);
   return new Response(JSON.stringify(body), {
-    status, headers: { ...CORS, "Content-Type": "application/json" },
+    status, headers: { ...cors, "Content-Type": "application/json" },
   });
 }
+
+
+
 async function _auth(req: Request): Promise<{ userId: string; email: string; svc: ReturnType<typeof _SVC> } | Response> {
   let token = req.headers.get("Authorization")?.replace("Bearer ", "").trim();
   if (!token) {
@@ -23,10 +45,10 @@ async function _auth(req: Request): Promise<{ userId: string; email: string; svc
     const match   = cookies.match(/(?:^|;\s*)access_token=([^;]+)/);
     token         = match?.[1]?.trim();
   }
-  if (!token) return _json({ error: "Unauthorized" }, 401);
+  if (!token) return _json({ error: "Unauthorized" }, 401,origin);
   const svc = _SVC();
   const { data: { user }, error } = await svc.auth.getUser(token);
-  if (error || !user) return _json({ error: "Unauthorized — invalid token" }, 401);
+  if (error || !user) return _json({ error: "Unauthorized — invalid token" }, 401,origin);
   return { userId: user.id, email: user.email ?? "", svc };
 }
 async function _rateLimit(
@@ -40,7 +62,7 @@ async function _rateLimit(
       .eq("user_id", userId).eq("action", action).eq("result", "ok")
       .gte("created_at", since);
     if ((count ?? 0) >= limit)
-      return _json({ error: "Too many requests. Please wait before trying again." }, 429);
+      return _json({ error: "Too many requests. Please wait before trying again." }, 429,origin);
   } catch { /* non-blocking */ }
   return null;
 }
@@ -71,8 +93,9 @@ function _clean(val: unknown, maxLen = 500): string {
  
  
 Deno.serve(async (req) => {
-  if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
-  if (req.method !== "POST") return _json({ error: "Method not allowed" }, 405);
+  origin = req.headers.get("origin");  
+  if (req.method === "OPTIONS") return new Response("ok", { headers: getCorsHeaders(origin) });
+  if (req.method !== "POST") return _json({ error: "Method not allowed" }, 405,origin);
  
   try {
     // Best-effort: sign out the session if we can identify the user
@@ -90,7 +113,7 @@ Deno.serve(async (req) => {
   return new Response(JSON.stringify({ success: true }), {
     status: 200,
     headers: {
-      ...CORS,
+      ...getCorsHeaders(origin),
       "Content-Type": "application/json",
       "Set-Cookie": "access_token=; HttpOnly; Secure; SameSite=None; Path=/; Max-Age=0",
     },

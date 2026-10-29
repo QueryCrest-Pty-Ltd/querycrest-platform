@@ -4,18 +4,41 @@ const _SVC = () => createClient(
   Deno.env.get("SUPABASE_URL")!,
   Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
 );
-const CORS = {
-  "Access-Control-Allow-Origin":      "https://www.querycrest.com",
-  "Access-Control-Allow-Headers":     "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods":     "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+
+
+
+const ALLOWED_ORIGINS = [
+  "https://querycrest.com",// Truehost
+  "https://www.querycrest.com",// Truehost
+  'https://www.portal.querycrest.com', // Digital ocean
+  'https://portal.querycrest.com', // Digital ocean   
+
+];
+let origin = null;
+function getCorsHeaders(origin: string | null) {
+  // Check if the request's origin is in the allowlist.
+  const allowedOrigin = origin && ALLOWED_ORIGINS.includes(origin)
+    ? origin
+    : ALLOWED_ORIGINS[0]; // Fallback to the first allowed origin if not matched
+
+  return {
+    'Access-Control-Allow-Origin': allowedOrigin,
+    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+    'Access-Control-Allow-Methods': "GET, POST, PUT, DELETE, PATCH, OPTIONS",
   "Access-Control-Max-Age":           "86400",
-  "Access-Control-Allow-Credentials": "true",
-};
-function _json(body: unknown, status = 200): Response {
+  "Access-Control-Allow-Credentials": "true",   // ← required for cookies
+  };
+}
+
+
+function _json(body: unknown, status = 200,origin: string | null): Response {
+  const cors = getCorsHeaders(origin);
   return new Response(JSON.stringify(body), {
-    status, headers: { ...CORS, "Content-Type": "application/json" },
+    status, headers: { ...cors, "Content-Type": "application/json" },
   });
 }
+
+
 async function _auth(req: Request): Promise<{ userId: string; email: string; svc: ReturnType<typeof _SVC> } | Response> {
   // 1. Try the Authorization header (backward-compat for any direct API callers)
   let token = req.headers.get("Authorization")?.replace("Bearer ", "").trim();
@@ -29,11 +52,11 @@ async function _auth(req: Request): Promise<{ userId: string; email: string; svc
     token         = match?.[1]?.trim();
   }
  
-  if (!token) return _json({ error: "Unauthorized" }, 401);
+  if (!token) return _json({ error: "Unauthorized" }, 401,origin);
  
   const svc = _SVC();
   const { data: { user }, error } = await svc.auth.getUser(token);
-  if (error || !user) return _json({ error: "Unauthorized — invalid token" }, 401);
+  if (error || !user) return _json({ error: "Unauthorized — invalid token" }, 401,origin);
   return { userId: user.id, email: user.email ?? "", svc };
 }
 async function _rateLimit(
@@ -47,7 +70,7 @@ async function _rateLimit(
       .eq("user_id", userId).eq("action", action).eq("result", "ok")
       .gte("created_at", since);
     if ((count ?? 0) >= limit)
-      return _json({ error: "Too many requests. Please wait before trying again." }, 429);
+      return _json({ error: "Too many requests. Please wait before trying again." }, 429,origin);
   } catch { /* non-blocking */ }
   return null;
 }
@@ -78,8 +101,9 @@ function _clean(val: unknown, maxLen = 500): string {
  
  
 Deno.serve(async (req) => {
-  if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
-  if (req.method !== "POST") return _json({ success: false, error: "Method not allowed" }, 405);
+  origin = req.headers.get("origin");     
+  if (req.method === "OPTIONS") return new Response("ok", { headers: getCorsHeaders(origin) });
+  if (req.method !== "POST") return _json({ success: false, error: "Method not allowed" }, 405,origin);
   try {
     const auth = await _auth(req);
     if (auth instanceof Response) return auth;
@@ -96,11 +120,11 @@ Deno.serve(async (req) => {
     } = body;
  
     if (!id_number || !marital_status || !current_occupation)
-      return _json({ success: false, error: "id_number, marital_status and current_occupation are required" }, 400);
+      return _json({ success: false, error: "id_number, marital_status and current_occupation are required" }, 400,origin);
  
     // South African ID: exactly 13 digits
     if (!/^\d{13}$/.test(String(id_number)))
-      return _json({ success: false, error: "id_number must be exactly 13 digits" }, 400);
+      return _json({ success: false, error: "id_number must be exactly 13 digits" }, 400,origin);
  
     // Whitelist allowed values — no free-text injection in enums
     const VALID_MARITAL    = ["Single","Married","Divorced","Widowed"];
@@ -111,13 +135,13 @@ Deno.serve(async (req) => {
       "Xitsonga","Tshivenda","SiSwati","IsiNdebele","Other",""];
  
     if (!VALID_MARITAL.includes(marital_status))
-      return _json({ success: false, error: "Invalid marital status" }, 400);
+      return _json({ success: false, error: "Invalid marital status" }, 400,origin);
     if (!VALID_OCCUPATION.includes(current_occupation))
-      return _json({ success: false, error: "Invalid occupation" }, 400);
+      return _json({ success: false, error: "Invalid occupation" }, 400,origin);
     if (title && !VALID_TITLE.includes(title))
-      return _json({ success: false, error: "Invalid title" }, 400);
+      return _json({ success: false, error: "Invalid title" }, 400,origin);
     if (home_language && !VALID_LANGUAGE.includes(home_language))
-      return _json({ success: false, error: "Invalid home language" }, 400);
+      return _json({ success: false, error: "Invalid home language" }, 400,origin);
  
     const { data, error } = await svc
       .from("student_personal_info")
@@ -137,12 +161,12 @@ Deno.serve(async (req) => {
       .single();
     if (error) {
       await _log(svc, userId, "save_personal_info", req, "fail", { reason: error.message });
-      return _json({ success: false, error: "Failed to save personal info" }, 500);
+      return _json({ success: false, error: "Failed to save personal info" }, 500,origin);
     }
  
     await _log(svc, userId, "save_personal_info", req, "ok");
-    return _json({ success: true, info: data });
+    return _json({ success: true, info: data },200,origin);
   } catch {
-    return _json({ success: false, error: "Server error" }, 500);
+    return _json({ success: false, error: "Server error" }, 500,origin);
   }
 });

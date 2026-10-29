@@ -7,18 +7,38 @@ const _SVC = () => createClient(
   Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
   { auth: { autoRefreshToken: false, persistSession: false, detectSessionInUrl: false } }
 );
-const CORS = {
-  "Access-Control-Allow-Origin":      "https://www.querycrest.com",
-  "Access-Control-Allow-Headers":     "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods":     "POST, OPTIONS",
+
+const ALLOWED_ORIGINS = [
+  "https://querycrest.com",// Truehost
+  "https://www.querycrest.com",// Truehost
+  'https://www.portal.querycrest.com', // Digital ocean
+  'https://portal.querycrest.com', // Digital ocean  
+
+];
+let origin = null;
+function getCorsHeaders(origin: string | null) {
+  // Check if the request's origin is in the allowlist.
+  const allowedOrigin = origin && ALLOWED_ORIGINS.includes(origin)
+    ? origin
+    : ALLOWED_ORIGINS[0]; // Fallback to the first allowed origin if not matched
+
+  return {
+    'Access-Control-Allow-Origin': allowedOrigin,
+    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+    'Access-Control-Allow-Methods': " POST, OPTIONS",
   "Access-Control-Max-Age":           "86400",
-  "Access-Control-Allow-Credentials": "true",
-};
-function _json(body: unknown, status = 200): Response {
+  "Access-Control-Allow-Credentials": "true",   // ← required for cookies
+  };
+}
+
+
+function _json(body: unknown, status = 200,origin: string | null): Response {
+  const cors = getCorsHeaders(origin);
   return new Response(JSON.stringify(body), {
-    status, headers: { ...CORS, "Content-Type": "application/json" },
+    status, headers: { ...cors, "Content-Type": "application/json" },
   });
 }
+
 // Rate limit by IP — no userId exists yet at registration time
 async function _ipRateLimit(
   svc: ReturnType<typeof _SVC>,
@@ -34,7 +54,7 @@ async function _ipRateLimit(
       .eq("ip_address", ip).eq("action", action)
       .gte("created_at", since);
     if ((count ?? 0) >= limit)
-      return _json({ error: "Too many attempts from this IP. Please wait before trying again." }, 429);
+      return _json({ error: "Too many attempts from this IP. Please wait before trying again." }, 429,origin);
   } catch { /* non-blocking */ }
   return null;
 }
@@ -66,8 +86,9 @@ function _clean(val: unknown, maxLen = 200): string {
 // ── End security layer ───────────────────────────────────────────────────────
  
 serve(async (req) => {
-  if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
-  if (req.method !== "POST")    return _json({ error: "Method not allowed" }, 405);
+  origin = req.headers.get("origin");
+  if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: getCorsHeaders(origin) });
+  if (req.method !== "POST")    return _json({ error: "Method not allowed" }, 405,origin);
  
   const svc = _SVC();
   const ip  = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim()
@@ -85,7 +106,7 @@ serve(async (req) => {
     // ── Parse & sanitise input ────────────────────────────────────────────
     let body: Record<string, unknown>;
     try { body = await req.json(); }
-    catch { return _json({ error: "Invalid JSON body" }, 400); }
+    catch { return _json({ error: "Invalid JSON body" }, 400,origin); }
  
     const firstName      = _clean(body.firstName,    100);
     const lastName       = _clean(body.lastName,     100);
@@ -97,32 +118,32 @@ serve(async (req) => {
  
     // ── Field validation ──────────────────────────────────────────────────
     if (!firstName || !lastName)
-      return _json({ error: "First and last name are required." }, 400);
+      return _json({ error: "First and last name are required." }, 400,origin);
     if (!email)
-      return _json({ error: "Email is required." }, 400);
+      return _json({ error: "Email is required." }, 400,origin);
  
     // RFC-5321 email format check
     if (!/^[^\s@]{1,64}@[^\s@]{1,255}$/.test(email))
-      return _json({ error: "Invalid email address." }, 400);
+      return _json({ error: "Invalid email address." }, 400,origin);
  
     if (!phone)
-      return _json({ error: "Phone number is required." }, 400);
+      return _json({ error: "Phone number is required." }, 400,origin);
     // Basic phone sanity: digits, spaces, +, -, () only
     if (!/^[\d\s+\-().]{7,20}$/.test(phone))
-      return _json({ error: "Invalid phone number." }, 400);
+      return _json({ error: "Invalid phone number." }, 400,origin);
  
     if (!password || password.length < 8)
-      return _json({ error: "Password must be at least 8 characters." }, 400);
+      return _json({ error: "Password must be at least 8 characters." }, 400,origin);
     if (password !== confirmPassword)
-      return _json({ error: "Passwords do not match." }, 400);
+      return _json({ error: "Passwords do not match." }, 400,origin);
  
     // Password strength — same rules as resetPassword
     if (!/[A-Z]/.test(password))
-      return _json({ error: "Password must include at least one uppercase letter." }, 400);
+      return _json({ error: "Password must include at least one uppercase letter." }, 400,origin);
     if (!/[0-9]/.test(password))
-      return _json({ error: "Password must include at least one number." }, 400);
+      return _json({ error: "Password must include at least one number." }, 400,origin);
     if (!/[!@#$%^&*(),.?":{}|<>]/.test(password))
-      return _json({ error: "Password must include at least one special character." }, 400);
+      return _json({ error: "Password must include at least one special character." }, 400,origin);
  
     // ── Create auth user (admin.createUser = no session switch) ──────────
     const { data: createData, error: createErr } = await svc.auth.admin.createUser({
@@ -138,14 +159,14 @@ serve(async (req) => {
  
       // Return a consistent error — do NOT confirm whether an email exists
       if (msg.toLowerCase().includes("already") || msg.toLowerCase().includes("registered"))
-        return _json({ error: "AuthApiError: User already registered" }, 409);
+        return _json({ error: "AuthApiError: User already registered" }, 409,origin);
       if (msg.toLowerCase().includes("invalid email"))
-        return _json({ error: "AuthApiError: Invalid email" }, 400);
-      return _json({ error: msg }, 400);
+        return _json({ error: "AuthApiError: Invalid email" }, 400,origin);
+      return _json({ error: msg }, 400,origin);
     }
  
     const newUserId = createData.user?.id;
-    if (!newUserId) return _json({ error: "Account creation failed — no ID returned" }, 500);
+    if (!newUserId) return _json({ error: "Account creation failed — no ID returned" }, 500,origin);
  
     // ── Insert into public.users ──────────────────────────────────────────
     const { error: userErr } = await svc.from("users").insert([{
@@ -162,7 +183,7 @@ serve(async (req) => {
       await svc.auth.admin.deleteUser(newUserId).catch(() => {});
       await _log(svc, newUserId, "register", req, "fail",
         { reason: "profile_insert_failed: " + userErr.message });
-      return _json({ error: "Failed to create user profile." }, 500);
+      return _json({ error: "Failed to create user profile." }, 500,origin);
     }
  
     // ── Record referral if code provided ──────────────────────────────────
@@ -190,11 +211,11 @@ serve(async (req) => {
     await _log(svc, newUserId, "register", req, "ok",
       { referral_recorded: referralRecorded });
  
-    return _json({ success: true, user_id: newUserId, referral_recorded: referralRecorded });
+    return _json({ success: true, user_id: newUserId, referral_recorded: referralRecorded },200,origin);
  
   } catch (err: any) {
     await _log(svc, null, "register", req, "fail",
       { reason: err?.message ?? "unhandled_exception" });
-    return _json({ error: "Server error" }, 500);
+    return _json({ error: "Server error" }, 500,origin);
   }
 });

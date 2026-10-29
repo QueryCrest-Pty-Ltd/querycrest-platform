@@ -4,18 +4,40 @@ const _SVC = () => createClient(
   Deno.env.get("SUPABASE_URL")!,
   Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
 );
-const CORS = {
-  "Access-Control-Allow-Origin":      "https://www.querycrest.com",
-  "Access-Control-Allow-Headers":     "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods":     "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+
+const ALLOWED_ORIGINS = [
+  "https://querycrest.com",// Truehost
+  "https://www.querycrest.com",// Truehost
+  'https://www.portal.querycrest.com', // Digital ocean
+  'https://portal.querycrest.com', // Digital ocean   
+
+];
+let origin = null;
+function getCorsHeaders(origin: string | null) {
+  // Check if the request's origin is in the allowlist.
+  const allowedOrigin = origin && ALLOWED_ORIGINS.includes(origin)
+    ? origin
+    : ALLOWED_ORIGINS[0]; // Fallback to the first allowed origin if not matched
+
+  return {
+    'Access-Control-Allow-Origin': allowedOrigin,
+    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+    'Access-Control-Allow-Methods': "GET, POST, PUT, DELETE, PATCH, OPTIONS",
   "Access-Control-Max-Age":           "86400",
-  "Access-Control-Allow-Credentials": "true",
-};
-function _json(body: unknown, status = 200): Response {
+  "Access-Control-Allow-Credentials": "true",   // ← required for cookies
+  };
+}
+
+
+function _json(body: unknown, status = 200,origin: string | null): Response {
+  const cors = getCorsHeaders(origin);
   return new Response(JSON.stringify(body), {
-    status, headers: { ...CORS, "Content-Type": "application/json" },
+    status, headers: { ...cors, "Content-Type": "application/json" },
   });
 }
+
+
+
 async function _auth(req: Request): Promise<{ userId: string; email: string; svc: ReturnType<typeof _SVC> } | Response> {
   // 1. Try the Authorization header (backward-compat for any direct API callers)
   let token = req.headers.get("Authorization")?.replace("Bearer ", "").trim();
@@ -29,11 +51,11 @@ async function _auth(req: Request): Promise<{ userId: string; email: string; svc
     token         = match?.[1]?.trim();
   }
  
-  if (!token) return _json({ error: "Unauthorized" }, 401);
+  if (!token) return _json({ error: "Unauthorized" }, 401,origin);
  
   const svc = _SVC();
   const { data: { user }, error } = await svc.auth.getUser(token);
-  if (error || !user) return _json({ error: "Unauthorized — invalid token" }, 401);
+  if (error || !user) return _json({ error: "Unauthorized — invalid token" }, 401,origin);
   return { userId: user.id, email: user.email ?? "", svc };
 }
 async function _rateLimit(
@@ -47,7 +69,7 @@ async function _rateLimit(
       .eq("user_id", userId).eq("action", action).eq("result", "ok")
       .gte("created_at", since);
     if ((count ?? 0) >= limit)
-      return _json({ error: "Too many requests. Please wait before trying again." }, 429);
+      return _json({ error: "Too many requests. Please wait before trying again." }, 429,origin);
   } catch { /* non-blocking */ }
   return null;
 }
@@ -77,7 +99,8 @@ function _clean(val: unknown, maxLen = 500): string {
 }
  
 Deno.serve(async (req) => {
-  if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
+  origin = req.headers.get("origin"); 
+  if (req.method === "OPTIONS") return new Response("ok", { headers: getCorsHeaders(origin) });
   try {
     const auth = await _auth(req);
     if (auth instanceof Response) return auth;
@@ -91,7 +114,7 @@ Deno.serve(async (req) => {
       .select("purchase_date, plans(plan_name)")
       .eq("user_id", userId)
       .order("purchase_date", { ascending: true });
-    if (error) return _json({ error: error.message }, 400);
+    if (error) return _json({ error: error.message }, 400,origin);
  
     const list    = (rows ?? []).map((p: any) => p.plans?.plan_name).filter(Boolean);
     const current = list.length > 0 ? list[list.length - 1] : "Free Plan";
@@ -101,8 +124,8 @@ Deno.serve(async (req) => {
       currentPlan:    current,
       purchasedPlans: list,
       noPlansMessage: list.length === 0 ? "You have not purchased any plan yet." : "",
-    });
+    },200,origin);
   } catch {
-    return _json({ error: "Server error" }, 500);
+    return _json({ error: "Server error" }, 500,origin);
   }
 });

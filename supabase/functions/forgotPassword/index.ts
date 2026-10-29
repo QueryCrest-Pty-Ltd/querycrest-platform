@@ -1,10 +1,29 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin":  "https://www.querycrest.com",
-  "Access-Control-Allow-Headers": "content-type",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-};
+
+
+
+const ALLOWED_ORIGINS = [
+  "https://querycrest.com",// Truehost
+  "https://www.querycrest.com",// Truehost
+  'https://www.portal.querycrest.com', // Digital ocean
+  'https://portal.querycrest.com', // Digital ocean  
+
+];
+
+let origin = null;
+function getCorsHeaders(origin: string | null) {
+  // Check if the request's origin is in the allowlist.
+  const allowedOrigin = origin && ALLOWED_ORIGINS.includes(origin)
+    ? origin
+    : ALLOWED_ORIGINS[0]; // Fallback to the first allowed origin if not matched
+
+  return {
+    'Access-Control-Allow-Origin': allowedOrigin,
+    'Access-Control-Allow-Headers': ' x-client-info, content-type',
+    'Access-Control-Allow-Methods': " POST OPTIONS",
+  };
+}
 
 const supabase = createClient(
   Deno.env.get("SUPABASE_URL")!,
@@ -15,7 +34,8 @@ const WINDOW_MINUTES = 30;
 const MAX_ATTEMPTS   = 3;
 
 Deno.serve(async (req) => {
-  if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+  origin = req.headers.get("origin");  
+  if (req.method === "OPTIONS") return new Response("ok", { headers: getCorsHeaders(origin) });
 
   try {
     const { email } = await req.json();
@@ -80,7 +100,7 @@ Deno.serve(async (req) => {
 
     return new Response(
       JSON.stringify({ message: "Password reset link sent to your email." }),
-      { status: 200, headers: corsHeaders }
+      { status: 200, headers: getCorsHeaders(origin) }
     );
 
   } catch (err) {
@@ -91,7 +111,7 @@ Deno.serve(async (req) => {
   function errorResponse(msg: string, status: number): Response {
     return new Response(JSON.stringify({ error: msg }), {
       status,
-      headers: corsHeaders,
+      headers: getCorsHeaders(origin),
     });
   }
 });

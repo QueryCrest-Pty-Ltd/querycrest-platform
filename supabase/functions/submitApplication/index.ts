@@ -4,18 +4,41 @@ const _SVC = () => createClient(
   Deno.env.get("SUPABASE_URL")!,
   Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
 );
-const CORS = {
-  "Access-Control-Allow-Origin":      "https://www.querycrest.com",
-  "Access-Control-Allow-Headers":     "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods":     "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+
+
+const ALLOWED_ORIGINS = [
+  "https://querycrest.com",// Truehost
+  "https://www.querycrest.com",// Truehost
+  'https://www.portal.querycrest.com', // Digital ocean
+  'https://portal.querycrest.com', // Digital ocean   
+
+];
+let origin = null;
+function getCorsHeaders(origin: string | null) {
+  // Check if the request's origin is in the allowlist.
+  const allowedOrigin = origin && ALLOWED_ORIGINS.includes(origin)
+    ? origin
+    : ALLOWED_ORIGINS[0]; // Fallback to the first allowed origin if not matched
+
+  return {
+    'Access-Control-Allow-Origin': allowedOrigin,
+    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+    'Access-Control-Allow-Methods': "GET, POST, PUT, DELETE, PATCH, OPTIONS",
   "Access-Control-Max-Age":           "86400",
-  "Access-Control-Allow-Credentials": "true",
-};
-function _json(body: unknown, status = 200): Response {
+  "Access-Control-Allow-Credentials": "true",   // ← required for cookies
+  };
+}
+
+
+function _json(body: unknown, status = 200,origin: string | null): Response {
+  const cors = getCorsHeaders(origin);
   return new Response(JSON.stringify(body), {
-    status, headers: { ...CORS, "Content-Type": "application/json" },
+    status, headers: { ...cors, "Content-Type": "application/json" },
   });
 }
+
+
+
 async function _auth(req: Request): Promise<{ userId: string; email: string; svc: ReturnType<typeof _SVC> } | Response> {
   let token = req.headers.get("Authorization")?.replace("Bearer ", "").trim();
   if (!token) {
@@ -23,10 +46,10 @@ async function _auth(req: Request): Promise<{ userId: string; email: string; svc
     const match   = cookies.match(/(?:^|;\s*)access_token=([^;]+)/);
     token         = match?.[1]?.trim();
   }
-  if (!token) return _json({ error: "Unauthorized" }, 401);
+  if (!token) return _json({ error: "Unauthorized" }, 401,origin);
   const svc = _SVC();
   const { data: { user }, error } = await svc.auth.getUser(token);
-  if (error || !user) return _json({ error: "Unauthorized — invalid token" }, 401);
+  if (error || !user) return _json({ error: "Unauthorized — invalid token" }, 401,origin);
   return { userId: user.id, email: user.email ?? "", svc };
 }
 async function _rateLimit(
@@ -86,8 +109,9 @@ async function encryptPassword(pw: string): Promise<string> {
 }
 
 Deno.serve(async (req) => {
-  if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
-  if (req.method !== "POST") return _json({ error: "Method not allowed" }, 405);
+  origin = req.headers.get("origin");  
+  if (req.method === "OPTIONS") return new Response("ok", { headers: getCorsHeaders(origin) });
+  if (req.method !== "POST") return _json({ error: "Method not allowed" }, 405,origin);
   try {
     const auth = await _auth(req);
     if (auth instanceof Response) return auth;
@@ -105,19 +129,19 @@ Deno.serve(async (req) => {
 
     // ── Validate ──────────────────────────────────────────────────────────
     if (!university_name || typeof university_name !== "string")
-      return _json({ error: "university_name is required" }, 400);
+      return _json({ error: "university_name is required" }, 400,origin);
     if (!Array.isArray(programs) || programs.length === 0)
-      return _json({ error: "At least one program is required" }, 400);
+      return _json({ error: "At least one program is required" }, 400,origin);
     if (!Array.isArray(course_codes) || course_codes.length === 0)
-      return _json({ error: "At least one course code is required" }, 400);
+      return _json({ error: "At least one course code is required" }, 400,origin);
     if (accepted_policy !== true)
-      return _json({ error: "You must accept the Privacy Policy" }, 400);
+      return _json({ error: "You must accept the Privacy Policy" }, 400,origin);
     if (!["first_time", "second_time"].includes(attempt_type))
-      return _json({ error: "Invalid attempt_type" }, 400);
+      return _json({ error: "Invalid attempt_type" }, 400,origin);
     if (has_applied_before === true) {
-      if (!student_number) return _json({ error: "student_number required for returning students" }, 400);
-      if (!portal_pin)     return _json({ error: "portal_pin required for returning students" }, 400);
-      if (!portal_password)return _json({ error: "portal_password required for returning students" }, 400);
+      if (!student_number) return _json({ error: "student_number required for returning students" }, 400,origin);
+      if (!portal_pin)     return _json({ error: "portal_pin required for returning students" }, 400,origin);
+      if (!portal_password)return _json({ error: "portal_password required for returning students" }, 400,origin);
     }
 
     // ── Sanitise ──────────────────────────────────────────────────────────
@@ -125,7 +149,7 @@ Deno.serve(async (req) => {
     const cleanPrograms = (programs   as string[]).map(p => _clean(p, 200)).filter(Boolean);
     const cleanCodes    = (course_codes as string[]).map(c => _clean(c, 50).toUpperCase()).filter(Boolean);
     if (!cleanPrograms.length || !cleanCodes.length)
-      return _json({ error: "Programs or codes are empty after validation" }, 400);
+      return _json({ error: "Programs or codes are empty after validation" }, 400,origin);
 
     // ── Plan check — NO free applications ────────────────────────────────
     //
@@ -154,7 +178,7 @@ Deno.serve(async (req) => {
       return _json({
         error: "You need a plan to submit an application. Please purchase a plan to continue.",
         upgrade_required: true,
-      }, 403);
+      }, 403,origin);
     }
 
     // Plan exists but all slots used
@@ -170,7 +194,7 @@ Deno.serve(async (req) => {
         upgrade_required: true,
         used,
         total_allowed: totalAllowed,
-      }, 403);
+      }, 403,origin);
     }
 
     // ── Resolve logo ──────────────────────────────────────────────────────
@@ -213,7 +237,7 @@ Deno.serve(async (req) => {
     if (insertError) {
       await _log(svc, userId, "submit_application", req, "fail",
         { reason: insertError.message });
-      return _json({ error: insertError.message }, 400);
+      return _json({ error: insertError.message }, 400,origin);
     }
 
     await _log(svc, userId, "submit_application", req, "ok", {
@@ -224,8 +248,8 @@ Deno.serve(async (req) => {
       application:            inserted,
       logo_url,
       remaining_applications: totalAllowed - (used ?? 0) - 1,
-    });
+    },200,origin);
   } catch (err: any) {
-    return _json({ error: err?.message ?? "Server error" }, 400);
+    return _json({ error: err?.message ?? "Server error" }, 400,origin);
   }
 });

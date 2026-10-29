@@ -4,18 +4,41 @@ const _SVC = () => createClient(
   Deno.env.get("SUPABASE_URL")!,
   Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
 );
-const CORS = {
-  "Access-Control-Allow-Origin":      "https://www.querycrest.com",
-  "Access-Control-Allow-Headers":     "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods":     "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+
+
+const ALLOWED_ORIGINS = [
+  "https://querycrest.com",// Truehost
+  "https://www.querycrest.com",// Truehost
+  'https://www.portal.querycrest.com', // Digital ocean
+  'https://portal.querycrest.com', // Digital ocean   
+
+];
+let origin = null;
+function getCorsHeaders(origin: string | null) {
+  // Check if the request's origin is in the allowlist.
+  const allowedOrigin = origin && ALLOWED_ORIGINS.includes(origin)
+    ? origin
+    : ALLOWED_ORIGINS[0]; // Fallback to the first allowed origin if not matched
+
+  return {
+    'Access-Control-Allow-Origin': allowedOrigin,
+    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+    'Access-Control-Allow-Methods': "GET, POST, PUT, DELETE, PATCH, OPTIONS",
   "Access-Control-Max-Age":           "86400",
-  "Access-Control-Allow-Credentials": "true",
-};
-function _json(body: unknown, status = 200): Response {
+  "Access-Control-Allow-Credentials": "true",   // ← required for cookies
+  };
+}
+
+
+function _json(body: unknown, status = 200,origin: string | null): Response {
+  const cors = getCorsHeaders(origin);
   return new Response(JSON.stringify(body), {
-    status, headers: { ...CORS, "Content-Type": "application/json" },
+    status, headers: { ...cors, "Content-Type": "application/json" },
   });
 }
+
+
+
 async function _auth(req: Request): Promise<{ userId: string; email: string; svc: ReturnType<typeof _SVC> } | Response> {
   // 1. Try the Authorization header (backward-compat for any direct API callers)
   let token = req.headers.get("Authorization")?.replace("Bearer ", "").trim();
@@ -29,11 +52,11 @@ async function _auth(req: Request): Promise<{ userId: string; email: string; svc
     token         = match?.[1]?.trim();
   }
  
-  if (!token) return _json({ error: "Unauthorized" }, 401);
+  if (!token) return _json({ error: "Unauthorized" }, 401,origin);
  
   const svc = _SVC();
   const { data: { user }, error } = await svc.auth.getUser(token);
-  if (error || !user) return _json({ error: "Unauthorized — invalid token" }, 401);
+  if (error || !user) return _json({ error: "Unauthorized — invalid token" }, 401,origin);
   return { userId: user.id, email: user.email ?? "", svc };
 }
 async function _rateLimit(
@@ -47,7 +70,7 @@ async function _rateLimit(
       .eq("user_id", userId).eq("action", action).eq("result", "ok")
       .gte("created_at", since);
     if ((count ?? 0) >= limit)
-      return _json({ error: "Too many requests. Please wait before trying again." }, 429);
+      return _json({ error: "Too many requests. Please wait before trying again." }, 429,origin);
   } catch { /* non-blocking */ }
   return null;
 }
@@ -85,8 +108,9 @@ const ALLOWED_MIME_TYPES = ["image/jpeg","image/jpg","image/png","application/pd
 const MAX_FILE_BYTES     = 10 * 1024 * 1024; // 10 MB
  
 Deno.serve(async (req) => {
-  if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
-  if (req.method !== "POST") return _json({ error: "Method not allowed" }, 405);
+  origin = req.headers.get("origin");    
+  if (req.method === "OPTIONS") return new Response("ok", { headers: getCorsHeaders(origin) });
+  if (req.method !== "POST") return _json({ error: "Method not allowed" }, 405,origin);
   try {
     const auth = await _auth(req);
     if (auth instanceof Response) return auth;
@@ -101,15 +125,15 @@ Deno.serve(async (req) => {
     if (ct.includes("application/json")) {
       const body = await req.json().catch(() => ({}));
       if (body.action !== "updateStatus")
-        return _json({ error: "Unknown action" }, 400);
+        return _json({ error: "Unknown action" }, 400,origin);
  
       const { document_id, status, admin_notes } = body;
       if (!document_id || !status)
-        return _json({ error: "document_id and status are required" }, 400);
+        return _json({ error: "document_id and status are required" }, 400,origin);
  
       const VALID = ["Pending","Approved","Verified","Rejected","Certify Doc"];
       if (!VALID.includes(status))
-        return _json({ error: `Invalid status. Use one of: ${VALID.join(", ")}` }, 400);
+        return _json({ error: `Invalid status. Use one of: ${VALID.join(", ")}` }, 400,origin);
  
       // Verify the caller has admin role
       const { data: caller } = await svc
@@ -117,7 +141,7 @@ Deno.serve(async (req) => {
       const isAdmin = Array.isArray(caller?.role)
         ? caller.role.includes("admin") : false;
       if (!isAdmin)
-        return _json({ error: "Admin role required to update document status" }, 403);
+        return _json({ error: "Admin role required to update document status" }, 403,origin);
  
       const update: Record<string, unknown> = {
         status,
@@ -129,11 +153,11 @@ Deno.serve(async (req) => {
       const { data: updated, error } = await svc
         .from("documents").update(update).eq("id", document_id)
         .select("id, document_type, file_name, status, admin_notes, reviewed_at").single();
-      if (error) return _json({ error: error.message }, 500);
+      if (error) return _json({ error: error.message }, 500,origin);
  
       await _log(svc, userId, "upload_document", req, "ok",
         { sub_action: "update_status", document_id, status });
-      return _json({ success: true, document: updated });
+      return _json({ success: true, document: updated },200,origin);
     }
  
     // ── User: file upload via multipart/form-data ────────────────────────
@@ -142,15 +166,15 @@ Deno.serve(async (req) => {
     const file         = fd.get("documentFile") as File | null;
  
     if (!documentType || !ALLOWED_DOC_TYPES.includes(documentType))
-      return _json({ error: "Invalid or missing document type" }, 400);
+      return _json({ error: "Invalid or missing document type" }, 400,origin);
     if (!file)
-      return _json({ error: "No file provided" }, 400);
+      return _json({ error: "No file provided" }, 400,origin);
     if (file.size === 0)
-      return _json({ error: "File is empty" }, 400);
+      return _json({ error: "File is empty" }, 400,origin);
     if (file.size > MAX_FILE_BYTES)
-      return _json({ error: "File exceeds 10 MB limit" }, 400);
+      return _json({ error: "File exceeds 10 MB limit" }, 400,origin);
     if (!ALLOWED_MIME_TYPES.includes(file.type))
-      return _json({ error: "Only PDF, JPG and PNG files are accepted" }, 400);
+      return _json({ error: "Only PDF, JPG and PNG files are accepted" }, 400,origin);
  
     // Sanitise filename: keep only safe chars
     const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_").slice(0, 200);
@@ -163,7 +187,7 @@ Deno.serve(async (req) => {
     if (uploadErr) {
       await _log(svc, userId, "upload_document", req, "fail",
         { reason: uploadErr.message, documentType });
-      return _json({ error: "Upload failed. Please try again." }, 500);
+      return _json({ error: "Upload failed. Please try again." }, 500,origin);
     }
  
     // 7-day signed URL for immediate use in the dashboard
@@ -178,7 +202,7 @@ Deno.serve(async (req) => {
     if (dbErr) {
       // Clean up orphaned storage object if DB insert fails
       await svc.storage.from("user-documents").remove([filePath]).catch(() => {});
-      return _json({ error: "Database error. Please try again." }, 500);
+      return _json({ error: "Database error. Please try again." }, 500,origin);
     }
  
     await _log(svc, userId, "upload_document", req, "ok",
@@ -186,8 +210,8 @@ Deno.serve(async (req) => {
     return _json({
       success: true, fileName, filePath, documentType,
       status: doc.status, url: signed?.signedUrl ?? null, document: doc,
-    });
+    },200,origin);
   } catch {
-    return _json({ error: "Server error" }, 500);
+    return _json({ error: "Server error" }, 500,origin);
   }
 });

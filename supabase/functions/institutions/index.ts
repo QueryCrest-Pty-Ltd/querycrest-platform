@@ -12,17 +12,37 @@ const _SVC = () => createClient(
 // ============================================================
 // CORS CONFIGURATION
 // ============================================================
-const ALLOWED_ORIGINS = [
-  "https://www.querycrest.com",
-  "https://querycrest.com",
-];
 
-const CORS = {
-  "Access-Control-Allow-Origin": "https://www.querycrest.com",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-  "Access-Control-Max-Age": "86400",
-};
+const ALLOWED_ORIGINS = [
+  "https://querycrest.com",// Truehost
+  "https://www.querycrest.com",// Truehost
+  'https://www.portal.querycrest.com', // Digital ocean
+  'https://portal.querycrest.com', // Digital ocean   
+
+];
+let origin = null;
+function getCorsHeaders(origin: string | null) {
+  // Check if the request's origin is in the allowlist.
+  const allowedOrigin = origin && ALLOWED_ORIGINS.includes(origin)
+    ? origin
+    : ALLOWED_ORIGINS[0]; // Fallback to the first allowed origin if not matched
+
+  return {
+    'Access-Control-Allow-Origin': allowedOrigin,
+    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+    'Access-Control-Allow-Methods': "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+  "Access-Control-Max-Age":           "86400",
+  "Access-Control-Allow-Credentials": "true",   // ← required for cookies
+  };
+}
+
+
+function _json(body: unknown, status = 200,origin: string | null): Response {
+  const cors = getCorsHeaders(origin);
+  return new Response(JSON.stringify(body), {
+    status, headers: { ...cors, "Content-Type": "application/json" },
+  });
+}
 
 // ============================================================
 // RATE LIMITING
@@ -62,12 +82,7 @@ setInterval(() => {
 // ============================================================
 // HELPERS
 // ============================================================
-function _json(body, status = 200) {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: { ...CORS, "Content-Type": "application/json" },
-  });
-}
+
 
 const JWT_SECRET = Deno.env.get("SUPABASE_JWT_SECRET") || "your-secret-key";
 
@@ -147,13 +162,14 @@ function getTableNameFromBody(body) {
 // MAIN HANDLER
 // ============================================================
 Deno.serve(async (req) => {
+  origin = req.headers.get("origin");   
   if (req.method === "OPTIONS") {
-    return new Response("ok", { headers: CORS });
+    return new Response("ok", { headers: getCorsHeaders(origin) });
   }
 
-  const origin = req.headers.get("origin");
+
   if (origin && !ALLOWED_ORIGINS.includes(origin)) {
-    return _json({ error: "Origin not allowed" }, 403);
+    return _json({ error: "Origin not allowed" }, 403,origin);
   }
 
   const clientId = req.headers.get("x-forwarded-for") || 
@@ -165,18 +181,18 @@ Deno.serve(async (req) => {
       error: "Rate limit exceeded. Try again later.",
       remaining: 0,
       resetAfter: rateCheck.resetAfter
-    }, 429);
+    }, 429,origin);
   }
 
   const isLocked = await checkLockdown();
   if (isLocked) {
-    return _json({ error: "System is in emergency lockdown. No operations allowed." }, 503);
+    return _json({ error: "System is in emergency lockdown. No operations allowed." }, 503,origin);
   }
 
   const authHeader = req.headers.get("authorization") || "";
   const isAuthenticated = await verifyToken(authHeader);
   if (!isAuthenticated) {
-    return _json({ error: "Unauthorized" }, 401);
+    return _json({ error: "Unauthorized" }, 401,origin);
   }
 
   const url = new URL(req.url);
@@ -218,7 +234,7 @@ Deno.serve(async (req) => {
         .order("name");
 
       if (error) {
-        return _json({ error: `Failed to fetch ${tableName}` }, 500);
+        return _json({ error: `Failed to fetch ${tableName}` }, 500,origin);
       }
 
       await logAuditAction(`VIEW_${tableName.toUpperCase()}`, { count: data?.length || 0 });
@@ -231,7 +247,7 @@ Deno.serve(async (req) => {
           total: data?.length || 0,
           pages: Math.ceil((data?.length || 0) / limit)
         }
-      });
+      },200,origin);
     }
 
     // ============================================================
@@ -242,7 +258,7 @@ Deno.serve(async (req) => {
       const tableParam = url.searchParams.get("table") || "universities";
       
       if (!query.trim()) {
-        return _json({ error: "Search query required" }, 400);
+        return _json({ error: "Search query required" }, 400,origin);
       }
 
       const tableName = getTableName(tableParam);
@@ -254,11 +270,11 @@ Deno.serve(async (req) => {
         .order("name");
 
       if (error) {
-        return _json({ error: "Search failed" }, 500);
+        return _json({ error: "Search failed" }, 500,origin);
       }
 
       await logAuditAction(`SEARCH_${tableName.toUpperCase()}`, { query });
-      return _json({ data });
+      return _json({ data },200,origin);
     }
 
     // ============================================================
@@ -277,11 +293,11 @@ Deno.serve(async (req) => {
         .single();
 
       if (error || !data) {
-        return _json({ error: "Record not found" }, 404);
+        return _json({ error: "Record not found" }, 404,origin);
       }
 
       await logAuditAction(`VIEW_${tableName.toUpperCase()}`, { id });
-      return _json({ data });
+      return _json({ data },200,origin);
     }
 
     // ============================================================
@@ -292,7 +308,7 @@ Deno.serve(async (req) => {
       try {
         body = await req.json();
       } catch {
-        return _json({ error: "Invalid request body" }, 400);
+        return _json({ error: "Invalid request body" }, 400,origin);
       }
 
       const tableName = getTableNameFromBody(body);
@@ -307,13 +323,13 @@ Deno.serve(async (req) => {
             opening_date: "2026-01-01",
             closing_date: "2026-12-31"
           }
-        }, 400);
+        }, 400,origin);
       }
 
       const { name, type, opening_date, closing_date, status, is_private } = body;
 
       if (!name || !type) {
-        return _json({ error: "Name and type are required" }, 400);
+        return _json({ error: "Name and type are required" }, 400,origin);
       }
 
       const { data, error } = await svc
@@ -329,11 +345,11 @@ Deno.serve(async (req) => {
         .select();
 
       if (error) {
-        return _json({ error: `Failed to create record in ${tableName}` }, 500);
+        return _json({ error: `Failed to create record in ${tableName}` }, 500,origin);
       }
 
       await logAuditAction(`CREATE_${tableName.toUpperCase()}`, { id: data?.[0]?.id, name });
-      return _json({ data: data?.[0], message: `Record created in ${tableName}` }, 201);
+      return _json({ data: data?.[0], message: `Record created in ${tableName}` }, 201,origin);
     }
 
     // ============================================================
@@ -345,18 +361,18 @@ Deno.serve(async (req) => {
       try {
         body = await req.json();
       } catch {
-        return _json({ error: "Invalid request body" }, 400);
+        return _json({ error: "Invalid request body" }, 400,origin);
       }
 
       const tableName = getTableNameFromBody(body);
       if (!tableName) {
-        return _json({ error: "Missing or invalid 'table' field" }, 400);
+        return _json({ error: "Missing or invalid 'table' field" }, 400,origin);
       }
 
       const { name, type, opening_date, closing_date, status, is_private } = body;
 
       if (!name || !type) {
-        return _json({ error: "Name and type are required" }, 400);
+        return _json({ error: "Name and type are required" }, 400,origin);
       }
 
       const { data, error } = await svc
@@ -373,15 +389,15 @@ Deno.serve(async (req) => {
         .select();
 
       if (error) {
-        return _json({ error: `Failed to update record in ${tableName}` }, 500);
+        return _json({ error: `Failed to update record in ${tableName}` }, 500,origin);
       }
 
       if (!data || data.length === 0) {
-        return _json({ error: "Record not found" }, 404);
+        return _json({ error: "Record not found" }, 404,origin);
       }
 
       await logAuditAction(`UPDATE_${tableName.toUpperCase()}`, { id, name });
-      return _json({ data: data[0], message: `Record updated in ${tableName}` });
+      return _json({ data: data[0], message: `Record updated in ${tableName}` },200,origin);
     }
 
     // ============================================================
@@ -395,11 +411,11 @@ Deno.serve(async (req) => {
       const { error } = await svc.from(tableName).delete().eq("id", id);
 
       if (error) {
-        return _json({ error: `Failed to delete record from ${tableName}` }, 500);
+        return _json({ error: `Failed to delete record from ${tableName}` }, 500,origin);
       }
 
       await logAuditAction(`DELETE_${tableName.toUpperCase()}`, { id });
-      return _json({ message: `Record deleted from ${tableName}` });
+      return _json({ message: `Record deleted from ${tableName}` },200,origin);
     }
 
     // ============================================================
@@ -428,9 +444,9 @@ Deno.serve(async (req) => {
         opening_date: "2026-01-01",
         closing_date: "2026-12-31"
       }
-    }, 404);
+    }, 404,origin);
   } catch (err) {
     console.error("Error:", err instanceof Error ? err.message : err);
-    return _json({ error: "Server error: " + (err instanceof Error ? err.message : String(err)) }, 500);
+    return _json({ error: "Server error: " + (err instanceof Error ? err.message : String(err)) }, 500,origin);
   }
 });

@@ -12,17 +12,36 @@ const _SVC = () => createClient(
 // accepts the Set-Cookie header from a cross-origin response.
 // The origin MUST be an exact domain — wildcard (*) is forbidden when
 // credentials are involved.
-const CORS = {
-  "Access-Control-Allow-Origin":      "https://www.querycrest.com",
-  "Access-Control-Allow-Headers":     "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods":     "POST, OPTIONS",
+
+const ALLOWED_ORIGINS = [
+  "https://querycrest.com",// Truehost
+  "https://www.querycrest.com",// Truehost
+  'https://www.portal.querycrest.com', // Digital ocean
+  'https://portal.querycrest.com', // Digital ocean  
+
+];
+let origin = null;
+function getCorsHeaders(origin: string | null) {
+  // Check if the request's origin is in the allowlist.
+  const allowedOrigin = origin && ALLOWED_ORIGINS.includes(origin)
+    ? origin
+    : ALLOWED_ORIGINS[0]; // Fallback to the first allowed origin if not matched
+
+  return {
+    'Access-Control-Allow-Origin': allowedOrigin,
+    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
   "Access-Control-Max-Age":           "86400",
   "Access-Control-Allow-Credentials": "true",   // ← required for cookies
-};
+  };
+}
+
+
  
-function _json(body: unknown, status = 200): Response {
+function _json(body: unknown, status = 200,origin: string | null): Response {
+  const cors = getCorsHeaders(origin);
   return new Response(JSON.stringify(body), {
-    status, headers: { ...CORS, "Content-Type": "application/json" },
+    status, headers: { ...cors, "Content-Type": "application/json" },
   });
 }
  
@@ -57,7 +76,7 @@ async function _ipRateLimit(
       .eq("ip_address", ip).eq("action", action).eq("result", "fail")
       .gte("created_at", since);
     if ((count ?? 0) >= limit)
-      return _json({ error: "Too many failed login attempts. Please wait before trying again." }, 429);
+      return _json({ error: "Too many failed login attempts. Please wait before trying again." }, 429,origin);
   } catch { /* non-blocking */ }
   return null;
 }
@@ -76,7 +95,7 @@ async function _emailFailLimit(
     if ((count ?? 0) >= limit)
       return _json({
         error: "Too many failed attempts on this account. Please reset your password or wait 15 minutes."
-      }, 429);
+      }, 429,origin);
   } catch { /* non-blocking */ }
   return null;
 }
@@ -106,8 +125,9 @@ function _clean(val: unknown, maxLen = 200): string {
 serve(async (req) => {
   // Pre-flight: browsers send OPTIONS before any cross-origin request that
   // carries credentials. Must respond with 204 + full CORS headers.
-  if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
-  if (req.method !== "POST")    return _json({ error: "Method not allowed" }, 405);
+  origin = req.headers.get("origin");
+  if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: getCorsHeaders(origin) });
+  if (req.method !== "POST")    return _json({ error: "Method not allowed" }, 405,origin);
  
   const svc = _SVC();
   const ip  = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim()
@@ -124,16 +144,16 @@ serve(async (req) => {
     // ── Parse & sanitise input ────────────────────────────────────────────
     let body: Record<string, unknown>;
     try { body = await req.json(); }
-    catch { return _json({ error: "Invalid JSON body" }, 400); }
+    catch { return _json({ error: "Invalid JSON body" }, 400,origin); }
  
     const email    = _clean(body.email, 254).toLowerCase();
     const password = String(body.password ?? "");
  
     if (!email || !password)
-      return _json({ error: "Email and password are required." }, 400);
+      return _json({ error: "Email and password are required." }, 400,origin);
  
     if (!/^[^\s@]{1,64}@[^\s@]{1,255}$/.test(email))
-      return _json({ error: "Invalid email address." }, 400);
+      return _json({ error: "Invalid email address." }, 400,origin);
  
     // ── Per-email failed-login limit: 5 fails per 15 min ─────────────────
     const emailRl = await _emailFailLimit(svc, email, 5, 900);
@@ -152,17 +172,17 @@ serve(async (req) => {
       await _log(svc, null, "login", req, "fail", { reason: msg, email });
  
       if (msg.includes("Invalid login credentials") || msg.includes("invalid_credentials"))
-        return _json({ error: "Invalid email or password." }, 401);
+        return _json({ error: "Invalid email or password." }, 401,origin);
       if (msg.includes("Email not confirmed"))
-        return _json({ error: "Email not verified. Please check your inbox." }, 403);
+        return _json({ error: "Email not verified. Please check your inbox." }, 403,origin);
       if (msg.includes("too many requests") || msg.includes("rate"))
-        return _json({ error: "Too many login attempts. Please wait before trying again." }, 429);
+        return _json({ error: "Too many login attempts. Please wait before trying again." }, 429,origin);
  
-      return _json({ error: "Login failed. Please try again." }, 401);
+      return _json({ error: "Login failed. Please try again." }, 401,origin);
     }
  
     if (!signInData?.session || !signInData?.user)
-      return _json({ error: "Unexpected authentication response." }, 500);
+      return _json({ error: "Unexpected authentication response." }, 500,origin);
  
     const { session, user } = signInData;
  
@@ -186,7 +206,7 @@ serve(async (req) => {
       {
         status: 200,
         headers: {
-          ...CORS,
+          ...getCorsHeaders(origin),
           "Content-Type": "application/json",
           "Set-Cookie":    _setCookie(session.access_token),
         },
@@ -196,6 +216,6 @@ serve(async (req) => {
   } catch (err: any) {
     await _log(svc, null, "login", req, "fail",
       { reason: err?.message ?? "unhandled_exception" });
-    return _json({ error: "Server error" }, 500);
+    return _json({ error: "Server error" }, 500,origin);
   }
 });

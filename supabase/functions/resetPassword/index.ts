@@ -4,18 +4,41 @@ const _SVC = () => createClient(
   Deno.env.get("SUPABASE_URL")!,
   Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
 );
-const CORS = {
-  "Access-Control-Allow-Origin":      "https://www.querycrest.com",
-  "Access-Control-Allow-Headers":     "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods":     "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+
+
+const ALLOWED_ORIGINS = [
+  "https://querycrest.com",// Truehost
+  "https://www.querycrest.com",// Truehost
+  'https://www.portal.querycrest.com', // Digital ocean
+  'https://portal.querycrest.com', // Digital ocean   
+
+];
+let origin = null;
+function getCorsHeaders(origin: string | null) {
+  // Check if the request's origin is in the allowlist.
+  const allowedOrigin = origin && ALLOWED_ORIGINS.includes(origin)
+    ? origin
+    : ALLOWED_ORIGINS[0]; // Fallback to the first allowed origin if not matched
+
+  return {
+    'Access-Control-Allow-Origin': allowedOrigin,
+    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+    'Access-Control-Allow-Methods': "GET, POST, PUT, DELETE, PATCH, OPTIONS",
   "Access-Control-Max-Age":           "86400",
-  "Access-Control-Allow-Credentials": "true",
-};
-function _json(body: unknown, status = 200): Response {
+  "Access-Control-Allow-Credentials": "true",   // ← required for cookies
+  };
+}
+
+
+function _json(body: unknown, status = 200,origin: string | null): Response {
+  const cors = getCorsHeaders(origin);
   return new Response(JSON.stringify(body), {
-    status, headers: { ...CORS, "Content-Type": "application/json" },
+    status, headers: { ...cors, "Content-Type": "application/json" },
   });
 }
+
+
+
 async function _auth(req: Request): Promise<{ userId: string; email: string; svc: ReturnType<typeof _SVC> } | Response> {
   // 1. Try the Authorization header (backward-compat for any direct API callers)
   let token = req.headers.get("Authorization")?.replace("Bearer ", "").trim();
@@ -29,11 +52,11 @@ async function _auth(req: Request): Promise<{ userId: string; email: string; svc
     token         = match?.[1]?.trim();
   }
  
-  if (!token) return _json({ error: "Unauthorized" }, 401);
+  if (!token) return _json({ error: "Unauthorized" }, 401,origin);
  
   const svc = _SVC();
   const { data: { user }, error } = await svc.auth.getUser(token);
-  if (error || !user) return _json({ error: "Unauthorized — invalid token" }, 401);
+  if (error || !user) return _json({ error: "Unauthorized — invalid token" }, 401,origin);
   return { userId: user.id, email: user.email ?? "", svc };
 }
 async function _rateLimit(
@@ -47,7 +70,7 @@ async function _rateLimit(
       .eq("user_id", userId).eq("action", action).eq("result", "ok")
       .gte("created_at", since);
     if ((count ?? 0) >= limit)
-      return _json({ error: "Too many requests. Please wait before trying again." }, 429);
+      return _json({ error: "Too many requests. Please wait before trying again." }, 429,origin);
   } catch { /* non-blocking */ }
   return null;
 }
@@ -77,8 +100,9 @@ function _clean(val: unknown, maxLen = 500): string {
 }
  
 Deno.serve(async (req) => {
-  if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
-  if (req.method !== "POST") return _json({ error: "Method not allowed" }, 405);
+  origin = req.headers.get("origin");  
+  if (req.method === "OPTIONS") return new Response("ok", { headers: getCorsHeaders(origin) });
+  if (req.method !== "POST") return _json({ error: "Method not allowed" }, 405,origin);
   try {
     const auth = await _auth(req);
     if (auth instanceof Response) return auth;
@@ -97,35 +121,35 @@ Deno.serve(async (req) => {
  
     if (!currentPassword || !newPassword) {
       await _log(svc, userId, "reset_password", req, "fail", { reason: "missing_fields" });
-      return _json({ error: "All fields are required." }, 400);
+      return _json({ error: "All fields are required." }, 400,origin);
     }
  
     // Verify current password by attempting sign-in
     const { error: loginError } = await svc.auth.signInWithPassword({ email, password: currentPassword });
     if (loginError) {
       await _log(svc, userId, "reset_password", req, "fail", { reason: "wrong_current_password" });
-      return _json({ error: "Current password is incorrect." }, 400);
+      return _json({ error: "Current password is incorrect." }, 400,origin);
     }
  
     if (currentPassword === newPassword)
-      return _json({ error: "New password cannot match the current password." }, 400);
+      return _json({ error: "New password cannot match the current password." }, 400,origin);
  
     // Password strength
-    if (newPassword.length < 8)          return _json({ error: "Password must be at least 8 characters." }, 400);
-    if (!/[A-Z]/.test(newPassword))      return _json({ error: "Password must include at least one uppercase letter." }, 400);
-    if (!/[0-9]/.test(newPassword))      return _json({ error: "Password must include at least one number." }, 400);
+    if (newPassword.length < 8)          return _json({ error: "Password must be at least 8 characters." }, 400,origin);
+    if (!/[A-Z]/.test(newPassword))      return _json({ error: "Password must include at least one uppercase letter." }, 400,origin);
+    if (!/[0-9]/.test(newPassword))      return _json({ error: "Password must include at least one number." }, 400,origin);
     if (!/[!@#$%^&*(),.?":{}|<>]/.test(newPassword))
-      return _json({ error: "Password must include at least one special character." }, 400);
+      return _json({ error: "Password must include at least one special character." }, 400,origin);
  
     const { error: updateError } = await svc.auth.admin.updateUserById(userId, { password: newPassword });
     if (updateError) {
       await _log(svc, userId, "reset_password", req, "fail", { reason: updateError.message });
-      return _json({ error: "Failed to update password." }, 400);
+      return _json({ error: "Failed to update password." }, 400,origin);
     }
  
     await _log(svc, userId, "reset_password", req, "ok");
-    return _json({ message: "Password updated successfully." });
+    return _json({ message: "Password updated successfully." },200,origin);
   } catch {
-    return _json({ error: "Server error" }, 500);
+    return _json({ error: "Server error" }, 500,origin);
   }
 });
